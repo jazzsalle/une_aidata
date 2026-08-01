@@ -14,7 +14,10 @@ def main() -> None:
     html=(PREVIEW/'index.html').read_text(encoding='utf-8')
     html=html.replace("fetch('./runtime_regression_result.json').then(r=>r.json())",f"Promise.resolve({json.dumps(data,ensure_ascii=False)})")
     with sync_playwright() as p:
-        browser=p.chromium.launch(headless=True,executable_path='/usr/bin/chromium',args=['--no-sandbox'])
+        launch_kwargs={'headless':True,'args':['--no-sandbox']}
+        if Path('/usr/bin/chromium').exists():
+            launch_kwargs['executable_path']='/usr/bin/chromium'
+        browser=p.chromium.launch(**launch_kwargs)
         page=browser.new_page(viewport={'width':1440,'height':1000})
         page.set_content(html,wait_until='load')
         page.wait_for_selector('[data-situation]')

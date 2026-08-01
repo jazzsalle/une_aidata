@@ -9,10 +9,11 @@ import { Fill, Stroke, Style, Circle as CircleStyle } from 'ol/style';
 import { fromLonLat } from 'ol/proj';
 import type { FeatureLike } from 'ol/Feature';
 
+const DEFAULT_CENTER: [number, number] = [127.39, 35.416];
 const CENTERS: Record<string, [number, number]> = {
   '41430': [126.968, 37.344],
   '47190': [128.344, 36.119],
-  '45190': [127.39, 35.416],
+  '45190': DEFAULT_CENTER,
 };
 export type MapConnectionState = 'seed-only' | 'connecting' | 'connected' | 'error';
 export type BaseMapType = 'base' | 'satellite';
@@ -116,11 +117,11 @@ export async function createVWorldMap(target: HTMLElement, adminCode: string, on
     sources.set(layerId,source);vectors.set(layerId,layer);mapLayers.push(layer);
   }
 
-  const center = CENTERS[adminCode] ?? CENTERS['45190'];
+  const center = CENTERS[adminCode] ?? DEFAULT_CENTER;
   const map = new OlMap({ target, layers: mapLayers, view: new View({ center: fromLonLat(center), zoom: 11 }), controls: [] });
   return {
     map,
-    setRegion(code) { map.getView().animate({ center: fromLonLat(CENTERS[code] ?? CENTERS['45190']), zoom: 11, duration: 350 }); },
+    setRegion(code) { map.getView().animate({ center: fromLonLat(CENTERS[code] ?? DEFAULT_CENTER), zoom: 11, duration: 350 }); },
     highlightFeature(id) {
       for (const source of sources.values()) {
         const feature = source.getFeatureById(id) ?? source.getFeatures().find((candidate) => String(candidate.get('id') ?? candidate.get('district_code') ?? candidate.get('trace_id') ?? '') === id);

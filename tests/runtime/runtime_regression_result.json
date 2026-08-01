@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-01T15:31:14.165Z",
+  "generated_at": "2026-08-01T16:26:03.014Z",
   "source_version": "1.4.0-runtime-gate",
   "runtime_mode": "MOCK_PROVIDER_NEUTRAL",
   "npm_install": {
@@ -1000,7 +1000,7 @@
           "event_id": "EVT::20120901-TYPH-47190-001",
           "event_name": "태풍 산바 - 구미천지구",
           "admin_code": "47190",
-          "score": 29,
+          "score": 24,
           "coverage": 65,
           "confidence": "LIMITED",
           "graph": "NOT_AVAILABLE",
@@ -1065,8 +1065,8 @@
               "availability": "AVAILABLE",
               "weight": 5,
               "effective_weight": 7.7,
-              "normalized_score": 1,
-              "contribution_score": 7.7
+              "normalized_score": 0.35,
+              "contribution_score": 2.7
             }
           ],
           "response_comparison": [
@@ -1094,103 +1094,6 @@
         },
         {
           "rank": 12,
-          "event_id": "EVT::20100901-TYPH-41430-001",
-          "event_name": "태풍 곤파스 - 안양천지구",
-          "admin_code": "41430",
-          "score": 22,
-          "coverage": 65,
-          "confidence": "LIMITED",
-          "graph": "NOT_AVAILABLE",
-          "factors": [
-            {
-              "code": "hazard_type",
-              "name": "재난유형",
-              "availability": "AVAILABLE",
-              "weight": 20,
-              "effective_weight": 30.8,
-              "normalized_score": 0.2,
-              "contribution_score": 6.2
-            },
-            {
-              "code": "weather_hydrology",
-              "name": "기상·수문",
-              "availability": "NOT_AVAILABLE",
-              "weight": 25,
-              "effective_weight": 0,
-              "normalized_score": null,
-              "contribution_score": 0
-            },
-            {
-              "code": "spatial",
-              "name": "공간·유역",
-              "availability": "AVAILABLE",
-              "weight": 15,
-              "effective_weight": 23.1,
-              "normalized_score": 0.35,
-              "contribution_score": 8.1
-            },
-            {
-              "code": "vulnerability",
-              "name": "취약요인",
-              "availability": "AVAILABLE",
-              "weight": 15,
-              "effective_weight": 23.1,
-              "normalized_score": 0,
-              "contribution_score": 0
-            },
-            {
-              "code": "damage_pattern",
-              "name": "피해양상",
-              "availability": "AVAILABLE",
-              "weight": 10,
-              "effective_weight": 15.4,
-              "normalized_score": 0,
-              "contribution_score": 0
-            },
-            {
-              "code": "response_pattern",
-              "name": "대응조치",
-              "availability": "NOT_AVAILABLE",
-              "weight": 10,
-              "effective_weight": 0,
-              "normalized_score": null,
-              "contribution_score": 0
-            },
-            {
-              "code": "temporal",
-              "name": "계절·시간",
-              "availability": "AVAILABLE",
-              "weight": 5,
-              "effective_weight": 7.7,
-              "normalized_score": 1,
-              "contribution_score": 7.7
-            }
-          ],
-          "response_comparison": [
-            {
-              "current": "요천 수위계 확인",
-              "past": null,
-              "difference": "대응조치 근거 미확보 - 현재 매뉴얼·현장 확인 필요",
-              "confirm": true
-            },
-            {
-              "current": "저지대 도로 통제 여부",
-              "past": null,
-              "difference": "대응조치 근거 미확보 - 현재 매뉴얼·현장 확인 필요",
-              "confirm": true
-            },
-            {
-              "current": "취약가구 대피 여부",
-              "past": null,
-              "difference": "대응조치 근거 미확보 - 현재 매뉴얼·현장 확인 필요",
-              "confirm": true
-            }
-          ],
-          "data_status": "actual_backed",
-          "official_data": false
-        },
-        {
-          "rank": 13,
           "event_id": "EVT::20090701-FLOOD-41430-002",
           "event_name": "집중호우 - 내손A지구",
           "admin_code": "41430",
@@ -1287,7 +1190,7 @@
           "official_data": false
         },
         {
-          "rank": 14,
+          "rank": 13,
           "event_id": "EVT::20160701-FLOOD-41430-001",
           "event_name": "집중호우 - 오전B지구",
           "admin_code": "41430",
@@ -1384,7 +1287,7 @@
           "official_data": false
         },
         {
-          "rank": 15,
+          "rank": 14,
           "event_id": "EVT::20170701-FLOOD-41430-001",
           "event_name": "집중호우 - 오전B지구",
           "admin_code": "41430",
@@ -1455,6 +1358,103 @@
               "effective_weight": 7.7,
               "normalized_score": 1,
               "contribution_score": 7.7
+            }
+          ],
+          "response_comparison": [
+            {
+              "current": "요천 수위계 확인",
+              "past": null,
+              "difference": "대응조치 근거 미확보 - 현재 매뉴얼·현장 확인 필요",
+              "confirm": true
+            },
+            {
+              "current": "저지대 도로 통제 여부",
+              "past": null,
+              "difference": "대응조치 근거 미확보 - 현재 매뉴얼·현장 확인 필요",
+              "confirm": true
+            },
+            {
+              "current": "취약가구 대피 여부",
+              "past": null,
+              "difference": "대응조치 근거 미확보 - 현재 매뉴얼·현장 확인 필요",
+              "confirm": true
+            }
+          ],
+          "data_status": "actual_backed",
+          "official_data": false
+        },
+        {
+          "rank": 15,
+          "event_id": "EVT::20100901-TYPH-41430-001",
+          "event_name": "태풍 곤파스 - 안양천지구",
+          "admin_code": "41430",
+          "score": 17,
+          "coverage": 65,
+          "confidence": "LIMITED",
+          "graph": "NOT_AVAILABLE",
+          "factors": [
+            {
+              "code": "hazard_type",
+              "name": "재난유형",
+              "availability": "AVAILABLE",
+              "weight": 20,
+              "effective_weight": 30.8,
+              "normalized_score": 0.2,
+              "contribution_score": 6.2
+            },
+            {
+              "code": "weather_hydrology",
+              "name": "기상·수문",
+              "availability": "NOT_AVAILABLE",
+              "weight": 25,
+              "effective_weight": 0,
+              "normalized_score": null,
+              "contribution_score": 0
+            },
+            {
+              "code": "spatial",
+              "name": "공간·유역",
+              "availability": "AVAILABLE",
+              "weight": 15,
+              "effective_weight": 23.1,
+              "normalized_score": 0.35,
+              "contribution_score": 8.1
+            },
+            {
+              "code": "vulnerability",
+              "name": "취약요인",
+              "availability": "AVAILABLE",
+              "weight": 15,
+              "effective_weight": 23.1,
+              "normalized_score": 0,
+              "contribution_score": 0
+            },
+            {
+              "code": "damage_pattern",
+              "name": "피해양상",
+              "availability": "AVAILABLE",
+              "weight": 10,
+              "effective_weight": 15.4,
+              "normalized_score": 0,
+              "contribution_score": 0
+            },
+            {
+              "code": "response_pattern",
+              "name": "대응조치",
+              "availability": "NOT_AVAILABLE",
+              "weight": 10,
+              "effective_weight": 0,
+              "normalized_score": null,
+              "contribution_score": 0
+            },
+            {
+              "code": "temporal",
+              "name": "계절·시간",
+              "availability": "AVAILABLE",
+              "weight": 5,
+              "effective_weight": 7.7,
+              "normalized_score": 0.35,
+              "contribution_score": 2.7
             }
           ],
           "response_comparison": [
@@ -1982,103 +1982,6 @@
         },
         {
           "rank": 6,
-          "event_id": "EVT::20100901-TYPH-41430-001",
-          "event_name": "태풍 곤파스 - 안양천지구",
-          "admin_code": "41430",
-          "score": 39,
-          "coverage": 65,
-          "confidence": "LIMITED",
-          "graph": "NOT_AVAILABLE",
-          "factors": [
-            {
-              "code": "hazard_type",
-              "name": "재난유형",
-              "availability": "AVAILABLE",
-              "weight": 20,
-              "effective_weight": 30.8,
-              "normalized_score": 0.2,
-              "contribution_score": 6.2
-            },
-            {
-              "code": "weather_hydrology",
-              "name": "기상·수문",
-              "availability": "NOT_AVAILABLE",
-              "weight": 25,
-              "effective_weight": 0,
-              "normalized_score": null,
-              "contribution_score": 0
-            },
-            {
-              "code": "spatial",
-              "name": "공간·유역",
-              "availability": "AVAILABLE",
-              "weight": 15,
-              "effective_weight": 23.1,
-              "normalized_score": 1,
-              "contribution_score": 23.1
-            },
-            {
-              "code": "vulnerability",
-              "name": "취약요인",
-              "availability": "AVAILABLE",
-              "weight": 15,
-              "effective_weight": 23.1,
-              "normalized_score": 0.088,
-              "contribution_score": 2
-            },
-            {
-              "code": "damage_pattern",
-              "name": "피해양상",
-              "availability": "AVAILABLE",
-              "weight": 10,
-              "effective_weight": 15.4,
-              "normalized_score": 0,
-              "contribution_score": 0
-            },
-            {
-              "code": "response_pattern",
-              "name": "대응조치",
-              "availability": "NOT_AVAILABLE",
-              "weight": 10,
-              "effective_weight": 0,
-              "normalized_score": null,
-              "contribution_score": 0
-            },
-            {
-              "code": "temporal",
-              "name": "계절·시간",
-              "availability": "AVAILABLE",
-              "weight": 5,
-              "effective_weight": 7.7,
-              "normalized_score": 1,
-              "contribution_score": 7.7
-            }
-          ],
-          "response_comparison": [
-            {
-              "current": "안양천 수위 확인",
-              "past": null,
-              "difference": "대응조치 근거 미확보 - 현재 매뉴얼·현장 확인 필요",
-              "confirm": true
-            },
-            {
-              "current": "교량 접근통제 여부",
-              "past": null,
-              "difference": "대응조치 근거 미확보 - 현재 매뉴얼·현장 확인 필요",
-              "confirm": true
-            },
-            {
-              "current": "지하공간 유입 여부",
-              "past": null,
-              "difference": "대응조치 근거 미확보 - 현재 매뉴얼·현장 확인 필요",
-              "confirm": true
-            }
-          ],
-          "data_status": "actual_backed",
-          "official_data": false
-        },
-        {
-          "rank": 7,
           "event_id": "EVT::20240712-SLOPE-47190-901",
           "event_name": "구미 황산 사면 붕괴위험 시연사례",
           "admin_code": "47190",
@@ -2175,7 +2078,7 @@
           "official_data": false
         },
         {
-          "rank": 8,
+          "rank": 7,
           "event_id": "EVT::20090701-FLOOD-41430-002",
           "event_name": "집중호우 - 내손A지구",
           "admin_code": "41430",
@@ -2272,7 +2175,7 @@
           "official_data": false
         },
         {
-          "rank": 9,
+          "rank": 8,
           "event_id": "EVT::20160701-FLOOD-41430-001",
           "event_name": "집중호우 - 오전B지구",
           "admin_code": "41430",
@@ -2369,7 +2272,7 @@
           "official_data": false
         },
         {
-          "rank": 10,
+          "rank": 9,
           "event_id": "EVT::20170701-FLOOD-41430-001",
           "event_name": "집중호우 - 오전B지구",
           "admin_code": "41430",
@@ -2466,7 +2369,7 @@
           "official_data": false
         },
         {
-          "rank": 11,
+          "rank": 10,
           "event_id": "EVT::20200713-FLOOD-45190-901",
           "event_name": "남원 요천 홍수 대응 시연사례",
           "admin_code": "45190",
@@ -2560,6 +2463,103 @@
             }
           ],
           "data_status": "synthetic_demo",
+          "official_data": false
+        },
+        {
+          "rank": 11,
+          "event_id": "EVT::20100901-TYPH-41430-001",
+          "event_name": "태풍 곤파스 - 안양천지구",
+          "admin_code": "41430",
+          "score": 34,
+          "coverage": 65,
+          "confidence": "LIMITED",
+          "graph": "NOT_AVAILABLE",
+          "factors": [
+            {
+              "code": "hazard_type",
+              "name": "재난유형",
+              "availability": "AVAILABLE",
+              "weight": 20,
+              "effective_weight": 30.8,
+              "normalized_score": 0.2,
+              "contribution_score": 6.2
+            },
+            {
+              "code": "weather_hydrology",
+              "name": "기상·수문",
+              "availability": "NOT_AVAILABLE",
+              "weight": 25,
+              "effective_weight": 0,
+              "normalized_score": null,
+              "contribution_score": 0
+            },
+            {
+              "code": "spatial",
+              "name": "공간·유역",
+              "availability": "AVAILABLE",
+              "weight": 15,
+              "effective_weight": 23.1,
+              "normalized_score": 1,
+              "contribution_score": 23.1
+            },
+            {
+              "code": "vulnerability",
+              "name": "취약요인",
+              "availability": "AVAILABLE",
+              "weight": 15,
+              "effective_weight": 23.1,
+              "normalized_score": 0.088,
+              "contribution_score": 2
+            },
+            {
+              "code": "damage_pattern",
+              "name": "피해양상",
+              "availability": "AVAILABLE",
+              "weight": 10,
+              "effective_weight": 15.4,
+              "normalized_score": 0,
+              "contribution_score": 0
+            },
+            {
+              "code": "response_pattern",
+              "name": "대응조치",
+              "availability": "NOT_AVAILABLE",
+              "weight": 10,
+              "effective_weight": 0,
+              "normalized_score": null,
+              "contribution_score": 0
+            },
+            {
+              "code": "temporal",
+              "name": "계절·시간",
+              "availability": "AVAILABLE",
+              "weight": 5,
+              "effective_weight": 7.7,
+              "normalized_score": 0.35,
+              "contribution_score": 2.7
+            }
+          ],
+          "response_comparison": [
+            {
+              "current": "안양천 수위 확인",
+              "past": null,
+              "difference": "대응조치 근거 미확보 - 현재 매뉴얼·현장 확인 필요",
+              "confirm": true
+            },
+            {
+              "current": "교량 접근통제 여부",
+              "past": null,
+              "difference": "대응조치 근거 미확보 - 현재 매뉴얼·현장 확인 필요",
+              "confirm": true
+            },
+            {
+              "current": "지하공간 유입 여부",
+              "past": null,
+              "difference": "대응조치 근거 미확보 - 현재 매뉴얼·현장 확인 필요",
+              "confirm": true
+            }
+          ],
+          "data_status": "actual_backed",
           "official_data": false
         },
         {
@@ -2858,7 +2858,7 @@
           "event_id": "EVT::20120901-TYPH-47190-001",
           "event_name": "태풍 산바 - 구미천지구",
           "admin_code": "47190",
-          "score": 28,
+          "score": 23,
           "coverage": 65,
           "confidence": "LIMITED",
           "graph": "NOT_AVAILABLE",
@@ -2923,8 +2923,8 @@
               "availability": "AVAILABLE",
               "weight": 5,
               "effective_weight": 7.7,
-              "normalized_score": 1,
-              "contribution_score": 7.7
+              "normalized_score": 0.35,
+              "contribution_score": 2.7
             }
           ],
           "response_comparison": [
@@ -3068,7 +3068,7 @@
           "event_id": "EVT::20120901-TYPH-47190-001",
           "event_name": "태풍 산바 - 구미천지구",
           "admin_code": "47190",
-          "score": 47,
+          "score": 42,
           "coverage": 65,
           "confidence": "LIMITED",
           "graph": "NOT_AVAILABLE",
@@ -3133,8 +3133,8 @@
               "availability": "AVAILABLE",
               "weight": 5,
               "effective_weight": 7.7,
-              "normalized_score": 1,
-              "contribution_score": 7.7
+              "normalized_score": 0.35,
+              "contribution_score": 2.7
             }
           ],
           "response_comparison": [
@@ -3647,103 +3647,6 @@
         },
         {
           "rank": 8,
-          "event_id": "EVT::20100901-TYPH-41430-001",
-          "event_name": "태풍 곤파스 - 안양천지구",
-          "admin_code": "41430",
-          "score": 26,
-          "coverage": 65,
-          "confidence": "LIMITED",
-          "graph": "NOT_AVAILABLE",
-          "factors": [
-            {
-              "code": "hazard_type",
-              "name": "재난유형",
-              "availability": "AVAILABLE",
-              "weight": 20,
-              "effective_weight": 30.8,
-              "normalized_score": 0.333,
-              "contribution_score": 10.2
-            },
-            {
-              "code": "weather_hydrology",
-              "name": "기상·수문",
-              "availability": "NOT_AVAILABLE",
-              "weight": 25,
-              "effective_weight": 0,
-              "normalized_score": null,
-              "contribution_score": 0
-            },
-            {
-              "code": "spatial",
-              "name": "공간·유역",
-              "availability": "AVAILABLE",
-              "weight": 15,
-              "effective_weight": 23.1,
-              "normalized_score": 0.35,
-              "contribution_score": 8.1
-            },
-            {
-              "code": "vulnerability",
-              "name": "취약요인",
-              "availability": "AVAILABLE",
-              "weight": 15,
-              "effective_weight": 23.1,
-              "normalized_score": 0,
-              "contribution_score": 0
-            },
-            {
-              "code": "damage_pattern",
-              "name": "피해양상",
-              "availability": "AVAILABLE",
-              "weight": 10,
-              "effective_weight": 15.4,
-              "normalized_score": 0,
-              "contribution_score": 0
-            },
-            {
-              "code": "response_pattern",
-              "name": "대응조치",
-              "availability": "NOT_AVAILABLE",
-              "weight": 10,
-              "effective_weight": 0,
-              "normalized_score": null,
-              "contribution_score": 0
-            },
-            {
-              "code": "temporal",
-              "name": "계절·시간",
-              "availability": "AVAILABLE",
-              "weight": 5,
-              "effective_weight": 7.7,
-              "normalized_score": 1,
-              "contribution_score": 7.7
-            }
-          ],
-          "response_comparison": [
-            {
-              "current": "구미천 수위 확인",
-              "past": null,
-              "difference": "대응조치 근거 미확보 - 현재 매뉴얼·현장 확인 필요",
-              "confirm": true
-            },
-            {
-              "current": "농경지·도로 현장확인",
-              "past": null,
-              "difference": "대응조치 근거 미확보 - 현재 매뉴얼·현장 확인 필요",
-              "confirm": true
-            },
-            {
-              "current": "호안 피해 여부",
-              "past": null,
-              "difference": "대응조치 근거 미확보 - 현재 매뉴얼·현장 확인 필요",
-              "confirm": true
-            }
-          ],
-          "data_status": "actual_backed",
-          "official_data": false
-        },
-        {
-          "rank": 9,
           "event_id": "EVT::20090701-FLOOD-41430-001",
           "event_name": "집중호우 - 오전천지구",
           "admin_code": "41430",
@@ -3840,7 +3743,7 @@
           "official_data": false
         },
         {
-          "rank": 10,
+          "rank": 9,
           "event_id": "EVT::20200801-FLOOD-45190-001",
           "event_name": "집중호우 - 주촌지구(하천재해)",
           "admin_code": "45190",
@@ -3937,7 +3840,7 @@
           "official_data": false
         },
         {
-          "rank": 11,
+          "rank": 10,
           "event_id": "EVT::20200801-FLOOD-45190-002",
           "event_name": "집중호우 - 요천지구",
           "admin_code": "45190",
@@ -4034,7 +3937,7 @@
           "official_data": false
         },
         {
-          "rank": 12,
+          "rank": 11,
           "event_id": "EVT::20100801-FLOOD-45190-001",
           "event_name": "집중호우(홍수) - 요천지구",
           "admin_code": "45190",
@@ -4105,6 +4008,103 @@
               "effective_weight": 7.7,
               "normalized_score": 1,
               "contribution_score": 7.7
+            }
+          ],
+          "response_comparison": [
+            {
+              "current": "구미천 수위 확인",
+              "past": null,
+              "difference": "대응조치 근거 미확보 - 현재 매뉴얼·현장 확인 필요",
+              "confirm": true
+            },
+            {
+              "current": "농경지·도로 현장확인",
+              "past": null,
+              "difference": "대응조치 근거 미확보 - 현재 매뉴얼·현장 확인 필요",
+              "confirm": true
+            },
+            {
+              "current": "호안 피해 여부",
+              "past": null,
+              "difference": "대응조치 근거 미확보 - 현재 매뉴얼·현장 확인 필요",
+              "confirm": true
+            }
+          ],
+          "data_status": "actual_backed",
+          "official_data": false
+        },
+        {
+          "rank": 12,
+          "event_id": "EVT::20100901-TYPH-41430-001",
+          "event_name": "태풍 곤파스 - 안양천지구",
+          "admin_code": "41430",
+          "score": 21,
+          "coverage": 65,
+          "confidence": "LIMITED",
+          "graph": "NOT_AVAILABLE",
+          "factors": [
+            {
+              "code": "hazard_type",
+              "name": "재난유형",
+              "availability": "AVAILABLE",
+              "weight": 20,
+              "effective_weight": 30.8,
+              "normalized_score": 0.333,
+              "contribution_score": 10.2
+            },
+            {
+              "code": "weather_hydrology",
+              "name": "기상·수문",
+              "availability": "NOT_AVAILABLE",
+              "weight": 25,
+              "effective_weight": 0,
+              "normalized_score": null,
+              "contribution_score": 0
+            },
+            {
+              "code": "spatial",
+              "name": "공간·유역",
+              "availability": "AVAILABLE",
+              "weight": 15,
+              "effective_weight": 23.1,
+              "normalized_score": 0.35,
+              "contribution_score": 8.1
+            },
+            {
+              "code": "vulnerability",
+              "name": "취약요인",
+              "availability": "AVAILABLE",
+              "weight": 15,
+              "effective_weight": 23.1,
+              "normalized_score": 0,
+              "contribution_score": 0
+            },
+            {
+              "code": "damage_pattern",
+              "name": "피해양상",
+              "availability": "AVAILABLE",
+              "weight": 10,
+              "effective_weight": 15.4,
+              "normalized_score": 0,
+              "contribution_score": 0
+            },
+            {
+              "code": "response_pattern",
+              "name": "대응조치",
+              "availability": "NOT_AVAILABLE",
+              "weight": 10,
+              "effective_weight": 0,
+              "normalized_score": null,
+              "contribution_score": 0
+            },
+            {
+              "code": "temporal",
+              "name": "계절·시간",
+              "availability": "AVAILABLE",
+              "weight": 5,
+              "effective_weight": 7.7,
+              "normalized_score": 0.35,
+              "contribution_score": 2.7
             }
           ],
           "response_comparison": [
@@ -5411,7 +5411,7 @@
           "event_id": "EVT::20100901-TYPH-41430-001",
           "event_name": "태풍 곤파스 - 안양천지구",
           "admin_code": "41430",
-          "score": 31,
+          "score": 26,
           "coverage": 65,
           "confidence": "LIMITED",
           "graph": "NOT_AVAILABLE",
@@ -5476,8 +5476,8 @@
               "availability": "AVAILABLE",
               "weight": 5,
               "effective_weight": 7.7,
-              "normalized_score": 1,
-              "contribution_score": 7.7
+              "normalized_score": 0.35,
+              "contribution_score": 2.7
             }
           ],
           "response_comparison": [
@@ -5799,7 +5799,7 @@
           "event_id": "EVT::20120901-TYPH-47190-001",
           "event_name": "태풍 산바 - 구미천지구",
           "admin_code": "47190",
-          "score": 21,
+          "score": 16,
           "coverage": 65,
           "confidence": "LIMITED",
           "graph": "NOT_AVAILABLE",
@@ -5864,8 +5864,8 @@
               "availability": "AVAILABLE",
               "weight": 5,
               "effective_weight": 7.7,
-              "normalized_score": 1,
-              "contribution_score": 7.7
+              "normalized_score": 0.35,
+              "contribution_score": 2.7
             }
           ],
           "response_comparison": [
@@ -6296,103 +6296,6 @@
         },
         {
           "rank": 5,
-          "event_id": "EVT::20120901-TYPH-47190-001",
-          "event_name": "태풍 산바 - 구미천지구",
-          "admin_code": "47190",
-          "score": 37,
-          "coverage": 65,
-          "confidence": "LIMITED",
-          "graph": "NOT_AVAILABLE",
-          "factors": [
-            {
-              "code": "hazard_type",
-              "name": "재난유형",
-              "availability": "AVAILABLE",
-              "weight": 20,
-              "effective_weight": 30.8,
-              "normalized_score": 0.167,
-              "contribution_score": 5.1
-            },
-            {
-              "code": "weather_hydrology",
-              "name": "기상·수문",
-              "availability": "NOT_AVAILABLE",
-              "weight": 25,
-              "effective_weight": 0,
-              "normalized_score": null,
-              "contribution_score": 0
-            },
-            {
-              "code": "spatial",
-              "name": "공간·유역",
-              "availability": "AVAILABLE",
-              "weight": 15,
-              "effective_weight": 23.1,
-              "normalized_score": 1,
-              "contribution_score": 23.1
-            },
-            {
-              "code": "vulnerability",
-              "name": "취약요인",
-              "availability": "AVAILABLE",
-              "weight": 15,
-              "effective_weight": 23.1,
-              "normalized_score": 0.032,
-              "contribution_score": 0.7
-            },
-            {
-              "code": "damage_pattern",
-              "name": "피해양상",
-              "availability": "AVAILABLE",
-              "weight": 10,
-              "effective_weight": 15.4,
-              "normalized_score": 0,
-              "contribution_score": 0
-            },
-            {
-              "code": "response_pattern",
-              "name": "대응조치",
-              "availability": "NOT_AVAILABLE",
-              "weight": 10,
-              "effective_weight": 0,
-              "normalized_score": null,
-              "contribution_score": 0
-            },
-            {
-              "code": "temporal",
-              "name": "계절·시간",
-              "availability": "AVAILABLE",
-              "weight": 5,
-              "effective_weight": 7.7,
-              "normalized_score": 1,
-              "contribution_score": 7.7
-            }
-          ],
-          "response_comparison": [
-            {
-              "current": "사면 접근 통제 여부",
-              "past": null,
-              "difference": "대응조치 근거 미확보 - 현재 매뉴얼·현장 확인 필요",
-              "confirm": true
-            },
-            {
-              "current": "낙석방지시설 상태",
-              "past": null,
-              "difference": "대응조치 근거 미확보 - 현재 매뉴얼·현장 확인 필요",
-              "confirm": true
-            },
-            {
-              "current": "인접 주거지 안내",
-              "past": null,
-              "difference": "대응조치 근거 미확보 - 현재 매뉴얼·현장 확인 필요",
-              "confirm": true
-            }
-          ],
-          "data_status": "actual_backed",
-          "official_data": false
-        },
-        {
-          "rank": 6,
           "event_id": "EVT::20230809-FLOOD-45190-902",
           "event_name": "남원 선제통제로 피해가 제한된 비교 시연사례",
           "admin_code": "45190",
@@ -6489,7 +6392,7 @@
           "official_data": false
         },
         {
-          "rank": 7,
+          "rank": 6,
           "event_id": "EVT::20200713-FLOOD-45190-901",
           "event_name": "남원 요천 홍수 대응 시연사례",
           "admin_code": "45190",
@@ -6583,6 +6486,103 @@
             }
           ],
           "data_status": "synthetic_demo",
+          "official_data": false
+        },
+        {
+          "rank": 7,
+          "event_id": "EVT::20120901-TYPH-47190-001",
+          "event_name": "태풍 산바 - 구미천지구",
+          "admin_code": "47190",
+          "score": 32,
+          "coverage": 65,
+          "confidence": "LIMITED",
+          "graph": "NOT_AVAILABLE",
+          "factors": [
+            {
+              "code": "hazard_type",
+              "name": "재난유형",
+              "availability": "AVAILABLE",
+              "weight": 20,
+              "effective_weight": 30.8,
+              "normalized_score": 0.167,
+              "contribution_score": 5.1
+            },
+            {
+              "code": "weather_hydrology",
+              "name": "기상·수문",
+              "availability": "NOT_AVAILABLE",
+              "weight": 25,
+              "effective_weight": 0,
+              "normalized_score": null,
+              "contribution_score": 0
+            },
+            {
+              "code": "spatial",
+              "name": "공간·유역",
+              "availability": "AVAILABLE",
+              "weight": 15,
+              "effective_weight": 23.1,
+              "normalized_score": 1,
+              "contribution_score": 23.1
+            },
+            {
+              "code": "vulnerability",
+              "name": "취약요인",
+              "availability": "AVAILABLE",
+              "weight": 15,
+              "effective_weight": 23.1,
+              "normalized_score": 0.032,
+              "contribution_score": 0.7
+            },
+            {
+              "code": "damage_pattern",
+              "name": "피해양상",
+              "availability": "AVAILABLE",
+              "weight": 10,
+              "effective_weight": 15.4,
+              "normalized_score": 0,
+              "contribution_score": 0
+            },
+            {
+              "code": "response_pattern",
+              "name": "대응조치",
+              "availability": "NOT_AVAILABLE",
+              "weight": 10,
+              "effective_weight": 0,
+              "normalized_score": null,
+              "contribution_score": 0
+            },
+            {
+              "code": "temporal",
+              "name": "계절·시간",
+              "availability": "AVAILABLE",
+              "weight": 5,
+              "effective_weight": 7.7,
+              "normalized_score": 0.35,
+              "contribution_score": 2.7
+            }
+          ],
+          "response_comparison": [
+            {
+              "current": "사면 접근 통제 여부",
+              "past": null,
+              "difference": "대응조치 근거 미확보 - 현재 매뉴얼·현장 확인 필요",
+              "confirm": true
+            },
+            {
+              "current": "낙석방지시설 상태",
+              "past": null,
+              "difference": "대응조치 근거 미확보 - 현재 매뉴얼·현장 확인 필요",
+              "confirm": true
+            },
+            {
+              "current": "인접 주거지 안내",
+              "past": null,
+              "difference": "대응조치 근거 미확보 - 현재 매뉴얼·현장 확인 필요",
+              "confirm": true
+            }
+          ],
+          "data_status": "actual_backed",
           "official_data": false
         },
         {
@@ -7269,7 +7269,7 @@
           "event_id": "EVT::20100901-TYPH-41430-001",
           "event_name": "태풍 곤파스 - 안양천지구",
           "admin_code": "41430",
-          "score": 16,
+          "score": 11,
           "coverage": 65,
           "confidence": "LIMITED",
           "graph": "NOT_AVAILABLE",
@@ -7334,8 +7334,8 @@
               "availability": "AVAILABLE",
               "weight": 5,
               "effective_weight": 7.7,
-              "normalized_score": 1,
-              "contribution_score": 7.7
+              "normalized_score": 0.35,
+              "contribution_score": 2.7
             }
           ],
           "response_comparison": [
@@ -7500,7 +7500,7 @@
   "report_results": [
     {
       "situation_id": "SIT-NW-POC-001",
-      "report_id": "RPT-13b34887-f5a4-4864-9125-593b9163aee6",
+      "report_id": "RPT-7b9bb419-bcbb-45bf-861e-0ce3032de7f5",
       "selected_event_id": "EVT::20230809-FLOOD-45190-902",
       "similar_event_count": 1,
       "factor_count": 7,
@@ -7510,7 +7510,7 @@
     },
     {
       "situation_id": "SIT-UW-POC-001",
-      "report_id": "RPT-72f89ef9-61a4-40b0-8e2e-86ba328c7db9",
+      "report_id": "RPT-25ac1853-e936-4c8f-b5ad-861fcfb4c28a",
       "selected_event_id": "EVT::20240718-FLOOD-41430-901",
       "similar_event_count": 1,
       "factor_count": 7,
@@ -7520,7 +7520,7 @@
     },
     {
       "situation_id": "SIT-GM-POC-001",
-      "report_id": "RPT-043999cb-d8ab-4476-a2ba-778e74fd61b1",
+      "report_id": "RPT-9fa89e5f-6981-4697-8668-283496ad3d88",
       "selected_event_id": "EVT::20230810-TYPH-47190-901",
       "similar_event_count": 1,
       "factor_count": 7,
@@ -7530,7 +7530,7 @@
     },
     {
       "situation_id": "SIT-UW-SLOPE-POC-001",
-      "report_id": "RPT-fe5873d9-a7fb-4d95-8ba6-ec01bead86c1",
+      "report_id": "RPT-c6c10eb6-49ca-41ea-91ff-8ac05f4ccfd5",
       "selected_event_id": "EVT::20240805-SLOPE-41430-901",
       "similar_event_count": 1,
       "factor_count": 7,
@@ -7540,7 +7540,7 @@
     },
     {
       "situation_id": "SIT-GM-SLOPE-POC-001",
-      "report_id": "RPT-2d396341-b84e-43fd-981e-d28e1d039353",
+      "report_id": "RPT-16884670-ef83-4f13-81de-fabe24380ed9",
       "selected_event_id": "EVT::20240712-SLOPE-47190-901",
       "similar_event_count": 1,
       "factor_count": 7,
