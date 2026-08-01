@@ -207,6 +207,11 @@ th { background: #f2f6f9; }
 .report-outline a { text-decoration-thickness: 1px; text-underline-offset: 3px; }
 .report-warning { margin-top: 14px; border: 1px solid #ebcf82; background: #fff6df; border-radius: 8px; padding: 10px; }
 .report-warning p { margin: 5px 0 0; font-size: 12px; line-height: 1.5; }
+.draft-validation { border: 1px solid #ebcf82; background: #fff6df; border-radius: 8px; padding: 10px 12px; }
+.draft-validation h3 { margin: 0 0 6px; font-size: 14px; color: #6b520f; }
+.draft-validation-list { margin: 0; padding-left: 20px; font-size: 12px; line-height: 1.6; color: #5c4a12; font-weight: 400; }
+.draft-validation-ok { margin: 0; font-size: 12px; line-height: 1.5; color: #245b35; font-weight: 700; }
+.draft-validation-note { margin: 6px 0 0; font-size: 11px; line-height: 1.5; color: #6a7480; font-weight: 400; }
 .report-form { display: flex; flex-direction: column; gap: 13px; }
 .report-form > label { display: flex; flex-direction: column; gap: 6px; font-weight: 800; color: #2e506d; }
 .report-form textarea { min-height: 125px; border: 1px solid #bfcdd9; border-radius: 8px; padding: 10px; resize: vertical; font-weight: 400; color: #1c2d3d; }
@@ -309,3 +314,6 @@ th { background: #f2f6f9; }
 
 /* Runtime regression v1.4: similar-event factor and response comparison */
 .similar-event-detail{margin-top:.75rem;padding:.75rem;border:1px solid #c8d7e2;border-radius:.55rem;background:#f8fbfd}.similar-event-detail h3{margin:0 0 .5rem;color:#173f5f}.similar-event-detail p{font-size:.78rem;line-height:1.45}.table-scroll{overflow:auto;max-width:100%;margin:.55rem 0}.comparison-table{width:100%;border-collapse:collapse;font-size:.72rem;background:#fff}.comparison-table caption{text-align:left;font-weight:800;padding:.35rem 0;color:#294f69}.comparison-table th,.comparison-table td{border:1px solid #d6e0e8;padding:.38rem;text-align:left;vertical-align:top}.comparison-table thead th{background:#eef4f8;white-space:nowrap}.similar-event-detail .safety-note{margin:.55rem 0 0;padding:.45rem;background:#fff6df;border:1px solid #ecd58e;border-radius:.35rem}
+
+/* Report editor v1.5: selected similar-event detail (similarity summary, response comparison, passage evidence) */
+.report-event-detail{margin-top:10px;padding:10px;border:1px solid #d6e0e8;border-radius:8px;background:#fff}.report-event-detail h4{margin:0 0 6px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:.85rem}.report-event-detail .event-meta{font-weight:600;color:#3d5568;font-size:.78rem}.report-event-detail .seed-badge{font-size:.72rem;min-height:26px;padding:3px 8px}.report-event-empty{margin:.35rem 0;color:#5a6672;font-size:.8rem}.report-passage-list{margin:.45rem 0 0;padding-left:1.1rem;font-size:.78rem}.report-passage-list li{margin:.25rem 0}.report-passage-list .passage-excerpt{color:#41505d}.report-passage-list .passage-status{margin-left:6px;color:#5a6672}
