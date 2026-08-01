@@ -1,0 +1,137 @@
+{
+  "dataset": "priority_areas_seed",
+  "version": "0.4",
+  "notice": "공식 위험도 또는 피해예측 결과가 아닌 POC 우선 확인 규칙 예시. 담당자 확인을 지원하기 위한 상대순위이다.",
+  "scoring_rule": {
+    "current_condition_match": 35,
+    "plan_risk_and_facility": 30,
+    "historical_damage_and_flood_trace": 20,
+    "manual_priority": 10,
+    "data_quality": 5,
+    "total": 100
+  },
+  "results": [
+    {
+      "situation_id": "SIT-NW-POC-001",
+      "generated_at": "2026-07-30T14:21:00+09:00",
+      "method": "POC_RULE_V0.4",
+      "official_risk_score": false,
+      "areas": [
+        {
+          "rank": 1,
+          "spatial_object_id": "NW-A-02",
+          "name": "요천지구",
+          "score": 86,
+          "components": {
+            "current_condition_match": 32,
+            "plan_risk_and_facility": 25,
+            "historical_damage_and_flood_trace": 17,
+            "manual_priority": 8,
+            "data_quality": 4
+          },
+          "reasons": [
+            "3시간 강우 시나리오가 호우경보 기준을 충족",
+            "요천 인접 하천재해 위험지구",
+            "2020년 집중호우 피해이력과 연결",
+            "현재 수위·유량 상승 시나리오"
+          ],
+          "required_checks": [
+            "남원수위표 최신값 확인",
+            "요천 인접 저지대·도로 현장확인",
+            "침수흔적도 중첩지역 확인"
+          ],
+          "operator_confirmation_required": true
+        },
+        {
+          "rank": 2,
+          "spatial_object_id": "NW-B-01",
+          "name": "남원 내수재해 대표지구",
+          "score": 72,
+          "components": {
+            "current_condition_match": 28,
+            "plan_risk_and_facility": 22,
+            "historical_damage_and_flood_trace": 13,
+            "manual_priority": 6,
+            "data_quality": 3
+          },
+          "reasons": [
+            "누적강우 조건",
+            "내수침수 취약요인",
+            "과거 침수 참고자료 연결"
+          ],
+          "required_checks": [
+            "배수상태 확인",
+            "저지대 도로 통제 필요성 검토"
+          ],
+          "operator_confirmation_required": true
+        }
+      ]
+    },
+    {
+      "situation_id": "SIT-UW-POC-001",
+      "generated_at": "2026-07-30T15:01:00+09:00",
+      "method": "POC_RULE_V0.4",
+      "official_risk_score": false,
+      "areas": [
+        {
+          "rank": 1,
+          "spatial_object_id": "UW-A-01",
+          "name": "안양천지구",
+          "score": 89,
+          "components": {
+            "current_condition_match": 31,
+            "plan_risk_and_facility": 30,
+            "historical_damage_and_flood_trace": 16,
+            "manual_priority": 8,
+            "data_quality": 4
+          },
+          "reasons": [
+            "3시간 72mm 시나리오",
+            "제방여유고·하폭·교량 시설능력 부족",
+            "과거 홍수사례 존재",
+            "수위 급상승 현장징후"
+          ],
+          "required_checks": [
+            "교량부 통수상태 확인",
+            "하천변 접근통제 검토",
+            "관측소 최신값 재확인"
+          ],
+          "operator_confirmation_required": true
+        }
+      ]
+    },
+    {
+      "situation_id": "SIT-GM-POC-001",
+      "generated_at": "2026-07-30T16:01:00+09:00",
+      "method": "POC_RULE_V0.4",
+      "official_risk_score": false,
+      "areas": [
+        {
+          "rank": 1,
+          "spatial_object_id": "GM-A-01",
+          "name": "구미천 하천재해 대표지구",
+          "score": 84,
+          "components": {
+            "current_condition_match": 33,
+            "plan_risk_and_facility": 24,
+            "historical_damage_and_flood_trace": 15,
+            "manual_priority": 8,
+            "data_quality": 4
+          },
+          "reasons": [
+            "태풍·호우 복합 시나리오",
+            "12시간 강우와 유량 상승",
+            "하천 인접 농경지·도로 피해양상 참고"
+          ],
+          "required_checks": [
+            "구미천 수위·유량 최신값 확인",
+            "하천변 도로·농경지 현장확인",
+            "과거 유사 태풍사례 대응조치 확인"
+          ],
+          "operator_confirmation_required": true
+        }
+      ]
+    }
+  ],
+  "package_version": "0.5"
+}

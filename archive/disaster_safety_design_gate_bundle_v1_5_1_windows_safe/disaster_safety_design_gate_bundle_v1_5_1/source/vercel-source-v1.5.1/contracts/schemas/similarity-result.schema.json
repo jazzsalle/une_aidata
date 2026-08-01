@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SimilarityScoreSummary",
+  "type": "object",
+  "required": [
+    "profile_id",
+    "event_similarity_score",
+    "comparison_coverage",
+    "confidence_status",
+    "factors",
+    "graph_similarity_status"
+  ],
+  "properties": {
+    "profile_id": {
+      "type": "string"
+    },
+    "profile_version": {
+      "type": "string"
+    },
+    "event_similarity_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "retrieval_relevance_score": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "available_weight": {
+      "type": "number"
+    },
+    "comparison_coverage": {
+      "type": "number"
+    },
+    "confidence_status": {
+      "enum": [
+        "HIGH",
+        "MEDIUM",
+        "LIMITED"
+      ]
+    },
+    "graph_similarity_score": {
+      "type": "null"
+    },
+    "graph_similarity_status": {
+      "const": "NOT_AVAILABLE"
+    },
+    "factors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "factor_code",
+          "normalized_score",
+          "weight",
+          "contribution_score",
+          "availability"
+        ],
+        "properties": {
+          "factor_code": {
+            "type": "string"
+          },
+          "factor_name": {
+            "type": "string"
+          },
+          "current_value": {},
+          "candidate_value": {},
+          "normalized_score": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "weight": {
+            "type": "number"
+          },
+          "effective_weight": {
+            "type": "number"
+          },
+          "contribution_score": {
+            "type": "number"
+          },
+          "availability": {
+            "enum": [
+              "AVAILABLE",
+              "NOT_AVAILABLE"
+            ]
+          },
+          "comparison_description": {
+            "type": "string"
+          },
+          "evidence_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

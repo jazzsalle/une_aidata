@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://une.example/contracts/observation.schema.json",
+  "title": "Observation",
+  "type": "object",
+  "required": [
+    "type",
+    "value",
+    "observed_at",
+    "source_provider",
+    "value_status",
+    "official_data"
+  ],
+  "properties": {
+    "observation_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "type": {
+      "type": "string",
+      "minLength": 1
+    },
+    "station_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "value": {},
+    "unit": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "trend": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "observed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "collected_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "provider": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source_provider": {
+      "type": "string",
+      "minLength": 1
+    },
+    "data_status": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "actual",
+        "actual_backed",
+        "open_api",
+        "t3q_supplied",
+        "derived",
+        "scenario",
+        "scenario_input",
+        "mock",
+        "synthetic_demo",
+        "provisional",
+        "not_available",
+        null
+      ]
+    },
+    "value_status": {
+      "type": "string",
+      "enum": [
+        "actual",
+        "actual_backed",
+        "open_api",
+        "t3q_supplied",
+        "derived",
+        "scenario",
+        "scenario_input",
+        "mock",
+        "synthetic_demo",
+        "provisional",
+        "not_available"
+      ]
+    },
+    "official_data": {
+      "type": "boolean"
+    },
+    "quality": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "raw_reference": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

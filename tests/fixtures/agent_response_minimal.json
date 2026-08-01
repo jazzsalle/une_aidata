@@ -1,0 +1,10 @@
+{
+  "message_id": "MSG-TEST-001",
+  "answer": "테스트 응답",
+  "map_actions": [],
+  "evidence": [],
+  "limitations": [
+    "테스트 자료"
+  ],
+  "operator_confirmation_required": true
+}

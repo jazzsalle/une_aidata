@@ -1,0 +1,42 @@
+{
+  "dataset": "hydrology_station_candidates",
+  "version": "0.1",
+  "updated": "2026-07-30",
+  "description": "POC 대상지역의 하천기본계획 내부 기준지점과 향후 홍수통제소 공식 관측소 매핑을 분리 관리하는 후보 목록",
+  "safety_note": "internal_plan_station_code는 하천기본계획 산정지점 코드이며 홍수통제소 공식 관측소 코드가 아니다. official_station_code가 확인되기 전에는 공공 API 호출에 사용하지 않는다.",
+  "stations": [
+    {
+      "admin_code": "41430",
+      "admin_name": "경기도 의왕시",
+      "river_name": "안양천",
+      "internal_plan_station_code": "AY09",
+      "internal_plan_station_name": "애자교 지점",
+      "official_station_code": null,
+      "official_station_name": null,
+      "verification_status": "pending",
+      "fallback": "USER_INPUT_OR_SCENARIO"
+    },
+    {
+      "admin_code": "47190",
+      "admin_name": "경상북도 구미시",
+      "river_name": "구미천",
+      "internal_plan_station_code": null,
+      "internal_plan_station_name": null,
+      "official_station_code": null,
+      "official_station_name": null,
+      "verification_status": "pending",
+      "fallback": "USER_INPUT_OR_SCENARIO"
+    },
+    {
+      "admin_code": "45190",
+      "admin_name": "전북특별자치도 남원시",
+      "river_name": "요천",
+      "internal_plan_station_code": "Y4",
+      "internal_plan_station_name": "남원수위표",
+      "official_station_code": null,
+      "official_station_name": null,
+      "verification_status": "pending",
+      "fallback": "USER_INPUT_OR_SCENARIO"
+    }
+  ]
+}

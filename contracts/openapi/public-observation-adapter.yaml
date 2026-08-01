@@ -1,0 +1,10 @@
+openapi: 3.0.3
+info:
+  title: Public Observation Adapter Contract
+  version: 0.5.0
+paths:
+  /observations/query:
+    post:
+      summary: 기상청·홍수통제소·Scenario 응답을 Observation으로 정규화
+      responses:
+        '200': {description: Observation bundle}

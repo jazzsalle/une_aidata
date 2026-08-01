@@ -1,0 +1,113 @@
+{
+    "dataset": "provider_contracts",
+    "version": "1.3",
+    "as_of": "2026-08-01",
+    "design_rule": "Provider source schema is isolated by Adapter/Mapper. UI consumes only common Domain Model.",
+    "providers": [
+        {
+            "domain": "event",
+            "env_key": "EVENT_PROVIDER",
+            "current": "mock",
+            "allowed": [
+                "mock",
+                "t3q"
+            ],
+            "common_model": "DisasterEvent/SimilarEvent",
+            "future_api_content": [
+                "event_id",
+                "taxonomy_codes",
+                "region",
+                "occurred_from",
+                "occurred_to",
+                "conditions",
+                "damage",
+                "responses",
+                "recovery",
+                "similarity",
+                "evidence",
+                "spatial_objects"
+            ],
+            "fallback": "mock_event_provider"
+        },
+        {
+            "domain": "risk",
+            "env_key": "RISK_PROVIDER",
+            "current": "mock",
+            "allowed": [
+                "mock",
+                "t3q"
+            ],
+            "common_model": "RiskKnowledge",
+            "future_api_content": [
+                "risk_id",
+                "hazard_codes",
+                "admin_code",
+                "district",
+                "risk_factors",
+                "thresholds",
+                "mitigation",
+                "geometry_ref",
+                "evidence"
+            ],
+            "fallback": "local_plan_seed"
+        },
+        {
+            "domain": "observation",
+            "env_key": "OBSERVATION_PROVIDER",
+            "current": "mock",
+            "allowed": [
+                "mock",
+                "openapi",
+                "t3q"
+            ],
+            "common_model": "MonitoringPoint/MonitoringObservation",
+            "future_api_content": [
+                "station_id",
+                "type",
+                "location",
+                "value",
+                "unit",
+                "observed_at",
+                "quality",
+                "alert_thresholds",
+                "source"
+            ],
+            "fallback": "scenario_observation_provider"
+        },
+        {
+            "domain": "spatial",
+            "env_key": "SPATIAL_PROVIDER",
+            "current": "mock",
+            "allowed": [
+                "mock",
+                "t3q",
+                "openapi"
+            ],
+            "common_model": "SpatialObject/FeatureCollection",
+            "future_api_content": [
+                "spatial_object_id",
+                "layer_id",
+                "geometry",
+                "crs",
+                "properties",
+                "admin_code",
+                "hazard_codes",
+                "effective_at",
+                "evidence"
+            ],
+            "fallback": "local_geojson_provider"
+        }
+    ],
+    "required_common_metadata": [
+        "data_status",
+        "source_type",
+        "provider_id",
+        "official_data",
+        "provisional",
+        "observed_at",
+        "reference_at",
+        "schema_version",
+        "evidence",
+        "quality"
+    ]
+}

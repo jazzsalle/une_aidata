@@ -1,0 +1,110 @@
+{
+    "dataset": "t3q_mock_search_scenarios",
+    "version": "1.5.1",
+    "runtime_policy": "MOCK_FIRST_PROVIDER_NEUTRAL",
+    "scenarios": [
+        {
+            "scenario_id": "MOCK-CQ-01",
+            "cq_id": "CQ-01",
+            "title": "범람 위험 하천 확인",
+            "query": "관내 어떤 하천이 범람 위험인가",
+            "admin_code": "45190",
+            "taxonomy_codes": [
+                "T102"
+            ],
+            "schema_types": [
+                "FloodVulnerableZonePassage",
+                "MonitoringPointPassage"
+            ],
+            "expected_layers": [
+                "L-RIVER",
+                "L-FLOOD-RISK-AREA"
+            ],
+            "expected_event_ids": [
+                "EVT::20200713-FLOOD-45190-901"
+            ]
+        },
+        {
+            "scenario_id": "MOCK-CQ-02",
+            "cq_id": "CQ-02",
+            "title": "저지대 침수 위험지역 확인",
+            "query": "저지대 침수 위험 지역은 어디인가",
+            "admin_code": "41430",
+            "taxonomy_codes": [
+                "T10106"
+            ],
+            "schema_types": [
+                "FloodVulnerableZonePassage"
+            ],
+            "expected_layers": [
+                "L-RISK",
+                "L-FLOOD-TRACE",
+                "L-FLOOD-RISK-AREA"
+            ],
+            "expected_event_ids": [
+                "EVT::20240718-FLOOD-41430-901"
+            ]
+        },
+        {
+            "scenario_id": "MOCK-CQ-03",
+            "cq_id": "CQ-03",
+            "title": "산사태 위험지역 검색 구조",
+            "query": "급경사지 산사태 위험 지역은 어디인가",
+            "admin_code": "47190",
+            "taxonomy_codes": [
+                "T10401"
+            ],
+            "schema_types": [
+                "HazardZonePassage"
+            ],
+            "expected_layers": [
+                "L-RISK"
+            ],
+            "expected_event_ids": [
+                "EVT::20240712-SLOPE-47190-901"
+            ]
+        },
+        {
+            "scenario_id": "MOCK-CQ-04",
+            "cq_id": "CQ-04",
+            "title": "수위계·우량계 확인",
+            "query": "어떤 수위계와 우량계를 모니터링해야 하는가",
+            "admin_code": "45190",
+            "taxonomy_codes": [
+                "T102"
+            ],
+            "schema_types": [
+                "MonitoringPointPassage"
+            ],
+            "expected_layers": [
+                "L-STATION",
+                "L-RIVER"
+            ],
+            "expected_event_ids": [
+                "EVT::20200713-FLOOD-45190-901"
+            ]
+        },
+        {
+            "scenario_id": "MOCK-CQ-05",
+            "cq_id": "CQ-05",
+            "title": "과거 침수지역·사례 조회",
+            "query": "과거 침수지역은 어디인가",
+            "admin_code": "41430",
+            "taxonomy_codes": [
+                "T10106",
+                "T10206"
+            ],
+            "schema_types": [
+                "DamageRecordPassage",
+                "FloodVulnerableZonePassage"
+            ],
+            "expected_layers": [
+                "L-EVENT",
+                "L-FLOOD-TRACE"
+            ],
+            "expected_event_ids": [
+                "EVT::20240718-FLOOD-41430-901"
+            ]
+        }
+    ]
+}

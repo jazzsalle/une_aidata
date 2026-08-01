@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AgentResponse",
+  "type": "object",
+  "required": [
+    "message_id",
+    "answer",
+    "map_actions",
+    "evidence",
+    "limitations",
+    "operator_confirmation_required"
+  ],
+  "properties": {
+    "message_id": {
+      "type": "string"
+    },
+    "answer": {
+      "type": "string"
+    },
+    "situation_summary": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "priority_areas": {
+      "type": "array"
+    },
+    "similar_events": {
+      "type": "array"
+    },
+    "procedures": {
+      "type": "array"
+    },
+    "map_actions": {
+      "type": "array",
+      "items": {
+        "$ref": "map-action.schema.json"
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "evidence.schema.json"
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "operator_confirmation_required": {
+      "const": true
+    }
+  },
+  "additionalProperties": false
+}

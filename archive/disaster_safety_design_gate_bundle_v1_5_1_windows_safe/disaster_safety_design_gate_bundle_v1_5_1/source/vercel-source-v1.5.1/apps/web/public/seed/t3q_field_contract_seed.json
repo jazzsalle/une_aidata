@@ -1,0 +1,24 @@
+{
+  "dataset": "t3q_field_contract",
+  "version": "1.1",
+  "status": "provisional",
+  "items": [
+    {"field":"event_id","required":true,"use":"사건 참조·유사사례·보고서","validation":"EVT::YYYYMMDD-TYPE-REGION5-SEQ3"},
+    {"field":"ref_disaster_event_id","required":false,"use":"도메인 Passage→Event 역참조","validation":"event_id와 동일 형식"},
+    {"field":"schema_type","required":true,"use":"도메인 분류·화면 섹션·검색필터","validation":"T3Q 확정 목록과 매핑"},
+    {"field":"taxonomy_codes","required":true,"use":"재난유형·prefix 검색","validation":"TTA T코드 배열"},
+    {"field":"region_code_5","required":true,"use":"시군구 필터","validation":"숫자 5자리"},
+    {"field":"legal_region_code_10","required":false,"use":"읍면동·법정동 공간연결","validation":"숫자 10자리"},
+    {"field":"started_at","required":false,"use":"기간·상황 타임라인","validation":"ISO-8601"},
+    {"field":"ended_at","required":false,"use":"사건 종료·유사도","validation":"started_at 이후"},
+    {"field":"crisis_level","required":false,"use":"관심·주의·경계·심각 표시","validation":"LVL_01..04"},
+    {"field":"risk_factors","required":false,"use":"상황 비교·검색 설명","validation":"controlled vocabulary"},
+    {"field":"passage_id","required":true,"use":"RAG 근거·중복제거·인용","validation":"전역 유일"},
+    {"field":"lineage.source_asset_id","required":false,"use":"원천자산 추적","validation":"원천 registry 식별자"},
+    {"field":"lineage.source_file","required":false,"use":"파일 근거","validation":"비밀 경로 비노출 정책 확인"},
+    {"field":"lineage.source_sheet","required":false,"use":"정형 근거","validation":"시트명"},
+    {"field":"lineage.source_row","required":false,"use":"정형 행 근거","validation":"1 이상의 정수"},
+    {"field":"lineage.document_page","required":false,"use":"비정형 페이지 근거","validation":"1 이상의 정수"},
+    {"field":"source_url","required":false,"use":"원문 열기","validation":"권한·만료·접근성 확인"}
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://une.example/contracts/t3q-search-preview.schema.json",
+  "title": "T3Q Search Preview",
+  "type": "object",
+  "required": [
+    "request",
+    "mode",
+    "events",
+    "passages",
+    "warnings"
+  ],
+  "properties": {
+    "request": {
+      "type": "object",
+      "required": [
+        "query",
+        "taxonomy_codes",
+        "top_k"
+      ],
+      "properties": {
+        "query": {
+          "type": "string"
+        },
+        "admin_code": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[0-9]{5}$"
+        },
+        "taxonomy_codes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "schema_types": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "top_k": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 20
+        }
+      }
+    },
+    "mode": {
+      "enum": [
+        "mock_contract",
+        "pending"
+      ]
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "$ref": "t3q-event-master.schema.json"
+      }
+    },
+    "passages": {
+      "type": "array",
+      "items": {
+        "$ref": "t3q-passage.schema.json"
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": false
+}

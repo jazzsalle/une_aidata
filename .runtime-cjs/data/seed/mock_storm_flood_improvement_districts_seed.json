@@ -1,0 +1,188 @@
+{
+    "type": "FeatureCollection",
+    "name": "mock_storm_flood_improvement_districts",
+    "crs": {
+        "type": "name",
+        "properties": {
+            "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+        }
+    },
+    "metadata": {
+        "dataset": "mock_storm_flood_improvement_districts.geojson",
+        "version": "1.2",
+        "runtime_policy": "MOCK_ONLY",
+        "data_status": "mock",
+        "official_data": false,
+        "notice": "위치·형상·속성은 시연용 가상값이며 실제 공간데이터로 해석하지 않는다."
+    },
+    "features": [
+        {
+            "type": "Feature",
+            "id": "MOCK-SFI-41430-001",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            126.96900000000001,
+                            37.323
+                        ],
+                        [
+                            126.98700000000001,
+                            37.323
+                        ],
+                        [
+                            126.98700000000001,
+                            37.335
+                        ],
+                        [
+                            126.96900000000001,
+                            37.335
+                        ],
+                        [
+                            126.96900000000001,
+                            37.323
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "feature_id": "MOCK-SFI-41430-001",
+                "data_status": "mock",
+                "official_data": false,
+                "is_prediction": false,
+                "display_badges": [
+                    "시연용 Mock",
+                    "공식자료 아님"
+                ],
+                "layer_id": "L-STORM-FLOOD-IMPROVEMENT",
+                "schema_type": "HazardReductionProjectPassage",
+                "ref_disaster_event_id": "EVT::20240718-FLOOD-41430-001",
+                "taxonomy_codes": [
+                    "T10106",
+                    "T10107",
+                    "T10206"
+                ],
+                "admin_code": "41430",
+                "admin_name": "경기도 의왕시",
+                "name": "왕곡 풍수해개선 Mock 지구",
+                "project_status": "계획",
+                "project_period": "2027~2029",
+                "mitigation_summary": "우수관로·배수체계·하천 정비를 가정한 Mock 대책",
+                "source_note": "실제 풍수해생활권 종합정비·개선사업 자료 아님"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "MOCK-SFI-47190-001",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            128.345,
+                            36.098
+                        ],
+                        [
+                            128.36299999999997,
+                            36.098
+                        ],
+                        [
+                            128.36299999999997,
+                            36.11
+                        ],
+                        [
+                            128.345,
+                            36.11
+                        ],
+                        [
+                            128.345,
+                            36.098
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "feature_id": "MOCK-SFI-47190-001",
+                "data_status": "mock",
+                "official_data": false,
+                "is_prediction": false,
+                "display_badges": [
+                    "시연용 Mock",
+                    "공식자료 아님"
+                ],
+                "layer_id": "L-STORM-FLOOD-IMPROVEMENT",
+                "schema_type": "HazardReductionProjectPassage",
+                "ref_disaster_event_id": "EVT::20230810-FLOOD-47190-001",
+                "taxonomy_codes": [
+                    "T10106",
+                    "T10107",
+                    "T10206"
+                ],
+                "admin_code": "47190",
+                "admin_name": "경상북도 구미시",
+                "name": "구포 풍수해개선 Mock 지구",
+                "project_status": "계획",
+                "project_period": "2027~2029",
+                "mitigation_summary": "우수관로·배수체계·하천 정비를 가정한 Mock 대책",
+                "source_note": "실제 풍수해생활권 종합정비·개선사업 자료 아님"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "MOCK-SFI-45190-001",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            127.391,
+                            35.394999999999996
+                        ],
+                        [
+                            127.409,
+                            35.394999999999996
+                        ],
+                        [
+                            127.409,
+                            35.407
+                        ],
+                        [
+                            127.391,
+                            35.407
+                        ],
+                        [
+                            127.391,
+                            35.394999999999996
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "feature_id": "MOCK-SFI-45190-001",
+                "data_status": "mock",
+                "official_data": false,
+                "is_prediction": false,
+                "display_badges": [
+                    "시연용 Mock",
+                    "공식자료 아님"
+                ],
+                "layer_id": "L-STORM-FLOOD-IMPROVEMENT",
+                "schema_type": "HazardReductionProjectPassage",
+                "ref_disaster_event_id": "EVT::20200713-FLOOD-45190-001",
+                "taxonomy_codes": [
+                    "T10106",
+                    "T10107",
+                    "T10206"
+                ],
+                "admin_code": "45190",
+                "admin_name": "전북특별자치도 남원시",
+                "name": "노암 풍수해개선 Mock 지구",
+                "project_status": "계획",
+                "project_period": "2027~2029",
+                "mitigation_summary": "우수관로·배수체계·하천 정비를 가정한 Mock 대책",
+                "source_note": "실제 풍수해생활권 종합정비·개선사업 자료 아님"
+            }
+        }
+    ]
+}

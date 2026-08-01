@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RiskKnowledge",
+  "type": "object",
+  "required": [
+    "knowledge_id",
+    "knowledge_type",
+    "data_status"
+  ],
+  "properties": {
+    "knowledge_id": {
+      "type": "string"
+    },
+    "knowledge_type": {
+      "type": "string"
+    },
+    "admin_code": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "spatial_object_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "hazards": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "summary": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "risk_factors": {
+      "type": "array"
+    },
+    "thresholds": {
+      "type": "array"
+    },
+    "mitigation": {
+      "type": "array"
+    },
+    "plan_version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "evidence": {
+      "type": "array"
+    },
+    "data_status": {
+      "type": "string",
+      "enum": [
+        "actual",
+        "actual_backed",
+        "open_api",
+        "t3q_supplied",
+        "derived",
+        "scenario",
+        "scenario_input",
+        "mock",
+        "synthetic_demo",
+        "provisional",
+        "not_available"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,1120 @@
+{
+  "dataset": "rivers",
+  "title": "하천 3종(요천·구미천·안양천) 제원·산정지점별 계획홍수량·홍수특보 기준유량 시드",
+  "generated_from": "하천기본계획 원천 PDF 판독 전사(PyMuPDF) — 수동 검수 시드",
+  "note": "모든 수치는 각 하천기본계획 보고서 표를 정본으로 전사. 홍수특보 기준유량은 계획홍수량×50%(주의보)·×70%(경보) 산출값(고시값 아님).",
+  "warning_flow_rule": {
+    "advisory": "계획홍수량 × 0.5",
+    "alert": "계획홍수량 × 0.7",
+    "basis": "환경부 홍수통제소 홍수특보 발령 기준 — 주의보=계획홍수량 50% 유량 도달, 경보=70% 유량 도달",
+    "rounding": "요천·구미천은 정수 반올림(0.5 올림, docs/02_데이터분석.md 표기 기준), 안양천은 소수 1자리 유지",
+    "source_ref": "docs/02_데이터분석.md"
+  },
+  "rivers": [
+    {
+      "river_id": "RIV-YC",
+      "name": "요천",
+      "grade": "국가하천",
+      "admin_code": "45190",
+      "admin_name": "전북 남원시",
+      "basin_area_km2": 485.7,
+      "length_km": 17.83,
+      "length_note": "국가하천(과업구간) 연장 17.83km — 표 1.2-1. 유로연장은 하구(Y0) 기준 61.21km",
+      "flow_length_km": 61.21,
+      "design_frequency_yr": "100~200년(하류부 100년, 남원 도심구간 Y3~Y5 200년)",
+      "start_point": "전북 남원시 이백면 척문리 832-1번지선",
+      "end_point": "전북 남원시 금지면 하도리 40번지선(섬진강 합류점)",
+      "plan_name": "요천권역(국가하천) 하천기본계획(변경), 2021",
+      "source_asset_id": "SRC-YC-RVP-2021",
+      "profile_evidence": {
+        "source_asset_id": "SRC-YC-RVP-2021",
+        "doc": "요천권역(국가하천) 하천기본계획(변경) 보고서.pdf",
+        "chapter_page": "1-2",
+        "table": "표 1.2-1 과업의 범위",
+        "pdf_page": 16
+      },
+      "warning_reference_station": {
+        "station_code": "Y4",
+        "name": "남원수위표",
+        "station_no": "No.15+290",
+        "note": "요천 홍수특보 판단 기준 수위관측 지점 — 계획홍수량 2,005㎥/s 기준 주의보 1,003 / 경보 1,404㎥/s"
+      },
+      "stations": [
+        {
+          "station_code": "Y0",
+          "station_name": "요천 하구(종점)",
+          "station_no": "No.0+000",
+          "basin_area_km2": 485.7,
+          "flow_length_km": 61.21,
+          "design_flood_m3s": 2470,
+          "design_frequency_yr": 100,
+          "prev_design_flood_m3s": 2400,
+          "flood_warning": {
+            "advisory_m3s": 1235,
+            "alert_m3s": 1729
+          },
+          "evidence": {
+            "source_asset_id": "SRC-YC-RVP-2021",
+            "doc": "요천권역(국가하천) 하천기본계획(변경) 보고서.pdf",
+            "chapter_page": "3-2, 3-80~3-81",
+            "table": "표 3.1-1 홍수량 산정지점, 표 3.1-45 요천 본류 계획홍수량 산정결과, 표 3.1-46 계획홍수량 산정결과 비교",
+            "pdf_page": [
+              131,
+              209,
+              210
+            ]
+          }
+        },
+        {
+          "station_code": "Y1",
+          "station_name": "풍촌천 합류전",
+          "station_no": "No.4+080",
+          "basin_area_km2": 433.2,
+          "flow_length_km": 57.13,
+          "design_flood_m3s": 2250,
+          "design_frequency_yr": 100,
+          "prev_design_flood_m3s": null,
+          "flood_warning": {
+            "advisory_m3s": 1125,
+            "alert_m3s": 1575
+          },
+          "evidence": {
+            "source_asset_id": "SRC-YC-RVP-2021",
+            "doc": "요천권역(국가하천) 하천기본계획(변경) 보고서.pdf",
+            "chapter_page": "3-2, 3-81",
+            "table": "표 3.1-1, 표 3.1-46",
+            "pdf_page": [
+              131,
+              210
+            ]
+          }
+        },
+        {
+          "station_code": "Y2",
+          "station_name": "옥률천 합류후",
+          "station_no": "No.9+270",
+          "basin_area_km2": 398.97,
+          "flow_length_km": 51.94,
+          "design_flood_m3s": 2130,
+          "design_frequency_yr": 100,
+          "prev_design_flood_m3s": 2100,
+          "flood_warning": {
+            "advisory_m3s": 1065,
+            "alert_m3s": 1491
+          },
+          "evidence": {
+            "source_asset_id": "SRC-YC-RVP-2021",
+            "doc": "요천권역(국가하천) 하천기본계획(변경) 보고서.pdf",
+            "chapter_page": "3-2, 3-81",
+            "table": "표 3.1-1, 표 3.1-46",
+            "pdf_page": [
+              131,
+              210
+            ]
+          }
+        },
+        {
+          "station_code": "Y3",
+          "station_name": "옥률천 합류전",
+          "station_no": "No.9+730",
+          "basin_area_km2": 366.12,
+          "flow_length_km": 51.48,
+          "design_flood_m3s": 2250,
+          "design_frequency_yr": 200,
+          "prev_design_flood_m3s": 2100,
+          "flood_warning": {
+            "advisory_m3s": 1125,
+            "alert_m3s": 1575
+          },
+          "evidence": {
+            "source_asset_id": "SRC-YC-RVP-2021",
+            "doc": "요천권역(국가하천) 하천기본계획(변경) 보고서.pdf",
+            "chapter_page": "3-2, 3-81",
+            "table": "표 3.1-1, 표 3.1-46",
+            "pdf_page": [
+              131,
+              210
+            ]
+          }
+        },
+        {
+          "station_code": "Y4",
+          "station_name": "남원수위표",
+          "station_no": "No.15+290",
+          "basin_area_km2": 315.7,
+          "flow_length_km": 45.9,
+          "design_flood_m3s": 2005,
+          "design_frequency_yr": 200,
+          "prev_design_flood_m3s": null,
+          "flood_warning": {
+            "advisory_m3s": 1003,
+            "alert_m3s": 1404,
+            "note": "2,005×0.5=1,002.5 → 1,003 / 2,005×0.7=1,403.5 → 1,404 (반올림)"
+          },
+          "evidence": {
+            "source_asset_id": "SRC-YC-RVP-2021",
+            "doc": "요천권역(국가하천) 하천기본계획(변경) 보고서.pdf",
+            "chapter_page": "3-2, 3-80~3-81",
+            "table": "표 3.1-1, 표 3.1-45, 표 3.1-46",
+            "pdf_page": [
+              131,
+              209,
+              210
+            ]
+          }
+        },
+        {
+          "station_code": "Y5",
+          "station_name": "고죽천 합류후",
+          "station_no": "No.17+370",
+          "basin_area_km2": 273.95,
+          "flow_length_km": 43.84,
+          "design_flood_m3s": 1735,
+          "design_frequency_yr": 200,
+          "prev_design_flood_m3s": null,
+          "flood_warning": {
+            "advisory_m3s": 868,
+            "alert_m3s": 1215,
+            "note": "1,735×0.5=867.5 → 868 / 1,735×0.7=1,214.5 → 1,215 (반올림)"
+          },
+          "evidence": {
+            "source_asset_id": "SRC-YC-RVP-2021",
+            "doc": "요천권역(국가하천) 하천기본계획(변경) 보고서.pdf",
+            "chapter_page": "3-2, 3-81",
+            "table": "표 3.1-1, 표 3.1-46",
+            "pdf_page": [
+              131,
+              210
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "river_id": "RIV-GMC",
+      "name": "구미천",
+      "grade": "지방하천",
+      "admin_code": "47190",
+      "admin_name": "경북 구미시",
+      "basin_area_km2": 67.35,
+      "length_km": 10.07,
+      "length_note": "하천연장(지정구간) 10.07km — 표 1.2-1·1.2-2. 유로연장은 종점(GM00) 기준 13.72km",
+      "flow_length_km": 13.72,
+      "design_frequency_yr": "80~100년(하류부 GM00~GM04 100년, 상류부 GM05~GM09 80년)",
+      "start_point": "경북 구미시 수점동",
+      "end_point": "경북 구미시 신평동 낙동강(국가하천) 합류점",
+      "designation": "경북536호(1966.04.22.)",
+      "plan_name": "구미천 하천기본계획(변경), 2025",
+      "source_asset_id": "SRC-GMC-RVP-2025",
+      "profile_evidence": {
+        "source_asset_id": "SRC-GMC-RVP-2025",
+        "doc": "보고서_제01장 개요.pdf",
+        "chapter_page": "1-1",
+        "table": "표 1.2-1 하천 지정 및 기수립 현황, 표 1.2-2 계획의 범위",
+        "pdf_page": 2
+      },
+      "warning_reference_station": null,
+      "limitations": "구미천 유역 내 실측 수위관측소 없음 — 유출·유황 분석은 인근 낙동강 본류 구미대교 수위관측소(유역면적 10,915.39㎢)·구미 우량관측소 기반 비유량법과 TANK 모형으로 대체(제3장 표 3.2-2, 3-54쪽). 따라서 홍수특보 기준유량(50%/70%)은 계획홍수량 기반 산출값이며 실측 수위-유량 관계로 검증 불가.",
+      "stations": [
+        {
+          "station_code": "GM00",
+          "station_name": "구미천 종점",
+          "station_no": "No.0+000",
+          "basin_area_km2": 67.35,
+          "flow_length_km": 13.72,
+          "design_flood_m3s": 390,
+          "design_frequency_yr": 100,
+          "flood_warning": {
+            "advisory_m3s": 195,
+            "alert_m3s": 273
+          },
+          "evidence": {
+            "source_asset_id": "SRC-GMC-RVP-2025",
+            "doc": "보고서_제03장 종합분석.pdf",
+            "chapter_page": "3-1, 3-13",
+            "table": "표 3.1-1 홍수량 산정지점, 표 3.1-17 계획홍수량 결정",
+            "pdf_page": [
+              2,
+              14
+            ]
+          }
+        },
+        {
+          "station_code": "GM01",
+          "station_name": "금오천 합류후",
+          "station_no": "No.2+300",
+          "basin_area_km2": 53.96,
+          "flow_length_km": 11.2,
+          "design_flood_m3s": 390,
+          "design_frequency_yr": 100,
+          "adoption_note": "계획홍수량 결정표(표 3.1-17) 미수록 지점 — 계획홍수위표(표 3.1-21)의 구간 배분값(No.0-060~2+369 구간 390㎥/s) 적용",
+          "flood_warning": {
+            "advisory_m3s": 195,
+            "alert_m3s": 273
+          },
+          "evidence": {
+            "source_asset_id": "SRC-GMC-RVP-2025",
+            "doc": "보고서_제03장 종합분석.pdf",
+            "chapter_page": "3-1, 3-21",
+            "table": "표 3.1-1, 표 3.1-21 계획홍수위·하폭·기설제방고",
+            "pdf_page": [
+              2,
+              22
+            ]
+          }
+        },
+        {
+          "station_code": "GM02",
+          "station_name": "금오천 합류전",
+          "station_no": "No.2+400",
+          "basin_area_km2": 41.55,
+          "flow_length_km": 11.2,
+          "design_flood_m3s": 260,
+          "design_frequency_yr": 100,
+          "flood_warning": {
+            "advisory_m3s": 130,
+            "alert_m3s": 182
+          },
+          "evidence": {
+            "source_asset_id": "SRC-GMC-RVP-2025",
+            "doc": "보고서_제03장 종합분석.pdf",
+            "chapter_page": "3-1, 3-13",
+            "table": "표 3.1-1, 표 3.1-17",
+            "pdf_page": [
+              2,
+              14
+            ]
+          }
+        },
+        {
+          "station_code": "GM03",
+          "station_name": "봉곡천 합류후",
+          "station_no": "No.3+500",
+          "basin_area_km2": 38.92,
+          "flow_length_km": 9.9,
+          "design_flood_m3s": 260,
+          "design_frequency_yr": 100,
+          "adoption_note": "계획홍수량 결정표(표 3.1-17) 미수록 지점 — 계획홍수위표(표 3.1-21)의 구간 배분값(No.2+400~3+600 구간 260㎥/s) 적용",
+          "flood_warning": {
+            "advisory_m3s": 130,
+            "alert_m3s": 182
+          },
+          "evidence": {
+            "source_asset_id": "SRC-GMC-RVP-2025",
+            "doc": "보고서_제03장 종합분석.pdf",
+            "chapter_page": "3-1, 3-22~3-23",
+            "table": "표 3.1-1, 표 3.1-21",
+            "pdf_page": [
+              2,
+              23,
+              24
+            ]
+          }
+        },
+        {
+          "station_code": "GM04",
+          "station_name": "봉곡천 합류전",
+          "station_no": "No.3+600",
+          "basin_area_km2": 21.03,
+          "flow_length_km": 9.9,
+          "design_flood_m3s": 130,
+          "design_frequency_yr": 100,
+          "flood_warning": {
+            "advisory_m3s": 65,
+            "alert_m3s": 91
+          },
+          "evidence": {
+            "source_asset_id": "SRC-GMC-RVP-2025",
+            "doc": "보고서_제03장 종합분석.pdf",
+            "chapter_page": "3-1, 3-13",
+            "table": "표 3.1-1, 표 3.1-17",
+            "pdf_page": [
+              2,
+              14
+            ]
+          }
+        },
+        {
+          "station_code": "GM05",
+          "station_name": "대성저수지 지점",
+          "station_no": "No.6+807",
+          "basin_area_km2": 18.13,
+          "flow_length_km": 6.74,
+          "design_flood_m3s": 110,
+          "design_frequency_yr": 80,
+          "adoption_note": "대성저수지 홍수조절효과 반영 조절후 홍수량(조절전 185 → 조절후 110㎥/s, 표 3.1-16)",
+          "flood_warning": {
+            "advisory_m3s": 55,
+            "alert_m3s": 77
+          },
+          "evidence": {
+            "source_asset_id": "SRC-GMC-RVP-2025",
+            "doc": "보고서_제03장 종합분석.pdf",
+            "chapter_page": "3-1, 3-12~3-13",
+            "table": "표 3.1-1, 표 3.1-16 대성저수지 저류효과 검토, 표 3.1-17",
+            "pdf_page": [
+              2,
+              13,
+              14
+            ]
+          }
+        },
+        {
+          "station_code": "GM06",
+          "station_name": "대성저수지 상류부",
+          "station_no": "No.8+000",
+          "basin_area_km2": 10.71,
+          "flow_length_km": 5.58,
+          "design_flood_m3s": 125,
+          "design_frequency_yr": 80,
+          "flood_warning": {
+            "advisory_m3s": 63,
+            "alert_m3s": 88,
+            "note": "125×0.5=62.5 → 63 / 125×0.7=87.5 → 88 (반올림)"
+          },
+          "evidence": {
+            "source_asset_id": "SRC-GMC-RVP-2025",
+            "doc": "보고서_제03장 종합분석.pdf",
+            "chapter_page": "3-1, 3-13",
+            "table": "표 3.1-1, 표 3.1-17",
+            "pdf_page": [
+              2,
+              14
+            ]
+          }
+        },
+        {
+          "station_code": "GM07",
+          "station_name": "대증천(소) 합류후",
+          "station_no": "No.9+100",
+          "basin_area_km2": 8.19,
+          "flow_length_km": 4.32,
+          "design_flood_m3s": 125,
+          "design_frequency_yr": 80,
+          "adoption_note": "계획홍수량 결정표(표 3.1-17) 미수록 지점 — 계획홍수위표(표 3.1-21)의 구간 배분값(No.7+900~9+171 구간 125㎥/s) 적용",
+          "flood_warning": {
+            "advisory_m3s": 63,
+            "alert_m3s": 88,
+            "note": "125×0.5=62.5 → 63 / 125×0.7=87.5 → 88 (반올림)"
+          },
+          "evidence": {
+            "source_asset_id": "SRC-GMC-RVP-2025",
+            "doc": "보고서_제03장 종합분석.pdf",
+            "chapter_page": "3-1, 3-25~3-26",
+            "table": "표 3.1-1, 표 3.1-21",
+            "pdf_page": [
+              2,
+              26,
+              27
+            ]
+          }
+        },
+        {
+          "station_code": "GM08",
+          "station_name": "대증천(소) 합류전",
+          "station_no": "No.9+200",
+          "basin_area_km2": 6.04,
+          "flow_length_km": 4.32,
+          "design_flood_m3s": 85,
+          "design_frequency_yr": 80,
+          "flood_warning": {
+            "advisory_m3s": 43,
+            "alert_m3s": 60,
+            "note": "85×0.5=42.5 → 43 / 85×0.7=59.5 → 60 (반올림)"
+          },
+          "evidence": {
+            "source_asset_id": "SRC-GMC-RVP-2025",
+            "doc": "보고서_제03장 종합분석.pdf",
+            "chapter_page": "3-1, 3-13",
+            "table": "표 3.1-1, 표 3.1-17",
+            "pdf_page": [
+              2,
+              14
+            ]
+          }
+        },
+        {
+          "station_code": "GM09",
+          "station_name": "구미천 시점",
+          "station_no": "No.10+009",
+          "basin_area_km2": 4.57,
+          "flow_length_km": 3.28,
+          "design_flood_m3s": 65,
+          "design_frequency_yr": 80,
+          "flood_warning": {
+            "advisory_m3s": 33,
+            "alert_m3s": 46,
+            "note": "65×0.5=32.5 → 33 / 65×0.7=45.5 → 46 (반올림)"
+          },
+          "evidence": {
+            "source_asset_id": "SRC-GMC-RVP-2025",
+            "doc": "보고서_제03장 종합분석.pdf",
+            "chapter_page": "3-1, 3-13",
+            "table": "표 3.1-1, 표 3.1-17",
+            "pdf_page": [
+              2,
+              14
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "river_id": "RIV-AYC",
+      "name": "안양천",
+      "grade": "지방하천",
+      "admin_code": "41430",
+      "admin_name": "경기 의왕시(과업구간) — 지방하천 구간은 의왕·군포·안양시 통과",
+      "basin_area_km2": 88.16,
+      "basin_area_note": "지방하천 종점(AY00) 기준 금회(2020) 유역면적. 기수립(2015)은 88.56㎢",
+      "length_km": 11.41,
+      "length_note": "지방하천 총연장 11.41km(기수립) — 금회 시점 조정으로 11.25km(No.11+249). 금회 일부변경 과업구간은 의왕 구간 No.8+122~No.11+411, L=3.29km",
+      "design_frequency_yr": "100년",
+      "start_point": "경기도 의왕시 왕곡동 488-10(No.11+411, 금회 조정 후 1번국도교 종점 No.11+249)",
+      "end_point": "경기도 안양시 안양동 안양천(국가하천) 기점(No.0+000)",
+      "uiwang_section": {
+        "range_no": "No.8+122~No.11+411",
+        "length_km": 3.29,
+        "start": "경기도 의왕시 오전동 150-4(의왕·군포시계, No.8+122)",
+        "end": "경기도 의왕시 왕곡동 488-10(No.11+411)",
+        "key_station": "AY09(애자교 지점) — 금회 315㎥/s 적용구간 No.8+122~9+126"
+      },
+      "plan_name": "안양천 하천기본계획(일부변경), 2020, 경기도",
+      "plan_versions": [
+        {
+          "plan_version": "기수립-2015",
+          "plan_name": "안양천권역 하천기본계획(2015.12, 서울지방국토관리청)"
+        },
+        {
+          "plan_version": "금회-2020",
+          "plan_name": "안양천 하천기본계획(일부변경)(2020, 경기도)",
+          "adopted": true
+        }
+      ],
+      "source_asset_id": "SRC-AYC-RVP-2020",
+      "profile_evidence": {
+        "source_asset_id": "SRC-AYC-RVP-2020",
+        "doc": "1.안양천 하천기본계획 보고서 작성 (수정).pdf",
+        "chapter_page": "1-6~1-9",
+        "table": "표 1.2-1 과업의 범위, 표 1.2-3 하천기본계획 수립현황, 표 1.3-2 시점 변경 현황",
+        "pdf_page": [
+          10,
+          13
+        ]
+      },
+      "warning_reference_station": {
+        "station_code": "AY09",
+        "name": "애자교 지점",
+        "station_no": "No.8+122(적용구간 시점, 의왕·군포시계) — 애자교 교량 위치 No.8+000",
+        "note": "의왕 구간 홍수특보 기준유량 산출 기준 지점 — 금회(2020) 315㎥/s 기준 주의보 157.5 / 경보 220.5㎥/s"
+      },
+      "stations": [
+        {
+          "station_code": "AY00",
+          "station_name": "지방하천 종점",
+          "station_no": "No.0+000",
+          "flow_segment_no": "No.0+000~No.2+565",
+          "basin_area_km2": 88.16,
+          "flow_length_km": 14.68,
+          "design_frequency_yr": 100,
+          "design_floods": [
+            {
+              "plan_version": "기수립-2015",
+              "design_flood_m3s": 1250,
+              "basin_area_km2": 88.56
+            },
+            {
+              "plan_version": "금회-2020",
+              "design_flood_m3s": 1253,
+              "adopted": true
+            }
+          ],
+          "flood_warning": {
+            "advisory_m3s": 626.5,
+            "alert_m3s": 877.1,
+            "basis_plan_version": "금회-2020"
+          },
+          "evidence": {
+            "source_asset_id": "SRC-AYC-RVP-2020",
+            "doc": "1.안양천 하천기본계획 보고서 작성 (수정).pdf",
+            "chapter_page": "1-11, 1-27, 1-32",
+            "table": "표 1.3-4 홍수량 산정지점 비교, 표 1.3-17 계획홍수량 산정 결과, 표 1.3-19 홍수위 및 하폭 비교",
+            "pdf_page": [
+              15,
+              31,
+              36
+            ],
+            "prev_plan_evidence": "2.기수립 하천기본계획.pdf 2-62쪽 표 2.3-15 지점별 계획홍수량(pdf p64)"
+          }
+        },
+        {
+          "station_code": "AY01",
+          "station_name": "학의천 합류후",
+          "station_no": null,
+          "flow_segment_no": "No.0+000~No.2+565",
+          "basin_area_km2": 82.74,
+          "flow_length_km": 12.03,
+          "design_frequency_yr": 100,
+          "design_floods": [
+            {
+              "plan_version": "기수립-2015",
+              "design_flood_m3s": 1250,
+              "basin_area_km2": 83.14
+            },
+            {
+              "plan_version": "금회-2020",
+              "design_flood_m3s": 1253,
+              "adopted": true
+            }
+          ],
+          "flood_warning": {
+            "advisory_m3s": 626.5,
+            "alert_m3s": 877.1,
+            "basis_plan_version": "금회-2020"
+          },
+          "evidence": {
+            "source_asset_id": "SRC-AYC-RVP-2020",
+            "doc": "1.안양천 하천기본계획 보고서 작성 (수정).pdf",
+            "chapter_page": "1-11, 1-27, 1-32",
+            "table": "표 1.3-4, 표 1.3-17, 표 1.3-19",
+            "pdf_page": [
+              15,
+              31,
+              36
+            ]
+          }
+        },
+        {
+          "station_code": "AY02",
+          "station_name": "학의천 합류전",
+          "station_no": null,
+          "flow_segment_no": "No.2+655~No.2+948",
+          "basin_area_km2": 41.21,
+          "flow_length_km": 10.07,
+          "design_frequency_yr": 100,
+          "design_floods": [
+            {
+              "plan_version": "기수립-2015",
+              "design_flood_m3s": 630,
+              "basin_area_km2": 41.51
+            },
+            {
+              "plan_version": "금회-2020",
+              "design_flood_m3s": 670,
+              "adopted": true
+            }
+          ],
+          "flood_warning": {
+            "advisory_m3s": 335,
+            "alert_m3s": 469,
+            "basis_plan_version": "금회-2020"
+          },
+          "evidence": {
+            "source_asset_id": "SRC-AYC-RVP-2020",
+            "doc": "1.안양천 하천기본계획 보고서 작성 (수정).pdf",
+            "chapter_page": "1-11, 1-27, 1-33",
+            "table": "표 1.3-4, 표 1.3-17, 표 1.3-19",
+            "pdf_page": [
+              15,
+              31,
+              37
+            ]
+          }
+        },
+        {
+          "station_code": "AY03",
+          "station_name": "호계천 합류전",
+          "station_no": null,
+          "flow_segment_no": "No.3+041~No.5+360",
+          "basin_area_km2": 36.91,
+          "flow_length_km": 9.71,
+          "design_frequency_yr": 100,
+          "design_floods": [
+            {
+              "plan_version": "기수립-2015",
+              "design_flood_m3s": 580,
+              "basin_area_km2": 37.2
+            },
+            {
+              "plan_version": "금회-2020",
+              "design_flood_m3s": 621,
+              "adopted": true
+            }
+          ],
+          "flood_warning": {
+            "advisory_m3s": 310.5,
+            "alert_m3s": 434.7,
+            "basis_plan_version": "금회-2020"
+          },
+          "evidence": {
+            "source_asset_id": "SRC-AYC-RVP-2020",
+            "doc": "1.안양천 하천기본계획 보고서 작성 (수정).pdf",
+            "chapter_page": "1-11, 1-27, 1-33",
+            "table": "표 1.3-4, 표 1.3-17, 표 1.3-19",
+            "pdf_page": [
+              15,
+              31,
+              37
+            ]
+          }
+        },
+        {
+          "station_code": "AY04",
+          "station_name": "산본천 합류후",
+          "station_no": null,
+          "flow_segment_no": "No.3+041~No.5+360",
+          "basin_area_km2": 33.2,
+          "flow_length_km": 7.32,
+          "design_frequency_yr": 100,
+          "design_floods": [
+            {
+              "plan_version": "기수립-2015",
+              "design_flood_m3s": 580,
+              "basin_area_km2": 33.5
+            },
+            {
+              "plan_version": "금회-2020",
+              "design_flood_m3s": 621,
+              "adopted": true
+            }
+          ],
+          "flood_warning": {
+            "advisory_m3s": 310.5,
+            "alert_m3s": 434.7,
+            "basis_plan_version": "금회-2020"
+          },
+          "evidence": {
+            "source_asset_id": "SRC-AYC-RVP-2020",
+            "doc": "1.안양천 하천기본계획 보고서 작성 (수정).pdf",
+            "chapter_page": "1-11, 1-27, 1-33~1-34",
+            "table": "표 1.3-4, 표 1.3-17, 표 1.3-19",
+            "pdf_page": [
+              15,
+              31,
+              37,
+              38
+            ]
+          }
+        },
+        {
+          "station_code": "AY05",
+          "station_name": "산본천 합류전",
+          "station_no": null,
+          "flow_segment_no": "No.5+377~No.5+861",
+          "basin_area_km2": 23.31,
+          "flow_length_km": 7.32,
+          "design_frequency_yr": 100,
+          "design_floods": [
+            {
+              "plan_version": "기수립-2015",
+              "design_flood_m3s": 420,
+              "basin_area_km2": 23.6
+            },
+            {
+              "plan_version": "금회-2020",
+              "design_flood_m3s": 455,
+              "adopted": true
+            }
+          ],
+          "flood_warning": {
+            "advisory_m3s": 227.5,
+            "alert_m3s": 318.5,
+            "basis_plan_version": "금회-2020"
+          },
+          "evidence": {
+            "source_asset_id": "SRC-AYC-RVP-2020",
+            "doc": "1.안양천 하천기본계획 보고서 작성 (수정).pdf",
+            "chapter_page": "1-11, 1-27, 1-34",
+            "table": "표 1.3-4, 표 1.3-17, 표 1.3-19",
+            "pdf_page": [
+              15,
+              31,
+              38
+            ]
+          }
+        },
+        {
+          "station_code": "AY06",
+          "station_name": "당정천 합류후",
+          "station_no": null,
+          "flow_segment_no": "No.5+377~No.5+861",
+          "basin_area_km2": 23.13,
+          "flow_length_km": 6.87,
+          "design_frequency_yr": 100,
+          "design_floods": [
+            {
+              "plan_version": "기수립-2015",
+              "design_flood_m3s": 420,
+              "basin_area_km2": 23.42
+            },
+            {
+              "plan_version": "금회-2020",
+              "design_flood_m3s": 455,
+              "adopted": true
+            }
+          ],
+          "flood_warning": {
+            "advisory_m3s": 227.5,
+            "alert_m3s": 318.5,
+            "basis_plan_version": "금회-2020"
+          },
+          "evidence": {
+            "source_asset_id": "SRC-AYC-RVP-2020",
+            "doc": "1.안양천 하천기본계획 보고서 작성 (수정).pdf",
+            "chapter_page": "1-11, 1-27, 1-34",
+            "table": "표 1.3-4, 표 1.3-17, 표 1.3-19",
+            "pdf_page": [
+              15,
+              31,
+              38
+            ]
+          }
+        },
+        {
+          "station_code": "AY07",
+          "station_name": "당정천 합류전",
+          "station_no": null,
+          "flow_segment_no": "No.5+960~No.8+000",
+          "basin_area_km2": 17.51,
+          "flow_length_km": 6.87,
+          "design_frequency_yr": 100,
+          "design_floods": [
+            {
+              "plan_version": "기수립-2015",
+              "design_flood_m3s": 300,
+              "basin_area_km2": 17.49
+            },
+            {
+              "plan_version": "금회-2020",
+              "design_flood_m3s": 340,
+              "adopted": true
+            }
+          ],
+          "flood_warning": {
+            "advisory_m3s": 170,
+            "alert_m3s": 238,
+            "basis_plan_version": "금회-2020"
+          },
+          "evidence": {
+            "source_asset_id": "SRC-AYC-RVP-2020",
+            "doc": "1.안양천 하천기본계획 보고서 작성 (수정).pdf",
+            "chapter_page": "1-11, 1-27, 1-34~1-35",
+            "table": "표 1.3-4, 표 1.3-17, 표 1.3-19",
+            "pdf_page": [
+              15,
+              31,
+              38,
+              39
+            ]
+          }
+        },
+        {
+          "station_code": "AY08",
+          "station_name": "구군포교 지점",
+          "station_no": "No.6+626(구군포교)",
+          "flow_segment_no": "No.5+960~No.8+000",
+          "basin_area_km2": 16.93,
+          "flow_length_km": 6.12,
+          "design_frequency_yr": 100,
+          "design_floods": [
+            {
+              "plan_version": "기수립-2015",
+              "design_flood_m3s": 300,
+              "basin_area_km2": 16.92
+            },
+            {
+              "plan_version": "금회-2020",
+              "design_flood_m3s": 340,
+              "adopted": true
+            }
+          ],
+          "flood_warning": {
+            "advisory_m3s": 170,
+            "alert_m3s": 238,
+            "basis_plan_version": "금회-2020"
+          },
+          "evidence": {
+            "source_asset_id": "SRC-AYC-RVP-2020",
+            "doc": "1.안양천 하천기본계획 보고서 작성 (수정).pdf",
+            "chapter_page": "1-11, 1-27, 1-34",
+            "table": "표 1.3-4, 표 1.3-17, 표 1.3-19",
+            "pdf_page": [
+              15,
+              31,
+              38
+            ]
+          }
+        },
+        {
+          "station_code": "AY09",
+          "station_name": "애자교 지점",
+          "station_no": "No.8+122(적용구간 시점, 의왕·군포시계) — 애자교 교량 위치 No.8+000",
+          "flow_segment_no": "No.8+122~No.9+126",
+          "basin_area_km2": 14.14,
+          "flow_length_km": 4.73,
+          "design_frequency_yr": 100,
+          "uiwang_section": true,
+          "design_floods": [
+            {
+              "plan_version": "기수립-2015",
+              "design_flood_m3s": 270,
+              "basin_area_km2": 14.13
+            },
+            {
+              "plan_version": "금회-2020",
+              "design_flood_m3s": 315,
+              "adopted": true
+            }
+          ],
+          "flood_warning": {
+            "advisory_m3s": 157.5,
+            "alert_m3s": 220.5,
+            "basis_plan_version": "금회-2020",
+            "note": "의왕 구간(No.8+122~11+411) 홍수특보 기준유량 산출 기준 — 금회 315×0.5=157.5 / 315×0.7=220.5"
+          },
+          "evidence": {
+            "source_asset_id": "SRC-AYC-RVP-2020",
+            "doc": "1.안양천 하천기본계획 보고서 작성 (수정).pdf",
+            "chapter_page": "1-11, 1-27, 1-35",
+            "table": "표 1.3-4, 표 1.3-17, 표 1.3-19",
+            "pdf_page": [
+              15,
+              31,
+              39
+            ],
+            "prev_plan_evidence": "2.기수립 하천기본계획.pdf 2-62쪽 표 2.3-15 지점별 계획홍수량 — 애자교 지점 270㎥/s, 100년(pdf p64)"
+          }
+        },
+        {
+          "station_code": "AY10",
+          "station_name": "오전천 합류후",
+          "station_no": null,
+          "flow_segment_no": "No.8+122~No.9+126",
+          "basin_area_km2": 12.33,
+          "flow_length_km": 3.58,
+          "design_frequency_yr": 100,
+          "uiwang_section": true,
+          "design_floods": [
+            {
+              "plan_version": "기수립-2015",
+              "design_flood_m3s": 250,
+              "basin_area_km2": 12.33
+            },
+            {
+              "plan_version": "금회-2020",
+              "design_flood_m3s": 315,
+              "adopted": true
+            }
+          ],
+          "flood_warning": {
+            "advisory_m3s": 157.5,
+            "alert_m3s": 220.5,
+            "basis_plan_version": "금회-2020"
+          },
+          "evidence": {
+            "source_asset_id": "SRC-AYC-RVP-2020",
+            "doc": "1.안양천 하천기본계획 보고서 작성 (수정).pdf",
+            "chapter_page": "1-11, 1-27, 1-35",
+            "table": "표 1.3-4, 표 1.3-17, 표 1.3-19",
+            "pdf_page": [
+              15,
+              31,
+              39
+            ]
+          }
+        },
+        {
+          "station_code": "AY11",
+          "station_name": "오전천 합류전",
+          "station_no": null,
+          "flow_segment_no": "No.9+180~No.9+766",
+          "basin_area_km2": 8.12,
+          "flow_length_km": 3.58,
+          "design_frequency_yr": 100,
+          "uiwang_section": true,
+          "design_floods": [
+            {
+              "plan_version": "기수립-2015",
+              "design_flood_m3s": 160,
+              "basin_area_km2": 8.11
+            },
+            {
+              "plan_version": "금회-2020",
+              "design_flood_m3s": 212,
+              "adopted": true
+            }
+          ],
+          "flood_warning": {
+            "advisory_m3s": 106,
+            "alert_m3s": 148.4,
+            "basis_plan_version": "금회-2020"
+          },
+          "evidence": {
+            "source_asset_id": "SRC-AYC-RVP-2020",
+            "doc": "1.안양천 하천기본계획 보고서 작성 (수정).pdf",
+            "chapter_page": "1-11, 1-27, 1-35~1-36",
+            "table": "표 1.3-4, 표 1.3-17, 표 1.3-19",
+            "pdf_page": [
+              15,
+              31,
+              39,
+              40
+            ]
+          }
+        },
+        {
+          "station_code": "AY12",
+          "station_name": "왕곡천 합류후",
+          "station_no": null,
+          "flow_segment_no": null,
+          "flow_segment_note": "계획홍수위표(표 1.3-19)에 199㎥/s 적용구간 미표기 — 합류 직후 단구간",
+          "basin_area_km2": 7.26,
+          "flow_length_km": 2.95,
+          "design_frequency_yr": 100,
+          "uiwang_section": true,
+          "design_floods": [
+            {
+              "plan_version": "기수립-2015",
+              "design_flood_m3s": 150,
+              "basin_area_km2": 7.46
+            },
+            {
+              "plan_version": "금회-2020",
+              "design_flood_m3s": 199,
+              "adopted": true
+            }
+          ],
+          "flood_warning": {
+            "advisory_m3s": 99.5,
+            "alert_m3s": 139.3,
+            "basis_plan_version": "금회-2020"
+          },
+          "evidence": {
+            "source_asset_id": "SRC-AYC-RVP-2020",
+            "doc": "1.안양천 하천기본계획 보고서 작성 (수정).pdf",
+            "chapter_page": "1-11, 1-27",
+            "table": "표 1.3-4, 표 1.3-17",
+            "pdf_page": [
+              15,
+              31
+            ]
+          }
+        },
+        {
+          "station_code": "AY13",
+          "station_name": "왕곡천 합류전",
+          "station_no": null,
+          "flow_segment_no": "No.9+817~No.10+668",
+          "basin_area_km2": 3.21,
+          "flow_length_km": 2.95,
+          "design_frequency_yr": 100,
+          "uiwang_section": true,
+          "design_floods": [
+            {
+              "plan_version": "기수립-2015",
+              "design_flood_m3s": 70,
+              "basin_area_km2": 3.41
+            },
+            {
+              "plan_version": "금회-2020",
+              "design_flood_m3s": 91,
+              "adopted": true
+            }
+          ],
+          "flood_warning": {
+            "advisory_m3s": 45.5,
+            "alert_m3s": 63.7,
+            "basis_plan_version": "금회-2020"
+          },
+          "evidence": {
+            "source_asset_id": "SRC-AYC-RVP-2020",
+            "doc": "1.안양천 하천기본계획 보고서 작성 (수정).pdf",
+            "chapter_page": "1-11, 1-27, 1-36",
+            "table": "표 1.3-4, 표 1.3-17, 표 1.3-19",
+            "pdf_page": [
+              15,
+              31,
+              40
+            ]
+          }
+        },
+        {
+          "station_code": "AY14",
+          "station_name": "통미천(소) 합류후",
+          "station_no": null,
+          "flow_segment_no": null,
+          "flow_segment_note": "계획홍수위표(표 1.3-19)에 70㎥/s 적용구간 미표기 — 합류 직후 단구간. 기수립(2015)에서는 '지류합류후(왕곡4교)' 명칭",
+          "basin_area_km2": 2.3,
+          "flow_length_km": 2.11,
+          "design_frequency_yr": 100,
+          "uiwang_section": true,
+          "design_floods": [
+            {
+              "plan_version": "기수립-2015",
+              "design_flood_m3s": 50,
+              "basin_area_km2": 2.31
+            },
+            {
+              "plan_version": "금회-2020",
+              "design_flood_m3s": 70,
+              "adopted": true
+            }
+          ],
+          "flood_warning": {
+            "advisory_m3s": 35,
+            "alert_m3s": 49,
+            "basis_plan_version": "금회-2020"
+          },
+          "evidence": {
+            "source_asset_id": "SRC-AYC-RVP-2020",
+            "doc": "1.안양천 하천기본계획 보고서 작성 (수정).pdf",
+            "chapter_page": "1-11, 1-27",
+            "table": "표 1.3-4, 표 1.3-17",
+            "pdf_page": [
+              15,
+              31
+            ]
+          }
+        },
+        {
+          "station_code": "AY15",
+          "station_name": "통미천(소) 합류전",
+          "station_no": null,
+          "flow_segment_no": "No.10+719~No.11+215",
+          "basin_area_km2": 1.58,
+          "flow_length_km": 1.67,
+          "design_frequency_yr": 100,
+          "uiwang_section": true,
+          "design_floods": [
+            {
+              "plan_version": "기수립-2015",
+              "design_flood_m3s": null,
+              "note": "기수립 미설정 — 금회 추가 지정 지점"
+            },
+            {
+              "plan_version": "금회-2020",
+              "design_flood_m3s": 50,
+              "adopted": true
+            }
+          ],
+          "flood_warning": {
+            "advisory_m3s": 25,
+            "alert_m3s": 35,
+            "basis_plan_version": "금회-2020"
+          },
+          "evidence": {
+            "source_asset_id": "SRC-AYC-RVP-2020",
+            "doc": "1.안양천 하천기본계획 보고서 작성 (수정).pdf",
+            "chapter_page": "1-11, 1-27, 1-36",
+            "table": "표 1.3-4, 표 1.3-17, 표 1.3-19",
+            "pdf_page": [
+              15,
+              31,
+              40
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "architecture": "React/Vite + TypeScript Vercel Functions",
+  "removed": [
+    "ASP.NET Core",
+    "C# DTO",
+    "PostgreSQL/PostGIS initial runtime",
+    "Docker Compose"
+  ],
+  "implemented": [
+    "Vercel API Functions",
+    "dynamic situation input",
+    "priority area rule",
+    "GeoJSON feature highlight",
+    "localStorage situation view"
+  ],
+  "file_count": 135
+}

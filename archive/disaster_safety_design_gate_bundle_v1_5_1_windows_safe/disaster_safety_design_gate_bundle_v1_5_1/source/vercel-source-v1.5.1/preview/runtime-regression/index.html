@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>재난안전 POC Runtime Regression</title>
+<style>
+:root{font-family:"Noto Sans KR","Malgun Gothic",sans-serif;color:#172b3a;background:#edf2f6}*{box-sizing:border-box}body{margin:0}.wrap{width:min(1500px,100%);margin:auto;padding:24px}.hero,.card{background:#fff;border:1px solid #cbd7e1;border-radius:12px;box-shadow:0 2px 10px rgba(20,50,75,.06)}.hero{padding:20px;margin-bottom:14px}.hero h1{margin:0;color:#123f64}.hero p{margin:6px 0 0;color:#61788b}.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}.metric{padding:12px;border-radius:9px;background:#f4f8fb;border:1px solid #d8e3eb}.metric strong{display:block;font-size:24px;color:#145f96}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.tabs button{min-height:42px;border:1px solid #aebfcd;background:#fff;border-radius:8px;padding:8px 14px;font-weight:800;color:#315a78}.tabs button.active{background:#1769aa;color:#fff}.card{padding:16px;margin-bottom:14px}.card h2{margin:0 0 10px;color:#183f5f}.notice{padding:10px;border:1px solid #e5c975;background:#fff6dc;border-radius:8px;margin:10px 0}.table-wrap{overflow:auto;border:1px solid #d3dee7;border-radius:8px}table{border-collapse:collapse;width:100%;font-size:13px;background:#fff}th,td{border-bottom:1px solid #dbe4eb;padding:8px;text-align:left;vertical-align:top}thead th{position:sticky;top:0;background:#eef4f8;color:#234f70}.rank{font-weight:900;color:#1769aa}.pass{color:#19713b;font-weight:900}.blocked{color:#9a5a00;font-weight:900}.factor-list{display:flex;flex-wrap:wrap;gap:5px}.factor-list span{background:#eef4f8;border-radius:999px;padding:3px 7px;white-space:nowrap}.scenario{margin:0 0 16px}.scenario h3{margin:0 0 8px;color:#275a7c}.hidden{display:none}@media(max-width:900px){.summary{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<section class="hero"><h1>Runtime Regression Gate</h1><p>15개 Mock Event 순위, 요인별 점수, 대응비교, CQ 5문, 보고서 연계를 검증합니다.</p><div class="summary" id="summary"></div><div class="notice" id="npmNotice"></div></section>
+<nav class="tabs" aria-label="검증 결과 탭"><button class="active" data-tab="ranking">15 Event 순위</button><button data-tab="cq">CQ 5문</button><button data-tab="report">보고서 연계</button><button data-tab="checks">종합 결과</button></nav>
+<section id="ranking" class="panel"></section><section id="cq" class="panel hidden"></section><section id="report" class="panel hidden"></section><section id="checks" class="panel hidden"></section>
+</main>
+<script>
+const esc=(v)=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+fetch('./runtime_regression_result.json').then(r=>r.json()).then(data=>{
+ document.querySelector('#summary').innerHTML=[['Event',data.counts.events],['상황',data.counts.situations],['CQ',data.counts.cq],['PASS',data.checks.filter(c=>c.status==='PASS').length]].map(([k,v])=>`<div class="metric"><span>${esc(k)}</span><strong>${esc(v)}</strong></div>`).join('');
+ document.querySelector('#npmNotice').innerHTML=`<strong>npm 설치 상태: ${esc(data.npm_install.status)}</strong><br>${esc(data.npm_install.reason)}`;
+ document.querySelector('#ranking').innerHTML=data.rankings.map(r=>`<article class="card scenario" data-situation="${esc(r.situation_id)}"><h2>${esc(r.admin_name)} · ${esc(r.situation_id)}</h2><p>재난유형: ${r.hazards.map(esc).join(', ')} · 예상 1위: <strong>${esc(r.expected_top_event_id)}</strong></p><div class="table-wrap"><table><thead><tr><th>순위</th><th>Event</th><th>사례명</th><th>점수</th><th>비교범위</th><th>상위 요인</th><th>대응비교</th></tr></thead><tbody>${r.events.map(e=>`<tr><td class="rank">${e.rank}</td><td>${esc(e.event_id)}</td><td>${esc(e.event_name)}</td><td>${e.score}</td><td>${e.coverage}% / ${esc(e.confidence)}</td><td><div class="factor-list">${e.factors.filter(f=>f.availability==='AVAILABLE').sort((a,b)=>b.contribution_score-a.contribution_score).slice(0,4).map(f=>`<span>${esc(f.name)} ${f.contribution_score.toFixed(1)}</span>`).join('')}</div></td><td>${e.response_comparison.length}건</td></tr>`).join('')}</tbody></table></div></article>`).join('');
+ document.querySelector('#cq').innerHTML=`<article class="card"><h2>CQ 5문 Event·Passage 결과</h2><div class="table-wrap"><table><thead><tr><th>CQ</th><th>질문</th><th>Event</th><th>Passage</th><th>Schema</th></tr></thead><tbody>${data.cq_results.map(r=>`<tr><td>${esc(r.cq_id)}</td><td>${esc(r.title)}<br><small>${esc(r.query)}</small></td><td>${r.event_ids.map(esc).join('<br>')}</td><td>${r.passage_ids.length}건</td><td>${r.schemas.map(esc).join(', ')}</td></tr>`).join('')}</tbody></table></div></article>`;
+ document.querySelector('#report').innerHTML=`<article class="card"><h2>보고서 연계 결과</h2><div class="table-wrap"><table><thead><tr><th>상황</th><th>선택 Event</th><th>요인</th><th>대응비교</th><th>우선지역</th><th>NDMS 자동제출</th></tr></thead><tbody>${data.report_results.map(r=>`<tr><td>${esc(r.situation_id)}</td><td>${esc(r.selected_event_id)}</td><td>${r.factor_count}종</td><td>${r.response_comparison_count}건</td><td>${r.priority_area_count}건</td><td>${r.ndms_submission?'예':'아니오'}</td></tr>`).join('')}</tbody></table></div></article>`;
+ document.querySelector('#checks').innerHTML=`<article class="card"><h2>종합 Gate 결과</h2><div class="table-wrap"><table><thead><tr><th>ID</th><th>항목</th><th>상태</th><th>비고</th></tr></thead><tbody>${data.checks.map(c=>`<tr><td>${esc(c.id)}</td><td>${esc(c.name)}</td><td class="${c.status==='PASS'?'pass':'blocked'}">${esc(c.status)}</td><td>${esc(c.note??'')}</td></tr>`).join('')}</tbody></table></div></article>`;
+}).catch(e=>{document.body.innerHTML=`<pre>${esc(e.stack||e)}</pre>`});
+for(const b of document.querySelectorAll('.tabs button'))b.addEventListener('click',()=>{for(const x of document.querySelectorAll('.tabs button'))x.classList.remove('active');b.classList.add('active');for(const p of document.querySelectorAll('.panel'))p.classList.add('hidden');document.querySelector('#'+b.dataset.tab).classList.remove('hidden');});
+</script>
+</body>
+</html>

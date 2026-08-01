@@ -1,0 +1,26 @@
+# secrets
+.env
+.env.*
+!.env.example
+
+# frontend
+node_modules/
+dist/
+.vite/
+
+# .NET
+bin/
+obj/
+*.user
+*.suo
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# runtime
+logs/
+artifacts/
+coverage/

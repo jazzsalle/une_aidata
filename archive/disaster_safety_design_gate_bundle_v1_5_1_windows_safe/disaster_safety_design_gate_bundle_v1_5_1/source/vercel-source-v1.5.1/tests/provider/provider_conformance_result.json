@@ -1,0 +1,111 @@
+{
+  "version": "1.5.1",
+  "generated_at": "2026-08-01T15:31:16.489925+00:00",
+  "summary": {
+    "total": 8,
+    "pass": 1,
+    "conditional_pass": 2,
+    "blocked": 2,
+    "fail": 3
+  },
+  "results": [
+    {
+      "case_id": "PCG-001",
+      "name": "전체 Mock/Seed 기본운영",
+      "actual_status": "PASS",
+      "expected_status": "PASS",
+      "lifecycle": "SELECTABLE",
+      "expected_lifecycle": "SELECTABLE",
+      "matched": true,
+      "messages": [
+        "Mock/Seed 기본운영 계약 적합"
+      ]
+    },
+    {
+      "case_id": "PCG-002",
+      "name": "T3Q Event Provider 미연계",
+      "actual_status": "BLOCKED",
+      "expected_status": "BLOCKED",
+      "lifecycle": "DRAFT",
+      "expected_lifecycle": "DRAFT",
+      "matched": true,
+      "messages": [
+        "외부 Provider 대표응답/Fixture 미확보: event:t3q"
+      ]
+    },
+    {
+      "case_id": "PCG-003",
+      "name": "Open API Observation Provider 미연계",
+      "actual_status": "BLOCKED",
+      "expected_status": "BLOCKED",
+      "lifecycle": "DRAFT",
+      "expected_lifecycle": "DRAFT",
+      "matched": true,
+      "messages": [
+        "외부 Provider 대표응답/Fixture 미확보: observation:openapi"
+      ]
+    },
+    {
+      "case_id": "PCG-004",
+      "name": "T3Q Event + Open API Observation 혼합운영",
+      "actual_status": "CONDITIONAL_PASS",
+      "expected_status": "CONDITIONAL_PASS",
+      "lifecycle": "FIXTURE_VALIDATED",
+      "expected_lifecycle": "FIXTURE_VALIDATED",
+      "matched": true,
+      "messages": [
+        "Fixture 계약 적합",
+        "실 Endpoint shadow 시험·출처배지·Fallback 회귀시험 전에는 SELECTABLE 불가"
+      ]
+    },
+    {
+      "case_id": "PCG-005",
+      "name": "Spatial Geometry CRS 오류",
+      "actual_status": "FAIL",
+      "expected_status": "FAIL",
+      "lifecycle": "DRAFT",
+      "expected_lifecycle": "DRAFT",
+      "matched": true,
+      "messages": [
+        "공간 Geometry/CRS가 허용 계약과 불일치"
+      ]
+    },
+    {
+      "case_id": "PCG-006",
+      "name": "Event Evidence·lineage 누락",
+      "actual_status": "FAIL",
+      "expected_status": "FAIL",
+      "lifecycle": "DRAFT",
+      "expected_lifecycle": "DRAFT",
+      "matched": true,
+      "messages": [
+        "Event 결과에 Evidence/lineage 누락"
+      ]
+    },
+    {
+      "case_id": "PCG-007",
+      "name": "관측정보 최신성 초과",
+      "actual_status": "CONDITIONAL_PASS",
+      "expected_status": "CONDITIONAL_PASS",
+      "lifecycle": "FIXTURE_VALIDATED",
+      "expected_lifecycle": "FIXTURE_VALIDATED",
+      "matched": true,
+      "messages": [
+        "관측 최신성 기준 초과",
+        "STALE 배지·관측시각 표출 및 판단 신뢰도 하향 필요"
+      ]
+    },
+    {
+      "case_id": "PCG-008",
+      "name": "위험지식 임계값 단위 누락",
+      "actual_status": "FAIL",
+      "expected_status": "FAIL",
+      "lifecycle": "DRAFT",
+      "expected_lifecycle": "DRAFT",
+      "matched": true,
+      "messages": [
+        "위험 임계값에 단위 또는 산정근거 누락"
+      ]
+    }
+  ]
+}

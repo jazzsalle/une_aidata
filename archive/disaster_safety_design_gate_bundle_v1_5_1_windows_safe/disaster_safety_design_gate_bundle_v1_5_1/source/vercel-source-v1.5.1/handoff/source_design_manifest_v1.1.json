@@ -1,0 +1,241 @@
+{
+  "version": "1.1",
+  "design_document": {
+    "file": "재난안전_AI데이터_활용_시범서비스_통합설계서_v1.4.docx",
+    "sha256": "61e80d0010ce1b72c4ea47586eec855e8e945434a74b82444aa0e6f4df557e84",
+    "bytes": 1260259
+  },
+  "source_version": "1.1.0",
+  "created_at": "2026-07-31T18:41:00+09:00",
+  "files": [
+    {
+      "file": "package.json",
+      "sha256": "cb094f7d3e355520ca9eb0d267178ee2a874965a509ae24cd145174d7431c8f6",
+      "bytes": 1828
+    },
+    {
+      "file": ".env.example",
+      "sha256": "d99bfff0e5b107d00af145b29d8cc7b6413dbb5c72eff3f15f05d28d8b0b05cd",
+      "bytes": 1775
+    },
+    {
+      "file": "contracts/openapi/poc-backend.yaml",
+      "sha256": "ec55153f83f22057bddd8691d13c9b86a065caf84a9ee75549cc88585096c58d",
+      "bytes": 6412
+    },
+    {
+      "file": "data/seed/t3q_alignment_seed.json",
+      "sha256": "9fc66160b62b246a4194bce2cb06e0ce4ab488d93b7176b14f8756435661be20",
+      "bytes": 4818
+    },
+    {
+      "file": "data/seed/t3q_integration_readiness_seed.json",
+      "sha256": "85ebe1b8628c3b407ddc5ce025a518cf5bb1153b02c8a22de43a1b12e6e0db38",
+      "bytes": 3305
+    },
+    {
+      "file": "data/seed/t3q_cq_coverage_seed.json",
+      "sha256": "1ca40eeb30f872e93bb694d020c1356772cc9edfa0e07d188a0e3632666a6bd3",
+      "bytes": 4371
+    },
+    {
+      "file": "data/seed/t3q_field_contract_seed.json",
+      "sha256": "b4e46162c9ab31fc540811f469bb98a1b73f488de5915226e9b078530ad95a40",
+      "bytes": 2148
+    },
+    {
+      "file": "contracts/schemas/t3q-event-master.schema.json",
+      "sha256": "0b320c4aeb04efafb1e84f4e0fd29f7efc10040314c44b25bc4abcdea24c6909",
+      "bytes": 1820
+    },
+    {
+      "file": "contracts/schemas/t3q-passage.schema.json",
+      "sha256": "84d543efabb8be0d80617b5c48f293875487c33f7e3479e9b36dc32f684627da",
+      "bytes": 2058
+    },
+    {
+      "file": "contracts/schemas/ontology-relation.schema.json",
+      "sha256": "319aacdfe86658ff61e4e34016b548e41cc077ee26bb4a83778e649e2529edca",
+      "bytes": 1027
+    },
+    {
+      "file": "contracts/schemas/t3q-integration-readiness.schema.json",
+      "sha256": "5e8c823096530dbf1967c086594b747ea0915e25e50de9befa5da6fbae47dbdc",
+      "bytes": 1307
+    },
+    {
+      "file": "contracts/schemas/t3q-cq-coverage.schema.json",
+      "sha256": "0ab4c663e2a4ce9562afbdccd84505bfd0a4d42765a0faf9fc5e4defb8a15576",
+      "bytes": 1518
+    },
+    {
+      "file": "contracts/schemas/t3q-search-preview.schema.json",
+      "sha256": "3b1211e1dcc7df9be1649c450bbb69ba4d1bb1c2f00fae427ab4ab8891b6f96c",
+      "bytes": 1063
+    },
+    {
+      "file": "server/contracts.ts",
+      "sha256": "c3ff3856088a858a3ea115d882d027323e7c5a6fbc255029c72e276f718518c2",
+      "bytes": 6225
+    },
+    {
+      "file": "server/domain/t3qCompatibility.ts",
+      "sha256": "249570f8098067e9a165f247878def4a8d219ffe41aa082198c756d4f6c602d6",
+      "bytes": 1331
+    },
+    {
+      "file": "server/domain/t3qReadiness.ts",
+      "sha256": "444a8345aaeca9da94c7595d7362da1d256602092bc50aa708a66de16f481610",
+      "bytes": 1538
+    },
+    {
+      "file": "server/providers/t3qGateway.ts",
+      "sha256": "b72b955f7852bdc2cfe9989c58561cb5c1af8947f6a41caeecedd3550e9d5789",
+      "bytes": 8076
+    },
+    {
+      "file": "server/providers/t3qMetadata.ts",
+      "sha256": "868f3a96889a8eb1f441a6feebc3a046278b9157dac2ba2a285cc7f4273440e3",
+      "bytes": 485
+    },
+    {
+      "file": "api/v1/t3q/alignment.ts",
+      "sha256": "764d97030f2a397bb549ce1df7e1b4afc75eb450aaf681256674fc1064bcb2f7",
+      "bytes": 455
+    },
+    {
+      "file": "api/v1/t3q/readiness.ts",
+      "sha256": "52b0485ed4a18b5f2733263834788c8b910a8597c50a0c5548b1b20956ac0f16",
+      "bytes": 340
+    },
+    {
+      "file": "api/v1/t3q/cq-coverage.ts",
+      "sha256": "f466bc6cf6f5125b7afcdfd56ebbc63d9a048d2ab69792d01b4eac58b7ddae44",
+      "bytes": 347
+    },
+    {
+      "file": "api/v1/t3q/search-preview.ts",
+      "sha256": "ed04e9f573b5533d28f1cd233a3041763d0872516c2f0c44ef64a99167aec7a5",
+      "bytes": 1048
+    },
+    {
+      "file": "apps/web/src/components/T3qReadinessPanel.tsx",
+      "sha256": "35b7d908460ef977d02aa80f31616cdeb3a744c17bfe248529de0c2bf84df763",
+      "bytes": 3687
+    },
+    {
+      "file": "apps/web/src/pages/DashboardPage.tsx",
+      "sha256": "a19de3ebde335e2c09998ca6ebe4126de5912c811b7e7a7ac2840fcffea9fa9d",
+      "bytes": 1781
+    },
+    {
+      "file": "apps/web/src/services/apiClient.ts",
+      "sha256": "105cfc76843c22d34a594081967e4eb5a0d727795c4166647f3617c51bca5379",
+      "bytes": 7692
+    },
+    {
+      "file": "apps/web/src/types/contracts.ts",
+      "sha256": "fc456f0a6df748a45557a08aee24bc449faf635b19c2fefa6fdf1684806fdc7f",
+      "bytes": 8864
+    },
+    {
+      "file": "apps/web/src/styles.css",
+      "sha256": "0feea600a72ab1f18bd30408c028389abbc11f256263f3e232d5e3b8df8fc487",
+      "bytes": 30684
+    },
+    {
+      "file": "docs/20_t3q_platform_analysis.md",
+      "sha256": "c674698c0d705527d7018b2d3d58776f148898c03dfbc6f1ac8dbe4743d9965a",
+      "bytes": 18778
+    },
+    {
+      "file": "docs/21_t3q_design_alignment_brief.md",
+      "sha256": "75d10e512fa4ed05693f20027349f68a88097c2e6f52781d4e58e35a854cb4b7",
+      "bytes": 8911
+    },
+    {
+      "file": "docs/22_t3q_mapping_and_contracts.md",
+      "sha256": "1d6831fd376d11aa59dca37e915848bd03a15cf549361af0929680c5e5ed37f2",
+      "bytes": 2366
+    },
+    {
+      "file": "docs/23_t3q_interface_readiness_and_cq_coverage.md",
+      "sha256": "fa812c8621832f39ea6cc73912dd76063bbe878cc2702a42094cf0c5e7795de1",
+      "bytes": 1945
+    },
+    {
+      "file": "decisions/ADR-013-t3q-event-passage-compatibility.md",
+      "sha256": "1ce3d1d47e46e80a6930dba6c9ffd71c5eb2aaacae7cde8edc2e877e9bc8f8b9",
+      "bytes": 903
+    },
+    {
+      "file": "decisions/ADR-014-t3q-readiness-and-cq-coverage-gate.md",
+      "sha256": "4062d7d57b16b2db49d9f9780fa00b57820a16250c8a0d6c039ebafc611360b8",
+      "bytes": 880
+    },
+    {
+      "file": "tests/acceptance/SCN-T3Q-ALIGN-001.md",
+      "sha256": "667d87fd6cada97c2f9570f9c3c033749d50a3211b59271e25d77378c9c238df",
+      "bytes": 978
+    },
+    {
+      "file": "tests/acceptance/SCN-T3Q-READINESS-001.md",
+      "sha256": "8a2b488e59ba8c836a7a80d2f896dde752eb2da67d6f9398e7b14f5887a78d1a",
+      "bytes": 1026
+    },
+    {
+      "file": "scripts/smoke_t3q_alignment.py",
+      "sha256": "732235cfda65b3894d30b566095f931ca772bc5e378a9d6f20c3995194079d00",
+      "bytes": 815
+    },
+    {
+      "file": "scripts/smoke_t3q_readiness.py",
+      "sha256": "0a828ee7bdb36eb6f28f2523ecb25e74377bf34e10efdd6843e6f3d12d2ca4cc",
+      "bytes": 1441
+    },
+    {
+      "file": "scripts/smoke_t3q_search_preview.py",
+      "sha256": "48ffc1e48bc7cfe134a4a26cec7488fb9764af729c4554c07dd423d2f50f0bb7",
+      "bytes": 723
+    },
+    {
+      "file": "scripts/validate_vercel_repo.py",
+      "sha256": "1fe352ee4ed6422b58ff7b81aded1186d8cc49d40df515204aa6442fc30cc4d6",
+      "bytes": 1079
+    },
+    {
+      "file": "handoff/DEVELOPMENT_HANDOFF_V1.1.md",
+      "sha256": "d8bcc34f8dc1128c541638b26d525cce093094f79dfd699be6fd99560e4107bb",
+      "bytes": 1137
+    },
+    {
+      "file": "handoff/IMPLEMENTATION_REPORT_V1.1.md",
+      "sha256": "5f9c237614dc6a7590862271f3c9aab1b00131b8f048df30dc2dab9769ad4516",
+      "bytes": 1601
+    }
+  ],
+  "validation": {
+    "repository_structure": "PASS (358 entries)",
+    "python_smoke": [
+      "smoke_seed_contracts",
+      "smoke_similar_events",
+      "smoke_spatial_assets",
+      "smoke_integration_adapters",
+      "smoke_t3q_alignment",
+      "smoke_t3q_readiness",
+      "smoke_t3q_search_preview"
+    ],
+    "typescript_functions": "PASS (tsc -p tsconfig.functions.json --noEmit)",
+    "openapi_yaml": "PASS (v1.1.0, T3Q 4 endpoints)",
+    "web_workspace": "NOT COMPLETED: React/React DOM and type packages are not installed in the current runtime; rerun after dependency installation.",
+    "missing_files": []
+  },
+  "pending_external_contracts": [
+    "T3Q event search endpoint",
+    "T3Q passage search endpoint",
+    "authentication header/scheme",
+    "response array paths and representative payloads",
+    "MCP tool list and schemas",
+    "GIS contracts for flood risk area, dangerous reservoir, storm/flood improvement district"
+  ]
+}

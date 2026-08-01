@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FloodTrace",
+  "type": "object",
+  "required": [
+    "trace_id",
+    "admin_code",
+    "data_status"
+  ],
+  "properties": {
+    "trace_id": {
+      "type": "string"
+    },
+    "event_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "admin_code": {
+      "type": "string"
+    },
+    "occurred_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "geometry": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "depth_min_m": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "depth_max_m": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "source": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "evidence": {
+      "type": "array"
+    },
+    "data_status": {
+      "type": "string",
+      "enum": [
+        "actual",
+        "actual_backed",
+        "open_api",
+        "t3q_supplied",
+        "derived",
+        "scenario",
+        "scenario_input",
+        "mock",
+        "synthetic_demo",
+        "provisional",
+        "not_available"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

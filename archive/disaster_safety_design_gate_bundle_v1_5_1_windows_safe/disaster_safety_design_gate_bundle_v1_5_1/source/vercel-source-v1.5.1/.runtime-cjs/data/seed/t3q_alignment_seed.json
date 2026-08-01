@@ -1,0 +1,212 @@
+{
+    "dataset": "t3q_alignment_seed",
+    "version": "1.0",
+    "as_of": "2026-07-30",
+    "source_status": "TEST_MODULE_IN_PROGRESS",
+    "contract_status": "pending",
+    "notice": "T3Q 테스트 모듈 조회 결과를 기준으로 한 정합 설계이며 대외 API/MCP 확정 시 교체한다.",
+    "schema_groups": [
+        "00-통합식별",
+        "01-상황경보",
+        "02-문서보고",
+        "03-피해복구",
+        "04-취약지역",
+        "05-잠재위험요소",
+        "06-기상수문환경",
+        "07-영상GeoAI",
+        "08-공간기준",
+        "09-해외참조",
+        "10-정책표준참조"
+    ],
+    "event_id": {
+        "canonical_pattern": "EVT::{YYYYMMDD}-{DisasterTypeCode}-{RegionCode5}-{Sequence3}",
+        "example": "EVT::20240715-FLOOD-44210-001",
+        "status_values": [
+            "발생",
+            "진행",
+            "종료",
+            "보정",
+            "병합"
+        ],
+        "compatibility": "유엔이 내부 ID와 구성요소는 동일하며 Adapter에서 양방향 변환"
+    },
+    "code_mapping": [
+        {
+            "une_event_code": "HEAVY_RAIN",
+            "t3q_disaster_type": "TYPH",
+            "taxonomy_codes": [
+                "T10107"
+            ],
+            "label": "호우"
+        },
+        {
+            "une_event_code": "TYPHOON",
+            "t3q_disaster_type": "TYPH",
+            "taxonomy_codes": [
+                "T10105"
+            ],
+            "label": "태풍"
+        },
+        {
+            "une_event_code": "FLOOD",
+            "t3q_disaster_type": "FLOOD",
+            "taxonomy_codes": [
+                "T10206"
+            ],
+            "label": "홍수"
+        },
+        {
+            "une_event_code": "INUNDATION",
+            "t3q_disaster_type": "FLOOD",
+            "taxonomy_codes": [
+                "T10106"
+            ],
+            "label": "침수/풍수해"
+        },
+        {
+            "une_event_code": "LANDSLIDE",
+            "t3q_disaster_type": "SLOPE",
+            "taxonomy_codes": [
+                "T10401"
+            ],
+            "label": "산사태"
+        }
+    ],
+    "controlled_vocabularies": {
+        "crisis_level": {
+            "LVL_01": "관심",
+            "LVL_02": "주의",
+            "LVL_03": "경계",
+            "LVL_04": "심각"
+        },
+        "risk_factor": [
+            "rain_fall",
+            "rain",
+            "precipitation",
+            "wind",
+            "slope",
+            "river_level",
+            "tide",
+            "temperature"
+        ],
+        "observation_source": [
+            "MET_AWS",
+            "MET_ASOS",
+            "SAT_SAR",
+            "SAT_OPT",
+            "GIS_ADM",
+            "GIS_HAZ",
+            "GIS_VULN"
+        ],
+        "ai_analysis_type": [
+            "AI_SUM",
+            "AI_PRED",
+            "AI_SIM",
+            "AI_SOP",
+            "AI_EVAL",
+            "AI_IMG"
+        ],
+        "doc_type": [
+            "DOC_DAMAGE",
+            "DOC_RESPONSE",
+            "DOC_SITUATION",
+            "DOC_LOG"
+        ]
+    },
+    "competency_questions": [
+        {
+            "cq_id": "CQ-01",
+            "question": "관내 어떤 하천이 범람 위험인가",
+            "design_targets": [
+                "하천",
+                "홍수취약지구",
+                "계획홍수량/수위",
+                "현재 관측"
+            ]
+        },
+        {
+            "cq_id": "CQ-02",
+            "question": "저지대 침수 위험 지역은 어디인가",
+            "design_targets": [
+                "홍수위험지역",
+                "내수재해 위험지구",
+                "침수흔적도"
+            ]
+        },
+        {
+            "cq_id": "CQ-03",
+            "question": "급경사지 산사태 위험 지역은 어디인가",
+            "design_targets": [
+                "사면/토사재해 위험지구",
+                "taxonomy T10401"
+            ]
+        },
+        {
+            "cq_id": "CQ-04",
+            "question": "어떤 수위계와 우량계를 모니터링해야 하는가",
+            "design_targets": [
+                "MonitoringPoint",
+                "참조관측소",
+                "단계별 제공수위"
+            ]
+        },
+        {
+            "cq_id": "CQ-05",
+            "question": "과거 침수지역은 어디인가",
+            "design_targets": [
+                "DisasterEvent",
+                "피해이력",
+                "침수흔적도",
+                "AI_SIM"
+            ]
+        }
+    ],
+    "pending_spatial_layers": [
+        {
+            "layer_id": "L-FLOOD-RISK-AREA",
+            "name": "홍수위험지역",
+            "schema_hint": "FloodVulnerableZonePassage/GIS_HAZ",
+            "status": "pending"
+        },
+        {
+            "layer_id": "L-DANGEROUS-RESERVOIR",
+            "name": "위험저수지",
+            "schema_hint": "WaterInfrastructurePassage/GIS_VULN",
+            "status": "pending"
+        },
+        {
+            "layer_id": "L-STORM-FLOOD-IMPROVEMENT",
+            "name": "풍수해개선지구",
+            "schema_hint": "hazard_reduction_projects/GIS_HAZ",
+            "status": "pending"
+        }
+    ],
+    "relation_types": [
+        "ref_event",
+        "spatial",
+        "references",
+        "type_match",
+        "relates_to",
+        "derived",
+        "code_ref"
+    ],
+    "lineage_required": [
+        "passage_id",
+        "schema_type",
+        "source_asset_id",
+        "source_file",
+        "source_sheet",
+        "source_row",
+        "document_page",
+        "version"
+    ],
+    "mcp": {
+        "external_server_exposed": false,
+        "status": "pending",
+        "internal_tool_names_observed": [
+            "sheet_passage_extract",
+            "extract_sheet_from_search",
+            "extract_sheet_from_sql"
+        ]
+    }
+}

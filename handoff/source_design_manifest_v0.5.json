@@ -1,0 +1,332 @@
+{
+  "package": "재난안전 POC Claude Code 개발착수 패키지",
+  "version": "0.5",
+  "generated_at": "2026-07-30",
+  "files": [
+    {
+      "path": ".env.example",
+      "sha256": "a54681d9fc504bdbda0cbc0fcaf0837e5aa11a5ddca92ea0fc834f6179ad538e",
+      "bytes": 533
+    },
+    {
+      "path": "CLAUDE.md",
+      "sha256": "e391ba6371b022e14c285733f132673886d451bb80d6a4e7e05c30231ba42587",
+      "bytes": 2762
+    },
+    {
+      "path": "README.md",
+      "sha256": "c07ee62c9e0439a4cf5d8cd34bb856e596b0ff3e477547201d538d0adff10f2e",
+      "bytes": 1600
+    },
+    {
+      "path": "decisions/ADR-001-fixed-screen-layout.md",
+      "sha256": "c14e6a4930f0c319394858e9cf5cb0c6e06a32addff7e0e1d67d7951b4b510dc",
+      "bytes": 234
+    },
+    {
+      "path": "decisions/ADR-002-no-cctv-or-municipal-context.md",
+      "sha256": "ab299a8821b64110afca688609c1988d50d02635a6e6f2ac75e8c216613a7643",
+      "bytes": 187
+    },
+    {
+      "path": "decisions/ADR-003-no-damage-prediction.md",
+      "sha256": "cb9e044c9f6d861def00b9e4fa79f6a0873d56bb6cab26e86c27fd8a0ff388a7",
+      "bytes": 190
+    },
+    {
+      "path": "decisions/ADR-004-provider-first-integration.md",
+      "sha256": "bdcd28b06d0c99d605452759184f43dcfb6a2a0f282b35e8e12b3d2e3841afec",
+      "bytes": 186
+    },
+    {
+      "path": "decisions/ADR-005-technology-baseline.md",
+      "sha256": "83774921ff1082c0d2c0969c2a5a2673432486d97d71f96c5b3c061033eb331e",
+      "bytes": 165
+    },
+    {
+      "path": "docs/01_service_overview.md",
+      "sha256": "96ba241290210b7fee7774e429520389ae692175c6623f66eaabf1e3f34ff0ef",
+      "bytes": 762
+    },
+    {
+      "path": "docs/02_scope_and_decisions.md",
+      "sha256": "80adb5aba45e6bb849a9efe6e36b4792b54ff799ebf35cded30c7069963d00c6",
+      "bytes": 758
+    },
+    {
+      "path": "docs/03_user_scenarios.md",
+      "sha256": "89b665b2681a11ddf944e567652493444839670ab073a7b068ebfb533c259397",
+      "bytes": 744
+    },
+    {
+      "path": "docs/04_screen_spec.md",
+      "sha256": "7002d2761ce7ccc780fd765891bffb9a678e8086c5419cc4d878026c3e3d00ad",
+      "bytes": 1803
+    },
+    {
+      "path": "docs/05_architecture.md",
+      "sha256": "c02747967a9d6a1a89f657af2853ba7cd2ed79f9079f3242e46b28eb95e50849",
+      "bytes": 764
+    },
+    {
+      "path": "docs/06_agent_tools.md",
+      "sha256": "656cc7015a043496ab84861777fb847ab3d89f2325d438a9b188b8c9bcc70468",
+      "bytes": 1084
+    },
+    {
+      "path": "docs/07_api_contracts.md",
+      "sha256": "da261b275113ca44760ccf0be87f7711596d6d8fe2a7fe4693e664deca53c04b",
+      "bytes": 314
+    },
+    {
+      "path": "docs/08_data_model.md",
+      "sha256": "837d9f0f8ad12169e8bc928a05f213842087f98d8928e664a36a1c24b6b4f9dd",
+      "bytes": 600
+    },
+    {
+      "path": "docs/09_gis_vworld.md",
+      "sha256": "44c0b32654e7e12d76cf9dbc31bb4aa911b10f49cd336ac5af3ad12f7fde6b55",
+      "bytes": 412
+    },
+    {
+      "path": "docs/10_mock_fallback.md",
+      "sha256": "d05569fa3af4e34b7e6667dc5d4e66a7a3bb1268dad6a04930447af5993a657b",
+      "bytes": 399
+    },
+    {
+      "path": "docs/11_security_accessibility.md",
+      "sha256": "262a4e4419966cecd878882f5f27c8aa729d9380078b0621937006c7a41cb6a2",
+      "bytes": 419
+    },
+    {
+      "path": "docs/12_test_plan.md",
+      "sha256": "113c8ff9c78d801aea760b98182fe0ca7f9a1a2d77adcf8ec9922ccc6e2131e4",
+      "bytes": 490
+    },
+    {
+      "path": "docs/13_implementation_backlog.md",
+      "sha256": "4fd3dc5c21099662d1b00c4a8942b36a1b11376ce7b8efa0dcaa460d738bd89b",
+      "bytes": 551
+    },
+    {
+      "path": "mock/api_responses/flood_waterlevel_success.json",
+      "sha256": "2c7a574a8a9c9215611f712f318249ba2d3649b0eaf33720b9a05a153d6879df",
+      "bytes": 272
+    },
+    {
+      "path": "mock/api_responses/kma_alert_success.json",
+      "sha256": "aaaedf431dcd9b9afff750ed5b5ec05701b0364013c807e2f7752536b368a53c",
+      "bytes": 249
+    },
+    {
+      "path": "mock/api_responses/provider_timeout.json",
+      "sha256": "72f6c16bcbc8ce7a5db08a479857fe7b6780e7be1887927465d0ff9a6d14a803",
+      "bytes": 146
+    },
+    {
+      "path": "mock/api_responses/une_rag_search_success.json",
+      "sha256": "5d2c2a3e5559d174d61cb24293970b3ac501be0a97202a8019b6e983b7320a07",
+      "bytes": 448
+    },
+    {
+      "path": "mock/seed/README.md",
+      "sha256": "e9643a7f5f927c00bf9c194382cfdad1aac4e108b0fafdaf764094e0e7cd92c7",
+      "bytes": 2225
+    },
+    {
+      "path": "mock/seed/current_situations_seed.json",
+      "sha256": "99684a52c124d0b323be2e11d82ca74d37395d1029632ba9426b2bbaa0b41e1a",
+      "bytes": 7062
+    },
+    {
+      "path": "mock/seed/damage_recovery_events_seed.json",
+      "sha256": "880c04c1ae23d91ef53f84bc859a0db0893671530848365cda3ca7b3ea4634df",
+      "bytes": 7783
+    },
+    {
+      "path": "mock/seed/layer_catalog_seed.json",
+      "sha256": "b8985933a5fa52c47244c48962cf0b8ab7595894dda6fa3b864352b64f8a9e63",
+      "bytes": 2749
+    },
+    {
+      "path": "mock/seed/priority_areas_seed.json",
+      "sha256": "a7a769a7d45a2e072e4d1cd463e6ff847ec5566217a1bfd3707f7e3eeeffe64c",
+      "bytes": 4439
+    },
+    {
+      "path": "mock/seed/public_api_catalog_seed.json",
+      "sha256": "3aaa1e202c14ad681bdb8dba25e1538c102b067c9808e5a2f623f350eabda055",
+      "bytes": 4916
+    },
+    {
+      "path": "mock/seed/report_draft_seed.json",
+      "sha256": "4df4d1c9af84610a2b8c1126fdbac0432014b817f6737906a61d503306021397",
+      "bytes": 1592
+    },
+    {
+      "path": "mock/seed/response_procedures_seed.json",
+      "sha256": "a3ac0ef277d41e5481d24ae3ed435d286ef945f4a32c9a22fa2946647db5d6ec",
+      "bytes": 13636
+    },
+    {
+      "path": "mock/seed/satellite_assets_seed.json",
+      "sha256": "d963fd83d7c6bb1b846eda24f49cc01961897526d3df7e150d3e730e1eaeffd2",
+      "bytes": 26131
+    },
+    {
+      "path": "mock/seed/scenario_timelines_seed.json",
+      "sha256": "f690a7afb51069d80ece6ebf3ffae7514f8f06ff18105d41bc781919667b1f4e",
+      "bytes": 2847
+    },
+    {
+      "path": "openapi/poc-backend.yaml",
+      "sha256": "05c47dc0749812106b44a68c86d3b35dc6808056723f57b8a88a08a6b4671307",
+      "bytes": 4204
+    },
+    {
+      "path": "openapi/public-observation-adapter.yaml",
+      "sha256": "c4cc0ebaaf567d21b29671f334cfcafbca9c94f1f7a171fcfb348d89237929f7",
+      "bytes": 279
+    },
+    {
+      "path": "openapi/une-rag-adapter.yaml",
+      "sha256": "e21913a1cc9dba39a6fdc9946cee73865084eff83bf8f7021470f687e99958b6",
+      "bytes": 734
+    },
+    {
+      "path": "prompts/evidence_guardrails.md",
+      "sha256": "09be2ec178f0a49c3f3cc479d7db4bdb6a5e5adc3ca827eef14fff2551a301f6",
+      "bytes": 287
+    },
+    {
+      "path": "prompts/report_generation_prompt.md",
+      "sha256": "1a3614795f675b5a070c8d4b6211f78304339380a073063ce768cc579011e087",
+      "bytes": 278
+    },
+    {
+      "path": "prompts/similar_event_prompt.md",
+      "sha256": "fa90bd16d94a2686a1d64f89b81baf766c3175b4b41294f83d436c6b26f35834",
+      "bytes": 237
+    },
+    {
+      "path": "prompts/situation_parser_prompt.md",
+      "sha256": "ddc4f41ca83815de1ddf2c78e4651e96bfe8c5093c0b6bfd8501004437588088",
+      "bytes": 254
+    },
+    {
+      "path": "prompts/system_prompt.md",
+      "sha256": "0e088fe224aa1319f2b45707a1caf76612e9d72d3825307241c2d85044c96a1f",
+      "bytes": 515
+    },
+    {
+      "path": "schemas/agent-response.schema.json",
+      "sha256": "7dd6958dad23b076bb5397f831c46491df171bf566eefc398187d888c1605acd",
+      "bytes": 1148
+    },
+    {
+      "path": "schemas/common-defs.schema.json",
+      "sha256": "8496efe588ef9d6fd8b8675f3b69380677d2327b0d3e1b520b8a0c378cb3f39c",
+      "bytes": 1264
+    },
+    {
+      "path": "schemas/common-envelope.schema.json",
+      "sha256": "b0295afaf75f9cd4136d8541240f2232f06e3248142a16ac9c3c26781bb4d746",
+      "bytes": 1117
+    },
+    {
+      "path": "schemas/current-situation.schema.json",
+      "sha256": "1814d3574d0ba162c862de537b71c2d0e6374fa3358de60dd0ffa6ffd3ad91d0",
+      "bytes": 1230
+    },
+    {
+      "path": "schemas/damage-recovery-record.schema.json",
+      "sha256": "ee8d3dcc7e917239a1be39c947b743561361bf6c9d8046bda32fddf24624b680",
+      "bytes": 1424
+    },
+    {
+      "path": "schemas/disaster-event.schema.json",
+      "sha256": "aee46cb9ac178cf17d413bba90f4eaa566ef6052b5dd6b338a82df11a17a5073",
+      "bytes": 1307
+    },
+    {
+      "path": "schemas/evidence.schema.json",
+      "sha256": "6842d470e88ba99b360d2dfc99939538368921e32271ad338222ace93bd715dc",
+      "bytes": 1126
+    },
+    {
+      "path": "schemas/flood-trace.schema.json",
+      "sha256": "efd938b49764006ae33182d8fd11fabaf29ed1f5a164529503bccf37105654b2",
+      "bytes": 1081
+    },
+    {
+      "path": "schemas/map-action.schema.json",
+      "sha256": "fb3121a8b5fd4e34f1989b9cb49774d5f640b126689791eff0a2bf601f130f78",
+      "bytes": 755
+    },
+    {
+      "path": "schemas/observation.schema.json",
+      "sha256": "32079aedc4604ccd6ccc8a2755d93635c6bc7c7076bff4182e9e14ff5d35df4f",
+      "bytes": 1343
+    },
+    {
+      "path": "schemas/priority-area.schema.json",
+      "sha256": "d4d46319738d5999e586d3403f6b83dbb1fa0d7d4d06ce4817720390e5c0458e",
+      "bytes": 1761
+    },
+    {
+      "path": "schemas/procedure-step.schema.json",
+      "sha256": "3dc8fa48c66fc9a8cbd07cfb659cecfa8831abf7627d46b71df07dd36db7283e",
+      "bytes": 1355
+    },
+    {
+      "path": "schemas/report-draft.schema.json",
+      "sha256": "cb46f4cf03b32ad68f579e048270ac8126c691f777f1fabfa0460d05ced0bab0",
+      "bytes": 884
+    },
+    {
+      "path": "schemas/risk-knowledge.schema.json",
+      "sha256": "273b6500daa945f4101671a84a6c9c839d9da0b317de076d9cc7f17e51907ea4",
+      "bytes": 1160
+    },
+    {
+      "path": "schemas/satellite-asset.schema.json",
+      "sha256": "d7f708f2b8a4b936a5678e7bdb7d392fdf56db28b89287c641a6f30d29db2586",
+      "bytes": 1638
+    },
+    {
+      "path": "schemas/situation-view.schema.json",
+      "sha256": "559f0b8cf1dc52f9d0b45cc261c911eec54604843e3e9e7674e7770afb2cf286",
+      "bytes": 1057
+    },
+    {
+      "path": "scripts/validate_package.py",
+      "sha256": "7e945700f590a8b5fd0d8afd33d8b6b0b2b786fc0e3a23de05e4078ab85095ff",
+      "bytes": 958
+    },
+    {
+      "path": "tests/acceptance/SCN-GM-001.md",
+      "sha256": "e0ed55a119d1455b71296af2954cc9b4888050066a4e85467e3e7e08bd65b0ae",
+      "bytes": 273
+    },
+    {
+      "path": "tests/acceptance/SCN-NW-001.md",
+      "sha256": "e7bd8924422d9913ab76c5edae0407ebff88ff1e0df09bfed1a1955829f074b1",
+      "bytes": 286
+    },
+    {
+      "path": "tests/acceptance/SCN-UW-001.md",
+      "sha256": "476ab174b42679ce5e6a8d814ebb74e90f0d670130349ebf7c4ffe0e3696e212",
+      "bytes": 260
+    },
+    {
+      "path": "tests/fixtures/agent_response_minimal.json",
+      "sha256": "40f8b8ed993f4e67429cae8d3503812ec19bc990ae227777672228a9372009e7",
+      "bytes": 195
+    },
+    {
+      "path": "tests/integration/api-contract-tests.md",
+      "sha256": "387a780e6a2ddf55f1538f5792f3adc83912fb76ac26e7541495d42620792aa7",
+      "bytes": 260
+    }
+  ]
+}

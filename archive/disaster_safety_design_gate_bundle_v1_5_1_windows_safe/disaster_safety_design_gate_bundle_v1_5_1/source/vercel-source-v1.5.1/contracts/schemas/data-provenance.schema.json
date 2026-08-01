@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://une.example/schemas/data-provenance.schema.json",
+  "title": "DataProvenance",
+  "type": "object",
+  "required": [
+    "data_status",
+    "source_type",
+    "provider_id",
+    "official_data",
+    "provisional",
+    "schema_version"
+  ],
+  "properties": {
+    "data_status": {
+      "enum": [
+        "actual",
+        "actual_backed",
+        "open_api",
+        "t3q_supplied",
+        "derived",
+        "scenario",
+        "scenario_input",
+        "mock",
+        "synthetic_demo",
+        "provisional",
+        "not_available"
+      ]
+    },
+    "source_type": {
+      "type": "string"
+    },
+    "provider_id": {
+      "type": "string"
+    },
+    "official_data": {
+      "type": "boolean"
+    },
+    "provisional": {
+      "type": "boolean"
+    },
+    "observed_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "reference_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "schema_version": {
+      "type": "string"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "evidence.schema.json"
+      }
+    },
+    "quality": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

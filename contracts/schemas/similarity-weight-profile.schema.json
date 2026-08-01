@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SimilarityWeightProfile",
+  "type": "object",
+  "required": [
+    "profile_id",
+    "hazard_codes",
+    "version",
+    "weights",
+    "missing_value_policy",
+    "minimum_coverage"
+  ],
+  "properties": {
+    "profile_id": {
+      "type": "string"
+    },
+    "hazard_codes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "version": {
+      "type": "string"
+    },
+    "weights": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "number",
+        "minimum": 0
+      }
+    },
+    "missing_value_policy": {
+      "const": "RENORMALIZE_AVAILABLE_WEIGHTS"
+    },
+    "minimum_coverage": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    }
+  }
+}

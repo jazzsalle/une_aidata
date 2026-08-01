@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SituationView",
+  "type": "object",
+  "required": [
+    "view_id",
+    "title",
+    "map_state",
+    "active_layers"
+  ],
+  "properties": {
+    "view_id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "situation_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "map_state": {
+      "type": "object"
+    },
+    "active_layers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "selected_event_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "selected_spatial_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "satellite_compare_state": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "procedure_state": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "agent_context": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

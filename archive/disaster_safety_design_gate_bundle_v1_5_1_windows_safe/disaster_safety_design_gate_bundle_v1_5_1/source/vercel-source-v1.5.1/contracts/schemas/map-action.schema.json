@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MapAction",
+  "type": "object",
+  "required": [
+    "action"
+  ],
+  "properties": {
+    "action": {
+      "type": "string",
+      "enum": [
+        "fit_bounds",
+        "pan_to",
+        "highlight",
+        "toggle_layer",
+        "open_popup",
+        "set_comparison",
+        "clear_highlight"
+      ]
+    },
+    "target_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "layer_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "visible": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "payload": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

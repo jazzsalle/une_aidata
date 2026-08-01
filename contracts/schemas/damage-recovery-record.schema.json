@@ -1,0 +1,174 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://une.example/contracts/damage-recovery-record.schema.json",
+  "title": "DamageRecoveryRecord",
+  "type": "object",
+  "required": [
+    "record_id",
+    "event_id",
+    "admin_code",
+    "event_name",
+    "hazards",
+    "damage",
+    "response",
+    "recovery",
+    "data_status",
+    "source_type",
+    "provider_id",
+    "official_data",
+    "provisional",
+    "schema_version",
+    "is_prediction"
+  ],
+  "properties": {
+    "record_id": {
+      "type": "string"
+    },
+    "event_id": {
+      "type": "string"
+    },
+    "source_event_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "admin_code": {
+      "type": "string"
+    },
+    "admin_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "event_name": {
+      "type": "string"
+    },
+    "occurred_from": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "occurred_to": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "hazards": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "disaster_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "taxonomy_codes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "district_code": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "district_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "conditions": {
+      "type": "object"
+    },
+    "risk_context": {
+      "type": "object"
+    },
+    "damage": {
+      "type": "object"
+    },
+    "responses": {
+      "type": "array"
+    },
+    "response": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "recovery": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "geometry": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "geometry_ref": {},
+    "evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "evidence.schema.json"
+      }
+    },
+    "data_status": {
+      "type": "string",
+      "enum": [
+        "actual",
+        "actual_backed",
+        "open_api",
+        "t3q_supplied",
+        "derived",
+        "scenario",
+        "scenario_input",
+        "mock",
+        "synthetic_demo",
+        "provisional",
+        "not_available"
+      ]
+    },
+    "source_type": {
+      "type": "string"
+    },
+    "provider_id": {
+      "type": "string"
+    },
+    "official_data": {
+      "type": "boolean"
+    },
+    "provisional": {
+      "type": "boolean"
+    },
+    "schema_version": {
+      "type": "string"
+    },
+    "is_prediction": {
+      "const": false
+    },
+    "future_provider": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "display_badges": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": false
+}

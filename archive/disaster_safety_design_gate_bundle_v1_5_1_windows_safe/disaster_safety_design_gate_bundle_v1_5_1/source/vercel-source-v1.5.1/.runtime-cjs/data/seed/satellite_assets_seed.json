@@ -1,0 +1,1379 @@
+{
+    "dataset": "satellite_assets_seed",
+    "version": "1.5.1",
+    "assets": [
+        {
+            "admin_code": "DEMO-EXT",
+            "admin_name": "시연용 외부지역 표본",
+            "area_id": "DEMO-FLOOD-TILE-001",
+            "area_name": "홍수 전·이벤트·후 영상 표본",
+            "river_id": null,
+            "event_id": "POC-FLOOD-IMAGE-SAMPLE-001",
+            "shared_demo": true,
+            "area_scope": "OUTSIDE_POC_TARGET_REGION",
+            "target_area_note": "부산·인제·영천 시범서비스 대상구역 자료가 아닌 시연용 표본이다.",
+            "tile_size_px": [
+                256,
+                256
+            ],
+            "display_mode": "standalone_tile_card",
+            "map_overlay_allowed": false,
+            "base_map_relation": "VWorld 2D 지도와 별도 표출",
+            "official_data": false,
+            "data_status": "mock",
+            "value_status": "mock",
+            "future_provider": "ThreeDLabsSatelliteProvider",
+            "display_badges": [
+                "256×256 Seed 타일",
+                "공식자료 아님",
+                "대상지역 외 표본",
+                "지도 오버레이 미적용",
+                "쓰리디랩스 자료로 교체 예정"
+            ],
+            "quality": {
+                "geometry_status": "not_georeferenced",
+                "verification_status": "seed_verified",
+                "irregular_interval": true,
+                "pixel_alignment": "same-source-crop"
+            },
+            "asset_id": "SAT-DEMO-FLOOD-001-PRE",
+            "asset_kind": "SATELLITE",
+            "phase": "PRE",
+            "phase_label": "사건발생 이전 -12일",
+            "phase_selection_rule": "event_start_at - 12 days",
+            "acquired_at": "2026-07-03T10:00:00+09:00",
+            "sensor_type": "GRAYSCALE_REFERENCE",
+            "satellite_name": "POC_REFERENCE_TILE",
+            "spatial_resolution_m": null,
+            "cloud_cover_pct": null,
+            "image_url": "/seed/imagery/sample-flood/tiles/pre_satellite_256.png",
+            "thumbnail_url": "/seed/imagery/sample-flood/tiles/pre_satellite_256.png",
+            "source_type": "user_attachment",
+            "source_authenticity": "provided_reference_image",
+            "processing": {
+                "center_crop": true,
+                "resize": "256x256_lanczos",
+                "orthorectified": false,
+                "super_resolution": false,
+                "flood_mask": false,
+                "change_detection": false,
+                "generation_method": null
+            }
+        },
+        {
+            "admin_code": "DEMO-EXT",
+            "admin_name": "시연용 외부지역 표본",
+            "area_id": "DEMO-FLOOD-TILE-001",
+            "area_name": "홍수 전·이벤트·후 영상 표본",
+            "river_id": null,
+            "event_id": "POC-FLOOD-IMAGE-SAMPLE-001",
+            "shared_demo": true,
+            "area_scope": "OUTSIDE_POC_TARGET_REGION",
+            "target_area_note": "부산·인제·영천 시범서비스 대상구역 자료가 아닌 시연용 표본이다.",
+            "tile_size_px": [
+                256,
+                256
+            ],
+            "display_mode": "standalone_tile_card",
+            "map_overlay_allowed": false,
+            "base_map_relation": "VWorld 2D 지도와 별도 표출",
+            "official_data": false,
+            "data_status": "mock",
+            "value_status": "mock",
+            "future_provider": "ThreeDLabsSatelliteProvider",
+            "display_badges": [
+                "256×256 Seed 타일",
+                "공식자료 아님",
+                "대상지역 외 표본",
+                "지도 오버레이 미적용",
+                "쓰리디랩스 자료로 교체 예정"
+            ],
+            "quality": {
+                "geometry_status": "not_georeferenced",
+                "verification_status": "seed_verified",
+                "irregular_interval": true,
+                "pixel_alignment": "same-source-crop"
+            },
+            "asset_id": "SAT-DEMO-FLOOD-001-PRE-MASK",
+            "asset_kind": "WATER_MASK",
+            "phase": "PRE",
+            "phase_label": "사건발생 이전 -12일",
+            "phase_selection_rule": "event_start_at - 12 days",
+            "acquired_at": "2026-07-03T10:00:00+09:00",
+            "sensor_type": "BINARY_WATER_MASK",
+            "satellite_name": null,
+            "spatial_resolution_m": null,
+            "cloud_cover_pct": null,
+            "image_url": "/seed/imagery/sample-flood/tiles/pre_water_mask_256.png",
+            "thumbnail_url": "/seed/imagery/sample-flood/tiles/pre_water_mask_256.png",
+            "source_type": "user_attachment",
+            "source_authenticity": "provided_reference_mask",
+            "water_mask_encoding": {
+                "water": 255,
+                "non_water": 0,
+                "description": "흰색=수계·침수영역, 검은색=비수계"
+            },
+            "processing": {
+                "center_crop": true,
+                "resize": "256x256_lanczos",
+                "orthorectified": false,
+                "super_resolution": false,
+                "flood_mask": true,
+                "change_detection": false,
+                "generation_method": null
+            }
+        },
+        {
+            "admin_code": "DEMO-EXT",
+            "admin_name": "시연용 외부지역 표본",
+            "area_id": "DEMO-FLOOD-TILE-001",
+            "area_name": "홍수 전·이벤트·후 영상 표본",
+            "river_id": null,
+            "event_id": "POC-FLOOD-IMAGE-SAMPLE-001",
+            "shared_demo": true,
+            "area_scope": "OUTSIDE_POC_TARGET_REGION",
+            "target_area_note": "부산·인제·영천 시범서비스 대상구역 자료가 아닌 시연용 표본이다.",
+            "tile_size_px": [
+                256,
+                256
+            ],
+            "display_mode": "standalone_tile_card",
+            "map_overlay_allowed": false,
+            "base_map_relation": "VWorld 2D 지도와 별도 표출",
+            "official_data": false,
+            "data_status": "mock",
+            "value_status": "mock",
+            "future_provider": "ThreeDLabsSatelliteProvider",
+            "display_badges": [
+                "256×256 Seed 타일",
+                "공식자료 아님",
+                "대상지역 외 표본",
+                "지도 오버레이 미적용",
+                "쓰리디랩스 자료로 교체 예정"
+            ],
+            "quality": {
+                "geometry_status": "not_georeferenced",
+                "verification_status": "seed_verified",
+                "irregular_interval": true,
+                "pixel_alignment": "same-source-crop"
+            },
+            "asset_id": "SAT-DEMO-FLOOD-001-EVENT",
+            "asset_kind": "SATELLITE",
+            "phase": "EVENT",
+            "phase_label": "재난 시작~종료 +2일 이내",
+            "phase_selection_rule": "event_start_at <= acquired_at <= event_end_at + 2 days",
+            "acquired_at": "2026-07-18T10:00:00+09:00",
+            "sensor_type": "GRAYSCALE_REFERENCE",
+            "satellite_name": "POC_REFERENCE_TILE",
+            "spatial_resolution_m": null,
+            "cloud_cover_pct": null,
+            "image_url": "/seed/imagery/sample-flood/tiles/event_satellite_256.png",
+            "thumbnail_url": "/seed/imagery/sample-flood/tiles/event_satellite_256.png",
+            "source_type": "derived_seed_from_pre_post",
+            "source_authenticity": "synthetic_interpolation",
+            "processing": {
+                "center_crop": true,
+                "resize": "256x256_lanczos",
+                "orthorectified": false,
+                "super_resolution": false,
+                "flood_mask": false,
+                "change_detection": false,
+                "generation_method": "registered 50:50 PRE/POST grayscale interpolation + EVENT water-mask darkening"
+            }
+        },
+        {
+            "admin_code": "DEMO-EXT",
+            "admin_name": "시연용 외부지역 표본",
+            "area_id": "DEMO-FLOOD-TILE-001",
+            "area_name": "홍수 전·이벤트·후 영상 표본",
+            "river_id": null,
+            "event_id": "POC-FLOOD-IMAGE-SAMPLE-001",
+            "shared_demo": true,
+            "area_scope": "OUTSIDE_POC_TARGET_REGION",
+            "target_area_note": "부산·인제·영천 시범서비스 대상구역 자료가 아닌 시연용 표본이다.",
+            "tile_size_px": [
+                256,
+                256
+            ],
+            "display_mode": "standalone_tile_card",
+            "map_overlay_allowed": false,
+            "base_map_relation": "VWorld 2D 지도와 별도 표출",
+            "official_data": false,
+            "data_status": "mock",
+            "value_status": "mock",
+            "future_provider": "ThreeDLabsSatelliteProvider",
+            "display_badges": [
+                "256×256 Seed 타일",
+                "공식자료 아님",
+                "대상지역 외 표본",
+                "지도 오버레이 미적용",
+                "쓰리디랩스 자료로 교체 예정"
+            ],
+            "quality": {
+                "geometry_status": "not_georeferenced",
+                "verification_status": "seed_verified",
+                "irregular_interval": true,
+                "pixel_alignment": "same-source-crop"
+            },
+            "asset_id": "SAT-DEMO-FLOOD-001-EVENT-MASK",
+            "asset_kind": "WATER_MASK",
+            "phase": "EVENT",
+            "phase_label": "재난 시작~종료 +2일 이내",
+            "phase_selection_rule": "event_start_at <= acquired_at <= event_end_at + 2 days",
+            "acquired_at": "2026-07-18T10:00:00+09:00",
+            "sensor_type": "BINARY_WATER_MASK",
+            "satellite_name": null,
+            "spatial_resolution_m": null,
+            "cloud_cover_pct": null,
+            "image_url": "/seed/imagery/sample-flood/tiles/event_water_mask_256.png",
+            "thumbnail_url": "/seed/imagery/sample-flood/tiles/event_water_mask_256.png",
+            "source_type": "derived_seed_from_pre_post",
+            "source_authenticity": "synthetic_interpolation",
+            "water_mask_encoding": {
+                "water": 255,
+                "non_water": 0,
+                "description": "흰색=수계·침수영역, 검은색=비수계"
+            },
+            "processing": {
+                "center_crop": true,
+                "resize": "256x256_lanczos",
+                "orthorectified": false,
+                "super_resolution": false,
+                "flood_mask": true,
+                "change_detection": false,
+                "generation_method": "PRE/POST binary mask weighted interpolation with midpoint area constraint"
+            }
+        },
+        {
+            "admin_code": "DEMO-EXT",
+            "admin_name": "시연용 외부지역 표본",
+            "area_id": "DEMO-FLOOD-TILE-001",
+            "area_name": "홍수 전·이벤트·후 영상 표본",
+            "river_id": null,
+            "event_id": "POC-FLOOD-IMAGE-SAMPLE-001",
+            "shared_demo": true,
+            "area_scope": "OUTSIDE_POC_TARGET_REGION",
+            "target_area_note": "부산·인제·영천 시범서비스 대상구역 자료가 아닌 시연용 표본이다.",
+            "tile_size_px": [
+                256,
+                256
+            ],
+            "display_mode": "standalone_tile_card",
+            "map_overlay_allowed": false,
+            "base_map_relation": "VWorld 2D 지도와 별도 표출",
+            "official_data": false,
+            "data_status": "mock",
+            "value_status": "mock",
+            "future_provider": "ThreeDLabsSatelliteProvider",
+            "display_badges": [
+                "256×256 Seed 타일",
+                "공식자료 아님",
+                "대상지역 외 표본",
+                "지도 오버레이 미적용",
+                "쓰리디랩스 자료로 교체 예정"
+            ],
+            "quality": {
+                "geometry_status": "not_georeferenced",
+                "verification_status": "seed_verified",
+                "irregular_interval": true,
+                "pixel_alignment": "same-source-crop"
+            },
+            "asset_id": "SAT-DEMO-FLOOD-001-POST",
+            "asset_kind": "SATELLITE",
+            "phase": "POST",
+            "phase_label": "재난 종료 이후 +12일",
+            "phase_selection_rule": "event_end_at + 12 days",
+            "acquired_at": "2026-07-29T10:00:00+09:00",
+            "sensor_type": "GRAYSCALE_REFERENCE",
+            "satellite_name": "POC_REFERENCE_TILE",
+            "spatial_resolution_m": null,
+            "cloud_cover_pct": null,
+            "image_url": "/seed/imagery/sample-flood/tiles/post_satellite_256.png",
+            "thumbnail_url": "/seed/imagery/sample-flood/tiles/post_satellite_256.png",
+            "source_type": "user_attachment",
+            "source_authenticity": "provided_reference_image",
+            "processing": {
+                "center_crop": true,
+                "resize": "256x256_lanczos",
+                "orthorectified": false,
+                "super_resolution": false,
+                "flood_mask": false,
+                "change_detection": false,
+                "generation_method": null
+            }
+        },
+        {
+            "admin_code": "DEMO-EXT",
+            "admin_name": "시연용 외부지역 표본",
+            "area_id": "DEMO-FLOOD-TILE-001",
+            "area_name": "홍수 전·이벤트·후 영상 표본",
+            "river_id": null,
+            "event_id": "POC-FLOOD-IMAGE-SAMPLE-001",
+            "shared_demo": true,
+            "area_scope": "OUTSIDE_POC_TARGET_REGION",
+            "target_area_note": "부산·인제·영천 시범서비스 대상구역 자료가 아닌 시연용 표본이다.",
+            "tile_size_px": [
+                256,
+                256
+            ],
+            "display_mode": "standalone_tile_card",
+            "map_overlay_allowed": false,
+            "base_map_relation": "VWorld 2D 지도와 별도 표출",
+            "official_data": false,
+            "data_status": "mock",
+            "value_status": "mock",
+            "future_provider": "ThreeDLabsSatelliteProvider",
+            "display_badges": [
+                "256×256 Seed 타일",
+                "공식자료 아님",
+                "대상지역 외 표본",
+                "지도 오버레이 미적용",
+                "쓰리디랩스 자료로 교체 예정"
+            ],
+            "quality": {
+                "geometry_status": "not_georeferenced",
+                "verification_status": "seed_verified",
+                "irregular_interval": true,
+                "pixel_alignment": "same-source-crop"
+            },
+            "asset_id": "SAT-DEMO-FLOOD-001-POST-MASK",
+            "asset_kind": "WATER_MASK",
+            "phase": "POST",
+            "phase_label": "재난 종료 이후 +12일",
+            "phase_selection_rule": "event_end_at + 12 days",
+            "acquired_at": "2026-07-29T10:00:00+09:00",
+            "sensor_type": "BINARY_WATER_MASK",
+            "satellite_name": null,
+            "spatial_resolution_m": null,
+            "cloud_cover_pct": null,
+            "image_url": "/seed/imagery/sample-flood/tiles/post_water_mask_256.png",
+            "thumbnail_url": "/seed/imagery/sample-flood/tiles/post_water_mask_256.png",
+            "source_type": "user_attachment",
+            "source_authenticity": "provided_reference_mask",
+            "water_mask_encoding": {
+                "water": 255,
+                "non_water": 0,
+                "description": "흰색=수계·침수영역, 검은색=비수계"
+            },
+            "processing": {
+                "center_crop": true,
+                "resize": "256x256_lanczos",
+                "orthorectified": false,
+                "super_resolution": false,
+                "flood_mask": true,
+                "change_detection": false,
+                "generation_method": null
+            }
+        },
+        {
+            "asset_id": "SAT-UW-AYC-01",
+            "admin_code": "41430",
+            "admin_name": "경기도 의왕시",
+            "area_id": "UW-A-01",
+            "area_name": "안양천지구",
+            "river_id": "RIV-AYC",
+            "event_id": null,
+            "phase": "BASELINE",
+            "phase_label": "기준시점",
+            "acquired_at": "2026-04-18T02:00:00Z",
+            "sensor_type": "OPTICAL",
+            "satellite_name": "POC_SAMPLE",
+            "spatial_resolution_m": 5,
+            "cloud_cover_pct": 12,
+            "image_url": "/mock/satellite/41430/baseline.webp",
+            "thumbnail_url": "/mock/satellite/41430/baseline-thumb.webp",
+            "footprint": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            126.962833,
+                            37.320889
+                        ],
+                        [
+                            126.998833,
+                            37.320889
+                        ],
+                        [
+                            126.998833,
+                            37.356889
+                        ],
+                        [
+                            126.962833,
+                            37.356889
+                        ],
+                        [
+                            126.962833,
+                            37.320889
+                        ]
+                    ]
+                ]
+            },
+            "processing": {
+                "orthorectified": true,
+                "super_resolution": false,
+                "flood_mask": false,
+                "change_detection": false
+            },
+            "quality": {
+                "geometry_status": "provisional",
+                "verification_status": "unverified",
+                "irregular_interval": true
+            },
+            "value_status": "mock",
+            "official_data": false,
+            "display_badges": [
+                "POC 예시자료",
+                "실제 관측자료 아님",
+                "쓰리디랩스 구축자료로 교체 예정"
+            ],
+            "future_provider": "ThreeDLabsSatelliteProvider",
+            "data_status": "mock"
+        },
+        {
+            "asset_id": "SAT-UW-AYC-02",
+            "admin_code": "41430",
+            "admin_name": "경기도 의왕시",
+            "area_id": "UW-A-01",
+            "area_name": "안양천지구",
+            "river_id": "RIV-AYC",
+            "event_id": "POC-EVT-41430-001",
+            "phase": "PRE_EVENT",
+            "phase_label": "재난 전",
+            "acquired_at": "2026-07-08T02:00:00Z",
+            "sensor_type": "OPTICAL",
+            "satellite_name": "POC_SAMPLE",
+            "spatial_resolution_m": 5,
+            "cloud_cover_pct": 6,
+            "image_url": "/mock/satellite/41430/pre_event.webp",
+            "thumbnail_url": "/mock/satellite/41430/pre_event-thumb.webp",
+            "footprint": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            126.962833,
+                            37.320889
+                        ],
+                        [
+                            126.998833,
+                            37.320889
+                        ],
+                        [
+                            126.998833,
+                            37.356889
+                        ],
+                        [
+                            126.962833,
+                            37.356889
+                        ],
+                        [
+                            126.962833,
+                            37.320889
+                        ]
+                    ]
+                ]
+            },
+            "processing": {
+                "orthorectified": true,
+                "super_resolution": false,
+                "flood_mask": false,
+                "change_detection": false
+            },
+            "quality": {
+                "geometry_status": "provisional",
+                "verification_status": "unverified",
+                "irregular_interval": true
+            },
+            "value_status": "mock",
+            "official_data": false,
+            "display_badges": [
+                "POC 예시자료",
+                "실제 관측자료 아님",
+                "쓰리디랩스 구축자료로 교체 예정"
+            ],
+            "future_provider": "ThreeDLabsSatelliteProvider",
+            "data_status": "mock"
+        },
+        {
+            "asset_id": "SAT-UW-AYC-03",
+            "admin_code": "41430",
+            "admin_name": "경기도 의왕시",
+            "area_id": "UW-A-01",
+            "area_name": "안양천지구",
+            "river_id": "RIV-AYC",
+            "event_id": "POC-EVT-41430-001",
+            "phase": "NEAR_EVENT",
+            "phase_label": "발생 근접",
+            "acquired_at": "2026-07-17T09:30:00Z",
+            "sensor_type": "SAR",
+            "satellite_name": "POC_SAMPLE",
+            "spatial_resolution_m": 10,
+            "cloud_cover_pct": null,
+            "image_url": "/mock/satellite/41430/near_event.webp",
+            "thumbnail_url": "/mock/satellite/41430/near_event-thumb.webp",
+            "footprint": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            126.962833,
+                            37.320889
+                        ],
+                        [
+                            126.998833,
+                            37.320889
+                        ],
+                        [
+                            126.998833,
+                            37.356889
+                        ],
+                        [
+                            126.962833,
+                            37.356889
+                        ],
+                        [
+                            126.962833,
+                            37.320889
+                        ]
+                    ]
+                ]
+            },
+            "processing": {
+                "orthorectified": true,
+                "super_resolution": false,
+                "flood_mask": true,
+                "change_detection": false
+            },
+            "quality": {
+                "geometry_status": "provisional",
+                "verification_status": "unverified",
+                "irregular_interval": true
+            },
+            "value_status": "mock",
+            "official_data": false,
+            "display_badges": [
+                "POC 예시자료",
+                "실제 관측자료 아님",
+                "쓰리디랩스 구축자료로 교체 예정"
+            ],
+            "future_provider": "ThreeDLabsSatelliteProvider",
+            "data_status": "mock"
+        },
+        {
+            "asset_id": "SAT-UW-AYC-04",
+            "admin_code": "41430",
+            "admin_name": "경기도 의왕시",
+            "area_id": "UW-A-01",
+            "area_name": "안양천지구",
+            "river_id": "RIV-AYC",
+            "event_id": "POC-EVT-41430-001",
+            "phase": "POST_EVENT",
+            "phase_label": "재난 후",
+            "acquired_at": "2026-07-25T02:15:00Z",
+            "sensor_type": "OPTICAL",
+            "satellite_name": "POC_SAMPLE",
+            "spatial_resolution_m": 5,
+            "cloud_cover_pct": 18,
+            "image_url": "/mock/satellite/41430/post_event.webp",
+            "thumbnail_url": "/mock/satellite/41430/post_event-thumb.webp",
+            "footprint": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            126.962833,
+                            37.320889
+                        ],
+                        [
+                            126.998833,
+                            37.320889
+                        ],
+                        [
+                            126.998833,
+                            37.356889
+                        ],
+                        [
+                            126.962833,
+                            37.356889
+                        ],
+                        [
+                            126.962833,
+                            37.320889
+                        ]
+                    ]
+                ]
+            },
+            "processing": {
+                "orthorectified": true,
+                "super_resolution": false,
+                "flood_mask": true,
+                "change_detection": true
+            },
+            "quality": {
+                "geometry_status": "provisional",
+                "verification_status": "unverified",
+                "irregular_interval": true
+            },
+            "value_status": "mock",
+            "official_data": false,
+            "display_badges": [
+                "POC 예시자료",
+                "실제 관측자료 아님",
+                "쓰리디랩스 구축자료로 교체 예정"
+            ],
+            "future_provider": "ThreeDLabsSatelliteProvider",
+            "data_status": "mock"
+        },
+        {
+            "asset_id": "SAT-UW-AYC-05",
+            "admin_code": "41430",
+            "admin_name": "경기도 의왕시",
+            "area_id": "UW-A-01",
+            "area_name": "안양천지구",
+            "river_id": "RIV-AYC",
+            "event_id": null,
+            "phase": "LATEST",
+            "phase_label": "최근",
+            "acquired_at": "2026-07-29T02:10:00Z",
+            "sensor_type": "OPTICAL",
+            "satellite_name": "POC_SAMPLE",
+            "spatial_resolution_m": 5,
+            "cloud_cover_pct": 9,
+            "image_url": "/mock/satellite/41430/latest.webp",
+            "thumbnail_url": "/mock/satellite/41430/latest-thumb.webp",
+            "footprint": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            126.962833,
+                            37.320889
+                        ],
+                        [
+                            126.998833,
+                            37.320889
+                        ],
+                        [
+                            126.998833,
+                            37.356889
+                        ],
+                        [
+                            126.962833,
+                            37.356889
+                        ],
+                        [
+                            126.962833,
+                            37.320889
+                        ]
+                    ]
+                ]
+            },
+            "processing": {
+                "orthorectified": true,
+                "super_resolution": false,
+                "flood_mask": false,
+                "change_detection": true
+            },
+            "quality": {
+                "geometry_status": "provisional",
+                "verification_status": "unverified",
+                "irregular_interval": true
+            },
+            "value_status": "mock",
+            "official_data": false,
+            "display_badges": [
+                "POC 예시자료",
+                "실제 관측자료 아님",
+                "쓰리디랩스 구축자료로 교체 예정"
+            ],
+            "future_provider": "ThreeDLabsSatelliteProvider",
+            "data_status": "mock"
+        },
+        {
+            "asset_id": "SAT-GM-GMC-01",
+            "admin_code": "47190",
+            "admin_name": "경상북도 구미시",
+            "area_id": "GM-A-04",
+            "area_name": "구미천지구",
+            "river_id": "RIV-GMC",
+            "event_id": null,
+            "phase": "BASELINE",
+            "phase_label": "기준시점",
+            "acquired_at": "2026-04-18T02:00:00Z",
+            "sensor_type": "OPTICAL",
+            "satellite_name": "POC_SAMPLE",
+            "spatial_resolution_m": 5,
+            "cloud_cover_pct": 12,
+            "image_url": "/mock/satellite/47190/baseline.webp",
+            "thumbnail_url": "/mock/satellite/47190/baseline-thumb.webp",
+            "footprint": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            128.317278,
+                            36.115611
+                        ],
+                        [
+                            128.353278,
+                            36.115611
+                        ],
+                        [
+                            128.353278,
+                            36.151611
+                        ],
+                        [
+                            128.317278,
+                            36.151611
+                        ],
+                        [
+                            128.317278,
+                            36.115611
+                        ]
+                    ]
+                ]
+            },
+            "processing": {
+                "orthorectified": true,
+                "super_resolution": false,
+                "flood_mask": false,
+                "change_detection": false
+            },
+            "quality": {
+                "geometry_status": "provisional",
+                "verification_status": "unverified",
+                "irregular_interval": true
+            },
+            "value_status": "mock",
+            "official_data": false,
+            "display_badges": [
+                "POC 예시자료",
+                "실제 관측자료 아님",
+                "쓰리디랩스 구축자료로 교체 예정"
+            ],
+            "future_provider": "ThreeDLabsSatelliteProvider",
+            "data_status": "mock"
+        },
+        {
+            "asset_id": "SAT-GM-GMC-02",
+            "admin_code": "47190",
+            "admin_name": "경상북도 구미시",
+            "area_id": "GM-A-04",
+            "area_name": "구미천지구",
+            "river_id": "RIV-GMC",
+            "event_id": "POC-EVT-47190-001",
+            "phase": "PRE_EVENT",
+            "phase_label": "재난 전",
+            "acquired_at": "2026-07-08T02:00:00Z",
+            "sensor_type": "OPTICAL",
+            "satellite_name": "POC_SAMPLE",
+            "spatial_resolution_m": 5,
+            "cloud_cover_pct": 6,
+            "image_url": "/mock/satellite/47190/pre_event.webp",
+            "thumbnail_url": "/mock/satellite/47190/pre_event-thumb.webp",
+            "footprint": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            128.317278,
+                            36.115611
+                        ],
+                        [
+                            128.353278,
+                            36.115611
+                        ],
+                        [
+                            128.353278,
+                            36.151611
+                        ],
+                        [
+                            128.317278,
+                            36.151611
+                        ],
+                        [
+                            128.317278,
+                            36.115611
+                        ]
+                    ]
+                ]
+            },
+            "processing": {
+                "orthorectified": true,
+                "super_resolution": false,
+                "flood_mask": false,
+                "change_detection": false
+            },
+            "quality": {
+                "geometry_status": "provisional",
+                "verification_status": "unverified",
+                "irregular_interval": true
+            },
+            "value_status": "mock",
+            "official_data": false,
+            "display_badges": [
+                "POC 예시자료",
+                "실제 관측자료 아님",
+                "쓰리디랩스 구축자료로 교체 예정"
+            ],
+            "future_provider": "ThreeDLabsSatelliteProvider",
+            "data_status": "mock"
+        },
+        {
+            "asset_id": "SAT-GM-GMC-03",
+            "admin_code": "47190",
+            "admin_name": "경상북도 구미시",
+            "area_id": "GM-A-04",
+            "area_name": "구미천지구",
+            "river_id": "RIV-GMC",
+            "event_id": "POC-EVT-47190-001",
+            "phase": "NEAR_EVENT",
+            "phase_label": "발생 근접",
+            "acquired_at": "2026-07-17T09:30:00Z",
+            "sensor_type": "SAR",
+            "satellite_name": "POC_SAMPLE",
+            "spatial_resolution_m": 10,
+            "cloud_cover_pct": null,
+            "image_url": "/mock/satellite/47190/near_event.webp",
+            "thumbnail_url": "/mock/satellite/47190/near_event-thumb.webp",
+            "footprint": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            128.317278,
+                            36.115611
+                        ],
+                        [
+                            128.353278,
+                            36.115611
+                        ],
+                        [
+                            128.353278,
+                            36.151611
+                        ],
+                        [
+                            128.317278,
+                            36.151611
+                        ],
+                        [
+                            128.317278,
+                            36.115611
+                        ]
+                    ]
+                ]
+            },
+            "processing": {
+                "orthorectified": true,
+                "super_resolution": false,
+                "flood_mask": true,
+                "change_detection": false
+            },
+            "quality": {
+                "geometry_status": "provisional",
+                "verification_status": "unverified",
+                "irregular_interval": true
+            },
+            "value_status": "mock",
+            "official_data": false,
+            "display_badges": [
+                "POC 예시자료",
+                "실제 관측자료 아님",
+                "쓰리디랩스 구축자료로 교체 예정"
+            ],
+            "future_provider": "ThreeDLabsSatelliteProvider",
+            "data_status": "mock"
+        },
+        {
+            "asset_id": "SAT-GM-GMC-04",
+            "admin_code": "47190",
+            "admin_name": "경상북도 구미시",
+            "area_id": "GM-A-04",
+            "area_name": "구미천지구",
+            "river_id": "RIV-GMC",
+            "event_id": "POC-EVT-47190-001",
+            "phase": "POST_EVENT",
+            "phase_label": "재난 후",
+            "acquired_at": "2026-07-25T02:15:00Z",
+            "sensor_type": "OPTICAL",
+            "satellite_name": "POC_SAMPLE",
+            "spatial_resolution_m": 5,
+            "cloud_cover_pct": 18,
+            "image_url": "/mock/satellite/47190/post_event.webp",
+            "thumbnail_url": "/mock/satellite/47190/post_event-thumb.webp",
+            "footprint": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            128.317278,
+                            36.115611
+                        ],
+                        [
+                            128.353278,
+                            36.115611
+                        ],
+                        [
+                            128.353278,
+                            36.151611
+                        ],
+                        [
+                            128.317278,
+                            36.151611
+                        ],
+                        [
+                            128.317278,
+                            36.115611
+                        ]
+                    ]
+                ]
+            },
+            "processing": {
+                "orthorectified": true,
+                "super_resolution": false,
+                "flood_mask": true,
+                "change_detection": true
+            },
+            "quality": {
+                "geometry_status": "provisional",
+                "verification_status": "unverified",
+                "irregular_interval": true
+            },
+            "value_status": "mock",
+            "official_data": false,
+            "display_badges": [
+                "POC 예시자료",
+                "실제 관측자료 아님",
+                "쓰리디랩스 구축자료로 교체 예정"
+            ],
+            "future_provider": "ThreeDLabsSatelliteProvider",
+            "data_status": "mock"
+        },
+        {
+            "asset_id": "SAT-GM-GMC-05",
+            "admin_code": "47190",
+            "admin_name": "경상북도 구미시",
+            "area_id": "GM-A-04",
+            "area_name": "구미천지구",
+            "river_id": "RIV-GMC",
+            "event_id": null,
+            "phase": "LATEST",
+            "phase_label": "최근",
+            "acquired_at": "2026-07-29T02:10:00Z",
+            "sensor_type": "OPTICAL",
+            "satellite_name": "POC_SAMPLE",
+            "spatial_resolution_m": 5,
+            "cloud_cover_pct": 9,
+            "image_url": "/mock/satellite/47190/latest.webp",
+            "thumbnail_url": "/mock/satellite/47190/latest-thumb.webp",
+            "footprint": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            128.317278,
+                            36.115611
+                        ],
+                        [
+                            128.353278,
+                            36.115611
+                        ],
+                        [
+                            128.353278,
+                            36.151611
+                        ],
+                        [
+                            128.317278,
+                            36.151611
+                        ],
+                        [
+                            128.317278,
+                            36.115611
+                        ]
+                    ]
+                ]
+            },
+            "processing": {
+                "orthorectified": true,
+                "super_resolution": false,
+                "flood_mask": false,
+                "change_detection": true
+            },
+            "quality": {
+                "geometry_status": "provisional",
+                "verification_status": "unverified",
+                "irregular_interval": true
+            },
+            "value_status": "mock",
+            "official_data": false,
+            "display_badges": [
+                "POC 예시자료",
+                "실제 관측자료 아님",
+                "쓰리디랩스 구축자료로 교체 예정"
+            ],
+            "future_provider": "ThreeDLabsSatelliteProvider",
+            "data_status": "mock"
+        },
+        {
+            "asset_id": "SAT-NW-YC-01",
+            "admin_code": "45190",
+            "admin_name": "전북특별자치도 남원시",
+            "area_id": "NW-A-02",
+            "area_name": "요천지구",
+            "river_id": "RIV-YC",
+            "event_id": null,
+            "phase": "BASELINE",
+            "phase_label": "기준시점",
+            "acquired_at": "2026-04-18T02:00:00Z",
+            "sensor_type": "OPTICAL",
+            "satellite_name": "POC_SAMPLE",
+            "spatial_resolution_m": 5,
+            "cloud_cover_pct": 12,
+            "image_url": "/mock/satellite/45190/baseline.webp",
+            "thumbnail_url": "/mock/satellite/45190/baseline-thumb.webp",
+            "footprint": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            127.4962748976171,
+                            35.36786568301534
+                        ],
+                        [
+                            127.5322748976171,
+                            35.36786568301534
+                        ],
+                        [
+                            127.5322748976171,
+                            35.40386568301534
+                        ],
+                        [
+                            127.4962748976171,
+                            35.40386568301534
+                        ],
+                        [
+                            127.4962748976171,
+                            35.36786568301534
+                        ]
+                    ]
+                ]
+            },
+            "processing": {
+                "orthorectified": true,
+                "super_resolution": false,
+                "flood_mask": false,
+                "change_detection": false
+            },
+            "quality": {
+                "geometry_status": "provisional",
+                "verification_status": "unverified",
+                "irregular_interval": true
+            },
+            "value_status": "mock",
+            "official_data": false,
+            "display_badges": [
+                "POC 예시자료",
+                "실제 관측자료 아님",
+                "쓰리디랩스 구축자료로 교체 예정"
+            ],
+            "future_provider": "ThreeDLabsSatelliteProvider",
+            "data_status": "mock"
+        },
+        {
+            "asset_id": "SAT-NW-YC-02",
+            "admin_code": "45190",
+            "admin_name": "전북특별자치도 남원시",
+            "area_id": "NW-A-02",
+            "area_name": "요천지구",
+            "river_id": "RIV-YC",
+            "event_id": "POC-EVT-45190-001",
+            "phase": "PRE_EVENT",
+            "phase_label": "재난 전",
+            "acquired_at": "2026-07-08T02:00:00Z",
+            "sensor_type": "OPTICAL",
+            "satellite_name": "POC_SAMPLE",
+            "spatial_resolution_m": 5,
+            "cloud_cover_pct": 6,
+            "image_url": "/mock/satellite/45190/pre_event.webp",
+            "thumbnail_url": "/mock/satellite/45190/pre_event-thumb.webp",
+            "footprint": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            127.4962748976171,
+                            35.36786568301534
+                        ],
+                        [
+                            127.5322748976171,
+                            35.36786568301534
+                        ],
+                        [
+                            127.5322748976171,
+                            35.40386568301534
+                        ],
+                        [
+                            127.4962748976171,
+                            35.40386568301534
+                        ],
+                        [
+                            127.4962748976171,
+                            35.36786568301534
+                        ]
+                    ]
+                ]
+            },
+            "processing": {
+                "orthorectified": true,
+                "super_resolution": false,
+                "flood_mask": false,
+                "change_detection": false
+            },
+            "quality": {
+                "geometry_status": "provisional",
+                "verification_status": "unverified",
+                "irregular_interval": true
+            },
+            "value_status": "mock",
+            "official_data": false,
+            "display_badges": [
+                "POC 예시자료",
+                "실제 관측자료 아님",
+                "쓰리디랩스 구축자료로 교체 예정"
+            ],
+            "future_provider": "ThreeDLabsSatelliteProvider",
+            "data_status": "mock"
+        },
+        {
+            "asset_id": "SAT-NW-YC-03",
+            "admin_code": "45190",
+            "admin_name": "전북특별자치도 남원시",
+            "area_id": "NW-A-02",
+            "area_name": "요천지구",
+            "river_id": "RIV-YC",
+            "event_id": "POC-EVT-45190-001",
+            "phase": "NEAR_EVENT",
+            "phase_label": "발생 근접",
+            "acquired_at": "2026-07-17T09:30:00Z",
+            "sensor_type": "SAR",
+            "satellite_name": "POC_SAMPLE",
+            "spatial_resolution_m": 10,
+            "cloud_cover_pct": null,
+            "image_url": "/mock/satellite/45190/near_event.webp",
+            "thumbnail_url": "/mock/satellite/45190/near_event-thumb.webp",
+            "footprint": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            127.4962748976171,
+                            35.36786568301534
+                        ],
+                        [
+                            127.5322748976171,
+                            35.36786568301534
+                        ],
+                        [
+                            127.5322748976171,
+                            35.40386568301534
+                        ],
+                        [
+                            127.4962748976171,
+                            35.40386568301534
+                        ],
+                        [
+                            127.4962748976171,
+                            35.36786568301534
+                        ]
+                    ]
+                ]
+            },
+            "processing": {
+                "orthorectified": true,
+                "super_resolution": false,
+                "flood_mask": true,
+                "change_detection": false
+            },
+            "quality": {
+                "geometry_status": "provisional",
+                "verification_status": "unverified",
+                "irregular_interval": true
+            },
+            "value_status": "mock",
+            "official_data": false,
+            "display_badges": [
+                "POC 예시자료",
+                "실제 관측자료 아님",
+                "쓰리디랩스 구축자료로 교체 예정"
+            ],
+            "future_provider": "ThreeDLabsSatelliteProvider",
+            "data_status": "mock"
+        },
+        {
+            "asset_id": "SAT-NW-YC-04",
+            "admin_code": "45190",
+            "admin_name": "전북특별자치도 남원시",
+            "area_id": "NW-A-02",
+            "area_name": "요천지구",
+            "river_id": "RIV-YC",
+            "event_id": "POC-EVT-45190-001",
+            "phase": "POST_EVENT",
+            "phase_label": "재난 후",
+            "acquired_at": "2026-07-25T02:15:00Z",
+            "sensor_type": "OPTICAL",
+            "satellite_name": "POC_SAMPLE",
+            "spatial_resolution_m": 5,
+            "cloud_cover_pct": 18,
+            "image_url": "/mock/satellite/45190/post_event.webp",
+            "thumbnail_url": "/mock/satellite/45190/post_event-thumb.webp",
+            "footprint": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            127.4962748976171,
+                            35.36786568301534
+                        ],
+                        [
+                            127.5322748976171,
+                            35.36786568301534
+                        ],
+                        [
+                            127.5322748976171,
+                            35.40386568301534
+                        ],
+                        [
+                            127.4962748976171,
+                            35.40386568301534
+                        ],
+                        [
+                            127.4962748976171,
+                            35.36786568301534
+                        ]
+                    ]
+                ]
+            },
+            "processing": {
+                "orthorectified": true,
+                "super_resolution": false,
+                "flood_mask": true,
+                "change_detection": true
+            },
+            "quality": {
+                "geometry_status": "provisional",
+                "verification_status": "unverified",
+                "irregular_interval": true
+            },
+            "value_status": "mock",
+            "official_data": false,
+            "display_badges": [
+                "POC 예시자료",
+                "실제 관측자료 아님",
+                "쓰리디랩스 구축자료로 교체 예정"
+            ],
+            "future_provider": "ThreeDLabsSatelliteProvider",
+            "data_status": "mock"
+        },
+        {
+            "asset_id": "SAT-NW-YC-05",
+            "admin_code": "45190",
+            "admin_name": "전북특별자치도 남원시",
+            "area_id": "NW-A-02",
+            "area_name": "요천지구",
+            "river_id": "RIV-YC",
+            "event_id": null,
+            "phase": "LATEST",
+            "phase_label": "최근",
+            "acquired_at": "2026-07-29T02:10:00Z",
+            "sensor_type": "OPTICAL",
+            "satellite_name": "POC_SAMPLE",
+            "spatial_resolution_m": 5,
+            "cloud_cover_pct": 9,
+            "image_url": "/mock/satellite/45190/latest.webp",
+            "thumbnail_url": "/mock/satellite/45190/latest-thumb.webp",
+            "footprint": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            127.4962748976171,
+                            35.36786568301534
+                        ],
+                        [
+                            127.5322748976171,
+                            35.36786568301534
+                        ],
+                        [
+                            127.5322748976171,
+                            35.40386568301534
+                        ],
+                        [
+                            127.4962748976171,
+                            35.40386568301534
+                        ],
+                        [
+                            127.4962748976171,
+                            35.36786568301534
+                        ]
+                    ]
+                ]
+            },
+            "processing": {
+                "orthorectified": true,
+                "super_resolution": false,
+                "flood_mask": false,
+                "change_detection": true
+            },
+            "quality": {
+                "geometry_status": "provisional",
+                "verification_status": "unverified",
+                "irregular_interval": true
+            },
+            "value_status": "mock",
+            "official_data": false,
+            "display_badges": [
+                "POC 예시자료",
+                "실제 관측자료 아님",
+                "쓰리디랩스 구축자료로 교체 예정"
+            ],
+            "future_provider": "ThreeDLabsSatelliteProvider",
+            "data_status": "mock"
+        }
+    ],
+    "package_version": "1.5.1",
+    "phase_selection_policy": {
+        "event_time_basis": {
+            "event_start_at": "2026-07-15T00:00:00+09:00",
+            "event_end_at": "2026-07-17T18:00:00+09:00",
+            "scenario_date": true
+        },
+        "PRE": {
+            "label": "사건발생 이전",
+            "selection_rule": "event_start_at - 12 days",
+            "target_offset_days": -12,
+            "example_acquired_at": "2026-07-03T10:00:00+09:00"
+        },
+        "EVENT": {
+            "label": "재난 이벤트",
+            "selection_rule": "event_start_at <= acquired_at <= event_end_at + 2 days",
+            "example_acquired_at": "2026-07-18T10:00:00+09:00"
+        },
+        "POST": {
+            "label": "사건 종료 이후",
+            "selection_rule": "event_end_at + 12 days",
+            "target_offset_days": 12,
+            "example_acquired_at": "2026-07-29T10:00:00+09:00",
+            "note": "EVENT 구간과 중복되지 않도록 재난 종료일을 기준으로 한다."
+        },
+        "display_rule": {
+            "tile_size_px": [
+                256,
+                256
+            ],
+            "display_mode": "standalone_tile_card",
+            "map_overlay_allowed": false,
+            "base_map": "VWorld 2D"
+        }
+    }
+}

@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ProviderContractRegistry",
+  "type": "object",
+  "required": [
+    "version",
+    "providers",
+    "required_common_metadata"
+  ],
+  "properties": {
+    "version": {
+      "type": "string"
+    },
+    "providers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "domain",
+          "env_key",
+          "current",
+          "allowed",
+          "common_model",
+          "future_api_content",
+          "fallback"
+        ],
+        "properties": {
+          "domain": {
+            "enum": [
+              "event",
+              "risk",
+              "observation",
+              "spatial"
+            ]
+          },
+          "env_key": {
+            "type": "string"
+          },
+          "current": {
+            "type": "string"
+          },
+          "allowed": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "common_model": {
+            "type": "string"
+          },
+          "future_api_content": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "fallback": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "required_common_metadata": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

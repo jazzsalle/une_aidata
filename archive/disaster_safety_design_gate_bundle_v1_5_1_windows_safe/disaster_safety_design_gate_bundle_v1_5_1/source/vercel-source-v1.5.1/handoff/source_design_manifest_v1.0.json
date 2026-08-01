@@ -1,0 +1,79 @@
+{
+  "version": "1.0",
+  "design_document": "재난안전_AI데이터_활용_시범서비스_통합설계서_v1.3.docx",
+  "source_version": "1.0.0",
+  "created_at": "2026-07-31",
+  "files": [
+    {
+      "file": "data/seed/t3q_alignment_seed.json",
+      "sha256": "9fc66160b62b246a4194bce2cb06e0ce4ab488d93b7176b14f8756435661be20",
+      "bytes": 4818
+    },
+    {
+      "file": "contracts/schemas/t3q-event-master.schema.json",
+      "sha256": "0b320c4aeb04efafb1e84f4e0fd29f7efc10040314c44b25bc4abcdea24c6909",
+      "bytes": 1820
+    },
+    {
+      "file": "contracts/schemas/t3q-passage.schema.json",
+      "sha256": "84d543efabb8be0d80617b5c48f293875487c33f7e3479e9b36dc32f684627da",
+      "bytes": 2058
+    },
+    {
+      "file": "contracts/schemas/ontology-relation.schema.json",
+      "sha256": "319aacdfe86658ff61e4e34016b548e41cc077ee26bb4a83778e649e2529edca",
+      "bytes": 1027
+    },
+    {
+      "file": "server/domain/t3qCompatibility.ts",
+      "sha256": "249570f8098067e9a165f247878def4a8d219ffe41aa082198c756d4f6c602d6",
+      "bytes": 1331
+    },
+    {
+      "file": "server/providers/t3qMetadata.ts",
+      "sha256": "659e60a7e4794c2ef13650418f3bc29733729a4b869fcd3fc180f50b0056b350",
+      "bytes": 355
+    },
+    {
+      "file": "api/v1/t3q/alignment.ts",
+      "sha256": "764d97030f2a397bb549ce1df7e1b4afc75eb450aaf681256674fc1064bcb2f7",
+      "bytes": 455
+    },
+    {
+      "file": "docs/20_t3q_platform_analysis.md",
+      "sha256": "c674698c0d705527d7018b2d3d58776f148898c03dfbc6f1ac8dbe4743d9965a",
+      "bytes": 18778
+    },
+    {
+      "file": "docs/21_t3q_design_alignment_brief.md",
+      "sha256": "75d10e512fa4ed05693f20027349f68a88097c2e6f52781d4e58e35a854cb4b7",
+      "bytes": 8911
+    },
+    {
+      "file": "docs/22_t3q_mapping_and_contracts.md",
+      "sha256": "1d6831fd376d11aa59dca37e915848bd03a15cf549361af0929680c5e5ed37f2",
+      "bytes": 2366
+    },
+    {
+      "file": "decisions/ADR-013-t3q-event-passage-compatibility.md",
+      "sha256": "1ce3d1d47e46e80a6930dba6c9ffd71c5eb2aaacae7cde8edc2e877e9bc8f8b9",
+      "bytes": 903
+    },
+    {
+      "file": "tests/acceptance/SCN-T3Q-ALIGN-001.md",
+      "sha256": "667d87fd6cada97c2f9570f9c3c033749d50a3211b59271e25d77378c9c238df",
+      "bytes": 978
+    }
+  ],
+  "validation": {
+    "python_smoke": [
+      "smoke_t3q_alignment",
+      "validate_vercel_repo",
+      "smoke_seed_contracts",
+      "smoke_similar_events",
+      "smoke_spatial_assets"
+    ],
+    "typescript_functions": "passed with global tsc 5.8.3",
+    "web_build": "not executed because @playwright/test package unavailable in internal registry"
+  }
+}

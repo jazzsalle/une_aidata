@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://une.example/contracts/t3q-integration-readiness.schema.json",
+  "title": "T3Q Integration Readiness",
+  "type": "object",
+  "required": [
+    "overall_state",
+    "dimensions",
+    "required_consultation_items"
+  ],
+  "properties": {
+    "dataset": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "as_of": {
+      "type": "string",
+      "format": "date"
+    },
+    "source_status": {
+      "type": "string"
+    },
+    "overall_state": {
+      "type": "string"
+    },
+    "notice": {
+      "type": "string"
+    },
+    "dimensions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "dimension_id",
+          "name",
+          "state",
+          "implemented",
+          "pending",
+          "completion_gate"
+        ],
+        "properties": {
+          "dimension_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "state": {
+            "enum": [
+              "designed",
+              "mock_ready",
+              "seed_ready",
+              "configured",
+              "verified",
+              "pending",
+              "error"
+            ]
+          },
+          "implemented": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "pending": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "completion_gate": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "required_consultation_items": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "runtime_policy": {
+      "enum": [
+        "MOCK_ONLY"
+      ]
+    },
+    "development_constraints": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "future_replacement_items": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": true
+}

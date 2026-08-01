@@ -1,0 +1,1527 @@
+{
+    "dataset": "damage_recovery_events_seed",
+    "version": "1.3",
+    "as_of": "2026-08-01",
+    "notice": "9건은 자연재해저감종합계획의 피해이력 문구를 구조화한 ACTUAL_BACKED 레코드이며, 6건은 유사도·대응비교·API 교체계약 검증용 SYNTHETIC_DEMO이다. 실제 NDMS 데이터 또는 피해예측 결과가 아니다.",
+    "future_provider": "T3qEventPassageProvider",
+    "runtime_policy": "MOCK_FIRST_PROVIDER_NEUTRAL",
+    "counts": {
+        "total": 15,
+        "actual_backed": 9,
+        "synthetic_demo": 6
+    },
+    "records": [
+        {
+            "record_id": "DR-ACT-UW-A-01-201009-01",
+            "event_id": "EVT::20100901-TYPH-41430-001",
+            "source_event_id": null,
+            "admin_code": "41430",
+            "admin_name": "경기도 의왕시",
+            "event_name": "태풍 곤파스 - 안양천지구",
+            "occurred_from": "2010-09-01T00:00:00+09:00",
+            "occurred_to": null,
+            "hazards": [
+                "T10105",
+                "T10206"
+            ],
+            "disaster_type": "TYPH",
+            "taxonomy_codes": [
+                "T10105",
+                "T10206"
+            ],
+            "district_code": "UW-A-01",
+            "district_name": "안양천지구",
+            "conditions": {
+                "rainfall_3h_mm": null,
+                "rainfall_12h_mm": null,
+                "water_level_m": null,
+                "water_level_trend": null,
+                "wind_speed_ms": null,
+                "affected_objects": [
+                    "하천",
+                    "도로",
+                    "농경지",
+                    "주거지"
+                ],
+                "risk_keywords": [
+                    "하천재해",
+                    "침수위험지구",
+                    "안양천(지방하천)",
+                    "안양천지구"
+                ]
+            },
+            "risk_context": {
+                "risk_factors": [
+                    "계획빈도에서 제방여유고 좌안 최대 2.96m·우안 최대 2.96m 부족, 하폭 최대 9m 부족",
+                    "교량 5개소 여유고·연장·경간장 등 시설능력 부족"
+                ],
+                "grade": "상세 위험도지수 6.4(고위험)",
+                "river_name": "안양천(지방하천)",
+                "location": "의왕시 왕곡동 566-10",
+                "spatial_object_ids": [
+                    "UW-A-01"
+                ]
+            },
+            "damage": {
+                "description": "2010년 태풍 곤파스 시 안양천 충훈1교 관측 최고수위 EL.17.09m 기록 — 200년빈도 계획홍수위 대비 분석 대상이 된 주요 홍수 사상",
+                "quantities_status": "NOT_AVAILABLE",
+                "is_prediction": false
+            },
+            "response": [],
+            "recovery": [],
+            "geometry_ref": {
+                "lat": 37.338889,
+                "lon": 126.980833,
+                "source": "관리대장 경위도(도분초)"
+            },
+            "evidence": [
+                {
+                    "evidence_id": "EVD-EVT::20100901-TYPH-41430-001-01",
+                    "source_type": "PLAN_DOCUMENT",
+                    "data_status": "actual_backed",
+                    "title": "제2차 의왕시 자연재해저감 종합계획(2022.7)",
+                    "page": 98,
+                    "passage_id": "PSG-UW-JGP-2-0098-01",
+                    "excerpt": "2010년 태풍 곤파스 시 안양천 충훈1교 관측 최고수위 EL.17.09m 기록 — 200년빈도 계획홍수위 대비 분석 대상이 된 주요 홍수 사상",
+                    "lineage": {
+                        "chapter": "제2장 2.3.3 주요자연재해특성분석",
+                        "district_code": "UW-A-01"
+                    }
+                }
+            ],
+            "data_status": "actual_backed",
+            "source_type": "DOCUMENT_EXTRACT",
+            "provider_id": "une_seed_from_plan",
+            "official_data": false,
+            "provisional": true,
+            "schema_version": "1.3",
+            "is_prediction": false,
+            "display_badges": [
+                "문서 근거 기반",
+                "수치 미확보 항목 있음",
+                "T3Q API 교체대상"
+            ]
+        },
+        {
+            "record_id": "DR-ACT-UW-A-02-200907-01",
+            "event_id": "EVT::20090701-FLOOD-41430-001",
+            "source_event_id": null,
+            "admin_code": "41430",
+            "admin_name": "경기도 의왕시",
+            "event_name": "집중호우 - 오전천지구",
+            "occurred_from": "2009-07-01T00:00:00+09:00",
+            "occurred_to": null,
+            "hazards": [
+                "T10107",
+                "T10206"
+            ],
+            "disaster_type": "FLOOD",
+            "taxonomy_codes": [
+                "T10107",
+                "T10206"
+            ],
+            "district_code": "UW-A-02",
+            "district_name": "오전천지구",
+            "conditions": {
+                "rainfall_3h_mm": null,
+                "rainfall_12h_mm": null,
+                "water_level_m": null,
+                "water_level_trend": null,
+                "wind_speed_ms": null,
+                "affected_objects": [
+                    "하천",
+                    "도로",
+                    "농경지",
+                    "주거지"
+                ],
+                "risk_keywords": [
+                    "하천재해",
+                    "침수위험지구",
+                    "오전천(지방하천)",
+                    "오전천지구"
+                ]
+            },
+            "risk_context": {
+                "risk_factors": [
+                    "계획빈도에서 제방여유고 좌안 최대 1.82m·우안 최대 1.82m 부족, 하폭 최대 18m 부족",
+                    "교량 11개소 여유고·연장·경간장 등 시설능력 부족"
+                ],
+                "grade": "상세 위험도지수 12.0(초고위험)",
+                "river_name": "오전천(지방하천)",
+                "location": "의왕시 오전동 789-1",
+                "spatial_object_ids": [
+                    "UW-A-02"
+                ]
+            },
+            "damage": {
+                "description": "2009년 7월 집중호우 시 하천급류로 인한 피해 발생(관리대장 피해이력). 위험지구 후보지 위험요인 분석표 피해이력(A) 3점 — 최근 10년내 피해이력 있음",
+                "quantities_status": "NOT_AVAILABLE",
+                "is_prediction": false
+            },
+            "response": [],
+            "recovery": [],
+            "geometry_ref": {
+                "lat": 37.3525,
+                "lon": 126.984722,
+                "source": "관리대장 경위도(도분초)"
+            },
+            "evidence": [
+                {
+                    "evidence_id": "EVD-EVT::20090701-FLOOD-41430-001-01",
+                    "source_type": "PLAN_DOCUMENT",
+                    "data_status": "actual_backed",
+                    "title": "제2차 의왕시 자연재해저감 종합계획 위험지구 후보지 위험요인 분석표",
+                    "page": 3,
+                    "passage_id": "PSG-UW-JGP-E-0003-01",
+                    "excerpt": "2009년 7월 집중호우 시 하천급류로 인한 피해 발생(관리대장 피해이력). 위험지구 후보지 위험요인 분석표 피해이력(A) 3점 — 최근 10년내 피해이력 있음",
+                    "lineage": {
+                        "chapter": "오전천지구",
+                        "district_code": "UW-A-02"
+                    }
+                }
+            ],
+            "data_status": "actual_backed",
+            "source_type": "DOCUMENT_EXTRACT",
+            "provider_id": "une_seed_from_plan",
+            "official_data": false,
+            "provisional": true,
+            "schema_version": "1.3",
+            "is_prediction": false,
+            "display_badges": [
+                "문서 근거 기반",
+                "수치 미확보 항목 있음",
+                "T3Q API 교체대상"
+            ]
+        },
+        {
+            "record_id": "DR-ACT-UW-B-02-200907-02",
+            "event_id": "EVT::20090701-FLOOD-41430-002",
+            "source_event_id": null,
+            "admin_code": "41430",
+            "admin_name": "경기도 의왕시",
+            "event_name": "집중호우 - 내손A지구",
+            "occurred_from": "2009-07-01T00:00:00+09:00",
+            "occurred_to": null,
+            "hazards": [
+                "T10107",
+                "T10106"
+            ],
+            "disaster_type": "FLOOD",
+            "taxonomy_codes": [
+                "T10107",
+                "T10106"
+            ],
+            "district_code": "UW-B-02",
+            "district_name": "내손A지구",
+            "conditions": {
+                "rainfall_3h_mm": null,
+                "rainfall_12h_mm": null,
+                "water_level_m": null,
+                "water_level_trend": null,
+                "wind_speed_ms": null,
+                "affected_objects": [
+                    "주택",
+                    "상가",
+                    "저지대",
+                    "도로"
+                ],
+                "risk_keywords": [
+                    "내수재해",
+                    "침수위험지구",
+                    "",
+                    "내손A지구"
+                ]
+            },
+            "risk_context": {
+                "risk_factors": [
+                    "우수관로 통수단면 부족에 따른 내수배제 불량으로 계원대사거리~안양농수산물시장 일대 침수피해 가능성"
+                ],
+                "grade": "상세 위험도지수 12.0(초고위험)",
+                "river_name": null,
+                "location": "의왕시 내손동 일원(내손동 754)",
+                "spatial_object_ids": [
+                    "UW-B-02"
+                ]
+            },
+            "damage": {
+                "description": "2009년 7월 집중호우 시 내손동 일대 주택 침수피해 발생(관리대장 피해이력)",
+                "quantities_status": "NOT_AVAILABLE",
+                "is_prediction": false
+            },
+            "response": [],
+            "recovery": [],
+            "geometry_ref": {
+                "lat": 37.373611,
+                "lon": 126.968889,
+                "source": "관리대장 경위도(도분초)"
+            },
+            "evidence": [
+                {
+                    "evidence_id": "EVD-EVT::20090701-FLOOD-41430-002-01",
+                    "source_type": "PLAN_DOCUMENT",
+                    "data_status": "actual_backed",
+                    "title": "제2차 의왕시 자연재해저감 종합계획 관리대장(2022.7)",
+                    "page": 11,
+                    "passage_id": null,
+                    "excerpt": "2009년 7월 집중호우 시 내손동 일대 주택 침수피해 발생(관리대장 피해이력)",
+                    "lineage": {
+                        "chapter": "내손A지구(B-02)",
+                        "district_code": "UW-B-02"
+                    }
+                }
+            ],
+            "data_status": "actual_backed",
+            "source_type": "DOCUMENT_EXTRACT",
+            "provider_id": "une_seed_from_plan",
+            "official_data": false,
+            "provisional": true,
+            "schema_version": "1.3",
+            "is_prediction": false,
+            "display_badges": [
+                "문서 근거 기반",
+                "수치 미확보 항목 있음",
+                "T3Q API 교체대상"
+            ]
+        },
+        {
+            "record_id": "DR-ACT-UW-B-03-201607-01",
+            "event_id": "EVT::20160701-FLOOD-41430-001",
+            "source_event_id": null,
+            "admin_code": "41430",
+            "admin_name": "경기도 의왕시",
+            "event_name": "집중호우 - 오전B지구",
+            "occurred_from": "2016-07-01T00:00:00+09:00",
+            "occurred_to": null,
+            "hazards": [
+                "T10107",
+                "T10106"
+            ],
+            "disaster_type": "FLOOD",
+            "taxonomy_codes": [
+                "T10107",
+                "T10106"
+            ],
+            "district_code": "UW-B-03",
+            "district_name": "오전B지구",
+            "conditions": {
+                "rainfall_3h_mm": null,
+                "rainfall_12h_mm": null,
+                "water_level_m": null,
+                "water_level_trend": null,
+                "wind_speed_ms": null,
+                "affected_objects": [
+                    "주택",
+                    "상가",
+                    "저지대",
+                    "도로"
+                ],
+                "risk_keywords": [
+                    "내수재해",
+                    "침수위험지구",
+                    "",
+                    "오전B지구"
+                ]
+            },
+            "risk_context": {
+                "risk_factors": [
+                    "우수관로 통수단면 부족에 따른 내수배제 불량으로 왕곡천복개구간 일대 침수피해 가능성"
+                ],
+                "grade": "상세 위험도지수 12.0(초고위험)",
+                "river_name": null,
+                "location": "의왕시 왕곡동·고천동 일원(왕곡동 613)",
+                "spatial_object_ids": [
+                    "UW-B-03"
+                ]
+            },
+            "damage": {
+                "description": "2016년 7월 집중호우 시 고천동 300-4 일대 주택 침수피해 발생(관리대장 피해이력)",
+                "quantities_status": "NOT_AVAILABLE",
+                "is_prediction": false
+            },
+            "response": [],
+            "recovery": [],
+            "geometry_ref": {
+                "lat": 37.353056,
+                "lon": 126.921944,
+                "source": "관리대장 경위도(도분초)"
+            },
+            "evidence": [
+                {
+                    "evidence_id": "EVD-EVT::20160701-FLOOD-41430-001-01",
+                    "source_type": "PLAN_DOCUMENT",
+                    "data_status": "actual_backed",
+                    "title": "제2차 의왕시 자연재해저감 종합계획 관리대장(2022.7)",
+                    "page": 12,
+                    "passage_id": null,
+                    "excerpt": "2016년 7월 집중호우 시 고천동 300-4 일대 주택 침수피해 발생(관리대장 피해이력)",
+                    "lineage": {
+                        "chapter": "오전B지구(B-03)",
+                        "district_code": "UW-B-03"
+                    }
+                }
+            ],
+            "data_status": "actual_backed",
+            "source_type": "DOCUMENT_EXTRACT",
+            "provider_id": "une_seed_from_plan",
+            "official_data": false,
+            "provisional": true,
+            "schema_version": "1.3",
+            "is_prediction": false,
+            "display_badges": [
+                "문서 근거 기반",
+                "수치 미확보 항목 있음",
+                "T3Q API 교체대상"
+            ]
+        },
+        {
+            "record_id": "DR-ACT-UW-B-03-201707-01",
+            "event_id": "EVT::20170701-FLOOD-41430-001",
+            "source_event_id": null,
+            "admin_code": "41430",
+            "admin_name": "경기도 의왕시",
+            "event_name": "집중호우 - 오전B지구",
+            "occurred_from": "2017-07-01T00:00:00+09:00",
+            "occurred_to": null,
+            "hazards": [
+                "T10107",
+                "T10106"
+            ],
+            "disaster_type": "FLOOD",
+            "taxonomy_codes": [
+                "T10107",
+                "T10106"
+            ],
+            "district_code": "UW-B-03",
+            "district_name": "오전B지구",
+            "conditions": {
+                "rainfall_3h_mm": null,
+                "rainfall_12h_mm": null,
+                "water_level_m": null,
+                "water_level_trend": null,
+                "wind_speed_ms": null,
+                "affected_objects": [
+                    "주택",
+                    "상가",
+                    "저지대",
+                    "도로"
+                ],
+                "risk_keywords": [
+                    "내수재해",
+                    "침수위험지구",
+                    "",
+                    "오전B지구"
+                ]
+            },
+            "risk_context": {
+                "risk_factors": [
+                    "우수관로 통수단면 부족에 따른 내수배제 불량으로 왕곡천복개구간 일대 침수피해 가능성"
+                ],
+                "grade": "상세 위험도지수 12.0(초고위험)",
+                "river_name": null,
+                "location": "의왕시 왕곡동·고천동 일원(왕곡동 613)",
+                "spatial_object_ids": [
+                    "UW-B-03"
+                ]
+            },
+            "damage": {
+                "description": "2017년 7월 집중호우 시 고천동 300-4 일대 주택 침수피해 발생(관리대장 피해이력)",
+                "quantities_status": "NOT_AVAILABLE",
+                "is_prediction": false
+            },
+            "response": [],
+            "recovery": [],
+            "geometry_ref": {
+                "lat": 37.353056,
+                "lon": 126.921944,
+                "source": "관리대장 경위도(도분초)"
+            },
+            "evidence": [
+                {
+                    "evidence_id": "EVD-EVT::20170701-FLOOD-41430-001-01",
+                    "source_type": "PLAN_DOCUMENT",
+                    "data_status": "actual_backed",
+                    "title": "제2차 의왕시 자연재해저감 종합계획 관리대장(2022.7)",
+                    "page": 12,
+                    "passage_id": null,
+                    "excerpt": "2017년 7월 집중호우 시 고천동 300-4 일대 주택 침수피해 발생(관리대장 피해이력)",
+                    "lineage": {
+                        "chapter": "오전B지구(B-03)",
+                        "district_code": "UW-B-03"
+                    }
+                }
+            ],
+            "data_status": "actual_backed",
+            "source_type": "DOCUMENT_EXTRACT",
+            "provider_id": "une_seed_from_plan",
+            "official_data": false,
+            "provisional": true,
+            "schema_version": "1.3",
+            "is_prediction": false,
+            "display_badges": [
+                "문서 근거 기반",
+                "수치 미확보 항목 있음",
+                "T3Q API 교체대상"
+            ]
+        },
+        {
+            "record_id": "DR-ACT-GM-A-04-201209-01",
+            "event_id": "EVT::20120901-TYPH-47190-001",
+            "source_event_id": null,
+            "admin_code": "47190",
+            "admin_name": "경상북도 구미시",
+            "event_name": "태풍 산바 - 구미천지구",
+            "occurred_from": "2012-09-01T00:00:00+09:00",
+            "occurred_to": null,
+            "hazards": [
+                "T10105",
+                "T10206",
+                "T10107"
+            ],
+            "disaster_type": "TYPH",
+            "taxonomy_codes": [
+                "T10105",
+                "T10206",
+                "T10107"
+            ],
+            "district_code": "GM-A-04",
+            "district_name": "구미천지구",
+            "conditions": {
+                "rainfall_3h_mm": null,
+                "rainfall_12h_mm": null,
+                "water_level_m": null,
+                "water_level_trend": null,
+                "wind_speed_ms": null,
+                "affected_objects": [
+                    "하천",
+                    "도로",
+                    "농경지",
+                    "주거지"
+                ],
+                "risk_keywords": [
+                    "하천재해",
+                    "침수위험지구",
+                    "구미천",
+                    "구미천지구"
+                ]
+            },
+            "risk_context": {
+                "risk_factors": [
+                    "제방고에 근접하는 고수위 빈발, 제방고 부족에 따른 주거지 침수 우려",
+                    "정비계획 수립 후 미시행된 인명피해 위험지역"
+                ],
+                "grade": null,
+                "river_name": "구미천",
+                "location": "구미시 원평동(원평2동) 964-640",
+                "spatial_object_ids": [
+                    "GM-A-04"
+                ]
+            },
+            "damage": {
+                "description": "2012년 9월 15~17일 태풍 산바 — 구미시 이재민 147명·재산피해액 약 82억원(최근 10년 최대 규모), 선주교 관측소 수위·환산홍수량 급상승 기록",
+                "quantities_status": "NOT_AVAILABLE",
+                "is_prediction": false
+            },
+            "response": [],
+            "recovery": [],
+            "geometry_ref": {
+                "lat": 36.133611,
+                "lon": 128.335278,
+                "source": "관리대장 경위도(도분초)"
+            },
+            "evidence": [
+                {
+                    "evidence_id": "EVD-EVT::20120901-TYPH-47190-001-01",
+                    "source_type": "PLAN_DOCUMENT",
+                    "data_status": "actual_backed",
+                    "title": "제2차 구미시 자연재해저감종합계획(2021.9)",
+                    "page": 705,
+                    "passage_id": "PSG-GM-JGP-2-0705-01",
+                    "excerpt": "2012년 9월 15~17일 태풍 산바 — 구미시 이재민 147명·재산피해액 약 82억원(최근 10년 최대 규모), 선주교 관측소 수위·환산홍수량 급상승 기록",
+                    "lineage": {
+                        "chapter": "제2장 2.7.2 계획 수립 중점방향",
+                        "district_code": "GM-A-04"
+                    }
+                }
+            ],
+            "data_status": "actual_backed",
+            "source_type": "DOCUMENT_EXTRACT",
+            "provider_id": "une_seed_from_plan",
+            "official_data": false,
+            "provisional": true,
+            "schema_version": "1.3",
+            "is_prediction": false,
+            "display_badges": [
+                "문서 근거 기반",
+                "수치 미확보 항목 있음",
+                "T3Q API 교체대상"
+            ]
+        },
+        {
+            "record_id": "DR-ACT-NW-A-01-202008-01",
+            "event_id": "EVT::20200801-FLOOD-45190-001",
+            "source_event_id": null,
+            "admin_code": "45190",
+            "admin_name": "전라북도 남원시",
+            "event_name": "집중호우 - 주촌지구(하천재해)",
+            "occurred_from": "2020-08-01T00:00:00+09:00",
+            "occurred_to": null,
+            "hazards": [
+                "T10107",
+                "T10206"
+            ],
+            "disaster_type": "FLOOD",
+            "taxonomy_codes": [
+                "T10107",
+                "T10206"
+            ],
+            "district_code": "NW-A-01",
+            "district_name": "주촌지구(하천재해)",
+            "conditions": {
+                "rainfall_3h_mm": null,
+                "rainfall_12h_mm": null,
+                "water_level_m": null,
+                "water_level_trend": null,
+                "wind_speed_ms": null,
+                "affected_objects": [
+                    "하천",
+                    "도로",
+                    "농경지",
+                    "주거지"
+                ],
+                "risk_keywords": [
+                    "하천재해",
+                    null,
+                    "",
+                    "주촌지구(하천재해)"
+                ]
+            },
+            "risk_context": {
+                "risk_factors": [
+                    "침수 위험"
+                ],
+                "grade": null,
+                "river_name": null,
+                "location": "남원시 주천면 송치리 1193-56 일원",
+                "spatial_object_ids": [
+                    "NW-A-01"
+                ]
+            },
+            "damage": {
+                "description": "2020년 8월 7~9일 집중호우 — 남원시 평균 411.1mm(대강면 누적 534mm·금지면 500mm)의 기록적 강우, 관내 하천 수계 침수피해 및 개선복구 계획 수립",
+                "quantities_status": "NOT_AVAILABLE",
+                "is_prediction": false
+            },
+            "response": [],
+            "recovery": [],
+            "geometry_ref": null,
+            "evidence": [
+                {
+                    "evidence_id": "EVD-EVT::20200801-FLOOD-45190-001-01",
+                    "source_type": "PLAN_DOCUMENT",
+                    "data_status": "actual_backed",
+                    "title": "제2차 남원시 자연재해저감 종합계획(2022.4)",
+                    "page": 121,
+                    "passage_id": "PSG-NW-JGP-2-0121-01",
+                    "excerpt": "2020년 8월 7~9일 집중호우 — 남원시 평균 411.1mm(대강면 누적 534mm·금지면 500mm)의 기록적 강우, 관내 하천 수계 침수피해 및 개선복구 계획 수립",
+                    "lineage": {
+                        "chapter": "제2장 2.3.2 주요 자연재해 특성 분석",
+                        "district_code": "NW-A-01"
+                    }
+                }
+            ],
+            "data_status": "actual_backed",
+            "source_type": "DOCUMENT_EXTRACT",
+            "provider_id": "une_seed_from_plan",
+            "official_data": false,
+            "provisional": true,
+            "schema_version": "1.3",
+            "is_prediction": false,
+            "display_badges": [
+                "문서 근거 기반",
+                "수치 미확보 항목 있음",
+                "T3Q API 교체대상"
+            ]
+        },
+        {
+            "record_id": "DR-ACT-NW-A-02-202008-02",
+            "event_id": "EVT::20200801-FLOOD-45190-002",
+            "source_event_id": null,
+            "admin_code": "45190",
+            "admin_name": "전라북도 남원시",
+            "event_name": "집중호우 - 요천지구",
+            "occurred_from": "2020-08-01T00:00:00+09:00",
+            "occurred_to": null,
+            "hazards": [
+                "T10107",
+                "T10206"
+            ],
+            "disaster_type": "FLOOD",
+            "taxonomy_codes": [
+                "T10107",
+                "T10206"
+            ],
+            "district_code": "NW-A-02",
+            "district_name": "요천지구",
+            "conditions": {
+                "rainfall_3h_mm": null,
+                "rainfall_12h_mm": null,
+                "water_level_m": null,
+                "water_level_trend": null,
+                "wind_speed_ms": null,
+                "affected_objects": [
+                    "하천",
+                    "도로",
+                    "농경지",
+                    "주거지"
+                ],
+                "risk_keywords": [
+                    "하천재해",
+                    null,
+                    "",
+                    "요천지구"
+                ]
+            },
+            "risk_context": {
+                "risk_factors": [
+                    "침수 위험"
+                ],
+                "grade": null,
+                "river_name": null,
+                "location": "남원시 이백면 남계리 1052-1 일원",
+                "spatial_object_ids": [
+                    "NW-A-02"
+                ]
+            },
+            "damage": {
+                "description": "2020년 8월 7~9일 집중호우 — 남원시 평균 411.1mm의 기록적 강우, 요천 합류부 침수피해 저감을 위한 개선복구·유로변경 등 복구계획 서술",
+                "quantities_status": "NOT_AVAILABLE",
+                "is_prediction": false
+            },
+            "response": [],
+            "recovery": [],
+            "geometry_ref": null,
+            "evidence": [
+                {
+                    "evidence_id": "EVD-EVT::20200801-FLOOD-45190-002-01",
+                    "source_type": "PLAN_DOCUMENT",
+                    "data_status": "actual_backed",
+                    "title": "제2차 남원시 자연재해저감 종합계획(2022.4)",
+                    "page": 120,
+                    "passage_id": "PSG-NW-JGP-2-0120-01",
+                    "excerpt": "2020년 8월 7~9일 집중호우 — 남원시 평균 411.1mm의 기록적 강우, 요천 합류부 침수피해 저감을 위한 개선복구·유로변경 등 복구계획 서술",
+                    "lineage": {
+                        "chapter": "제2장 2.3.2 주요 자연재해 특성 분석",
+                        "district_code": "NW-A-02"
+                    }
+                }
+            ],
+            "data_status": "actual_backed",
+            "source_type": "DOCUMENT_EXTRACT",
+            "provider_id": "une_seed_from_plan",
+            "official_data": false,
+            "provisional": true,
+            "schema_version": "1.3",
+            "is_prediction": false,
+            "display_badges": [
+                "문서 근거 기반",
+                "수치 미확보 항목 있음",
+                "T3Q API 교체대상"
+            ]
+        },
+        {
+            "record_id": "DR-ACT-NW-A-02-201008-01",
+            "event_id": "EVT::20100801-FLOOD-45190-001",
+            "source_event_id": null,
+            "admin_code": "45190",
+            "admin_name": "전라북도 남원시",
+            "event_name": "집중호우(홍수) - 요천지구",
+            "occurred_from": "2010-08-01T00:00:00+09:00",
+            "occurred_to": null,
+            "hazards": [
+                "T10206",
+                "T10107"
+            ],
+            "disaster_type": "FLOOD",
+            "taxonomy_codes": [
+                "T10206",
+                "T10107"
+            ],
+            "district_code": "NW-A-02",
+            "district_name": "요천지구",
+            "conditions": {
+                "rainfall_3h_mm": null,
+                "rainfall_12h_mm": null,
+                "water_level_m": null,
+                "water_level_trend": null,
+                "wind_speed_ms": null,
+                "affected_objects": [
+                    "하천",
+                    "도로",
+                    "농경지",
+                    "주거지"
+                ],
+                "risk_keywords": [
+                    "하천재해",
+                    null,
+                    "",
+                    "요천지구"
+                ]
+            },
+            "risk_context": {
+                "risk_factors": [
+                    "침수 위험"
+                ],
+                "grade": null,
+                "river_name": null,
+                "location": "남원시 이백면 남계리 1052-1 일원",
+                "spatial_object_ids": [
+                    "NW-A-02"
+                ]
+            },
+            "damage": {
+                "description": "2010년 8월 12~18일 홍수 — 남원관측소 1시간 최대 58mm(20년빈도 상당) 기록, 요천 수계 홍수분석 대상 사상",
+                "quantities_status": "NOT_AVAILABLE",
+                "is_prediction": false
+            },
+            "response": [],
+            "recovery": [],
+            "geometry_ref": null,
+            "evidence": [
+                {
+                    "evidence_id": "EVD-EVT::20100801-FLOOD-45190-001-01",
+                    "source_type": "PLAN_DOCUMENT",
+                    "data_status": "actual_backed",
+                    "title": "요천권역(국가하천) 하천기본계획(변경)(2021)",
+                    "page": 97,
+                    "passage_id": "PSG-YC-RVP-2-0097-01",
+                    "excerpt": "2010년 8월 12~18일 홍수 — 남원관측소 1시간 최대 58mm(20년빈도 상당) 기록, 요천 수계 홍수분석 대상 사상",
+                    "lineage": {
+                        "chapter": "제2장 2.3.3 홍수피해현황 및 취약지역",
+                        "district_code": "NW-A-02"
+                    }
+                }
+            ],
+            "data_status": "actual_backed",
+            "source_type": "DOCUMENT_EXTRACT",
+            "provider_id": "une_seed_from_plan",
+            "official_data": false,
+            "provisional": true,
+            "schema_version": "1.3",
+            "is_prediction": false,
+            "display_badges": [
+                "문서 근거 기반",
+                "수치 미확보 항목 있음",
+                "T3Q API 교체대상"
+            ]
+        },
+        {
+            "record_id": "DR-SYN-UW-001",
+            "event_id": "EVT::20240718-FLOOD-41430-901",
+            "admin_code": "41430",
+            "admin_name": "경기도 의왕시",
+            "event_name": "의왕 안양천 호우·수위상승 시연사례",
+            "occurred_from": "2024-07-18T03:00:00+09:00",
+            "occurred_to": "2024-07-18T21:00:00+09:00",
+            "hazards": [
+                "T10107",
+                "T10206",
+                "T10106"
+            ],
+            "disaster_type": "FLOOD",
+            "taxonomy_codes": [
+                "T10107",
+                "T10206",
+                "T10106"
+            ],
+            "district_code": "UW-A-01",
+            "district_name": "안양천지구",
+            "conditions": {
+                "rainfall_3h_mm": 76,
+                "rainfall_12h_mm": 152,
+                "water_level_m": 2.4,
+                "water_level_trend": "rapid_rise",
+                "wind_speed_ms": null,
+                "affected_objects": [
+                    "지하공간",
+                    "교량 접근로",
+                    "하천변 도로"
+                ],
+                "risk_keywords": [
+                    "안양천",
+                    "저지대",
+                    "제방여유고",
+                    "하폭 부족"
+                ]
+            },
+            "risk_context": {
+                "risk_factors": [
+                    "제방여유고 부족",
+                    "하폭 부족",
+                    "교량 시설능력 부족"
+                ],
+                "grade": "고위험",
+                "river_name": "안양천",
+                "location": "의왕시 왕곡동",
+                "spatial_object_ids": [
+                    "UW-A-01",
+                    "MOCK-FRA-41430-001"
+                ]
+            },
+            "damage": {
+                "human": {
+                    "evacuees": 22
+                },
+                "private_facility": [
+                    {
+                        "category": "상가·지하공간 침수",
+                        "count": 7,
+                        "unit": "개소"
+                    }
+                ],
+                "public_facility": [
+                    {
+                        "category": "도로 일시통제",
+                        "count": 3,
+                        "unit": "구간"
+                    }
+                ],
+                "is_prediction": false
+            },
+            "response": [
+                {
+                    "sequence": 1,
+                    "action": "안양천 하천변 접근통제",
+                    "status": "completed",
+                    "responsible_agency": "시 재난부서"
+                },
+                {
+                    "sequence": 2,
+                    "action": "교량·저지대 현장확인",
+                    "status": "completed",
+                    "responsible_agency": "현장점검반"
+                },
+                {
+                    "sequence": 3,
+                    "action": "배수장비 투입",
+                    "status": "completed",
+                    "responsible_agency": "도로·하수부서"
+                }
+            ],
+            "recovery": [
+                {
+                    "sequence": 1,
+                    "action": "도로 배수·청소",
+                    "status": "completed",
+                    "duration_hours": 12
+                }
+            ],
+            "geometry_ref": "/mock/damage_recovery/41430/evt-uw-901.geojson",
+            "evidence": [
+                {
+                    "evidence_id": "EVD-EVT::20240718-FLOOD-41430-901-01",
+                    "source_type": "SYNTHETIC_DEMO",
+                    "data_status": "synthetic_demo",
+                    "title": "UNE POC 시연용 사건",
+                    "page": null,
+                    "passage_id": null,
+                    "excerpt": "유사도·대응비교·교체형 API 계약 검증을 위한 합성 시연자료",
+                    "lineage": {
+                        "source_file": "damage_recovery_events_seed.json",
+                        "version": "1.3"
+                    }
+                }
+            ],
+            "data_status": "synthetic_demo",
+            "source_type": "SYNTHETIC_DEMO",
+            "provider_id": "mock_event_provider",
+            "official_data": false,
+            "provisional": true,
+            "schema_version": "1.3",
+            "is_prediction": false,
+            "display_badges": [
+                "합성 시연자료",
+                "공식자료 아님",
+                "T3Q API 교체대상"
+            ]
+        },
+        {
+            "record_id": "DR-SYN-UW-002",
+            "event_id": "EVT::20240805-SLOPE-41430-901",
+            "admin_code": "41430",
+            "admin_name": "경기도 의왕시",
+            "event_name": "의왕 사면 토사유출 시연사례",
+            "occurred_from": "2024-08-05T11:00:00+09:00",
+            "occurred_to": "2024-08-05T19:00:00+09:00",
+            "hazards": [
+                "T10107",
+                "T10401"
+            ],
+            "disaster_type": "SLOPE",
+            "taxonomy_codes": [
+                "T10107",
+                "T10401"
+            ],
+            "district_code": "UW-C-01",
+            "district_name": "능안천지구",
+            "conditions": {
+                "rainfall_3h_mm": 88,
+                "rainfall_12h_mm": 170,
+                "water_level_m": null,
+                "water_level_trend": null,
+                "wind_speed_ms": null,
+                "affected_objects": [
+                    "사면",
+                    "도로",
+                    "인접시설"
+                ],
+                "risk_keywords": [
+                    "토사유출",
+                    "사면",
+                    "급경사지",
+                    "도로"
+                ]
+            },
+            "risk_context": {
+                "risk_factors": [
+                    "토사발생 위험도 높음",
+                    "사면 배수 취약"
+                ],
+                "grade": "상",
+                "river_name": null,
+                "location": "의왕시 능안동",
+                "spatial_object_ids": [
+                    "UW-C-01"
+                ]
+            },
+            "damage": {
+                "public_facility": [
+                    {
+                        "category": "도로 토사유입",
+                        "count": 1,
+                        "unit": "구간"
+                    }
+                ],
+                "is_prediction": false
+            },
+            "response": [
+                {
+                    "sequence": 1,
+                    "action": "사면 하부 도로 통제",
+                    "status": "completed",
+                    "responsible_agency": "도로부서"
+                },
+                {
+                    "sequence": 2,
+                    "action": "인접시설 이용자 안내",
+                    "status": "completed",
+                    "responsible_agency": "현장지원반"
+                }
+            ],
+            "recovery": [
+                {
+                    "sequence": 1,
+                    "action": "토사 제거 및 사면 점검",
+                    "status": "completed",
+                    "duration_hours": 10
+                }
+            ],
+            "geometry_ref": "/mock/damage_recovery/41430/evt-uw-slope-901.geojson",
+            "evidence": [
+                {
+                    "evidence_id": "EVD-EVT::20240805-SLOPE-41430-901-01",
+                    "source_type": "SYNTHETIC_DEMO",
+                    "data_status": "synthetic_demo",
+                    "title": "UNE POC 시연용 사건",
+                    "page": null,
+                    "passage_id": null,
+                    "excerpt": "유사도·대응비교·교체형 API 계약 검증을 위한 합성 시연자료",
+                    "lineage": {
+                        "source_file": "damage_recovery_events_seed.json",
+                        "version": "1.3"
+                    }
+                }
+            ],
+            "data_status": "synthetic_demo",
+            "source_type": "SYNTHETIC_DEMO",
+            "provider_id": "mock_event_provider",
+            "official_data": false,
+            "provisional": true,
+            "schema_version": "1.3",
+            "is_prediction": false,
+            "display_badges": [
+                "합성 시연자료",
+                "공식자료 아님",
+                "T3Q API 교체대상"
+            ]
+        },
+        {
+            "record_id": "DR-SYN-GM-001",
+            "event_id": "EVT::20230810-TYPH-47190-901",
+            "admin_code": "47190",
+            "admin_name": "경상북도 구미시",
+            "event_name": "구미 태풍·호우 복합 시연사례",
+            "occurred_from": "2023-08-10T03:00:00+09:00",
+            "occurred_to": "2023-08-10T22:00:00+09:00",
+            "hazards": [
+                "T10105",
+                "T10107",
+                "T10206"
+            ],
+            "disaster_type": "TYPH",
+            "taxonomy_codes": [
+                "T10105",
+                "T10107",
+                "T10206"
+            ],
+            "district_code": "GM-A-04",
+            "district_name": "구미천지구",
+            "conditions": {
+                "rainfall_3h_mm": 90,
+                "rainfall_12h_mm": 188,
+                "water_level_m": 3.0,
+                "water_level_trend": "rising",
+                "wind_speed_ms": 24,
+                "affected_objects": [
+                    "농경지",
+                    "도로",
+                    "하천시설"
+                ],
+                "risk_keywords": [
+                    "구미천",
+                    "태풍",
+                    "호안",
+                    "농경지"
+                ]
+            },
+            "risk_context": {
+                "risk_factors": [
+                    "태풍 동반 집중호우",
+                    "하천시설 피해 가능"
+                ],
+                "grade": "중위험",
+                "river_name": "구미천",
+                "location": "구미시 구포동",
+                "spatial_object_ids": [
+                    "GM-A-04",
+                    "MOCK-FRA-47190-001"
+                ]
+            },
+            "damage": {
+                "human": {
+                    "evacuees": 34
+                },
+                "agriculture": [
+                    {
+                        "category": "농경지 침수",
+                        "value": 15,
+                        "unit": "ha"
+                    }
+                ],
+                "public_facility": [
+                    {
+                        "category": "호안 피해",
+                        "value": 120,
+                        "unit": "m"
+                    }
+                ],
+                "is_prediction": false
+            },
+            "response": [
+                {
+                    "sequence": 1,
+                    "action": "구미천 인접지역 예찰·통제",
+                    "status": "completed",
+                    "responsible_agency": "시 재난부서"
+                },
+                {
+                    "sequence": 2,
+                    "action": "농경지·도로 피해 확인",
+                    "status": "completed",
+                    "responsible_agency": "현장점검반"
+                }
+            ],
+            "recovery": [
+                {
+                    "sequence": 1,
+                    "action": "호안 응급복구",
+                    "status": "completed",
+                    "duration_hours": 36
+                }
+            ],
+            "geometry_ref": "/mock/damage_recovery/47190/evt-gm-901.geojson",
+            "evidence": [
+                {
+                    "evidence_id": "EVD-EVT::20230810-TYPH-47190-901-01",
+                    "source_type": "SYNTHETIC_DEMO",
+                    "data_status": "synthetic_demo",
+                    "title": "UNE POC 시연용 사건",
+                    "page": null,
+                    "passage_id": null,
+                    "excerpt": "유사도·대응비교·교체형 API 계약 검증을 위한 합성 시연자료",
+                    "lineage": {
+                        "source_file": "damage_recovery_events_seed.json",
+                        "version": "1.3"
+                    }
+                }
+            ],
+            "data_status": "synthetic_demo",
+            "source_type": "SYNTHETIC_DEMO",
+            "provider_id": "mock_event_provider",
+            "official_data": false,
+            "provisional": true,
+            "schema_version": "1.3",
+            "is_prediction": false,
+            "display_badges": [
+                "합성 시연자료",
+                "공식자료 아님",
+                "T3Q API 교체대상"
+            ]
+        },
+        {
+            "record_id": "DR-SYN-GM-002",
+            "event_id": "EVT::20240712-SLOPE-47190-901",
+            "admin_code": "47190",
+            "admin_name": "경상북도 구미시",
+            "event_name": "구미 황산 사면 붕괴위험 시연사례",
+            "occurred_from": "2024-07-12T06:00:00+09:00",
+            "occurred_to": "2024-07-12T18:00:00+09:00",
+            "hazards": [
+                "T10107",
+                "T10401"
+            ],
+            "disaster_type": "SLOPE",
+            "taxonomy_codes": [
+                "T10107",
+                "T10401"
+            ],
+            "district_code": "GM-C-01",
+            "district_name": "황산지구",
+            "conditions": {
+                "rainfall_3h_mm": 70,
+                "rainfall_12h_mm": 140,
+                "water_level_m": null,
+                "water_level_trend": null,
+                "wind_speed_ms": null,
+                "affected_objects": [
+                    "사면",
+                    "도로",
+                    "주거지"
+                ],
+                "risk_keywords": [
+                    "황산",
+                    "풍화",
+                    "낙석",
+                    "침식"
+                ]
+            },
+            "risk_context": {
+                "risk_factors": [
+                    "사면 풍화",
+                    "낙석·침식 가능"
+                ],
+                "grade": "중위험",
+                "river_name": null,
+                "location": "구미시 황산 일원",
+                "spatial_object_ids": [
+                    "GM-C-01"
+                ]
+            },
+            "damage": {
+                "public_facility": [
+                    {
+                        "category": "사면 낙석",
+                        "count": 1,
+                        "unit": "개소"
+                    }
+                ],
+                "is_prediction": false
+            },
+            "response": [
+                {
+                    "sequence": 1,
+                    "action": "사면 접근 통제",
+                    "status": "completed",
+                    "responsible_agency": "도로부서"
+                },
+                {
+                    "sequence": 2,
+                    "action": "낙석방지시설 점검",
+                    "status": "completed",
+                    "responsible_agency": "시설관리부서"
+                }
+            ],
+            "recovery": [
+                {
+                    "sequence": 1,
+                    "action": "낙석 제거 및 임시 방호",
+                    "status": "completed",
+                    "duration_hours": 16
+                }
+            ],
+            "geometry_ref": "/mock/damage_recovery/47190/evt-gm-slope-901.geojson",
+            "evidence": [
+                {
+                    "evidence_id": "EVD-EVT::20240712-SLOPE-47190-901-01",
+                    "source_type": "SYNTHETIC_DEMO",
+                    "data_status": "synthetic_demo",
+                    "title": "UNE POC 시연용 사건",
+                    "page": null,
+                    "passage_id": null,
+                    "excerpt": "유사도·대응비교·교체형 API 계약 검증을 위한 합성 시연자료",
+                    "lineage": {
+                        "source_file": "damage_recovery_events_seed.json",
+                        "version": "1.3"
+                    }
+                }
+            ],
+            "data_status": "synthetic_demo",
+            "source_type": "SYNTHETIC_DEMO",
+            "provider_id": "mock_event_provider",
+            "official_data": false,
+            "provisional": true,
+            "schema_version": "1.3",
+            "is_prediction": false,
+            "display_badges": [
+                "합성 시연자료",
+                "공식자료 아님",
+                "T3Q API 교체대상"
+            ]
+        },
+        {
+            "record_id": "DR-SYN-NW-001",
+            "event_id": "EVT::20200713-FLOOD-45190-901",
+            "admin_code": "45190",
+            "admin_name": "전북특별자치도 남원시",
+            "event_name": "남원 요천 홍수 대응 시연사례",
+            "occurred_from": "2020-07-13T03:00:00+09:00",
+            "occurred_to": "2020-07-13T21:00:00+09:00",
+            "hazards": [
+                "T10107",
+                "T10206",
+                "T10106"
+            ],
+            "disaster_type": "FLOOD",
+            "taxonomy_codes": [
+                "T10107",
+                "T10206",
+                "T10106"
+            ],
+            "district_code": "NW-A-02",
+            "district_name": "요천지구",
+            "conditions": {
+                "rainfall_3h_mm": 96,
+                "rainfall_12h_mm": 185,
+                "water_level_m": 4.1,
+                "water_level_trend": "rising",
+                "wind_speed_ms": null,
+                "affected_objects": [
+                    "저지대 주거지",
+                    "도로",
+                    "농경지"
+                ],
+                "risk_keywords": [
+                    "요천",
+                    "합류부",
+                    "저지대",
+                    "하천수위"
+                ]
+            },
+            "risk_context": {
+                "risk_factors": [
+                    "요천 합류부 침수 위험",
+                    "기록적 강우"
+                ],
+                "grade": "고위험",
+                "river_name": "요천",
+                "location": "남원시 요천 인접지역",
+                "spatial_object_ids": [
+                    "NW-A-02",
+                    "MOCK-FRA-45190-001"
+                ]
+            },
+            "damage": {
+                "human": {
+                    "evacuees": 46
+                },
+                "private_facility": [
+                    {
+                        "category": "주택·상가 침수",
+                        "count": 18,
+                        "unit": "동"
+                    }
+                ],
+                "agriculture": [
+                    {
+                        "category": "농경지 침수",
+                        "value": 24.5,
+                        "unit": "ha"
+                    }
+                ],
+                "is_prediction": false
+            },
+            "response": [
+                {
+                    "sequence": 1,
+                    "action": "요천 인접 저지대 예찰·통제",
+                    "status": "completed",
+                    "responsible_agency": "시 재난부서"
+                },
+                {
+                    "sequence": 2,
+                    "action": "주민 사전대피 및 임시주거시설 안내",
+                    "status": "completed",
+                    "responsible_agency": "읍면동"
+                }
+            ],
+            "recovery": [
+                {
+                    "sequence": 1,
+                    "action": "퇴수·토사 제거",
+                    "status": "completed",
+                    "duration_hours": 18
+                }
+            ],
+            "geometry_ref": "/mock/damage_recovery/45190/evt-nw-901.geojson",
+            "evidence": [
+                {
+                    "evidence_id": "EVD-EVT::20200713-FLOOD-45190-901-01",
+                    "source_type": "SYNTHETIC_DEMO",
+                    "data_status": "synthetic_demo",
+                    "title": "UNE POC 시연용 사건",
+                    "page": null,
+                    "passage_id": null,
+                    "excerpt": "유사도·대응비교·교체형 API 계약 검증을 위한 합성 시연자료",
+                    "lineage": {
+                        "source_file": "damage_recovery_events_seed.json",
+                        "version": "1.3"
+                    }
+                }
+            ],
+            "data_status": "synthetic_demo",
+            "source_type": "SYNTHETIC_DEMO",
+            "provider_id": "mock_event_provider",
+            "official_data": false,
+            "provisional": true,
+            "schema_version": "1.3",
+            "is_prediction": false,
+            "display_badges": [
+                "합성 시연자료",
+                "공식자료 아님",
+                "T3Q API 교체대상"
+            ]
+        },
+        {
+            "record_id": "DR-SYN-NW-002",
+            "event_id": "EVT::20230809-FLOOD-45190-902",
+            "admin_code": "45190",
+            "admin_name": "전북특별자치도 남원시",
+            "event_name": "남원 선제통제로 피해가 제한된 비교 시연사례",
+            "occurred_from": "2023-08-09T01:00:00+09:00",
+            "occurred_to": "2023-08-09T18:00:00+09:00",
+            "hazards": [
+                "T10107",
+                "T10206"
+            ],
+            "disaster_type": "FLOOD",
+            "taxonomy_codes": [
+                "T10107",
+                "T10206"
+            ],
+            "district_code": "NW-A-01",
+            "district_name": "주촌지구",
+            "conditions": {
+                "rainfall_3h_mm": 92,
+                "rainfall_12h_mm": 176,
+                "water_level_m": 3.8,
+                "water_level_trend": "rapid_rise",
+                "wind_speed_ms": null,
+                "affected_objects": [
+                    "도로",
+                    "저지대 주거지"
+                ],
+                "risk_keywords": [
+                    "주촌",
+                    "하천",
+                    "저지대",
+                    "선제통제"
+                ]
+            },
+            "risk_context": {
+                "risk_factors": [
+                    "하천 수위 급상승",
+                    "저지대 도로 침수 가능"
+                ],
+                "grade": "고위험",
+                "river_name": "요천 수계",
+                "location": "남원시 주촌 일원",
+                "spatial_object_ids": [
+                    "NW-A-01"
+                ]
+            },
+            "damage": {
+                "human": {
+                    "evacuees": 8
+                },
+                "public_facility": [
+                    {
+                        "category": "도로 일시통제",
+                        "count": 1,
+                        "unit": "구간"
+                    }
+                ],
+                "damage_note": "선제통제로 시연상 피해규모가 작게 설정됨",
+                "is_prediction": false
+            },
+            "response": [
+                {
+                    "sequence": 1,
+                    "action": "저지대 도로 조기통제",
+                    "status": "completed",
+                    "responsible_agency": "도로부서"
+                },
+                {
+                    "sequence": 2,
+                    "action": "취약가구 사전 연락·대피 확인",
+                    "status": "completed",
+                    "responsible_agency": "읍면동"
+                }
+            ],
+            "recovery": [
+                {
+                    "sequence": 1,
+                    "action": "통제구간 안전점검 후 해제",
+                    "status": "completed",
+                    "duration_hours": 8
+                }
+            ],
+            "geometry_ref": "/mock/damage_recovery/45190/evt-nw-902.geojson",
+            "evidence": [
+                {
+                    "evidence_id": "EVD-EVT::20230809-FLOOD-45190-902-01",
+                    "source_type": "SYNTHETIC_DEMO",
+                    "data_status": "synthetic_demo",
+                    "title": "UNE POC 시연용 사건",
+                    "page": null,
+                    "passage_id": null,
+                    "excerpt": "유사도·대응비교·교체형 API 계약 검증을 위한 합성 시연자료",
+                    "lineage": {
+                        "source_file": "damage_recovery_events_seed.json",
+                        "version": "1.3"
+                    }
+                }
+            ],
+            "data_status": "synthetic_demo",
+            "source_type": "SYNTHETIC_DEMO",
+            "provider_id": "mock_event_provider",
+            "official_data": false,
+            "provisional": true,
+            "schema_version": "1.3",
+            "is_prediction": false,
+            "display_badges": [
+                "합성 시연자료",
+                "공식자료 아님",
+                "T3Q API 교체대상"
+            ]
+        }
+    ]
+}

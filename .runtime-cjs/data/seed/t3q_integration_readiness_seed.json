@@ -1,0 +1,106 @@
+{
+    "dataset": "t3q_integration_readiness",
+    "version": "1.2",
+    "as_of": "2026-07-31",
+    "source_status": "T3Q_DEVELOPMENT_NO_TECH_SUPPORT",
+    "runtime_policy": "MOCK_ONLY",
+    "overall_state": "MOCK_CONTRACT_READY",
+    "notice": "현재 T3Q 기술협력을 전제로 하지 않는다. Event·Passage·RefDisasterEventID·T코드·lineage 구조만 유지하고 모든 화면·검색은 UNE Mock/Seed로 동작한다.",
+    "dimensions": [
+        {
+            "dimension_id": "RDY-IDENTITY",
+            "name": "사건 식별",
+            "state": "mock_ready",
+            "implemented": [
+                "T3Q 형식 Event ID Mock",
+                "UNE↔T3Q 코드 매핑",
+                "EventStatus 계약"
+            ],
+            "pending": [
+                "향후 실제 응답 수신 시 Mapper 교체"
+            ],
+            "completion_gate": "Mock Event ID 왕복·필터 시험 통과"
+        },
+        {
+            "dimension_id": "RDY-TAXONOMY",
+            "name": "재난유형 택사노미",
+            "state": "mock_ready",
+            "implemented": [
+                "T코드 prefix 검색",
+                "간이코드↔T코드 Mock 매핑"
+            ],
+            "pending": [
+                "향후 확정 taxonomy 응답과 대조"
+            ],
+            "completion_gate": "CQ Mock 검색에서 상·하위코드 필터 동작"
+        },
+        {
+            "dimension_id": "RDY-PASSAGE",
+            "name": "Passage·원문 근거",
+            "state": "mock_ready",
+            "implemented": [
+                "Mock Passage 12건",
+                "RefDisasterEventID",
+                "문서/행 lineage 구조"
+            ],
+            "pending": [
+                "실제 SchemaType·원문 식별자 교체"
+            ],
+            "completion_gate": "Event→Passage 역조회와 lineage 표시"
+        },
+        {
+            "dimension_id": "RDY-CQ",
+            "name": "역량질의 5문",
+            "state": "mock_ready",
+            "implemented": [
+                "CQ 5문 Mock 시나리오",
+                "검색·지도·근거 연결"
+            ],
+            "pending": [
+                "지역별 실제 데이터 커버리지 교체"
+            ],
+            "completion_gate": "CQ별 결과 또는 데이터 미확보를 명시"
+        },
+        {
+            "dimension_id": "RDY-SPATIAL",
+            "name": "공간 레이어",
+            "state": "mock_ready",
+            "implemented": [
+                "홍수위험지역·위험저수지·풍수해개선지구 Mock GeoJSON",
+                "레이어 토글·상세속성"
+            ],
+            "pending": [
+                "실제 Geometry·속성 계약 시 Adapter 교체"
+            ],
+            "completion_gate": "Mock 표식·비공식 경고·레이어 동작"
+        },
+        {
+            "dimension_id": "RDY-MCP",
+            "name": "MCP/API",
+            "state": "designed",
+            "implemented": [
+                "논리 Tool 계약",
+                "Mock Search API",
+                "외부호출 금지"
+            ],
+            "pending": [
+                "향후 T3Q 공개 규격 수신 시 별도 연계단계 수행"
+            ],
+            "completion_gate": "현재 단계는 Mock API만 수용시험"
+        }
+    ],
+    "development_constraints": [
+        "T3Q Base URL·API Key·MCP URL을 요구하지 않음",
+        "T3Q 외부 호출을 기본 비활성화",
+        "Mock 결과를 실제 T3Q 데이터로 표시하지 않음",
+        "Provider/Adapter 교체경계를 유지"
+    ],
+    "future_replacement_items": [
+        "Event Master 대표응답",
+        "Passage SchemaType·lineage",
+        "검색·페이징·오류계약",
+        "MCP Tool manifest",
+        "GIS 3종 실제 Geometry·속성"
+    ],
+    "required_consultation_items": []
+}

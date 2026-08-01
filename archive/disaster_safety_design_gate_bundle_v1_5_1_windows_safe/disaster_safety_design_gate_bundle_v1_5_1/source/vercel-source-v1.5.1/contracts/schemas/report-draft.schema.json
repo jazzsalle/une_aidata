@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ReportDraft",
+  "type": "object",
+  "required": [
+    "report_id",
+    "situation_id",
+    "status",
+    "ndms_submission",
+    "sections"
+  ],
+  "properties": {
+    "report_id": {
+      "type": "string"
+    },
+    "situation_id": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "DRAFT",
+        "REVIEWED",
+        "ARCHIVED"
+      ]
+    },
+    "ndms_submission": {
+      "const": false
+    },
+    "sections": {
+      "type": "object",
+      "properties": {
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "evidence": {
+      "type": "array"
+    },
+    "limitations": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string"
+      }
+    },
+    "updated_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false
+}

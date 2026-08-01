@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DisasterEvent",
+  "type": "object",
+  "required": [
+    "event_id",
+    "hazards",
+    "data_status"
+  ],
+  "properties": {
+    "event_id": {
+      "type": "string"
+    },
+    "title": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "admin_code": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "occurred_from": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "occurred_to": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "hazards": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "observations": {
+      "type": "array"
+    },
+    "damage_recovery": {
+      "type": "array",
+      "items": {
+        "$ref": "damage-recovery-record.schema.json"
+      }
+    },
+    "responses": {
+      "type": "array"
+    },
+    "geometry": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "evidence": {
+      "type": "array"
+    },
+    "data_status": {
+      "type": "string",
+      "enum": [
+        "actual",
+        "actual_backed",
+        "open_api",
+        "t3q_supplied",
+        "derived",
+        "scenario",
+        "scenario_input",
+        "mock",
+        "synthetic_demo",
+        "provisional",
+        "not_available"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

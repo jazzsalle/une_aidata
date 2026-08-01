@@ -1,0 +1,39 @@
+{
+  "version": "1.4",
+  "as_of": "2026-08-01",
+  "baseline": "Source v1.3 Provider-neutral / Design v1.7",
+  "changes": [
+    "runtime-regression-gate",
+    "full-ranking-15-events",
+    "factor-score-ui-detail",
+    "response-comparison-ui-detail",
+    "report-similarity-response-linkage",
+    "cq-korean-query-normalization",
+    "cq-structural-filter-fallback",
+    "browser-regression-dashboard"
+  ],
+  "event_counts": {
+    "total": 15,
+    "actual_backed": 9,
+    "synthetic_demo": 6
+  },
+  "runtime_regression": {
+    "situations": 5,
+    "cq": 5,
+    "core_domain_api": "passed",
+    "browser_regression_dashboard": "passed",
+    "react_production_build": "blocked_by_npm_registry"
+  },
+  "external_integrations": "not called",
+  "default_providers": {
+    "event": "mock",
+    "risk": "mock",
+    "observation": "mock",
+    "spatial": "mock"
+  },
+  "passage_counts": {
+    "passages": 73,
+    "ref_event_relations": 73
+  },
+  "final_handoff_document": "deferred_until_design_completion"
+}

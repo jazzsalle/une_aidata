@@ -1,0 +1,57 @@
+{
+  "dataset": "mock_contract_catalog",
+  "version": "1.2",
+  "runtime_policy": "MOCK_ONLY",
+  "generated_at": "2026-07-31T20:15:00+09:00",
+  "contracts": [
+    {
+      "id": "MC-EVENT",
+      "file": "t3q_mock_event_master_seed.json",
+      "count": 3,
+      "schema": "t3q-event-master.schema.json"
+    },
+    {
+      "id": "MC-PASSAGE",
+      "file": "t3q_mock_passages_seed.json",
+      "count": 12,
+      "schema": "t3q-passage.schema.json"
+    },
+    {
+      "id": "MC-RELATION",
+      "file": "t3q_mock_ontology_relations_seed.json",
+      "count": 15,
+      "schema": "ontology-relation.schema.json"
+    },
+    {
+      "id": "MC-FRA",
+      "file": "mock_flood_risk_areas.geojson",
+      "count": 3,
+      "schema": "mock-spatial-feature-collection.schema.json"
+    },
+    {
+      "id": "MC-RES",
+      "file": "mock_dangerous_reservoirs.geojson",
+      "count": 3,
+      "schema": "mock-spatial-feature-collection.schema.json"
+    },
+    {
+      "id": "MC-SFI",
+      "file": "mock_storm_flood_improvement_districts.geojson",
+      "count": 3,
+      "schema": "mock-spatial-feature-collection.schema.json"
+    },
+    {
+      "id": "MC-CQ",
+      "file": "t3q_mock_search_scenarios_seed.json",
+      "count": 5,
+      "schema": "t3q-mock-search-scenarios.schema.json"
+    }
+  ],
+  "safety_rules": [
+    "모든 Mock 객체 data_status=mock",
+    "official_data=false",
+    "is_prediction=false",
+    "지도·검색·보고서에 시연용 Mock 표시",
+    "실제 T3Q/공식자료로 오인 가능한 문구 금지"
+  ]
+}

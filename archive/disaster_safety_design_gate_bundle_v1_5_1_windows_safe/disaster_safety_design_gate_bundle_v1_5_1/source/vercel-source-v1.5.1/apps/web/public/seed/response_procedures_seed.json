@@ -1,0 +1,397 @@
+{
+  "dataset": "response_procedures_seed",
+  "version": "1.5.1",
+  "notice": "부산 북구청 매뉴얼을 참고한 잠정 공통 템플릿이며 의왕·구미·남원 정식 매뉴얼 확보 후 교체해야 함",
+  "procedures": [
+    {
+      "procedure_id": "PROC-TPL-STORM-001",
+      "template_name": "풍수해 공통 대응절차 잠정 템플릿",
+      "source_admin": "부산광역시 북구",
+      "source_document": "풍수해위기관리행동매뉴얼(2023.11)_부산 북구청",
+      "source_section": "제4장 재난대응 단계별 행동요령",
+      "source_page_label": "25~33",
+      "target_admin_codes": [
+        "41430",
+        "47190",
+        "45190"
+      ],
+      "stage_code": "STAGE1",
+      "stage_name": "징후 감지",
+      "alert_levels": [
+        "관심",
+        "주의"
+      ],
+      "sequence": 1,
+      "action_title": "초기 상황판단회의 개최",
+      "action_description": "강수현황·기상특보·태풍진로·피해발생 가능성을 확인하고 초기 대응수준을 판단한다.",
+      "required_information": [
+        "기상특보",
+        "강수현황",
+        "과거 유사사례"
+      ],
+      "expected_outputs": [
+        "상황판단 결과",
+        "비상근무 사전예고"
+      ],
+      "official_for_target_municipality": false,
+      "data_status": "provisional",
+      "replacement_required": true,
+      "public_level": "INTERNAL",
+      "operator_confirmation_required": true
+    },
+    {
+      "procedure_id": "PROC-TPL-STORM-002",
+      "template_name": "풍수해 공통 대응절차 잠정 템플릿",
+      "source_admin": "부산광역시 북구",
+      "source_document": "풍수해위기관리행동매뉴얼(2023.11)_부산 북구청",
+      "source_section": "제4장 재난대응 단계별 행동요령",
+      "source_page_label": "25~33",
+      "target_admin_codes": [
+        "41430",
+        "47190",
+        "45190"
+      ],
+      "stage_code": "STAGE1",
+      "stage_name": "징후 감지",
+      "alert_levels": [
+        "관심",
+        "주의"
+      ],
+      "sequence": 2,
+      "action_title": "풍수해 취약지역 사전점검",
+      "action_description": "재해위험지구·인명피해 우려지역·침수우려지·대형공사장 등 사전점검 대상을 지도에서 확인한다.",
+      "required_information": [
+        "위험지구",
+        "하천",
+        "침수흔적도"
+      ],
+      "expected_outputs": [
+        "점검대상 목록",
+        "지도 상황뷰"
+      ],
+      "official_for_target_municipality": false,
+      "data_status": "provisional",
+      "replacement_required": true,
+      "public_level": "INTERNAL",
+      "operator_confirmation_required": true
+    },
+    {
+      "procedure_id": "PROC-TPL-STORM-003",
+      "template_name": "풍수해 공통 대응절차 잠정 템플릿",
+      "source_admin": "부산광역시 북구",
+      "source_document": "풍수해위기관리행동매뉴얼(2023.11)_부산 북구청",
+      "source_section": "제4장 재난대응 단계별 행동요령",
+      "source_page_label": "25~33",
+      "target_admin_codes": [
+        "41430",
+        "47190",
+        "45190"
+      ],
+      "stage_code": "STAGE1",
+      "stage_name": "징후 감지",
+      "alert_levels": [
+        "관심",
+        "주의"
+      ],
+      "sequence": 3,
+      "action_title": "비상근무 사전예고",
+      "action_description": "관련 부서와 현장 조직에 비상근무 가능성을 사전 전파한다.",
+      "required_information": [
+        "담당부서",
+        "비상연락체계"
+      ],
+      "expected_outputs": [
+        "사전예고 이력"
+      ],
+      "official_for_target_municipality": false,
+      "data_status": "provisional",
+      "replacement_required": true,
+      "public_level": "INTERNAL",
+      "operator_confirmation_required": true
+    },
+    {
+      "procedure_id": "PROC-TPL-STORM-004",
+      "template_name": "풍수해 공통 대응절차 잠정 템플릿",
+      "source_admin": "부산광역시 북구",
+      "source_document": "풍수해위기관리행동매뉴얼(2023.11)_부산 북구청",
+      "source_section": "제4장 재난대응 단계별 행동요령",
+      "source_page_label": "25~33",
+      "target_admin_codes": [
+        "41430",
+        "47190",
+        "45190"
+      ],
+      "stage_code": "STAGE2",
+      "stage_name": "초기 대응",
+      "alert_levels": [
+        "경계",
+        "심각"
+      ],
+      "sequence": 4,
+      "action_title": "상황판단회의 및 대응체계 강화",
+      "action_description": "피해 발생·확대 가능성을 판단하고 재난안전대책본부 운영 및 현장지원 필요성을 검토한다.",
+      "required_information": [
+        "피해현황",
+        "기상·수문",
+        "현장조치"
+      ],
+      "expected_outputs": [
+        "회의결과",
+        "대응단계"
+      ],
+      "official_for_target_municipality": false,
+      "data_status": "provisional",
+      "replacement_required": true,
+      "public_level": "INTERNAL",
+      "operator_confirmation_required": true
+    },
+    {
+      "procedure_id": "PROC-TPL-STORM-005",
+      "template_name": "풍수해 공통 대응절차 잠정 템플릿",
+      "source_admin": "부산광역시 북구",
+      "source_document": "풍수해위기관리행동매뉴얼(2023.11)_부산 북구청",
+      "source_section": "제4장 재난대응 단계별 행동요령",
+      "source_page_label": "25~33",
+      "target_admin_codes": [
+        "41430",
+        "47190",
+        "45190"
+      ],
+      "stage_code": "STAGE2",
+      "stage_name": "초기 대응",
+      "alert_levels": [
+        "경계",
+        "심각"
+      ],
+      "sequence": 5,
+      "action_title": "위험지역 대피·접근통제 검토",
+      "action_description": "침수우려 도로·저지대·하천변·산지 인접지역의 통제 및 주민대피 준비사항을 확인한다.",
+      "required_information": [
+        "침수우려지",
+        "대피소",
+        "통제대상"
+      ],
+      "expected_outputs": [
+        "대피·통제 검토결과"
+      ],
+      "official_for_target_municipality": false,
+      "data_status": "provisional",
+      "replacement_required": true,
+      "public_level": "INTERNAL",
+      "operator_confirmation_required": true
+    },
+    {
+      "procedure_id": "PROC-TPL-STORM-006",
+      "template_name": "풍수해 공통 대응절차 잠정 템플릿",
+      "source_admin": "부산광역시 북구",
+      "source_document": "풍수해위기관리행동매뉴얼(2023.11)_부산 북구청",
+      "source_section": "제4장 재난대응 단계별 행동요령",
+      "source_page_label": "25~33",
+      "target_admin_codes": [
+        "41430",
+        "47190",
+        "45190"
+      ],
+      "stage_code": "STAGE2",
+      "stage_name": "초기 대응",
+      "alert_levels": [
+        "경계",
+        "심각"
+      ],
+      "sequence": 6,
+      "action_title": "상황전파 및 초동보고",
+      "action_description": "소관부서·유관기관·상급기관에 상황과 초기조치 내용을 전파한다.",
+      "required_information": [
+        "상황요약",
+        "기관목록"
+      ],
+      "expected_outputs": [
+        "초동보고서",
+        "전파이력"
+      ],
+      "official_for_target_municipality": false,
+      "data_status": "provisional",
+      "replacement_required": true,
+      "public_level": "INTERNAL",
+      "operator_confirmation_required": true
+    },
+    {
+      "procedure_id": "PROC-TPL-STORM-007",
+      "template_name": "풍수해 공통 대응절차 잠정 템플릿",
+      "source_admin": "부산광역시 북구",
+      "source_document": "풍수해위기관리행동매뉴얼(2023.11)_부산 북구청",
+      "source_section": "제4장 재난대응 단계별 행동요령",
+      "source_page_label": "25~33",
+      "target_admin_codes": [
+        "41430",
+        "47190",
+        "45190"
+      ],
+      "stage_code": "STAGE3",
+      "stage_name": "비상 대응",
+      "alert_levels": [
+        "경계",
+        "심각"
+      ],
+      "sequence": 7,
+      "action_title": "인명 구조·구급 우선",
+      "action_description": "인명피해 및 고립 가능성을 우선 확인하고 구조·구급기관과 공조한다.",
+      "required_information": [
+        "인명피해",
+        "고립신고",
+        "긴급구조기관"
+      ],
+      "expected_outputs": [
+        "구조·구급 현황"
+      ],
+      "official_for_target_municipality": false,
+      "data_status": "provisional",
+      "replacement_required": true,
+      "public_level": "INTERNAL",
+      "operator_confirmation_required": true
+    },
+    {
+      "procedure_id": "PROC-TPL-STORM-008",
+      "template_name": "풍수해 공통 대응절차 잠정 템플릿",
+      "source_admin": "부산광역시 북구",
+      "source_document": "풍수해위기관리행동매뉴얼(2023.11)_부산 북구청",
+      "source_section": "제4장 재난대응 단계별 행동요령",
+      "source_page_label": "25~33",
+      "target_admin_codes": [
+        "41430",
+        "47190",
+        "45190"
+      ],
+      "stage_code": "STAGE3",
+      "stage_name": "비상 대응",
+      "alert_levels": [
+        "경계",
+        "심각"
+      ],
+      "sequence": 8,
+      "action_title": "피해 확산 방지 및 응급복구",
+      "action_description": "교통통제·시설 응급조치·2차 피해 방지와 필요한 인력·장비를 관리한다.",
+      "required_information": [
+        "통제현황",
+        "시설피해",
+        "자원현황"
+      ],
+      "expected_outputs": [
+        "응급조치 이력"
+      ],
+      "official_for_target_municipality": false,
+      "data_status": "provisional",
+      "replacement_required": true,
+      "public_level": "INTERNAL",
+      "operator_confirmation_required": true
+    },
+    {
+      "procedure_id": "PROC-TPL-STORM-009",
+      "template_name": "풍수해 공통 대응절차 잠정 템플릿",
+      "source_admin": "부산광역시 북구",
+      "source_document": "풍수해위기관리행동매뉴얼(2023.11)_부산 북구청",
+      "source_section": "제4장 재난대응 단계별 행동요령",
+      "source_page_label": "25~33",
+      "target_admin_codes": [
+        "41430",
+        "47190",
+        "45190"
+      ],
+      "stage_code": "STAGE3",
+      "stage_name": "비상 대응",
+      "alert_levels": [
+        "경계",
+        "심각"
+      ],
+      "sequence": 9,
+      "action_title": "피해자·이재민 지원",
+      "action_description": "대피소 운영, 구호물자, 취약계층 지원과 생활안정 조치를 확인한다.",
+      "required_information": [
+        "대피인원",
+        "대피소",
+        "구호자원"
+      ],
+      "expected_outputs": [
+        "이재민 지원현황"
+      ],
+      "official_for_target_municipality": false,
+      "data_status": "provisional",
+      "replacement_required": true,
+      "public_level": "INTERNAL",
+      "operator_confirmation_required": true
+    },
+    {
+      "procedure_id": "PROC-TPL-STORM-010",
+      "template_name": "풍수해 공통 대응절차 잠정 템플릿",
+      "source_admin": "부산광역시 북구",
+      "source_document": "풍수해위기관리행동매뉴얼(2023.11)_부산 북구청",
+      "source_section": "제4장 재난대응 단계별 행동요령",
+      "source_page_label": "25~33",
+      "target_admin_codes": [
+        "41430",
+        "47190",
+        "45190"
+      ],
+      "stage_code": "STAGE4",
+      "stage_name": "수습·복구",
+      "alert_levels": [
+        "경계",
+        "심각"
+      ],
+      "sequence": 10,
+      "action_title": "피해·복구상황 관리",
+      "action_description": "인명·재산·시설피해를 집계하고 응급복구 및 추가피해 여부를 관리한다.",
+      "required_information": [
+        "피해현황",
+        "복구현황",
+        "위성영상",
+        "침수흔적도"
+      ],
+      "expected_outputs": [
+        "피해·복구 보고"
+      ],
+      "official_for_target_municipality": false,
+      "data_status": "provisional",
+      "replacement_required": true,
+      "public_level": "INTERNAL",
+      "operator_confirmation_required": true
+    },
+    {
+      "procedure_id": "PROC-TPL-STORM-011",
+      "template_name": "풍수해 공통 대응절차 잠정 템플릿",
+      "source_admin": "부산광역시 북구",
+      "source_document": "풍수해위기관리행동매뉴얼(2023.11)_부산 북구청",
+      "source_section": "제4장 재난대응 단계별 행동요령",
+      "source_page_label": "25~33",
+      "target_admin_codes": [
+        "41430",
+        "47190",
+        "45190"
+      ],
+      "stage_code": "STAGE4",
+      "stage_name": "수습·복구",
+      "alert_levels": [
+        "경계",
+        "심각"
+      ],
+      "sequence": 11,
+      "action_title": "상황종료 및 후속과제 정리",
+      "action_description": "통제해제 조건, 상황종료 보고, 복구계획 및 개선과제를 정리한다.",
+      "required_information": [
+        "관측정보",
+        "현장확인",
+        "복구계획"
+      ],
+      "expected_outputs": [
+        "종료보고",
+        "후속과제"
+      ],
+      "official_for_target_municipality": false,
+      "data_status": "provisional",
+      "replacement_required": true,
+      "public_level": "INTERNAL",
+      "operator_confirmation_required": true
+    }
+  ],
+  "package_version": "1.5.1"
+}

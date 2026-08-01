@@ -1,0 +1,36 @@
+{
+  "version": "1.5.1",
+  "as_of": "2026-08-02",
+  "baseline": "Design v1.8.1 / Source v1.5.1",
+  "design_file": "재난안전_AI데이터_활용_시범서비스_통합설계서_v1.8.1.docx",
+  "design_sha256": "41c435ac1cfbcae1d1f12acb617002fdd6ba98540bda1deb8842f445968531dc",
+  "source_directory": "vercel-source-v1.5.1",
+  "git_commit": "NOT_AVAILABLE_IN_UPLOADED_ZIP",
+  "recommended_git_tag": "design-v1.8.1-source-v1.5.1",
+  "contracts": {
+    "openapi_routes": 31,
+    "openapi_operations": 31,
+    "schema_objects": 260,
+    "schema_count": 18
+  },
+  "runtime_regression": {
+    "situations": 5,
+    "events": 15,
+    "cq": 5,
+    "status": "passed"
+  },
+  "provider_conformance": {
+    "cases": 8,
+    "status": "passed_expected_outcomes"
+  },
+  "external_integrations": "not_called",
+  "design_gate": "PASS",
+  "final_handoff_document": "handoff/GLORDCODE_DEVELOPMENT_HANDOFF_v1.0.md",
+  "development_gate_pending": [
+    "package-lock.json",
+    "React production build",
+    "Playwright E2E",
+    "Vercel Preview",
+    "external provider fixtures"
+  ]
+}

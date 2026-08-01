@@ -1,0 +1,1194 @@
+{
+  "package": "재난안전_POC_소스코드_Vercel_v0.7",
+  "generated_at": "2026-07-30T18:55:00+09:00",
+  "design_doc": "재난안전_AI데이터_활용_시범서비스_통합설계서_v1.0.docx",
+  "file_count": 236,
+  "key_change": "홍수 PRE/EVENT/POST 256×256 위성영상·수계마스크 Seed와 독립 카드 UI",
+  "phase_policy": {
+    "PRE": "event_start_at - 12 days",
+    "EVENT": "event_start_at <= acquired_at <= event_end_at + 2 days",
+    "POST": "event_end_at + 12 days"
+  },
+  "files": [
+    {
+      "path": ".editorconfig",
+      "bytes": 284,
+      "sha256": "d3862961189cf66ec24ca4c061b4bbd5d6712247fea2ac38dd4af7b23be7022c"
+    },
+    {
+      "path": ".env.example",
+      "bytes": 1413,
+      "sha256": "3afb4c9a5fba571f477f086ce862da7de474c10bd0da391b81dd135999f4020b"
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 192,
+      "sha256": "3fcc2a1e4f7666d764387fafbf2abf37ed1688d14158bbe8434f4432fd8e5e6f"
+    },
+    {
+      "path": "CLAUDE.md",
+      "bytes": 4962,
+      "sha256": "a6ff12a4b580342bd9646b4e78545d3978d256c40a867271a3395029f1dc24db"
+    },
+    {
+      "path": "README.md",
+      "bytes": 4137,
+      "sha256": "de93ccfb2937e6f55c8e61cc72fb760199c4e2bc64795f25ab4373ce0cf2964b"
+    },
+    {
+      "path": "api/health.ts",
+      "bytes": 222,
+      "sha256": "263712e1277a9082bf0bb1cd1df7dfed0c1c282d2dcbf91634f31e20b35b2bb9"
+    },
+    {
+      "path": "api/v1/agent/messages.ts",
+      "bytes": 892,
+      "sha256": "8898312d049bb2ed057dabaffcb75e123ebdacfe0940f3d5d8a451f8b6905286"
+    },
+    {
+      "path": "api/v1/flood-traces.ts",
+      "bytes": 524,
+      "sha256": "261f48d4c6897ff6a8b38c755a6798b95ad75b599ea79dc6c94eafa78d7da992"
+    },
+    {
+      "path": "api/v1/integrations/status.ts",
+      "bytes": 3279,
+      "sha256": "ccd19748bc2fb65c8eaa6a6e528c1dc8e1f8e56c78a00fd2aef9aca8098ac722"
+    },
+    {
+      "path": "api/v1/integrations/une-rag-probe.ts",
+      "bytes": 386,
+      "sha256": "b7085770a1c63018cb980e869b90d9b429bb03b38c3a13408bee185f4188165c"
+    },
+    {
+      "path": "api/v1/map/layers.ts",
+      "bytes": 220,
+      "sha256": "edd25cb630af14a4b99a60d4a6c05e0e95779fc9417345edffd65201a0f1c7b3"
+    },
+    {
+      "path": "api/v1/observations/hydrology.ts",
+      "bytes": 926,
+      "sha256": "d7cf90947da86f3b36fbf7d7ae51e6e4232fbdfeddd04d08806646149197c996"
+    },
+    {
+      "path": "api/v1/observations/kma-nowcast.ts",
+      "bytes": 796,
+      "sha256": "282783e6984d353b026ee21e8d0eda909e15be76b2cc6a3cd352e8ce23ac21c2"
+    },
+    {
+      "path": "api/v1/observations/query.ts",
+      "bytes": 1024,
+      "sha256": "13d5459cba1319f0a462234190ca2626a95647cd7477063dba1a45e94effc32a"
+    },
+    {
+      "path": "api/v1/priority-areas/query.ts",
+      "bytes": 969,
+      "sha256": "48708c8c71f8ece21db56fe68a4cf29aa534c9a86a93b4e17967765da2f716c6"
+    },
+    {
+      "path": "api/v1/procedures.ts",
+      "bytes": 542,
+      "sha256": "c2370f18b4f594f1962045c9e9c8581b568800cefeeb5e748ca37948dd7ac294"
+    },
+    {
+      "path": "api/v1/reports/drafts.ts",
+      "bytes": 3056,
+      "sha256": "690803d5b8ad1369115ff0cf5495abfec1c0834e024965e0c16b147886517e91"
+    },
+    {
+      "path": "api/v1/risk-knowledge/search.ts",
+      "bytes": 747,
+      "sha256": "e1266d47cbd44dfade4803f86fd9e509dd7f81d25c52c7e5df3f584a72ae6948"
+    },
+    {
+      "path": "api/v1/satellite-assets.ts",
+      "bytes": 709,
+      "sha256": "7eea679d233704667b1f53fab0bedc3e3ac98c28438eeb90a294259a371a6a97"
+    },
+    {
+      "path": "api/v1/scenarios.ts",
+      "bytes": 225,
+      "sha256": "e88e418e1f1f75222ce891194fdb52d48e51f0699bd3f0c5f400357d9b21e45e"
+    },
+    {
+      "path": "api/v1/similar-events/detail.ts",
+      "bytes": 598,
+      "sha256": "c6d51e15d269afa70de9c203dad50702a3dd73fa84f69f7c9efa5b378ff8b5ae"
+    },
+    {
+      "path": "api/v1/similar-events/search.ts",
+      "bytes": 1002,
+      "sha256": "09c8929d4708b075171b40b933b635dbb8af3cc8063261326c156c361b620ad4"
+    },
+    {
+      "path": "api/v1/situations.ts",
+      "bytes": 463,
+      "sha256": "785b77f2ab46b18ee609da8ac742e493377ab49085cfba9aa0ade30cc6059f65"
+    },
+    {
+      "path": "apps/web/index.html",
+      "bytes": 413,
+      "sha256": "ba8bc79d44a8adabc6c9ff4fc1b05e07409c366bbc48037afa7404f884bd80cf"
+    },
+    {
+      "path": "apps/web/package.json",
+      "bytes": 591,
+      "sha256": "f1a745aaa644ab656b935f789bcd5949cd759632dff31e85e3f6ce5e9c86bcbc"
+    },
+    {
+      "path": "apps/web/playwright.config.ts",
+      "bytes": 276,
+      "sha256": "085014a6c121ed4f03d18f433a2188493d96a00cdf5c9640fbacf9fbe66a82de"
+    },
+    {
+      "path": "apps/web/public/mock/satellite/41430/baseline-thumb.webp",
+      "bytes": 12282,
+      "sha256": "527d7b64da23a774051aae8a4e8247f4ea40d543f8e3846de2fadc1b98a9e7ca"
+    },
+    {
+      "path": "apps/web/public/mock/satellite/41430/baseline.webp",
+      "bytes": 84504,
+      "sha256": "83e15893e196260cd852029679a97073c4f3198b5f21bdf2e9da301d72bc4210"
+    },
+    {
+      "path": "apps/web/public/mock/satellite/41430/latest-thumb.webp",
+      "bytes": 13232,
+      "sha256": "45d61d22c98478fae1c122bb57b4acfef520ca29f63f7873e5781aee95d74a7a"
+    },
+    {
+      "path": "apps/web/public/mock/satellite/41430/latest.webp",
+      "bytes": 88378,
+      "sha256": "cf02e0ace4d1fd665ac75e52aec8778202f9606e248fac6ce4738a7ee07244f6"
+    },
+    {
+      "path": "apps/web/public/mock/satellite/41430/near_event-thumb.webp",
+      "bytes": 13292,
+      "sha256": "daa7be1f3ceab2eaefd55ed9b046784697996092ac350beccbe3522c55a46626"
+    },
+    {
+      "path": "apps/web/public/mock/satellite/41430/near_event.webp",
+      "bytes": 83846,
+      "sha256": "0781740d39166e5394b0a7c860e91159dde3cd3e2ba1840e683f27e6e82ed3a6"
+    },
+    {
+      "path": "apps/web/public/mock/satellite/41430/post_event-thumb.webp",
+      "bytes": 13184,
+      "sha256": "1a36ccc668026967e07ecfcc8d1e0bf8c7fff8602e95a598cc06c5c30f3a0937"
+    },
+    {
+      "path": "apps/web/public/mock/satellite/41430/post_event.webp",
+      "bytes": 84578,
+      "sha256": "bc5fa4f34ae7e4f00548baf1939b54b418c7b10139f878a76fb74d8003764f0c"
+    },
+    {
+      "path": "apps/web/public/mock/satellite/41430/pre_event-thumb.webp",
+      "bytes": 12916,
+      "sha256": "f61d199a768d09d16644cdde6aeb39898635c3b9441fde8c70731ff49d1663f1"
+    },
+    {
+      "path": "apps/web/public/mock/satellite/41430/pre_event.webp",
+      "bytes": 87998,
+      "sha256": "e5ec1d40a4ad35c6f7eb337b17432208ce9bab891a0b4f12c66ae7f55dba07bf"
+    },
+    {
+      "path": "apps/web/public/mock/satellite/45190/baseline-thumb.webp",
+      "bytes": 11196,
+      "sha256": "4b922de0593196894e7eff010b767ba0b0e35558e799ae7c47a13cf459fb6af1"
+    },
+    {
+      "path": "apps/web/public/mock/satellite/45190/baseline.webp",
+      "bytes": 85412,
+      "sha256": "ea396a645fb470ce70250ede387ea71a8face46fa62a4061fe876e250775f53e"
+    },
+    {
+      "path": "apps/web/public/mock/satellite/45190/latest-thumb.webp",
+      "bytes": 12716,
+      "sha256": "b2748979f85523b09c41a91a800ea09e35c027bafc6983f870d669f4e383394e"
+    },
+    {
+      "path": "apps/web/public/mock/satellite/45190/latest.webp",
+      "bytes": 86484,
+      "sha256": "a3ade2659ac17cc5b6e1a384bcff266b1a8c8cc5e07e09cb54034f9b9e03c52e"
+    },
+    {
+      "path": "apps/web/public/mock/satellite/45190/near_event-thumb.webp",
+      "bytes": 12624,
+      "sha256": "e319fe275a1c15c2e7bdf8fd0471b8531c1b93200bb7f502a7de80b377f839b4"
+    },
+    {
+      "path": "apps/web/public/mock/satellite/45190/near_event.webp",
+      "bytes": 83190,
+      "sha256": "e51a5cace72dfbbef3bb8176b3d7e58c12b247e1e01f2bfdf5ba09c097fe5c26"
+    },
+    {
+      "path": "apps/web/public/mock/satellite/45190/post_event-thumb.webp",
+      "bytes": 12878,
+      "sha256": "6aa4a3d782accf4755e00131a2afff0c8abb0b7d344a2b61bb62b50356208de8"
+    },
+    {
+      "path": "apps/web/public/mock/satellite/45190/post_event.webp",
+      "bytes": 84526,
+      "sha256": "bb561193a20e1554b9be4cf7e21f8bbb84a8beef3c45bfaaeb6900a8785f2fcd"
+    },
+    {
+      "path": "apps/web/public/mock/satellite/45190/pre_event-thumb.webp",
+      "bytes": 12398,
+      "sha256": "752887140238692251358e264a1230a08f23392466d1e18fcd2a2ac068af0d31"
+    },
+    {
+      "path": "apps/web/public/mock/satellite/45190/pre_event.webp",
+      "bytes": 86844,
+      "sha256": "8fa7e44464f5f803479f2a58a0af58aac7849988829f822680386e26873ec5dc"
+    },
+    {
+      "path": "apps/web/public/mock/satellite/47190/baseline-thumb.webp",
+      "bytes": 11324,
+      "sha256": "c88547d07649e66586ee0f2f200abeb4869151530053aba9902f42dacc8d9682"
+    },
+    {
+      "path": "apps/web/public/mock/satellite/47190/baseline.webp",
+      "bytes": 85060,
+      "sha256": "29206db040140b85958b948684a1bda1adec18d75bfd9fefd1d27692773c59ff"
+    },
+    {
+      "path": "apps/web/public/mock/satellite/47190/latest-thumb.webp",
+      "bytes": 13134,
+      "sha256": "887c93ffb54fda76c3cacb14d3d626408c5fb22db5e8fca1060bd3ea7aae91fc"
+    },
+    {
+      "path": "apps/web/public/mock/satellite/47190/latest.webp",
+      "bytes": 85270,
+      "sha256": "e331749af693dd5e1b52287adc8d5006ac552166932bbeb362cb199b34e8c53f"
+    },
+    {
+      "path": "apps/web/public/mock/satellite/47190/near_event-thumb.webp",
+      "bytes": 12764,
+      "sha256": "9666e986b6f41a2f0771f76645c375144f41e2c689a7e4f58b8593effebf7ba1"
+    },
+    {
+      "path": "apps/web/public/mock/satellite/47190/near_event.webp",
+      "bytes": 83894,
+      "sha256": "a24a0dc252d926e5082950dc40bf828088c2aff175e962ba68a685a164095e7a"
+    },
+    {
+      "path": "apps/web/public/mock/satellite/47190/post_event-thumb.webp",
+      "bytes": 13228,
+      "sha256": "612ae4da11aac9d799f1a436747ff3943b53e465de981592a43d662c6f4a442f"
+    },
+    {
+      "path": "apps/web/public/mock/satellite/47190/post_event.webp",
+      "bytes": 84100,
+      "sha256": "a6115d78185f72d308995817050b2f3071abcb898ffe911fcc2c33369a0c5b04"
+    },
+    {
+      "path": "apps/web/public/mock/satellite/47190/pre_event-thumb.webp",
+      "bytes": 13258,
+      "sha256": "aa84af879474e95b1f02d703d6ca6acdd73d1feb5e6a49e7c5724476e2c7e1b3"
+    },
+    {
+      "path": "apps/web/public/mock/satellite/47190/pre_event.webp",
+      "bytes": 87008,
+      "sha256": "98593ff218c35dc1d5ea79db8e916ccc418d9d37d9beeb94eafa6510e39fe078"
+    },
+    {
+      "path": "apps/web/public/seed/criteria.json",
+      "bytes": 34074,
+      "sha256": "aacb9a9a4353a7f838328ab6677a26c083ecd2b6c9fe6a4f3778e56c2d6900c7"
+    },
+    {
+      "path": "apps/web/public/seed/current_situations_seed.json",
+      "bytes": 7062,
+      "sha256": "99684a52c124d0b323be2e11d82ca74d37395d1029632ba9426b2bbaa0b41e1a"
+    },
+    {
+      "path": "apps/web/public/seed/damage_recovery_events_seed.json",
+      "bytes": 9798,
+      "sha256": "bd89e32e48133307ee679eaab9ee345520bd195131efcba40881fb331ebafa90"
+    },
+    {
+      "path": "apps/web/public/seed/districts.json",
+      "bytes": 73377,
+      "sha256": "d53a65ef4df7f081da0786c600f786a26e67bd733b5fe9a95062ed951482cb66"
+    },
+    {
+      "path": "apps/web/public/seed/flood_traces_seed.geojson",
+      "bytes": 3736,
+      "sha256": "8429416163633be409d16da2eea207a8cb2189f740ee13f0e29b02f3c7c684b8"
+    },
+    {
+      "path": "apps/web/public/seed/geo.json",
+      "bytes": 1933926,
+      "sha256": "cc6e6623d01d5938fc293626104895d9774112693760d6802cdcaae0463b1622"
+    },
+    {
+      "path": "apps/web/public/seed/imagery/sample-flood/SOURCE_NOTES.md",
+      "bytes": 748,
+      "sha256": "02ff12466b35673571ca90deb80de09268ad053e5bfa0cf8541cd34f6ec12931"
+    },
+    {
+      "path": "apps/web/public/seed/imagery/sample-flood/source/post_satellite_original.png",
+      "bytes": 712991,
+      "sha256": "8338e7c9eb9480153b9c5417f55c5d57c1fee1924c2385ebb384712e52beb4f3"
+    },
+    {
+      "path": "apps/web/public/seed/imagery/sample-flood/source/post_water_mask_original.png",
+      "bytes": 12363,
+      "sha256": "c2de0d4f51c147fbe8e3e9a4dda5f0d1aa74e2fef03611ece876271785462baf"
+    },
+    {
+      "path": "apps/web/public/seed/imagery/sample-flood/source/pre_satellite_original.png",
+      "bytes": 762978,
+      "sha256": "f2938a0a57629946fc57240beca91d99c976a40cd5bb819c627c7039a223b71b"
+    },
+    {
+      "path": "apps/web/public/seed/imagery/sample-flood/source/pre_water_mask_original.png",
+      "bytes": 12763,
+      "sha256": "e34eeb82e7f37cae49db94c9a0b4e24a139bf8ff8fb831b41712c5a2951b7a4c"
+    },
+    {
+      "path": "apps/web/public/seed/imagery/sample-flood/tiles/event_satellite_256.png",
+      "bytes": 45227,
+      "sha256": "d515103aa36b155974ff5b6a75bea5c789e2cdb6031bf4fe40e72f5a6d253530"
+    },
+    {
+      "path": "apps/web/public/seed/imagery/sample-flood/tiles/event_water_mask_256.png",
+      "bytes": 1305,
+      "sha256": "d557a5595f1764fb5c83c15a33af438075084e9c2481e6ac78a910b60b89d59f"
+    },
+    {
+      "path": "apps/web/public/seed/imagery/sample-flood/tiles/post_satellite_256.png",
+      "bytes": 40521,
+      "sha256": "be7d04acbc3de4f4a87a78ea772f29f08ccbe1b7096997d200162b2c896c3255"
+    },
+    {
+      "path": "apps/web/public/seed/imagery/sample-flood/tiles/post_water_mask_256.png",
+      "bytes": 1442,
+      "sha256": "1e56cb475a28a790b167309febef2a4af5a066ec299b3dde6d4b2252992df018"
+    },
+    {
+      "path": "apps/web/public/seed/imagery/sample-flood/tiles/pre_satellite_256.png",
+      "bytes": 42190,
+      "sha256": "dbe8b0e7f9d6986f01769aec821ac09aedcf438f1822ac989bbb0c29fbeede4a"
+    },
+    {
+      "path": "apps/web/public/seed/imagery/sample-flood/tiles/pre_water_mask_256.png",
+      "bytes": 1426,
+      "sha256": "c21636daedeea92f4488541b1bdcf607cce4bbfd46f51e5c9b45f873a6bf872e"
+    },
+    {
+      "path": "apps/web/public/seed/layer_catalog_seed.json",
+      "bytes": 2749,
+      "sha256": "b8985933a5fa52c47244c48962cf0b8ab7595894dda6fa3b864352b64f8a9e63"
+    },
+    {
+      "path": "apps/web/public/seed/priority_areas_seed.json",
+      "bytes": 4439,
+      "sha256": "a7a769a7d45a2e072e4d1cd463e6ff847ec5566217a1bfd3707f7e3eeeffe64c"
+    },
+    {
+      "path": "apps/web/public/seed/public_api_catalog_seed.json",
+      "bytes": 4916,
+      "sha256": "3aaa1e202c14ad681bdb8dba25e1538c102b067c9808e5a2f623f350eabda055"
+    },
+    {
+      "path": "apps/web/public/seed/report_draft_seed.json",
+      "bytes": 1592,
+      "sha256": "4df4d1c9af84610a2b8c1126fdbac0432014b817f6737906a61d503306021397"
+    },
+    {
+      "path": "apps/web/public/seed/response_procedures_seed.json",
+      "bytes": 13636,
+      "sha256": "a3ac0ef277d41e5481d24ae3ed435d286ef945f4a32c9a22fa2946647db5d6ec"
+    },
+    {
+      "path": "apps/web/public/seed/rivers.json",
+      "bytes": 39028,
+      "sha256": "ccd7909077183e568982ec9786e528de89726600c7c058a6d7546d41fd085e64"
+    },
+    {
+      "path": "apps/web/public/seed/satellite-placeholder.svg",
+      "bytes": 809,
+      "sha256": "b72e1e1b022d06a6e93cc08fe6cb74e79d09270eb5ada81c7811fdc9550a0296"
+    },
+    {
+      "path": "apps/web/public/seed/satellite_assets_seed.json",
+      "bytes": 41020,
+      "sha256": "38881608c0a13e72cd868bbd9d7deac814347ee9210eb8a16de32cec4e8baca1"
+    },
+    {
+      "path": "apps/web/public/seed/scenario_timelines_seed.json",
+      "bytes": 2847,
+      "sha256": "f690a7afb51069d80ece6ebf3ffae7514f8f06ff18105d41bc781919667b1f4e"
+    },
+    {
+      "path": "apps/web/src/App.tsx",
+      "bytes": 7682,
+      "sha256": "bd580fa8e4a241a9cec749cad2dec6b53de201ab606972552f2c11c07161ef70"
+    },
+    {
+      "path": "apps/web/src/components/AppHeader.tsx",
+      "bytes": 2340,
+      "sha256": "f4ab4c3b568e00b8399ff3120683822181dcfb399ccaedfe22f8a609e7b79b95"
+    },
+    {
+      "path": "apps/web/src/components/DamageRecoveryEvidence.tsx",
+      "bytes": 2354,
+      "sha256": "5f3f9d1b195e4d9befccb3982354b2d6e4a5ad08a90101434dcb8b6b2fb095bf"
+    },
+    {
+      "path": "apps/web/src/components/InsightPanel.tsx",
+      "bytes": 3663,
+      "sha256": "29f31c304881f0acccfafa9201b3d4e24fa948c49a1a0bf0289bff4286749384"
+    },
+    {
+      "path": "apps/web/src/components/IntegrationStatusPanel.tsx",
+      "bytes": 1308,
+      "sha256": "bba3108b81008d68636712f263cf85901e8f0435b69d3ab60813803de758f47b"
+    },
+    {
+      "path": "apps/web/src/components/PageHeading.tsx",
+      "bytes": 648,
+      "sha256": "6ac8bc9bad55cfba4180e6916fd4165e87a6ea03aa671a9341c0f4d70ca94d0a"
+    },
+    {
+      "path": "apps/web/src/components/ReportEditor.tsx",
+      "bytes": 6514,
+      "sha256": "28897c137cf009d160657f07ca0c7161a0146d7f9357712d1a295877849e8fa1"
+    },
+    {
+      "path": "apps/web/src/components/SatelliteComparison.tsx",
+      "bytes": 4619,
+      "sha256": "eee7276aa42854c7337374d04c1bd00d6105e9d4fce4d0f203ba321eb5592942"
+    },
+    {
+      "path": "apps/web/src/components/SituationAgentPanel.tsx",
+      "bytes": 6382,
+      "sha256": "b836bf43728bb3fcc72e5cb18070416c05e22ad9d5ad82559f20fcca9dc86394"
+    },
+    {
+      "path": "apps/web/src/components/SituationTimeline.tsx",
+      "bytes": 985,
+      "sha256": "1b5f96de85fd51f7506b310640133473187a81cd98379b9831b4760eb2fc9581"
+    },
+    {
+      "path": "apps/web/src/components/TopBar.tsx",
+      "bytes": 1242,
+      "sha256": "d0753f6108980f216a2c90e4bd25742bf679c5802bbc938652376f39e0cc2950"
+    },
+    {
+      "path": "apps/web/src/features/map/MapPanel.tsx",
+      "bytes": 3866,
+      "sha256": "9a86a7b2f5f1a471d31e075e24d8f92a1fb1ed6792cf45e9b5ee5579de4ba13e"
+    },
+    {
+      "path": "apps/web/src/features/map/VWorldMapAdapter.ts",
+      "bytes": 6874,
+      "sha256": "cff27f031cf7f9bb8372ff4e0cd95dfe7603d8fe76321915551eff217d0f7404"
+    },
+    {
+      "path": "apps/web/src/hooks/useRoute.ts",
+      "bytes": 1768,
+      "sha256": "81876a8d7967fee25263eb4bac9078ba9fc9845e765b867c078d665c876b7455"
+    },
+    {
+      "path": "apps/web/src/hooks/useRovingTabs.ts",
+      "bytes": 891,
+      "sha256": "79a421922dfd5ffb0419274234b6231947a2ab37710b021d35b3e49bf1a5aa0c"
+    },
+    {
+      "path": "apps/web/src/main.tsx",
+      "bytes": 281,
+      "sha256": "bee50d4b077c38e6d62334ed9c635ee470263c88b3ea8f9c7ee8c06b1c5c57f4"
+    },
+    {
+      "path": "apps/web/src/pages/DashboardPage.tsx",
+      "bytes": 1644,
+      "sha256": "9e90446e1980141188fc9c26acf977262f8c935326bab8736edc39cf2042af2a"
+    },
+    {
+      "path": "apps/web/src/pages/EvidencePage.tsx",
+      "bytes": 2703,
+      "sha256": "1f1794de2a01d8aea4bfac22730b4f318119ab6ff814713a0427693eedb0e9f7"
+    },
+    {
+      "path": "apps/web/src/pages/ReportPage.tsx",
+      "bytes": 567,
+      "sha256": "c0b4191fa361deab0c2857b8d1bb60be8356dec523c68741801d61be9259cadb"
+    },
+    {
+      "path": "apps/web/src/services/apiClient.ts",
+      "bytes": 6135,
+      "sha256": "6ef75883c6a09ab6c7458e0cc394758cedea8c4cc85ac47c97d1176956651b98"
+    },
+    {
+      "path": "apps/web/src/styles.css",
+      "bytes": 27138,
+      "sha256": "dd5cc2affd476943f999ff5c55184268c4ca8851d96da12b7c094a5825298aaa"
+    },
+    {
+      "path": "apps/web/src/types/contracts.ts",
+      "bytes": 4719,
+      "sha256": "059d730dd3aa2eb273613f7604f40b8bc995121cf724a237d9b773fbe9973069"
+    },
+    {
+      "path": "apps/web/src/vite-env.d.ts",
+      "bytes": 248,
+      "sha256": "a76abe6897f397e37eb19eb66536c5b71a115ebbd506cfd3a6726c97c6f3c36c"
+    },
+    {
+      "path": "apps/web/tsconfig.app.json",
+      "bytes": 569,
+      "sha256": "9e643d135634f3a2999a96dc976b9103aad04ebfcbd38bb1d5d1bdd9a74a7c93"
+    },
+    {
+      "path": "apps/web/tsconfig.json",
+      "bytes": 119,
+      "sha256": "770b4140bbb581e2dfd9ea9946ffc9c75a1d86ba7d2db5f77c83e37cbdf9d808"
+    },
+    {
+      "path": "apps/web/tsconfig.node.json",
+      "bytes": 211,
+      "sha256": "4d899360a26430461f39fa0b9297a566eab26e2fc53c28c6eb34d3c5f344d9c6"
+    },
+    {
+      "path": "apps/web/vite.config.ts",
+      "bytes": 405,
+      "sha256": "93500e8bc9314f8aa481c3caccff0a14a2b536981b7911f8df6f3d1e2f4e3270"
+    },
+    {
+      "path": "contracts/openapi/poc-backend.yaml",
+      "bytes": 4204,
+      "sha256": "05c47dc0749812106b44a68c86d3b35dc6808056723f57b8a88a08a6b4671307"
+    },
+    {
+      "path": "contracts/openapi/public-observation-adapter.yaml",
+      "bytes": 279,
+      "sha256": "c4cc0ebaaf567d21b29671f334cfcafbca9c94f1f7a171fcfb348d89237929f7"
+    },
+    {
+      "path": "contracts/openapi/une-rag-adapter.yaml",
+      "bytes": 734,
+      "sha256": "e21913a1cc9dba39a6fdc9946cee73865084eff83bf8f7021470f687e99958b6"
+    },
+    {
+      "path": "contracts/schemas/agent-response.schema.json",
+      "bytes": 1148,
+      "sha256": "7dd6958dad23b076bb5397f831c46491df171bf566eefc398187d888c1605acd"
+    },
+    {
+      "path": "contracts/schemas/common-defs.schema.json",
+      "bytes": 1264,
+      "sha256": "8496efe588ef9d6fd8b8675f3b69380677d2327b0d3e1b520b8a0c378cb3f39c"
+    },
+    {
+      "path": "contracts/schemas/common-envelope.schema.json",
+      "bytes": 1117,
+      "sha256": "b0295afaf75f9cd4136d8541240f2232f06e3248142a16ac9c3c26781bb4d746"
+    },
+    {
+      "path": "contracts/schemas/current-situation.schema.json",
+      "bytes": 1230,
+      "sha256": "1814d3574d0ba162c862de537b71c2d0e6374fa3358de60dd0ffa6ffd3ad91d0"
+    },
+    {
+      "path": "contracts/schemas/damage-recovery-record.schema.json",
+      "bytes": 1424,
+      "sha256": "ee8d3dcc7e917239a1be39c947b743561361bf6c9d8046bda32fddf24624b680"
+    },
+    {
+      "path": "contracts/schemas/disaster-event.schema.json",
+      "bytes": 1307,
+      "sha256": "aee46cb9ac178cf17d413bba90f4eaa566ef6052b5dd6b338a82df11a17a5073"
+    },
+    {
+      "path": "contracts/schemas/evidence.schema.json",
+      "bytes": 1126,
+      "sha256": "6842d470e88ba99b360d2dfc99939538368921e32271ad338222ace93bd715dc"
+    },
+    {
+      "path": "contracts/schemas/flood-trace.schema.json",
+      "bytes": 1081,
+      "sha256": "efd938b49764006ae33182d8fd11fabaf29ed1f5a164529503bccf37105654b2"
+    },
+    {
+      "path": "contracts/schemas/map-action.schema.json",
+      "bytes": 755,
+      "sha256": "fb3121a8b5fd4e34f1989b9cb49774d5f640b126689791eff0a2bf601f130f78"
+    },
+    {
+      "path": "contracts/schemas/observation.schema.json",
+      "bytes": 1343,
+      "sha256": "32079aedc4604ccd6ccc8a2755d93635c6bc7c7076bff4182e9e14ff5d35df4f"
+    },
+    {
+      "path": "contracts/schemas/priority-area.schema.json",
+      "bytes": 1761,
+      "sha256": "d4d46319738d5999e586d3403f6b83dbb1fa0d7d4d06ce4817720390e5c0458e"
+    },
+    {
+      "path": "contracts/schemas/procedure-step.schema.json",
+      "bytes": 1355,
+      "sha256": "3dc8fa48c66fc9a8cbd07cfb659cecfa8831abf7627d46b71df07dd36db7283e"
+    },
+    {
+      "path": "contracts/schemas/report-draft.schema.json",
+      "bytes": 884,
+      "sha256": "cb46f4cf03b32ad68f579e048270ac8126c691f777f1fabfa0460d05ced0bab0"
+    },
+    {
+      "path": "contracts/schemas/risk-knowledge.schema.json",
+      "bytes": 1160,
+      "sha256": "273b6500daa945f4101671a84a6c9c839d9da0b317de076d9cc7f17e51907ea4"
+    },
+    {
+      "path": "contracts/schemas/satellite-asset.schema.json",
+      "bytes": 3511,
+      "sha256": "0f1f4cfe56ac8a21cb0c86aaf8dd994d9b72532cf12fc935bf959577b61f1fd2"
+    },
+    {
+      "path": "contracts/schemas/situation-view.schema.json",
+      "bytes": 1057,
+      "sha256": "559f0b8cf1dc52f9d0b45cc261c911eec54604843e3e9e7674e7770afb2cf286"
+    },
+    {
+      "path": "data/reference/criteria.json",
+      "bytes": 34074,
+      "sha256": "aacb9a9a4353a7f838328ab6677a26c083ecd2b6c9fe6a4f3778e56c2d6900c7"
+    },
+    {
+      "path": "data/reference/districts.json",
+      "bytes": 73377,
+      "sha256": "d53a65ef4df7f081da0786c600f786a26e67bd733b5fe9a95062ed951482cb66"
+    },
+    {
+      "path": "data/reference/geo.json",
+      "bytes": 1933926,
+      "sha256": "cc6e6623d01d5938fc293626104895d9774112693760d6802cdcaae0463b1622"
+    },
+    {
+      "path": "data/reference/report.md",
+      "bytes": 7965,
+      "sha256": "f1c9b1ae04e7bb5eb227b03c94bd2357417c0c2c94173fa324d2ce1837184315"
+    },
+    {
+      "path": "data/reference/rivers.json",
+      "bytes": 39028,
+      "sha256": "ccd7909077183e568982ec9786e528de89726600c7c058a6d7546d41fd085e64"
+    },
+    {
+      "path": "data/seed/README.md",
+      "bytes": 2389,
+      "sha256": "6ac42024b9278fb15b1e98dec318a7f736ecc8824d145a07b1c44d1e2008faa5"
+    },
+    {
+      "path": "data/seed/current_situations_seed.json",
+      "bytes": 7062,
+      "sha256": "99684a52c124d0b323be2e11d82ca74d37395d1029632ba9426b2bbaa0b41e1a"
+    },
+    {
+      "path": "data/seed/damage_recovery_events_seed.json",
+      "bytes": 9798,
+      "sha256": "bd89e32e48133307ee679eaab9ee345520bd195131efcba40881fb331ebafa90"
+    },
+    {
+      "path": "data/seed/flood_traces_seed.geojson",
+      "bytes": 3736,
+      "sha256": "8429416163633be409d16da2eea207a8cb2189f740ee13f0e29b02f3c7c684b8"
+    },
+    {
+      "path": "data/seed/flood_traces_seed.json",
+      "bytes": 3736,
+      "sha256": "8429416163633be409d16da2eea207a8cb2189f740ee13f0e29b02f3c7c684b8"
+    },
+    {
+      "path": "data/seed/hydrology_station_candidates_seed.json",
+      "bytes": 1641,
+      "sha256": "58b762fbbd0af74719fb9217efb09df649da2c1eb89adb2285c1393de8401e86"
+    },
+    {
+      "path": "data/seed/layer_catalog_seed.json",
+      "bytes": 2749,
+      "sha256": "b8985933a5fa52c47244c48962cf0b8ab7595894dda6fa3b864352b64f8a9e63"
+    },
+    {
+      "path": "data/seed/priority_areas_seed.json",
+      "bytes": 4439,
+      "sha256": "a7a769a7d45a2e072e4d1cd463e6ff847ec5566217a1bfd3707f7e3eeeffe64c"
+    },
+    {
+      "path": "data/seed/public_api_catalog_seed.json",
+      "bytes": 4916,
+      "sha256": "3aaa1e202c14ad681bdb8dba25e1538c102b067c9808e5a2f623f350eabda055"
+    },
+    {
+      "path": "data/seed/report_draft_seed.json",
+      "bytes": 1592,
+      "sha256": "4df4d1c9af84610a2b8c1126fdbac0432014b817f6737906a61d503306021397"
+    },
+    {
+      "path": "data/seed/response_procedures_seed.json",
+      "bytes": 13636,
+      "sha256": "a3ac0ef277d41e5481d24ae3ed435d286ef945f4a32c9a22fa2946647db5d6ec"
+    },
+    {
+      "path": "data/seed/satellite_assets_seed.json",
+      "bytes": 41020,
+      "sha256": "38881608c0a13e72cd868bbd9d7deac814347ee9210eb8a16de32cec4e8baca1"
+    },
+    {
+      "path": "data/seed/scenario_timelines_seed.json",
+      "bytes": 2847,
+      "sha256": "f690a7afb51069d80ece6ebf3ffae7514f8f06ff18105d41bc781919667b1f4e"
+    },
+    {
+      "path": "decisions/ADR-001-fixed-screen-layout.md",
+      "bytes": 755,
+      "sha256": "d8052b487b90b47f1536d3a10ba25d3e78f5e65249b1ce6d3f19872b4e342c1a"
+    },
+    {
+      "path": "decisions/ADR-002-no-cctv-or-municipal-context.md",
+      "bytes": 187,
+      "sha256": "ab299a8821b64110afca688609c1988d50d02635a6e6f2ac75e8c216613a7643"
+    },
+    {
+      "path": "decisions/ADR-003-no-damage-prediction.md",
+      "bytes": 190,
+      "sha256": "cb9e044c9f6d861def00b9e4fa79f6a0873d56bb6cab26e86c27fd8a0ff388a7"
+    },
+    {
+      "path": "decisions/ADR-004-provider-first-integration.md",
+      "bytes": 186,
+      "sha256": "bdcd28b06d0c99d605452759184f43dcfb6a2a0f282b35e8e12b3d2e3841afec"
+    },
+    {
+      "path": "decisions/ADR-005-technology-baseline.md",
+      "bytes": 165,
+      "sha256": "83774921ff1082c0d2c0969c2a5a2673432486d97d71f96c5b3c061033eb331e"
+    },
+    {
+      "path": "decisions/ADR-006-vercel-typescript-bff.md",
+      "bytes": 841,
+      "sha256": "cf10bfebe4cf969e0d290a151895174bfb5520cbb138e3b3ffc19e642e08bf5f"
+    },
+    {
+      "path": "decisions/ADR-007-multi-page-accessible-navigation.md",
+      "bytes": 1662,
+      "sha256": "72b91956c787f152928548a00a2af2ba39ec325ef598e8538fb65fed30a220c8"
+    },
+    {
+      "path": "decisions/ADR-008-public-observation-and-evidence-report-sync.md",
+      "bytes": 530,
+      "sha256": "a7981e2c4b87b409a25053335b851b53790269454d110ce96ebfe8e58f67671a"
+    },
+    {
+      "path": "decisions/ADR-009-external-integration-verification-gates.md",
+      "bytes": 1137,
+      "sha256": "7738dedd5229ac8b143a02df7965d337fd63fe5d89543cc1853f493610884fad"
+    },
+    {
+      "path": "decisions/ADR-010-standalone-256-flood-imagery-tiles.md",
+      "bytes": 799,
+      "sha256": "2e9249bac51027381bb2dca3a43de108ea1ceb5ff9a35a00a1aa1d3030bdd6e0"
+    },
+    {
+      "path": "docs/01_service_overview.md",
+      "bytes": 762,
+      "sha256": "96ba241290210b7fee7774e429520389ae692175c6623f66eaabf1e3f34ff0ef"
+    },
+    {
+      "path": "docs/02_scope_and_decisions.md",
+      "bytes": 758,
+      "sha256": "80adb5aba45e6bb849a9efe6e36b4792b54ff799ebf35cded30c7069963d00c6"
+    },
+    {
+      "path": "docs/03_user_scenarios.md",
+      "bytes": 744,
+      "sha256": "89b665b2681a11ddf944e567652493444839670ab073a7b068ebfb533c259397"
+    },
+    {
+      "path": "docs/04_screen_spec.md",
+      "bytes": 1796,
+      "sha256": "16baad53e7db105f364ae227dfcbba3437eea92575fe7b5827dbd8d6cbb1effd"
+    },
+    {
+      "path": "docs/05_architecture.md",
+      "bytes": 667,
+      "sha256": "8aebd348a3cf1a82c91c857a63eab30dec8cc2c43109d71168265f3662544dc0"
+    },
+    {
+      "path": "docs/06_agent_tools.md",
+      "bytes": 1084,
+      "sha256": "656cc7015a043496ab84861777fb847ab3d89f2325d438a9b188b8c9bcc70468"
+    },
+    {
+      "path": "docs/07_api_contracts.md",
+      "bytes": 314,
+      "sha256": "da261b275113ca44760ccf0be87f7711596d6d8fe2a7fe4693e664deca53c04b"
+    },
+    {
+      "path": "docs/08_data_model.md",
+      "bytes": 600,
+      "sha256": "837d9f0f8ad12169e8bc928a05f213842087f98d8928e664a36a1c24b6b4f9dd"
+    },
+    {
+      "path": "docs/09_gis_vworld.md",
+      "bytes": 412,
+      "sha256": "44c0b32654e7e12d76cf9dbc31bb4aa911b10f49cd336ac5af3ad12f7fde6b55"
+    },
+    {
+      "path": "docs/10_mock_fallback.md",
+      "bytes": 399,
+      "sha256": "d05569fa3af4e34b7e6667dc5d4e66a7a3bb1268dad6a04930447af5993a657b"
+    },
+    {
+      "path": "docs/11_security_accessibility.md",
+      "bytes": 1435,
+      "sha256": "49d839726f701bf091f6c0817ad280b3d63c8b2b7b118dbb6f30f0c45dbc0a21"
+    },
+    {
+      "path": "docs/12_test_plan.md",
+      "bytes": 490,
+      "sha256": "113c8ff9c78d801aea760b98182fe0ca7f9a1a2d77adcf8ec9922ccc6e2131e4"
+    },
+    {
+      "path": "docs/13_implementation_backlog.md",
+      "bytes": 551,
+      "sha256": "4fd3dc5c21099662d1b00c4a8942b36a1b11376ce7b8efa0dcaa460d738bd89b"
+    },
+    {
+      "path": "docs/14_multi_page_ux_accessibility.md",
+      "bytes": 5012,
+      "sha256": "e1cf327f9872593878df29781fd9b6fd9f49f5ba613a5510f4ab3a954c9aef96"
+    },
+    {
+      "path": "docs/15_public_api_and_report_sync.md",
+      "bytes": 756,
+      "sha256": "633cc9ec3541c6160ccddd424f079be0e04a1fe413e12a14cd2d1002f63182a9"
+    },
+    {
+      "path": "docs/16_external_integration_verification.md",
+      "bytes": 1865,
+      "sha256": "64dbe63093ae7c2ead30ef1841f0e706224a0c3c064cc4d4af194552a016a3ca"
+    },
+    {
+      "path": "docs/17_flood_imagery_256_tiles.md",
+      "bytes": 816,
+      "sha256": "be70962727f69379f167ee079cc83c6e5138a94e549dcc0c70760d7fad282328"
+    },
+    {
+      "path": "handoff/DEVELOPMENT_HANDOFF.md",
+      "bytes": 2713,
+      "sha256": "a01545763fe169e9f633fac2db3948cd3c3ececdba871a75ade24caebbb92283"
+    },
+    {
+      "path": "handoff/DEVELOPMENT_HANDOFF_V0.2.md",
+      "bytes": 962,
+      "sha256": "b4674e47a0ed029922b5d5d64798aae90c3a7bff98cd4c9d22e92d96f2ea3958"
+    },
+    {
+      "path": "handoff/DEVELOPMENT_HANDOFF_V0.3.md",
+      "bytes": 1678,
+      "sha256": "008968e76a87d97f72e39f0c04a5531531bdda38f1370b3d714d36f0854ff9ca"
+    },
+    {
+      "path": "handoff/DEVELOPMENT_HANDOFF_V0.4.md",
+      "bytes": 5050,
+      "sha256": "3bb75cc39c402bb1b69e2663cd1a7aabb85cb804b4106858de7214d3673e8df5"
+    },
+    {
+      "path": "handoff/DEVELOPMENT_HANDOFF_V0.5.md",
+      "bytes": 1040,
+      "sha256": "8821a57fc503a7030c5242358e693a8bbbc53ad28f1d5a8f6abdf502200b8070"
+    },
+    {
+      "path": "handoff/DEVELOPMENT_HANDOFF_V0.6.md",
+      "bytes": 2428,
+      "sha256": "55e2a61770e5384ca09997a66c5e9bec2af2183e27dd33941701a0ceb4396fee"
+    },
+    {
+      "path": "handoff/DEVELOPMENT_HANDOFF_V0.7.md",
+      "bytes": 3050,
+      "sha256": "2ba1a3bff812f5b484528b47c303f136fe913063a0cd4da5e26c54e4fcdf09c1"
+    },
+    {
+      "path": "handoff/IMPLEMENTATION_REPORT.md",
+      "bytes": 1269,
+      "sha256": "f08353fba61f7ef153373e05cf4c82ca8d1dbdf9c54672447ccee91e85a2ba93"
+    },
+    {
+      "path": "handoff/IMPLEMENTATION_REPORT_V0.3.md",
+      "bytes": 652,
+      "sha256": "a41bda4ed321f4eed1ecc2fa4e9272c1ea337281c22f2a93f1053b6fd213952d"
+    },
+    {
+      "path": "handoff/IMPLEMENTATION_REPORT_V0.4.md",
+      "bytes": 2885,
+      "sha256": "7b7abe567b36d053b11a8b82d6989c20612d462e2b14a5cefae591872b881409"
+    },
+    {
+      "path": "handoff/IMPLEMENTATION_REPORT_V0.5.md",
+      "bytes": 347,
+      "sha256": "125770ce533f7daeb164c8271875f788214e0973bad98a3184ae7098276242f8"
+    },
+    {
+      "path": "handoff/IMPLEMENTATION_REPORT_V0.6.md",
+      "bytes": 1601,
+      "sha256": "765a3e6370e38c06384f8a44be3b130b8a2cafa1831cd1262c6dd2a89d45e327"
+    },
+    {
+      "path": "handoff/IMPLEMENTATION_REPORT_V0.7.md",
+      "bytes": 1596,
+      "sha256": "42db39a71ffd48d18f31c8d8d02784ebf103fe0b9b16f357a6c051ba59874d1b"
+    },
+    {
+      "path": "handoff/source_design_manifest_v0.5.json",
+      "bytes": 10955,
+      "sha256": "907dc965e8264c0f4393dccbc7f0b6e5438e126672a71569a9653ad4b48069f1"
+    },
+    {
+      "path": "handoff/source_design_manifest_v0.6.json",
+      "bytes": 401,
+      "sha256": "dd4d6675f8901b4b65e38614d6c73b1ba1c19f83538e3a6b01cb2e4b29915ae1"
+    },
+    {
+      "path": "package.json",
+      "bytes": 1373,
+      "sha256": "3538bc2c8fbbd1eb572bf0dac53fffcc3b4843ab05fd1670aea07037e1924b1a"
+    },
+    {
+      "path": "preview/index.html",
+      "bytes": 4120,
+      "sha256": "7f13b65f56e2e0933dd4f1048fdee75d3981caa948159b1a8af42befa4cc7420"
+    },
+    {
+      "path": "preview/multipage/index.html",
+      "bytes": 18998,
+      "sha256": "e7f9dc86d31db8e07b77407abac70a48542882509f3e758ac714d03f907de71d"
+    },
+    {
+      "path": "preview/multipage-v05/index.html",
+      "bytes": 21707,
+      "sha256": "b8bfbfcd8116a4d99a77be42757193a1df63e6234c5e07f4cd9c2dceb0db4474"
+    },
+    {
+      "path": "preview/rendered/v0.3-change-comparison.png",
+      "bytes": 837227,
+      "sha256": "c741cf14a37676432e24d337e95e6f3dc971543ef3495c38f07dd5a5b3b49ebb"
+    },
+    {
+      "path": "preview/rendered/v0.4-dashboard.png",
+      "bytes": 273486,
+      "sha256": "2263ad18ff31160146101fb98c7f0b5e1c6adab8e1a66e26536933c4be6fb25b"
+    },
+    {
+      "path": "preview/rendered/v0.4-evidence.png",
+      "bytes": 278400,
+      "sha256": "13a36c1fc58824abc546fc5a90928d62ce2841336cc44628e6f23420ab9a0881"
+    },
+    {
+      "path": "preview/rendered/v0.4-report.png",
+      "bytes": 159899,
+      "sha256": "b5827c83843973de43348109cd3a3a735d107a1f9960b0ff4756e65cf08879cd"
+    },
+    {
+      "path": "preview/rendered/v0.7-flood-imagery-tiles.png",
+      "bytes": 243181,
+      "sha256": "af7a2469772ed609aac22e0afe20fbd391bc9ebabe46a3f225e9137d6f77930a"
+    },
+    {
+      "path": "preview/rendered/vercel-v0.2-screen.png",
+      "bytes": 120793,
+      "sha256": "abae436158b5f178704fb3dc9d50405df2778550124eb442afc5dc785c816123"
+    },
+    {
+      "path": "prompts/evidence_guardrails.md",
+      "bytes": 287,
+      "sha256": "09be2ec178f0a49c3f3cc479d7db4bdb6a5e5adc3ca827eef14fff2551a301f6"
+    },
+    {
+      "path": "prompts/report_generation_prompt.md",
+      "bytes": 278,
+      "sha256": "1a3614795f675b5a070c8d4b6211f78304339380a073063ce768cc579011e087"
+    },
+    {
+      "path": "prompts/similar_event_prompt.md",
+      "bytes": 237,
+      "sha256": "fa90bd16d94a2686a1d64f89b81baf766c3175b4b41294f83d436c6b26f35834"
+    },
+    {
+      "path": "prompts/situation_parser_prompt.md",
+      "bytes": 254,
+      "sha256": "ddc4f41ca83815de1ddf2c78e4651e96bfe8c5093c0b6bfd8501004437588088"
+    },
+    {
+      "path": "prompts/system_prompt.md",
+      "bytes": 515,
+      "sha256": "0e088fe224aa1319f2b45707a1caf76612e9d72d3825307241c2d85044c96a1f"
+    },
+    {
+      "path": "scripts/smoke_flood_imagery_tiles.py",
+      "bytes": 870,
+      "sha256": "f718a2033f2b805f2fd1b3ba3fcccff5dc00893a1a1a19ac36d8f4ccc3e63649"
+    },
+    {
+      "path": "scripts/smoke_integration_adapters.py",
+      "bytes": 1373,
+      "sha256": "69f897be2f99f9b05b4d4bd4e372f509725ccb1d6acd304bb9e71f395542aa26"
+    },
+    {
+      "path": "scripts/smoke_priority_logic.py",
+      "bytes": 601,
+      "sha256": "1a6e7a5a594731ec023bd40c34b58ed7258baaef2644f75141b05bbdafb887c1"
+    },
+    {
+      "path": "scripts/smoke_public_observation_provider.py",
+      "bytes": 283,
+      "sha256": "1c6ac9da5601585d5c21dfd085af1bcf42888174d1082a71308f31158db89696"
+    },
+    {
+      "path": "scripts/smoke_report_context.py",
+      "bytes": 527,
+      "sha256": "a20863e9544cd6cf9f22e791995f4803204c6272aa180c50adb92110ec3a6636"
+    },
+    {
+      "path": "scripts/smoke_seed_contracts.py",
+      "bytes": 2194,
+      "sha256": "0dec842ac8f10cdd3bed40cbde489161943b4ae548209b0c3b6ed48bd03f1761"
+    },
+    {
+      "path": "scripts/smoke_similar_events.py",
+      "bytes": 407,
+      "sha256": "d83e60547b26a42f2298e79fc442b60b0956122e13e60e0b03173830ff384301"
+    },
+    {
+      "path": "scripts/smoke_spatial_assets.py",
+      "bytes": 685,
+      "sha256": "fbc89d6c0e9ea2e922888029f4296ecd9edfbb2df5c92068e1ac6c16c1d901cb"
+    },
+    {
+      "path": "scripts/validate_multi_page_a11y.py",
+      "bytes": 1706,
+      "sha256": "fee7e04e99aeebecf91f596f5603fa3a0ab54aebb80a8c3ce6fd7c6b79a5ac79"
+    },
+    {
+      "path": "scripts/validate_repo.py",
+      "bytes": 1423,
+      "sha256": "fd01f21a5392fe47ac0b9082e03bf473e0ce14eafcb3dfe1893dc2751e59e4f7"
+    },
+    {
+      "path": "scripts/validate_vercel_repo.py",
+      "bytes": 913,
+      "sha256": "4238cce04ecd522d4002ae3e1fbe984ca3468cdbccb5206c515ac0dc8b7c1945"
+    },
+    {
+      "path": "server/contracts.ts",
+      "bytes": 2589,
+      "sha256": "119656dd7f3338fe6362da3fdf3650b7da5e3b9e3da057dc2a6df22b5d633af1"
+    },
+    {
+      "path": "server/domain/agent.ts",
+      "bytes": 1883,
+      "sha256": "eb40a309455b2ed8dd2572a0de26871e3ed891393b57e83d7a2b7b13d0e4d3e3"
+    },
+    {
+      "path": "server/domain/priorityAreas.ts",
+      "bytes": 5627,
+      "sha256": "e3dfd9e4dc625b2d6b086cc5d5de40cccd345367797bfddc871b819b0575391e"
+    },
+    {
+      "path": "server/domain/similarEvents.ts",
+      "bytes": 5217,
+      "sha256": "b6e1fc2513b6d81496f0d8ba4dd7c503a78b54f20b7b87416e6971d13982cf93"
+    },
+    {
+      "path": "server/domain/situations.ts",
+      "bytes": 1717,
+      "sha256": "baf5b5f0c1bf310dc51573a04eb5a811f2f9192b4ac448c0dd5dc6884a340dd6"
+    },
+    {
+      "path": "server/env.ts",
+      "bytes": 455,
+      "sha256": "8ceaf8a02e1fb937507e201686be4126c085bf63c7f093c567fd543409434e9a"
+    },
+    {
+      "path": "server/http.ts",
+      "bytes": 1205,
+      "sha256": "797458320cd81b2023650c60af19b735a9781d52db619cb293561dae01a6fb78"
+    },
+    {
+      "path": "server/providers/hrfcoHydrology.ts",
+      "bytes": 7137,
+      "sha256": "243fe7e896ddfe83e89ce11d0f87981a843442efaa9281ca8c77411396fd3617"
+    },
+    {
+      "path": "server/providers/kmaNowcast.ts",
+      "bytes": 5415,
+      "sha256": "7f50c2f59aca73d466c112b3a0e0316b6ad67901a6ae4e068be3c57171e2934d"
+    },
+    {
+      "path": "server/providers/publicObservation.ts",
+      "bytes": 1298,
+      "sha256": "e093970ebae5119a4ec5ea737c12d051d7efa724daae9cd666fb6388ace30bb2"
+    },
+    {
+      "path": "server/providers/uneRag.ts",
+      "bytes": 8058,
+      "sha256": "432bbb189e49b9bcc35333a587adb3276e1610802495ebf17603855106bfc5b2"
+    },
+    {
+      "path": "server/seeds.ts",
+      "bytes": 1080,
+      "sha256": "d691bad29193969d000d84c989a1a9133b5db0d58db6aae50b6ec35effc9fec1"
+    },
+    {
+      "path": "tests/acceptance/SCN-FLOOD-IMG-001.md",
+      "bytes": 615,
+      "sha256": "be1e36ca807b74248b62b6fa1bdd4b2268258d43925aaefeeb53b8ed9ce9bb05"
+    },
+    {
+      "path": "tests/acceptance/SCN-GM-001.md",
+      "bytes": 273,
+      "sha256": "e0ed55a119d1455b71296af2954cc9b4888050066a4e85467e3e7e08bd65b0ae"
+    },
+    {
+      "path": "tests/acceptance/SCN-NW-001.md",
+      "bytes": 286,
+      "sha256": "e7bd8924422d9913ab76c5edae0407ebff88ff1e0df09bfed1a1955829f074b1"
+    },
+    {
+      "path": "tests/acceptance/SCN-UW-001.md",
+      "bytes": 260,
+      "sha256": "476ab174b42679ce5e6a8d814ebb74e90f0d670130349ebf7c4ffe0e3696e212"
+    },
+    {
+      "path": "tests/accessibility/multi-page-a11y-checklist.md",
+      "bytes": 1545,
+      "sha256": "8c3b24f9f665298d3ed806225e68900e493e64ef23d5901fb25efaa138bbfd7a"
+    },
+    {
+      "path": "tests/e2e/accessibility-navigation.spec.ts",
+      "bytes": 1353,
+      "sha256": "e03fb97d6624c690e7bce4832db9cbb46d0b7b771cb7ab12e03658e96325aed2"
+    },
+    {
+      "path": "tests/fixtures/agent_response_minimal.json",
+      "bytes": 195,
+      "sha256": "40f8b8ed993f4e67429cae8d3503812ec19bc990ae227777672228a9372009e7"
+    },
+    {
+      "path": "tests/integration/api-contract-tests.md",
+      "bytes": 260,
+      "sha256": "387a780e6a2ddf55f1538f5792f3adc83912fb76ac26e7541495d42620792aa7"
+    },
+    {
+      "path": "tsconfig.functions.json",
+      "bytes": 384,
+      "sha256": "0ec8dc6b3b84489b209b202f9b86178dfd748e89b0366aec40c56c6842a17b0f"
+    },
+    {
+      "path": "vercel.json",
+      "bytes": 331,
+      "sha256": "6a54c2b0da6f55ce087c3bf41b369dbd71e38df3bf493ab9b40e96aafa124f1a"
+    }
+  ]
+}

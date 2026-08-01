@@ -1,0 +1,89 @@
+{
+  "dataset": "scenario_timelines_seed",
+  "version": "0.4",
+  "scenarios": [
+    {
+      "scenario_id": "SCN-NW-001",
+      "name": "남원 요천 집중호우·취약지역 변화 확인",
+      "admin_code": "45190",
+      "hazards": [
+        "HEAVY_RAIN",
+        "FLOOD"
+      ],
+      "inputs": {
+        "rain_3h_mm": 95,
+        "water_level_trend": "rising",
+        "mode": "scenario"
+      },
+      "expected_flow": [
+        "기준 매칭",
+        "요천·위험지구 지도표출",
+        "유사사례 검색",
+        "위성·침수흔적 비교",
+        "매뉴얼 대응절차",
+        "상황보고서"
+      ],
+      "current_situation_source": [
+        "user_input",
+        "public_api_or_scenario_fallback"
+      ],
+      "priority_area_step": "현재 조건 + 계획위험 + 과거 피해·침수흔적 + 매뉴얼 우선항목을 조합한 POC 상대순위",
+      "damage_recovery_usage": "과거 유사사례 참고 및 보고서 초안 구조 검증; 피해예측 금지"
+    },
+    {
+      "scenario_id": "SCN-UW-001",
+      "name": "의왕 안양천 시설능력·과거 변화 확인",
+      "admin_code": "41430",
+      "hazards": [
+        "HEAVY_RAIN",
+        "FLOOD"
+      ],
+      "inputs": {
+        "rain_3h_mm": 72,
+        "field_symptom": "하천 수위 빠른 상승",
+        "mode": "scenario"
+      },
+      "expected_flow": [
+        "안양천지구 근거조회",
+        "교량·제방 부족 표시",
+        "시계열 영상비교",
+        "대응절차 체크"
+      ],
+      "current_situation_source": [
+        "user_input",
+        "public_api_or_scenario_fallback"
+      ],
+      "priority_area_step": "현재 조건 + 계획위험 + 과거 피해·침수흔적 + 매뉴얼 우선항목을 조합한 POC 상대순위",
+      "damage_recovery_usage": "과거 유사사례 참고 및 보고서 초안 구조 검증; 피해예측 금지"
+    },
+    {
+      "scenario_id": "SCN-GM-001",
+      "name": "구미천 태풍·호우 복합상황",
+      "admin_code": "47190",
+      "hazards": [
+        "TYPHOON",
+        "HEAVY_RAIN",
+        "FLOOD"
+      ],
+      "inputs": {
+        "rain_12h_mm": 190,
+        "wind_ms": 22,
+        "mode": "scenario"
+      },
+      "expected_flow": [
+        "복합재난 구조화",
+        "구미천 위험지구",
+        "유사 태풍사례",
+        "침수흔적·영상 비교",
+        "관계기관 보고 초안"
+      ],
+      "current_situation_source": [
+        "user_input",
+        "public_api_or_scenario_fallback"
+      ],
+      "priority_area_step": "현재 조건 + 계획위험 + 과거 피해·침수흔적 + 매뉴얼 우선항목을 조합한 POC 상대순위",
+      "damage_recovery_usage": "과거 유사사례 참고 및 보고서 초안 구조 검증; 피해예측 금지"
+    }
+  ],
+  "package_version": "0.5"
+}

@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://une.example/contracts/t3q-event-master.schema.json",
+  "title": "T3Q Disaster Event Master Compatibility Contract",
+  "type": "object",
+  "required": [
+    "event_id",
+    "disaster_type",
+    "taxonomy_codes",
+    "region_code_5",
+    "sequence",
+    "event_status"
+  ],
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "pattern": "^EVT::[0-9]{8}-[A-Z_]+-[0-9]{5}-[0-9]{3}$"
+    },
+    "disaster_type": {
+      "enum": [
+        "FLOOD",
+        "TYPH",
+        "QUAKE",
+        "SLOPE",
+        "FIRE",
+        "SNOW",
+        "FIRE_S",
+        "CHEM",
+        "BIO"
+      ]
+    },
+    "taxonomy_codes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^T[0-9]+$"
+      }
+    },
+    "region_code_5": {
+      "type": "string",
+      "pattern": "^[0-9]{5}$"
+    },
+    "legal_region_code_10": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[0-9]{10}$"
+    },
+    "sequence": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 999
+    },
+    "event_status": {
+      "enum": [
+        "발생",
+        "진행",
+        "종료",
+        "보정",
+        "병합"
+      ]
+    },
+    "started_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "ended_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "crisis_level": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "LVL_01",
+        "LVL_02",
+        "LVL_03",
+        "LVL_04",
+        null
+      ]
+    },
+    "risk_factors": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "title": {
+      "type": "string"
+    },
+    "admin_name": {
+      "type": "string"
+    },
+    "district_code": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source_record_id": {
+      "type": "string"
+    },
+    "data_status": {
+      "type": "string",
+      "enum": [
+        "actual",
+        "actual_backed",
+        "open_api",
+        "t3q_supplied",
+        "derived",
+        "scenario",
+        "scenario_input",
+        "mock",
+        "synthetic_demo",
+        "provisional",
+        "not_available"
+      ]
+    },
+    "source_type": {
+      "type": "string"
+    },
+    "provider_id": {
+      "type": "string"
+    },
+    "official_data": {
+      "type": "boolean"
+    },
+    "schema_version": {
+      "type": "string"
+    },
+    "display_badges": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": false
+}

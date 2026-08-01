@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://une.example/contracts/evidence.schema.json",
+  "title": "Evidence",
+  "type": "object",
+  "required": [
+    "evidence_id",
+    "source_type",
+    "title",
+    "data_status"
+  ],
+  "properties": {
+    "evidence_id": {
+      "type": "string"
+    },
+    "source_type": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "excerpt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "document_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "page": {
+      "type": [
+        "integer",
+        "string",
+        "null"
+      ]
+    },
+    "passage_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "content": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "uri": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "rag_score": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "score": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "data_status": {
+      "type": "string",
+      "enum": [
+        "actual",
+        "actual_backed",
+        "open_api",
+        "t3q_supplied",
+        "derived",
+        "scenario",
+        "scenario_input",
+        "mock",
+        "synthetic_demo",
+        "provisional",
+        "not_available"
+      ]
+    },
+    "verified": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "lineage": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

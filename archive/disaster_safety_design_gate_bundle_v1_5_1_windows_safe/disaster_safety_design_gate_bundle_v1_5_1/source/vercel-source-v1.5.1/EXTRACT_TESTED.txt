@@ -1,0 +1,3 @@
+Source v1.5.1 extracted and tested on Linux container.
+PASS: source structure, legacy validator compatibility, OpenAPI 31/31, JSON Schema 260 objects/18 schemas, Functions TypeScript, full smoke, Runtime Regression, Provider Conformance.
+Pending development environment gates: npm install/package-lock, React build, Playwright E2E, Vercel Preview.

@@ -1,0 +1,1070 @@
+{
+  "dataset": "criteria",
+  "title": "재난판단기준 5종 — 판단조건(Q1)·등급세분화(Q2)·근거출처 구조화 시드",
+  "source_file": "재난판단기준_5종_v0.6.xlsx",
+  "source_sheets": [
+    "0.개요·검토요약",
+    "1.Q1_판단조건",
+    "2.실제판단데이터",
+    "3.Q2_등급세분화",
+    "4.근거·출처"
+  ],
+  "source_version": "v0.6",
+  "source_authored_date": "2026-07-06",
+  "note": "기상특보·홍수·산사태·위험지구 등급은 웹 검증(2025~2026 현행). 태풍 강도 풍속 경계값·영향 서술, 위기경보 4단계는 표준 분류·매뉴얼 기재 — 세부 수치·문구는 소관기관 현행 자료로 최종 확인 권장.",
+  "criteria": [
+    {
+      "event_code": "HEAVY_RAIN",
+      "hazard_code": "T10107",
+      "name_ko": "호우",
+      "judgment_subject": "기상청",
+      "judgment_concept": "단시간/누적 강우가 특보 기준 초과 예상.",
+      "related_variables": [
+        "1시간 강수량",
+        "3시간 강수량",
+        "12시간 강수량"
+      ],
+      "q1_conditions": [
+        {
+          "level": "주의보",
+          "indicator": "강수량",
+          "period": "3시간",
+          "operator": ">=",
+          "value": 60,
+          "unit": "mm",
+          "note": "3시간 60mm 또는 12시간 110mm 예상 시"
+        },
+        {
+          "level": "주의보",
+          "indicator": "강수량",
+          "period": "12시간",
+          "operator": ">=",
+          "value": 110,
+          "unit": "mm",
+          "note": "3시간 60mm 또는 12시간 110mm 예상 시"
+        },
+        {
+          "level": "경보",
+          "indicator": "강수량",
+          "period": "3시간",
+          "operator": ">=",
+          "value": 90,
+          "unit": "mm",
+          "note": "3시간 90mm 또는 12시간 180mm 예상 시"
+        },
+        {
+          "level": "경보",
+          "indicator": "강수량",
+          "period": "12시간",
+          "operator": ">=",
+          "value": 180,
+          "unit": "mm",
+          "note": "3시간 90mm 또는 12시간 180mm 예상 시"
+        },
+        {
+          "level": "긴급재난문자(극한호우)",
+          "indicator": "강수량",
+          "period": "1시간",
+          "operator": ">=",
+          "value": 50,
+          "unit": "mm",
+          "logic": "AND",
+          "condition_group": "극한호우-동시충족",
+          "note": "1시간 50mm와 3시간 90mm 동시 충족 시 직접발송"
+        },
+        {
+          "level": "긴급재난문자(극한호우)",
+          "indicator": "강수량",
+          "period": "3시간",
+          "operator": ">=",
+          "value": 90,
+          "unit": "mm",
+          "logic": "AND",
+          "condition_group": "극한호우-동시충족",
+          "note": "1시간 50mm와 3시간 90mm 동시 충족 시 직접발송"
+        },
+        {
+          "level": "긴급재난문자(극한호우)",
+          "indicator": "강수량",
+          "period": "1시간",
+          "operator": ">=",
+          "value": 72,
+          "unit": "mm",
+          "logic": "OR",
+          "condition_group": "극한호우-단독충족",
+          "note": "1시간 72mm 단독 충족 시 직접발송"
+        }
+      ],
+      "q2_grades": [
+        {
+          "system": "호우 특보",
+          "operator_org": "기상청",
+          "source_refs": [
+            "S1"
+          ],
+          "grades": [
+            {
+              "order": 1,
+              "grade": "주의보",
+              "criteria": "3시간 60mm / 12시간 110mm",
+              "meaning": "침수 시작 우려"
+            },
+            {
+              "order": 2,
+              "grade": "경보",
+              "criteria": "3시간 90mm / 12시간 180mm",
+              "meaning": "침수·범람 위험"
+            }
+          ]
+        },
+        {
+          "system": "극한호우 긴급재난문자",
+          "operator_org": "기상청",
+          "source_refs": [
+            "S8"
+          ],
+          "grades": [
+            {
+              "order": 1,
+              "grade": "긴급재난문자",
+              "criteria": "1시간 50mm & 3시간 90mm 동시, 또는 1시간 72mm",
+              "meaning": "즉시 대피(직접발송)"
+            }
+          ]
+        },
+        {
+          "system": "기상 영향예보",
+          "operator_org": "기상청",
+          "source_refs": [
+            "S10"
+          ],
+          "grades": [
+            {
+              "order": 1,
+              "grade": "관심",
+              "criteria": "강우 영향 정도 4단계",
+              "meaning": "영향 기반 대응"
+            },
+            {
+              "order": 2,
+              "grade": "주의",
+              "criteria": "강우 영향 정도 4단계",
+              "meaning": "영향 기반 대응"
+            },
+            {
+              "order": 3,
+              "grade": "경계",
+              "criteria": "강우 영향 정도 4단계",
+              "meaning": "영향 기반 대응"
+            },
+            {
+              "order": 4,
+              "grade": "심각",
+              "criteria": "강우 영향 정도 4단계",
+              "meaning": "영향 기반 대응"
+            }
+          ]
+        },
+        {
+          "system": "재난 위기경보",
+          "operator_org": "행정안전부(위기관리 표준매뉴얼)",
+          "source_refs": [
+            "S12"
+          ],
+          "grades": [
+            {
+              "order": 1,
+              "grade": "관심(Blue)",
+              "criteria": "위기징후 감시·활동",
+              "meaning": "1단계"
+            },
+            {
+              "order": 2,
+              "grade": "주의(Yellow)",
+              "criteria": "위기 발생 가능성 증가",
+              "meaning": "2단계"
+            },
+            {
+              "order": 3,
+              "grade": "경계(Orange)",
+              "criteria": "위기 발생 가능성 농후",
+              "meaning": "3단계"
+            },
+            {
+              "order": 4,
+              "grade": "심각(Red)",
+              "criteria": "위기 발생 확실·임박(중대본 가동)",
+              "meaning": "4단계"
+            }
+          ]
+        }
+      ],
+      "legal_basis": "기상특보 발표기준(2023 3시간 기준 도입); 극한호우 긴급재난문자 직접발송",
+      "sources": [
+        {
+          "ref": "S1",
+          "title": "기상특보 발표기준(강풍·호우·태풍·풍랑·폭풍해일 등)",
+          "publisher": "기상청",
+          "type": "웹",
+          "url": "https://www.weather.go.kr/w/community/knowledge/standard.do",
+          "verified": "웹검증(2026)"
+        },
+        {
+          "ref": "S8",
+          "title": "극한호우 긴급재난문자 발송기준",
+          "publisher": "기상청",
+          "type": "웹",
+          "url": "https://www.weather.go.kr",
+          "verified": "웹검증(2026)"
+        },
+        {
+          "ref": "S10",
+          "title": "기상 영향예보",
+          "publisher": "기상청",
+          "type": "웹",
+          "url": "https://www.weather.go.kr/w/special-report/impact.do",
+          "verified": "웹검증(2026)"
+        },
+        {
+          "ref": "S12",
+          "title": "재난 및 안전관리 기본법 제38조(위기경보)",
+          "publisher": "법제처",
+          "type": "법령",
+          "url": "https://www.law.go.kr/법령/재난및안전관리기본법/제38조",
+          "verified": "법령"
+        }
+      ]
+    },
+    {
+      "event_code": "FLOOD",
+      "hazard_code": "T10206",
+      "name_ko": "홍수",
+      "judgment_subject": "환경부 홍수통제소",
+      "judgment_concept": "하천수위가 지점별 기준수위 초과 예상.",
+      "related_variables": [
+        "하천수위",
+        "유량(계획홍수량 대비)"
+      ],
+      "q1_conditions": [
+        {
+          "level": "주의보",
+          "indicator": "하천수위(주의보수위)",
+          "period": null,
+          "operator": ">= 초과 예상",
+          "value": 50,
+          "unit": "% (계획홍수량 대비 유량)",
+          "note": "주의보수위 = 계획홍수량의 50% 유량이 흐를 때의 수위. 초과 예상 시 발령"
+        },
+        {
+          "level": "경보",
+          "indicator": "하천수위(경보수위)",
+          "period": null,
+          "operator": ">= 초과 예상",
+          "value": 70,
+          "unit": "% (계획홍수량 대비 유량)",
+          "note": "경보수위 = 계획홍수량의 70% 유량이 흐를 때의 수위. 초과 예상 시 발령. ※홍수특보지점 223곳"
+        }
+      ],
+      "q2_grades": [
+        {
+          "system": "홍수 특보",
+          "operator_org": "환경부 홍수통제소",
+          "source_refs": [
+            "S3",
+            "S4"
+          ],
+          "grades": [
+            {
+              "order": 1,
+              "grade": "주의보",
+              "criteria": "계획홍수량 50% 수위 초과 예상",
+              "meaning": "2단계 특보 중 1단계"
+            },
+            {
+              "order": 2,
+              "grade": "경보",
+              "criteria": "계획홍수량 70% 수위 초과 예상",
+              "meaning": "2단계 특보 중 2단계"
+            }
+          ]
+        },
+        {
+          "system": "하천 기준수위(단계)",
+          "operator_org": "홍수통제소",
+          "source_refs": [
+            "S4"
+          ],
+          "grades": [
+            {
+              "order": 1,
+              "grade": "주의보수위",
+              "criteria": "수위 상승 단계",
+              "meaning": "수위 상승 감시"
+            },
+            {
+              "order": 2,
+              "grade": "경보수위",
+              "criteria": "수위 상승 단계",
+              "meaning": "수위 상승 경보"
+            },
+            {
+              "order": 3,
+              "grade": "계획홍수위",
+              "criteria": "수위 상승 단계",
+              "meaning": "제방여유고 잠식"
+            },
+            {
+              "order": 4,
+              "grade": "위험홍수위",
+              "criteria": "수위 상승 단계",
+              "meaning": "범람 임박"
+            }
+          ]
+        },
+        {
+          "system": "도시(내수) 침수 예·경보",
+          "operator_org": "환경부/지자체",
+          "source_refs": [
+            "S4"
+          ],
+          "grades": [
+            {
+              "order": 1,
+              "grade": "예·경보(지자체)",
+              "criteria": "하수관로·저지대 침수",
+              "meaning": "내수배제 불량"
+            }
+          ]
+        },
+        {
+          "system": "재난 위기경보",
+          "operator_org": "행정안전부(위기관리 표준매뉴얼)",
+          "source_refs": [
+            "S12"
+          ],
+          "grades": [
+            {
+              "order": 1,
+              "grade": "관심(Blue)",
+              "criteria": "위기징후 감시·활동",
+              "meaning": "1단계"
+            },
+            {
+              "order": 2,
+              "grade": "주의(Yellow)",
+              "criteria": "위기 발생 가능성 증가",
+              "meaning": "2단계"
+            },
+            {
+              "order": 3,
+              "grade": "경계(Orange)",
+              "criteria": "위기 발생 가능성 농후",
+              "meaning": "3단계"
+            },
+            {
+              "order": 4,
+              "grade": "심각(Red)",
+              "criteria": "위기 발생 확실·임박(중대본 가동)",
+              "meaning": "4단계"
+            }
+          ]
+        }
+      ],
+      "legal_basis": "홍수특보 발령기준 [별표1]; 하천법",
+      "sources": [
+        {
+          "ref": "S3",
+          "title": "홍수특보 발령 기준 [별표1]",
+          "publisher": "법제처",
+          "type": "법령",
+          "url": "https://www.law.go.kr",
+          "verified": "웹검증(2026)"
+        },
+        {
+          "ref": "S4",
+          "title": "한강홍수통제소 홍수예보",
+          "publisher": "환경부 홍수통제소",
+          "type": "웹",
+          "url": "http://www.hrfco.go.kr/web/floodPage/floodForecast.do",
+          "verified": "웹검증(2026)"
+        },
+        {
+          "ref": "S12",
+          "title": "재난 및 안전관리 기본법 제38조(위기경보)",
+          "publisher": "법제처",
+          "type": "법령",
+          "url": "https://www.law.go.kr/법령/재난및안전관리기본법/제38조",
+          "verified": "법령"
+        }
+      ]
+    },
+    {
+      "event_code": "INUNDATION",
+      "hazard_code": "T10106",
+      "name_ko": "수해/침수(풍수해)",
+      "judgment_subject": "행정안전부(자연재해대책법)",
+      "judgment_concept": "태풍·홍수·호우·강풍·풍랑·해일·조수·대설 등 복합재해(우산개념). 독립 특보 없음.",
+      "related_variables": [
+        "구성재해 변수 전체"
+      ],
+      "no_single_criterion": true,
+      "composite_of": [
+        {
+          "event_code": "TYPHOON",
+          "hazard_code": "T10105",
+          "name_ko": "태풍"
+        },
+        {
+          "event_code": "FLOOD",
+          "hazard_code": "T10206",
+          "name_ko": "홍수"
+        },
+        {
+          "event_code": "HEAVY_RAIN",
+          "hazard_code": "T10107",
+          "name_ko": "호우"
+        },
+        {
+          "event_code": null,
+          "hazard_code": null,
+          "name_ko": "강풍"
+        },
+        {
+          "event_code": null,
+          "hazard_code": null,
+          "name_ko": "풍랑"
+        },
+        {
+          "event_code": null,
+          "hazard_code": null,
+          "name_ko": "해일"
+        },
+        {
+          "event_code": null,
+          "hazard_code": null,
+          "name_ko": "조수"
+        },
+        {
+          "event_code": null,
+          "hazard_code": null,
+          "name_ko": "대설"
+        }
+      ],
+      "q1_conditions": [
+        {
+          "level": "구성재해 기준 준용",
+          "indicator": "구성재해 특보 발효",
+          "period": null,
+          "operator": "발효",
+          "value": null,
+          "unit": null,
+          "refers_to": [
+            "HEAVY_RAIN(T10107)",
+            "TYPHOON(T10105)",
+            "FLOOD(T10206)",
+            "강풍"
+          ],
+          "note": "단일 정량기준 없음 — 호우·태풍·강풍·홍수 등 구성재해 특보 발효 시 준용 판정"
+        },
+        {
+          "level": "피해 발생",
+          "indicator": "침수·범람·유실·붕괴 피해",
+          "period": null,
+          "operator": "발생",
+          "value": null,
+          "unit": null,
+          "note": "특보와 별개로 침수·범람·유실·붕괴 피해 발생 시 풍수해로 판단"
+        }
+      ],
+      "q2_grades": [
+        {
+          "system": "자연재해위험개선지구",
+          "operator_org": "행정안전부",
+          "source_refs": [
+            "S11"
+          ],
+          "grades": [
+            {
+              "order": 1,
+              "grade": "가등급",
+              "criteria": "재해 시 인명피해 우려 매우 높은 지역",
+              "meaning": "최우선 정비"
+            },
+            {
+              "order": 2,
+              "grade": "나등급",
+              "criteria": "건축물(주택·상가·공공) 피해 발생/우려",
+              "meaning": "정비 대상"
+            },
+            {
+              "order": 3,
+              "grade": "다등급",
+              "criteria": "기반시설(공단·철도·기간도로)·농경지 침수 우려",
+              "meaning": "관리 대상"
+            }
+          ]
+        },
+        {
+          "system": "재난 위기경보",
+          "operator_org": "행정안전부(위기관리 표준매뉴얼)",
+          "source_refs": [
+            "S12"
+          ],
+          "grades": [
+            {
+              "order": 1,
+              "grade": "관심(Blue)",
+              "criteria": "위기징후 감시·활동",
+              "meaning": "1단계"
+            },
+            {
+              "order": 2,
+              "grade": "주의(Yellow)",
+              "criteria": "위기 발생 가능성 증가",
+              "meaning": "2단계"
+            },
+            {
+              "order": 3,
+              "grade": "경계(Orange)",
+              "criteria": "위기 발생 가능성 농후",
+              "meaning": "3단계"
+            },
+            {
+              "order": 4,
+              "grade": "심각(Red)",
+              "criteria": "위기 발생 확실·임박(중대본 가동)",
+              "meaning": "4단계"
+            }
+          ]
+        }
+      ],
+      "legal_basis": "자연재해대책법 제2조제2호(풍수해)",
+      "sources": [
+        {
+          "ref": "S7",
+          "title": "자연재해대책법 [시행 2026.1.2 법률 제21065호]",
+          "publisher": "법제처",
+          "type": "법령",
+          "url": "https://www.law.go.kr",
+          "verified": "법령"
+        },
+        {
+          "ref": "S11",
+          "title": "자연재해위험개선지구 관리지침 [시행 2025.9.11 고시 제2025-58호]",
+          "publisher": "행정안전부",
+          "type": "행정규칙",
+          "url": "https://www.law.go.kr/행정규칙/자연재해위험개선지구관리지침",
+          "verified": "웹검증(2026)"
+        },
+        {
+          "ref": "S12",
+          "title": "재난 및 안전관리 기본법 제38조(위기경보)",
+          "publisher": "법제처",
+          "type": "법령",
+          "url": "https://www.law.go.kr/법령/재난및안전관리기본법/제38조",
+          "verified": "법령"
+        }
+      ]
+    },
+    {
+      "event_code": "TYPHOON",
+      "hazard_code": "T10105",
+      "name_ko": "태풍",
+      "judgment_subject": "기상청",
+      "judgment_concept": "열대저기압 중 중심 최대풍속 임계 이상=태풍. 태풍특보는 강풍·풍랑·호우·폭풍해일이 특보기준 도달 예상 시.",
+      "related_variables": [
+        "풍속",
+        "강우",
+        "파고",
+        "해일고"
+      ],
+      "q1_conditions": [
+        {
+          "level": "정의",
+          "indicator": "중심 최대풍속(10분평균)",
+          "period": null,
+          "operator": ">=",
+          "value": 17,
+          "unit": "m/s",
+          "note": "17 m/s(34kt) 이상인 열대저기압을 태풍으로 판단"
+        },
+        {
+          "level": "주의보",
+          "indicator": "강풍·풍랑·호우·폭풍해일 주의보기준",
+          "period": null,
+          "operator": "도달 예상",
+          "value": null,
+          "unit": null,
+          "note": "강풍/풍랑/호우/폭풍해일 주의보 기준 도달 예상 시"
+        },
+        {
+          "level": "경보",
+          "indicator": "풍속(강풍)",
+          "period": null,
+          "operator": ">=",
+          "value": 21,
+          "unit": "m/s",
+          "logic": "OR",
+          "condition_group": "태풍경보",
+          "note": "강풍·풍랑·총강우·폭풍해일 경보기준 중 하나 충족 예상 시"
+        },
+        {
+          "level": "경보",
+          "indicator": "유의파고(풍랑)",
+          "period": null,
+          "operator": ">",
+          "value": 5,
+          "unit": "m",
+          "logic": "OR",
+          "condition_group": "태풍경보",
+          "note": "강풍·풍랑·총강우·폭풍해일 경보기준 중 하나 충족 예상 시"
+        },
+        {
+          "level": "경보",
+          "indicator": "총강우량",
+          "period": "총강우",
+          "operator": ">=",
+          "value": 200,
+          "unit": "mm",
+          "logic": "OR",
+          "condition_group": "태풍경보",
+          "note": "강풍·풍랑·총강우·폭풍해일 경보기준 중 하나 충족 예상 시"
+        },
+        {
+          "level": "경보",
+          "indicator": "폭풍해일",
+          "period": null,
+          "operator": "경보기준 도달 예상",
+          "value": null,
+          "unit": null,
+          "logic": "OR",
+          "condition_group": "태풍경보",
+          "note": "폭풍해일 경보 기준 도달 예상 시"
+        }
+      ],
+      "q2_grades": [
+        {
+          "system": "태풍 강도(중심최대풍속·10분평균)",
+          "operator_org": "기상청",
+          "source_refs": [
+            "S2",
+            "S9"
+          ],
+          "grades": [
+            {
+              "order": 1,
+              "grade": "약(-)",
+              "criteria": "17~25 m/s 미만 (34~47 kt)",
+              "meaning": "('약' 표기 생략, 2019~)",
+              "wind_min_ms": 17,
+              "wind_max_ms": 25
+            },
+            {
+              "order": 2,
+              "grade": "중(Normal)",
+              "criteria": "25~33 m/s 미만 (48~63 kt)",
+              "meaning": "지붕·기왓장이 날아감",
+              "wind_min_ms": 25,
+              "wind_max_ms": 33
+            },
+            {
+              "order": 3,
+              "grade": "강(Strong)",
+              "criteria": "33~44 m/s 미만 (64~84 kt)",
+              "meaning": "기차 탈선; 사람·큰 돌이 날아감",
+              "wind_min_ms": 33,
+              "wind_max_ms": 44
+            },
+            {
+              "order": 4,
+              "grade": "매우강(Very strong)",
+              "criteria": "44~54 m/s 미만 (85~104 kt)",
+              "meaning": "사람이 날아갈 정도; 나무 뽑힘·낡은 가옥 붕괴",
+              "wind_min_ms": 44,
+              "wind_max_ms": 54
+            },
+            {
+              "order": 5,
+              "grade": "초강력(Super strong)",
+              "criteria": "54 m/s 이상 (105 kt~)",
+              "meaning": "대부분 건물 붕괴 가능",
+              "wind_min_ms": 54,
+              "wind_max_ms": null
+            }
+          ]
+        },
+        {
+          "system": "태풍 특보",
+          "operator_org": "기상청",
+          "source_refs": [
+            "S1"
+          ],
+          "grades": [
+            {
+              "order": 1,
+              "grade": "주의보",
+              "criteria": "강풍·풍랑·호우·폭풍해일 주의보 기준 도달 예상",
+              "meaning": "2단계 특보 중 1단계"
+            },
+            {
+              "order": 2,
+              "grade": "경보",
+              "criteria": "강풍(≥21 m/s)·풍랑(>5m)·총강우 200mm·폭풍해일 기준",
+              "meaning": "2단계 특보 중 2단계"
+            }
+          ]
+        },
+        {
+          "system": "재난 위기경보",
+          "operator_org": "행정안전부(위기관리 표준매뉴얼)",
+          "source_refs": [
+            "S12"
+          ],
+          "grades": [
+            {
+              "order": 1,
+              "grade": "관심(Blue)",
+              "criteria": "위기징후 감시·활동",
+              "meaning": "1단계"
+            },
+            {
+              "order": 2,
+              "grade": "주의(Yellow)",
+              "criteria": "위기 발생 가능성 증가",
+              "meaning": "2단계"
+            },
+            {
+              "order": 3,
+              "grade": "경계(Orange)",
+              "criteria": "위기 발생 가능성 농후",
+              "meaning": "3단계"
+            },
+            {
+              "order": 4,
+              "grade": "심각(Red)",
+              "criteria": "위기 발생 확실·임박(중대본 가동)",
+              "meaning": "4단계"
+            }
+          ]
+        }
+      ],
+      "legal_basis": "재난안전법 제3조; 자연재해대책법 제2조; 기상특보 발표기준",
+      "sources": [
+        {
+          "ref": "S1",
+          "title": "기상특보 발표기준(강풍·호우·태풍·풍랑·폭풍해일 등)",
+          "publisher": "기상청",
+          "type": "웹",
+          "url": "https://www.weather.go.kr/w/community/knowledge/standard.do",
+          "verified": "웹검증(2026)"
+        },
+        {
+          "ref": "S2",
+          "title": "태풍의 분류(강도·크기)",
+          "publisher": "기상청",
+          "type": "웹",
+          "url": "https://www.weather.go.kr/w/typhoon/basic/info3.do",
+          "verified": "표준분류·시점확인권장"
+        },
+        {
+          "ref": "S7",
+          "title": "자연재해대책법 [시행 2026.1.2 법률 제21065호]",
+          "publisher": "법제처",
+          "type": "법령",
+          "url": "https://www.law.go.kr",
+          "verified": "법령"
+        },
+        {
+          "ref": "S9",
+          "title": "태풍 강도별 영향(강도·크기 분류)",
+          "publisher": "기상청",
+          "type": "웹",
+          "url": "https://www.weather.go.kr/w/typhoon/basic/info3.do",
+          "verified": "웹검증(2026)"
+        },
+        {
+          "ref": "S12",
+          "title": "재난 및 안전관리 기본법 제38조(위기경보)",
+          "publisher": "법제처",
+          "type": "법령",
+          "url": "https://www.law.go.kr/법령/재난및안전관리기본법/제38조",
+          "verified": "법령"
+        }
+      ]
+    },
+    {
+      "event_code": "LANDSLIDE",
+      "hazard_code": "T10401",
+      "name_ko": "산사태",
+      "judgment_subject": "산림청",
+      "judgment_concept": "강우로 토양함수지수가 임계 초과 예상.",
+      "related_variables": [
+        "토양함수지수",
+        "누적강우"
+      ],
+      "q1_conditions": [
+        {
+          "level": "주의보",
+          "indicator": "토양함수지수",
+          "period": null,
+          "operator": ">= 도달 예상",
+          "value": 80,
+          "unit": "%",
+          "note": "토양함수지수 80% 도달 예상 시 사전대피 준비"
+        },
+        {
+          "level": "예비경보",
+          "indicator": "토양함수지수",
+          "period": null,
+          "operator": ">= 도달 예상",
+          "value": 90,
+          "unit": "%",
+          "note": "토양함수지수 90% 도달 예상 시 대피 준비 강화"
+        },
+        {
+          "level": "경보",
+          "indicator": "토양함수지수",
+          "period": null,
+          "operator": ">= 도달 예상",
+          "value": 100,
+          "unit": "%",
+          "note": "토양함수지수 100% 도달 예상 시 즉시 대피"
+        }
+      ],
+      "q2_grades": [
+        {
+          "system": "산사태 예측정보",
+          "operator_org": "산림청",
+          "source_refs": [
+            "S6"
+          ],
+          "grades": [
+            {
+              "order": 1,
+              "grade": "주의보",
+              "criteria": "토양함수지수 80%",
+              "meaning": "사전대피 준비"
+            },
+            {
+              "order": 2,
+              "grade": "예비경보",
+              "criteria": "토양함수지수 90%",
+              "meaning": "대피 준비 강화"
+            },
+            {
+              "order": 3,
+              "grade": "경보",
+              "criteria": "토양함수지수 100%",
+              "meaning": "즉시 대피"
+            }
+          ]
+        },
+        {
+          "system": "산사태 위험지도 등급",
+          "operator_org": "산림청",
+          "source_refs": [
+            "S6"
+          ],
+          "grades": [
+            {
+              "order": 1,
+              "grade": "1등급(최고)",
+              "criteria": "지형·토질·임상 분석 위험도",
+              "meaning": "발생확률 최고"
+            },
+            {
+              "order": 2,
+              "grade": "2등급",
+              "criteria": "지형·토질·임상 분석 위험도",
+              "meaning": "위험도 상"
+            },
+            {
+              "order": 3,
+              "grade": "3등급",
+              "criteria": "지형·토질·임상 분석 위험도",
+              "meaning": "위험도 중"
+            },
+            {
+              "order": 4,
+              "grade": "4등급",
+              "criteria": "지형·토질·임상 분석 위험도",
+              "meaning": "위험도 하"
+            },
+            {
+              "order": 5,
+              "grade": "5등급",
+              "criteria": "지형·토질·임상 분석 위험도",
+              "meaning": "위험도 최저"
+            }
+          ]
+        },
+        {
+          "system": "재난 위기경보",
+          "operator_org": "행정안전부(위기관리 표준매뉴얼)",
+          "source_refs": [
+            "S12"
+          ],
+          "grades": [
+            {
+              "order": 1,
+              "grade": "관심(Blue)",
+              "criteria": "위기징후 감시·활동",
+              "meaning": "1단계"
+            },
+            {
+              "order": 2,
+              "grade": "주의(Yellow)",
+              "criteria": "위기 발생 가능성 증가",
+              "meaning": "2단계"
+            },
+            {
+              "order": 3,
+              "grade": "경계(Orange)",
+              "criteria": "위기 발생 가능성 농후",
+              "meaning": "3단계"
+            },
+            {
+              "order": 4,
+              "grade": "심각(Red)",
+              "criteria": "위기 발생 확실·임박(중대본 가동)",
+              "meaning": "4단계"
+            }
+          ]
+        }
+      ],
+      "legal_basis": "산림보호법; 국립산림과학원 산사태 예측 모델",
+      "sources": [
+        {
+          "ref": "S6",
+          "title": "산사태 예측정보·산사태위험지도 기준",
+          "publisher": "산림청",
+          "type": "웹",
+          "url": "https://sansatai.forest.go.kr",
+          "verified": "웹검증(2026)"
+        },
+        {
+          "ref": "S12",
+          "title": "재난 및 안전관리 기본법 제38조(위기경보)",
+          "publisher": "법제처",
+          "type": "법령",
+          "url": "https://www.law.go.kr/법령/재난및안전관리기본법/제38조",
+          "verified": "법령"
+        }
+      ]
+    }
+  ],
+  "source_registry": [
+    {
+      "ref": "S1",
+      "title": "기상특보 발표기준(강풍·호우·태풍·풍랑·폭풍해일 등)",
+      "publisher": "기상청",
+      "type": "웹",
+      "url": "https://www.weather.go.kr/w/community/knowledge/standard.do",
+      "verified": "웹검증(2026)"
+    },
+    {
+      "ref": "S2",
+      "title": "태풍의 분류(강도·크기)",
+      "publisher": "기상청",
+      "type": "웹",
+      "url": "https://www.weather.go.kr/w/typhoon/basic/info3.do",
+      "verified": "표준분류·시점확인권장"
+    },
+    {
+      "ref": "S3",
+      "title": "홍수특보 발령 기준 [별표1]",
+      "publisher": "법제처",
+      "type": "법령",
+      "url": "https://www.law.go.kr",
+      "verified": "웹검증(2026)"
+    },
+    {
+      "ref": "S4",
+      "title": "한강홍수통제소 홍수예보",
+      "publisher": "환경부 홍수통제소",
+      "type": "웹",
+      "url": "http://www.hrfco.go.kr/web/floodPage/floodForecast.do",
+      "verified": "웹검증(2026)"
+    },
+    {
+      "ref": "S6",
+      "title": "산사태 예측정보·산사태위험지도 기준",
+      "publisher": "산림청",
+      "type": "웹",
+      "url": "https://sansatai.forest.go.kr",
+      "verified": "웹검증(2026)"
+    },
+    {
+      "ref": "S7",
+      "title": "자연재해대책법 [시행 2026.1.2 법률 제21065호]",
+      "publisher": "법제처",
+      "type": "법령",
+      "url": "https://www.law.go.kr",
+      "verified": "법령"
+    },
+    {
+      "ref": "S8",
+      "title": "극한호우 긴급재난문자 발송기준",
+      "publisher": "기상청",
+      "type": "웹",
+      "url": "https://www.weather.go.kr",
+      "verified": "웹검증(2026)"
+    },
+    {
+      "ref": "S9",
+      "title": "태풍 강도별 영향(강도·크기 분류)",
+      "publisher": "기상청",
+      "type": "웹",
+      "url": "https://www.weather.go.kr/w/typhoon/basic/info3.do",
+      "verified": "웹검증(2026)"
+    },
+    {
+      "ref": "S10",
+      "title": "기상 영향예보",
+      "publisher": "기상청",
+      "type": "웹",
+      "url": "https://www.weather.go.kr/w/special-report/impact.do",
+      "verified": "웹검증(2026)"
+    },
+    {
+      "ref": "S11",
+      "title": "자연재해위험개선지구 관리지침 [시행 2025.9.11 고시 제2025-58호]",
+      "publisher": "행정안전부",
+      "type": "행정규칙",
+      "url": "https://www.law.go.kr/행정규칙/자연재해위험개선지구관리지침",
+      "verified": "웹검증(2026)"
+    },
+    {
+      "ref": "S12",
+      "title": "재난 및 안전관리 기본법 제38조(위기경보)",
+      "publisher": "법제처",
+      "type": "법령",
+      "url": "https://www.law.go.kr/법령/재난및안전관리기본법/제38조",
+      "verified": "법령"
+    },
+    {
+      "ref": "S13",
+      "title": "기상자료개방포털(AWS·ASOS·위성·레이더·수치예보 개방데이터)",
+      "publisher": "기상청",
+      "type": "웹",
+      "url": "https://data.kma.go.kr",
+      "verified": "웹검증(2026)"
+    },
+    {
+      "ref": "S14",
+      "title": "국가수자원관리종합정보시스템(WAMIS) 수위·유량·댐방류량",
+      "publisher": "환경부 홍수통제소",
+      "type": "웹",
+      "url": "https://www.wamis.go.kr",
+      "verified": "웹검증(2026)"
+    },
+    {
+      "ref": "S15",
+      "title": "재해연보·재난연감(자연재해 피해집계)",
+      "publisher": "행정안전부",
+      "type": "간행물·웹",
+      "url": "https://www.mois.go.kr",
+      "verified": "웹검증(2026)"
+    }
+  ]
+}

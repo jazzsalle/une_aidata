@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#385d65"/>
+      <stop offset="0.5" stop-color="#78936a"/>
+      <stop offset="1" stop-color="#c1aa72"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#g)"/>
+  <path d="M-30 330 C150 220 250 390 430 270 S690 180 850 70" fill="none" stroke="#77c8e2" stroke-width="52" opacity=".65"/>
+  <path d="M40 50 L760 410 M-50 200 L610 520 M220 -60 L850 310" stroke="#e5dfbd" stroke-width="12" opacity=".35"/>
+  <rect x="24" y="24" width="250" height="52" rx="8" fill="rgba(10,20,30,.68)"/>
+  <text x="44" y="58" font-family="sans-serif" font-size="24" fill="white">POC 위성영상 예시</text>
+</svg>

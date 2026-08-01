@@ -1,0 +1,47 @@
+{
+  "name": "une-disaster-safety-poc-vercel",
+  "version": "1.5.1",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/web"
+  ],
+  "scripts": {
+    "dev": "npx vercel dev",
+    "dev:web": "npm --workspace @une-disaster/web run dev",
+    "build": "npm run build:web",
+    "build:web": "npm --workspace @une-disaster/web run build",
+    "typecheck": "npm run typecheck:functions && npm run typecheck:web",
+    "typecheck:functions": "tsc -p tsconfig.functions.json --noEmit",
+    "typecheck:web": "npm --workspace @une-disaster/web run typecheck",
+    "validate": "python3 scripts/validate_vercel_repo.py",
+    "test:seed": "python3 scripts/smoke_seed_contracts.py",
+    "test:priority": "python3 scripts/smoke_priority_logic.py",
+    "test:similar": "python3 scripts/smoke_similar_events.py",
+    "test:assets": "python3 scripts/smoke_spatial_assets.py",
+    "test:a11y-structure": "python3 scripts/validate_multi_page_a11y.py",
+    "test:observation-provider": "python3 scripts/smoke_public_observation_provider.py",
+    "test:report-context": "python3 scripts/smoke_report_context.py",
+    "test:e2e": "npm --workspace @une-disaster/web run test:e2e",
+    "test:integration-adapters": "python3 scripts/smoke_integration_adapters.py",
+    "test:flood-imagery": "python3 scripts/smoke_flood_imagery_tiles.py",
+    "test:flood-phase-selection": "python3 scripts/smoke_flood_phase_selection.py",
+    "test:flood-mask-metrics": "python3 scripts/smoke_flood_mask_metrics.py",
+    "test:evidence-sets": "python3 scripts/smoke_satellite_evidence_sets.py",
+    "test:t3q-alignment": "python3 scripts/smoke_t3q_alignment.py",
+    "test:t3q-readiness": "python3 scripts/smoke_t3q_readiness.py",
+    "test:t3q-search-preview": "python3 scripts/smoke_t3q_search_preview.py",
+    "test:t3q-mock-contract": "python3 scripts/smoke_t3q_mock_contract.py",
+    "test:mock-spatial": "python3 scripts/smoke_mock_spatial_layers.py",
+    "test:provider-contracts": "python3 scripts/smoke_provider_contracts.py",
+    "test:similarity-v13": "python3 scripts/smoke_similarity_policy_v13.py",
+    "test:runtime-gate": "bash scripts/run_runtime_regression_gate.sh",
+    "test:provider-conformance": "python3 scripts/smoke_provider_conformance_gate.py",
+    "test:schema-contracts": "python3 scripts/validate_json_schema_contracts.py",
+    "test:openapi-contracts": "python3 scripts/validate_openapi_contracts.py",
+    "test:contracts": "npm run test:openapi-contracts && npm run test:schema-contracts"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}

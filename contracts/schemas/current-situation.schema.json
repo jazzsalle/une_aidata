@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CurrentSituation",
+  "type": "object",
+  "required": [
+    "situation_id",
+    "admin_code",
+    "reference_time",
+    "mode",
+    "hazards",
+    "observations",
+    "data_quality"
+  ],
+  "properties": {
+    "situation_id": {
+      "type": "string"
+    },
+    "admin_code": {
+      "type": "string"
+    },
+    "admin_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "reference_time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "live",
+        "hybrid",
+        "scenario"
+      ]
+    },
+    "hazards": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "user_input": {
+      "type": "object"
+    },
+    "observations": {
+      "type": "array",
+      "items": {
+        "$ref": "observation.schema.json"
+      }
+    },
+    "criteria_matches": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "data_quality": {
+      "type": "object"
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": false
+}

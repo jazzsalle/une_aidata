@@ -1,0 +1,2043 @@
+{
+  "dataset": "districts",
+  "version": "0.2",
+  "updated": "2026-07-27",
+  "description": "위험지구 정형 시드 — 의왕 17개소 전체, 구미·남원 대표 지구. 원문(관리대장·주요현황 서식)에서 판독한 값만 기입, 미기재·판독 불가 항목은 null. v0.2: 유사 재난 사례 검색용 damage_events(구조화 피해이력) 추가 — 코퍼스 실기록(저감계획 재해발생현황 장·관리대장) 근거 한정.",
+  "schema_note": {
+    "damage_events": "구조화 피해이력 배열(유사 재난 사례 검색용) — occurred(YYYY-MM), event_name(사건명), hazard_codes(관련 T코드), description(원문 기반 피해·기록 서술), evidence(doc_title·page 필수, passage_id는 코퍼스 청크 대응 시). 원문에 기록된 사건만 기입 — 추정·가상 사례 금지",
+    "risk_thresholds": "위험조건 임계값 구조체(target 대상, operator 비교연산, value 값, unit 단위, basis 산정 근거). operator '부족(최대)'=계획빈도 기준 최대 부족량, '<'=기준 대비 미달(음수=부족), '='=평가·산정값, '부족'/'위험'/'해당'=원문 서술형(수치 미기재 시 value=null)",
+    "hazard_codes": "하천재해→[T10206,T10107], 내수재해→[T10107,T10106], 사면·토사재해→[T10401], 바람재해→[T10105], 대설재해→[](대상 재난 5종 외)",
+    "cost_million_krw": "사업비(백만원)",
+    "expected_damage_million_krw": "예상피해액(백만원, 구미 관리대장 기재 시)",
+    "project_status": "구축완료/구축중/구축필요 — 본 시드는 전건 저감대책 계획 단계(구축필요)",
+    "coordinates": "관리대장 경위도(도분초)를 십진도로 환산. 남원 주요현황 서식은 경위도 미기재 → null"
+  },
+  "sources": [
+    {
+      "source_asset_id": "SRC-UW-JGP-2022",
+      "doc_title": "제2차 의왕시 자연재해저감 종합계획 관리대장(2022.7)",
+      "file": "경기도 의왕시(2022.7.)/관리대장/PDF/06관리대장(최종).pdf",
+      "pages": 17
+    },
+    {
+      "source_asset_id": "SRC-GM-JGP-2021",
+      "doc_title": "제2차 구미시 자연재해저감종합계획 관리대장(2021.9)",
+      "file": "경상북도 구미시(2021.9.)/02 관리대장/구미시_관리대장.pdf",
+      "pages": 66
+    },
+    {
+      "source_asset_id": "SRC-NW-JGP-2022",
+      "doc_title": "제2차 남원시 자연재해저감 종합계획 수립 주요현황(작성서식 2)(2022.4)",
+      "file": "전라남도 남원시(2022.4.8.)/보고서/02.(작성서식 2) 제2차 남원시 자연재해저감 종합계획 수립 주요현황 1부-수정.pdf",
+      "pages": 17,
+      "note": "폴더명 '전라남도'는 오기 — 전라북도 남원시(45190). 수치 불일치 시 주요현황 서식(작성서식 2) 우선"
+    }
+  ],
+  "counts": {
+    "total": 29,
+    "uiwang_41430": 17,
+    "gumi_47190": 6,
+    "namwon_45190": 6
+  },
+  "districts": [
+    {
+      "district_code": "UW-A-01",
+      "ledger_code": "A-01",
+      "code_origin": "관리대장 지구코드",
+      "district_name": "안양천지구",
+      "admin_code": "41430",
+      "admin_name": "경기도 의왕시",
+      "disaster_type": "하천재해",
+      "disaster_subtype": "침수위험지구",
+      "hazard_codes": [
+        "T10206",
+        "T10107"
+      ],
+      "location": "의왕시 왕곡동 566-10",
+      "river_name": "안양천(지방하천)",
+      "station": "No.9+423~11+466",
+      "risk_factors": [
+        "계획빈도에서 제방여유고 좌안 최대 2.96m·우안 최대 2.96m 부족, 하폭 최대 9m 부족",
+        "교량 5개소 여유고·연장·경간장 등 시설능력 부족"
+      ],
+      "risk_thresholds": [
+        {
+          "target": "제방여유고(좌안)",
+          "operator": "부족(최대)",
+          "value": 2.96,
+          "unit": "m",
+          "basis": "계획빈도 하도 능력검토"
+        },
+        {
+          "target": "제방여유고(우안)",
+          "operator": "부족(최대)",
+          "value": 2.96,
+          "unit": "m",
+          "basis": "계획빈도 하도 능력검토"
+        },
+        {
+          "target": "하폭",
+          "operator": "부족(최대)",
+          "value": 9,
+          "unit": "m",
+          "basis": "계획빈도 하도 능력검토"
+        },
+        {
+          "target": "교량 시설능력(여유고·연장·경간장)",
+          "operator": "부족",
+          "value": 5,
+          "unit": "개소",
+          "basis": "시설물 능력검토"
+        },
+        {
+          "target": "제방여유고(No.8+988 좌안)",
+          "operator": "<",
+          "value": -0.83,
+          "unit": "m",
+          "basis": "계획홍수량 270㎥/s·개수전 홍수위 EL.48.02m·기설제방고 좌안 EL.47.99m·기준여유고 0.8m(우안 -0.39m)",
+          "evidence": {
+            "source_asset_id": "SRC-UW-JGP-2022",
+            "doc_title": "제2차 의왕시 자연재해저감 종합계획 보고서 제3장",
+            "pdf_page": 65,
+            "page_label": "3-65",
+            "table": "표 3.3-17 하천재해 위험지구 선정"
+          }
+        }
+      ],
+      "grade": "상세 위험도지수 6.4(고위험)",
+      "mitigation": [
+        "축제 L=1,280m",
+        "보축 L=1,902m",
+        "교량 재가설 10개소"
+      ],
+      "project_status": "구축필요",
+      "implementation_period": "1~5차년",
+      "implementation_method": "하천재해예방사업",
+      "cost_million_krw": 26513,
+      "expected_damage_million_krw": null,
+      "damage_history": null,
+      "damage_events": [
+        {
+          "occurred": "2010-09",
+          "event_name": "태풍 곤파스",
+          "hazard_codes": [
+            "T10105",
+            "T10206"
+          ],
+          "description": "2010년 태풍 곤파스 시 안양천 충훈1교 관측 최고수위 EL.17.09m 기록 — 200년빈도 계획홍수위 대비 분석 대상이 된 주요 홍수 사상",
+          "evidence": {
+            "doc_title": "제2차 의왕시 자연재해저감 종합계획(2022.7)",
+            "chapter": "제2장 2.3.3 주요자연재해특성분석",
+            "page": 98,
+            "passage_id": "PSG-UW-JGP-2-0098-01"
+          }
+        }
+      ],
+      "priority": "전체 1/17위(하천재해 1/9위)",
+      "implementer": "경기도(하천과)",
+      "related_ministry": "환경부",
+      "coordinates": {
+        "lat": 37.338889,
+        "lon": 126.980833,
+        "source": "관리대장 경위도(도분초)"
+      },
+      "note": "위험요인 분석이 인용하는 계획홍수량 270㎥/s(No.8+988)·여유고 -0.83m는 안양천권역 하천기본계획 기수립(2015) 값 — 금회(2020) 재수립 수치와 구분 필요(plan_version 주의)",
+      "evidence": {
+        "source_asset_id": "SRC-UW-JGP-2022",
+        "doc_title": "제2차 의왕시 자연재해저감 종합계획 관리대장(2022.7)",
+        "pdf_page": 1,
+        "page_label": "관리대장 p.1"
+      }
+    },
+    {
+      "district_code": "UW-A-02",
+      "ledger_code": "A-02",
+      "code_origin": "관리대장 지구코드",
+      "district_name": "오전천지구",
+      "admin_code": "41430",
+      "admin_name": "경기도 의왕시",
+      "disaster_type": "하천재해",
+      "disaster_subtype": "침수위험지구",
+      "hazard_codes": [
+        "T10206",
+        "T10107"
+      ],
+      "location": "의왕시 오전동 789-1",
+      "river_name": "오전천(지방하천)",
+      "station": "No.0+958~2+883",
+      "risk_factors": [
+        "계획빈도에서 제방여유고 좌안 최대 1.82m·우안 최대 1.82m 부족, 하폭 최대 18m 부족",
+        "교량 11개소 여유고·연장·경간장 등 시설능력 부족"
+      ],
+      "risk_thresholds": [
+        {
+          "target": "제방여유고(좌안)",
+          "operator": "부족(최대)",
+          "value": 1.82,
+          "unit": "m",
+          "basis": "계획빈도 하도 능력검토"
+        },
+        {
+          "target": "제방여유고(우안)",
+          "operator": "부족(최대)",
+          "value": 1.82,
+          "unit": "m",
+          "basis": "계획빈도 하도 능력검토"
+        },
+        {
+          "target": "하폭",
+          "operator": "부족(최대)",
+          "value": 18,
+          "unit": "m",
+          "basis": "계획빈도 하도 능력검토"
+        },
+        {
+          "target": "교량 시설능력(여유고·연장·경간장)",
+          "operator": "부족",
+          "value": 11,
+          "unit": "개소",
+          "basis": "시설물 능력검토"
+        }
+      ],
+      "grade": "상세 위험도지수 12.0(초고위험)",
+      "mitigation": [
+        "축제 L=3,450m",
+        "교량 재가설 10개소",
+        "보 및 낙차공 재가설 14개소"
+      ],
+      "project_status": "구축필요",
+      "implementation_period": "6~10차년",
+      "implementation_method": "하천재해예방사업",
+      "cost_million_krw": 31196,
+      "expected_damage_million_krw": null,
+      "damage_history": "'09년 7월 집중호우시 하천급류로 인한 피해발생",
+      "damage_events": [
+        {
+          "occurred": "2009-07",
+          "event_name": "집중호우",
+          "hazard_codes": [
+            "T10107",
+            "T10206"
+          ],
+          "description": "2009년 7월 집중호우 시 하천급류로 인한 피해 발생(관리대장 피해이력). 위험지구 후보지 위험요인 분석표 피해이력(A) 3점 — 최근 10년내 피해이력 있음",
+          "evidence": {
+            "doc_title": "제2차 의왕시 자연재해저감 종합계획 위험지구 후보지 위험요인 분석표",
+            "chapter": "오전천지구",
+            "page": 3,
+            "passage_id": "PSG-UW-JGP-E-0003-01"
+          }
+        }
+      ],
+      "priority": "전체 14/17위(하천재해 7/9위)",
+      "implementer": "경기도(하천과)",
+      "related_ministry": "환경부",
+      "coordinates": {
+        "lat": 37.3525,
+        "lon": 126.984722,
+        "source": "관리대장 경위도(도분초)"
+      },
+      "note": null,
+      "evidence": {
+        "source_asset_id": "SRC-UW-JGP-2022",
+        "doc_title": "제2차 의왕시 자연재해저감 종합계획 관리대장(2022.7)",
+        "pdf_page": 2,
+        "page_label": "관리대장 p.2"
+      }
+    },
+    {
+      "district_code": "UW-A-03",
+      "ledger_code": "A-03",
+      "code_origin": "관리대장 지구코드",
+      "district_name": "새우대천지구",
+      "admin_code": "41430",
+      "admin_name": "경기도 의왕시",
+      "disaster_type": "하천재해",
+      "disaster_subtype": "침수위험지구",
+      "hazard_codes": [
+        "T10206",
+        "T10107"
+      ],
+      "location": "의왕시 초평동 396-2",
+      "river_name": "새우대천(소하천)",
+      "station": "No.0+00~24+36",
+      "risk_factors": [
+        "계획빈도에서 제방여유고 좌안 최대 2.75m·우안 최대 2.45m 부족, 하폭 최대 7m 부족",
+        "교량 6개소 여유고·연장·경간장 등 시설능력 부족"
+      ],
+      "risk_thresholds": [
+        {
+          "target": "제방여유고(좌안)",
+          "operator": "부족(최대)",
+          "value": 2.75,
+          "unit": "m",
+          "basis": "계획빈도 하도 능력검토"
+        },
+        {
+          "target": "제방여유고(우안)",
+          "operator": "부족(최대)",
+          "value": 2.45,
+          "unit": "m",
+          "basis": "계획빈도 하도 능력검토"
+        },
+        {
+          "target": "하폭",
+          "operator": "부족(최대)",
+          "value": 7,
+          "unit": "m",
+          "basis": "계획빈도 하도 능력검토"
+        },
+        {
+          "target": "교량 시설능력(여유고·연장·경간장)",
+          "operator": "부족",
+          "value": 6,
+          "unit": "개소",
+          "basis": "시설물 능력검토"
+        }
+      ],
+      "grade": "상세 위험도지수 5.2(고위험)",
+      "mitigation": [
+        "축제 L=2,156m",
+        "교량 재가설 1개소"
+      ],
+      "project_status": "구축필요",
+      "implementation_period": "1~3차년",
+      "implementation_method": "소하천정비사업",
+      "cost_million_krw": 8486,
+      "expected_damage_million_krw": null,
+      "damage_history": null,
+      "priority": "전체 2/17위(하천재해 2/9위)",
+      "implementer": "의왕시(안전총괄과)",
+      "related_ministry": "행정안전부",
+      "coordinates": {
+        "lat": 37.311667,
+        "lon": 126.939722,
+        "source": "관리대장 경위도(도분초)"
+      },
+      "note": null,
+      "evidence": {
+        "source_asset_id": "SRC-UW-JGP-2022",
+        "doc_title": "제2차 의왕시 자연재해저감 종합계획 관리대장(2022.7)",
+        "pdf_page": 3,
+        "page_label": "관리대장 p.3"
+      }
+    },
+    {
+      "district_code": "UW-A-04",
+      "ledger_code": "A-04",
+      "code_origin": "관리대장 지구코드",
+      "district_name": "통미천지구",
+      "admin_code": "41430",
+      "admin_name": "경기도 의왕시",
+      "disaster_type": "하천재해",
+      "disaster_subtype": "침수위험지구",
+      "hazard_codes": [
+        "T10206",
+        "T10107"
+      ],
+      "location": "의왕시 왕곡동 437-8",
+      "river_name": "통미천(소하천)",
+      "station": "No.0+000~1+009",
+      "risk_factors": [
+        "계획빈도에서 제방여유고 좌안 최대 1.21m·우안 최대 1.30m 부족, 하폭 최대 2m 부족",
+        "교량 5개소 여유고·연장·경간장 등 시설능력 부족"
+      ],
+      "risk_thresholds": [
+        {
+          "target": "제방여유고(좌안)",
+          "operator": "부족(최대)",
+          "value": 1.21,
+          "unit": "m",
+          "basis": "계획빈도 하도 능력검토"
+        },
+        {
+          "target": "제방여유고(우안)",
+          "operator": "부족(최대)",
+          "value": 1.3,
+          "unit": "m",
+          "basis": "계획빈도 하도 능력검토"
+        },
+        {
+          "target": "하폭",
+          "operator": "부족(최대)",
+          "value": 2,
+          "unit": "m",
+          "basis": "계획빈도 하도 능력검토"
+        },
+        {
+          "target": "교량 시설능력(여유고·연장·경간장)",
+          "operator": "부족",
+          "value": 5,
+          "unit": "개소",
+          "basis": "시설물 능력검토"
+        }
+      ],
+      "grade": "상세 위험도지수 9.6(고위험)",
+      "mitigation": [
+        "축제 L=1,126m",
+        "교량 재가설 5개소",
+        "보 및 낙차공 재가설 3개소"
+      ],
+      "project_status": "구축필요",
+      "implementation_period": "6~7차년",
+      "implementation_method": "소하천정비사업",
+      "cost_million_krw": 3173,
+      "expected_damage_million_krw": null,
+      "damage_history": "'09년 7월 집중호우시 하천급류로 인한 피해발생",
+      "priority": "전체 8/17위(하천재해 3/9위)",
+      "implementer": "의왕시(안전총괄과)",
+      "related_ministry": "행정안전부",
+      "coordinates": {
+        "lat": 37.340278,
+        "lon": 126.983056,
+        "source": "관리대장 경위도(도분초)"
+      },
+      "note": null,
+      "evidence": {
+        "source_asset_id": "SRC-UW-JGP-2022",
+        "doc_title": "제2차 의왕시 자연재해저감 종합계획 관리대장(2022.7)",
+        "pdf_page": 4,
+        "page_label": "관리대장 p.4"
+      }
+    },
+    {
+      "district_code": "UW-A-05",
+      "ledger_code": "A-05",
+      "code_origin": "관리대장 지구코드",
+      "district_name": "왕정천지구",
+      "admin_code": "41430",
+      "admin_name": "경기도 의왕시",
+      "disaster_type": "하천재해",
+      "disaster_subtype": "침수위험지구",
+      "hazard_codes": [
+        "T10206",
+        "T10107"
+      ],
+      "location": "의왕시 왕곡동 46-1",
+      "river_name": "왕정천(소하천)",
+      "station": "No.0+003~0+518",
+      "risk_factors": [
+        "계획빈도에서 제방여유고 좌안 최대 1.50m·우안 최대 1.14m 부족, 하폭 최대 4m 부족",
+        "교량 3개소 여유고·연장·경간장 등 시설능력 부족"
+      ],
+      "risk_thresholds": [
+        {
+          "target": "제방여유고(좌안)",
+          "operator": "부족(최대)",
+          "value": 1.5,
+          "unit": "m",
+          "basis": "계획빈도 하도 능력검토"
+        },
+        {
+          "target": "제방여유고(우안)",
+          "operator": "부족(최대)",
+          "value": 1.14,
+          "unit": "m",
+          "basis": "계획빈도 하도 능력검토"
+        },
+        {
+          "target": "하폭",
+          "operator": "부족(최대)",
+          "value": 4,
+          "unit": "m",
+          "basis": "계획빈도 하도 능력검토"
+        },
+        {
+          "target": "교량 시설능력(여유고·연장·경간장)",
+          "operator": "부족",
+          "value": 3,
+          "unit": "개소",
+          "basis": "시설물 능력검토"
+        }
+      ],
+      "grade": "상세 위험도지수 9.6(고위험)",
+      "mitigation": [
+        "축제 L=698m",
+        "교량 재가설 2개소",
+        "보 및 낙차공 재가설 3개소"
+      ],
+      "project_status": "구축필요",
+      "implementation_period": "9~10차년",
+      "implementation_method": "소하천정비사업",
+      "cost_million_krw": 1878,
+      "expected_damage_million_krw": null,
+      "damage_history": "'09년 7월 집중호우시 하천급류로 인한 피해발생",
+      "priority": "전체 10/17위(하천재해 5/9위)",
+      "implementer": "의왕시(안전총괄과)",
+      "related_ministry": "행정안전부",
+      "coordinates": {
+        "lat": 37.345556,
+        "lon": 126.997778,
+        "source": "관리대장 경위도(도분초)"
+      },
+      "note": null,
+      "evidence": {
+        "source_asset_id": "SRC-UW-JGP-2022",
+        "doc_title": "제2차 의왕시 자연재해저감 종합계획 관리대장(2022.7)",
+        "pdf_page": 5,
+        "page_label": "관리대장 p.5"
+      }
+    },
+    {
+      "district_code": "UW-A-06",
+      "ledger_code": "A-06",
+      "code_origin": "관리대장 지구코드",
+      "district_name": "오매기천지구",
+      "admin_code": "41430",
+      "admin_name": "경기도 의왕시",
+      "disaster_type": "하천재해",
+      "disaster_subtype": "침수위험지구",
+      "hazard_codes": [
+        "T10206",
+        "T10107"
+      ],
+      "location": "의왕시 오전동 540-11",
+      "river_name": "오매기천(소하천)",
+      "station": "No.0+000~0+731",
+      "risk_factors": [
+        "계획빈도에서 제방여유고 좌안 최대 1.06m·우안 최대 1.50m 부족, 하폭 최대 7m 부족",
+        "교량 7개소 여유고·연장·경간장 등 시설능력 부족"
+      ],
+      "risk_thresholds": [
+        {
+          "target": "제방여유고(좌안)",
+          "operator": "부족(최대)",
+          "value": 1.06,
+          "unit": "m",
+          "basis": "계획빈도 하도 능력검토"
+        },
+        {
+          "target": "제방여유고(우안)",
+          "operator": "부족(최대)",
+          "value": 1.5,
+          "unit": "m",
+          "basis": "계획빈도 하도 능력검토"
+        },
+        {
+          "target": "하폭",
+          "operator": "부족(최대)",
+          "value": 7,
+          "unit": "m",
+          "basis": "계획빈도 하도 능력검토"
+        },
+        {
+          "target": "교량 시설능력(여유고·연장·경간장)",
+          "operator": "부족",
+          "value": 7,
+          "unit": "개소",
+          "basis": "시설물 능력검토"
+        }
+      ],
+      "grade": "상세 위험도지수 7.2(고위험)",
+      "mitigation": [
+        "축제 L=1,329m",
+        "교량 재가설 7개소",
+        "보 및 낙차공 재가설 6개소"
+      ],
+      "project_status": "구축필요",
+      "implementation_period": "7~9차년",
+      "implementation_method": "소하천정비사업",
+      "cost_million_krw": 3943,
+      "expected_damage_million_krw": null,
+      "damage_history": null,
+      "priority": "전체 9/17위(하천재해 4/9위)",
+      "implementer": "의왕시(안전총괄과)",
+      "related_ministry": "행정안전부",
+      "coordinates": {
+        "lat": 37.358333,
+        "lon": 126.988611,
+        "source": "관리대장 경위도(도분초)"
+      },
+      "note": null,
+      "evidence": {
+        "source_asset_id": "SRC-UW-JGP-2022",
+        "doc_title": "제2차 의왕시 자연재해저감 종합계획 관리대장(2022.7)",
+        "pdf_page": 6,
+        "page_label": "관리대장 p.6"
+      }
+    },
+    {
+      "district_code": "UW-A-07",
+      "ledger_code": "A-07",
+      "code_origin": "관리대장 지구코드",
+      "district_name": "능안천지구(하천재해)",
+      "admin_code": "41430",
+      "admin_name": "경기도 의왕시",
+      "disaster_type": "하천재해",
+      "disaster_subtype": "침수위험지구",
+      "hazard_codes": [
+        "T10206",
+        "T10107"
+      ],
+      "location": "의왕시 내손동 산157-7",
+      "river_name": "능안천(소하천)",
+      "station": "No.0+023~1+782",
+      "risk_factors": [
+        "계획빈도에서 제방여유고 좌안 최대 1.92m·우안 최대 1.92m 부족, 하폭 최대 5m 부족",
+        "교량 5개소 여유고·연장·경간장 등 시설능력 부족"
+      ],
+      "risk_thresholds": [
+        {
+          "target": "제방여유고(좌안)",
+          "operator": "부족(최대)",
+          "value": 1.92,
+          "unit": "m",
+          "basis": "계획빈도 하도 능력검토"
+        },
+        {
+          "target": "제방여유고(우안)",
+          "operator": "부족(최대)",
+          "value": 1.92,
+          "unit": "m",
+          "basis": "계획빈도 하도 능력검토"
+        },
+        {
+          "target": "하폭",
+          "operator": "부족(최대)",
+          "value": 5,
+          "unit": "m",
+          "basis": "계획빈도 하도 능력검토"
+        },
+        {
+          "target": "교량 시설능력(여유고·연장·경간장)",
+          "operator": "부족",
+          "value": 5,
+          "unit": "개소",
+          "basis": "시설물 능력검토"
+        }
+      ],
+      "grade": "상세 위험도지수 10.2(초고위험)",
+      "mitigation": [
+        "축제 L=816m",
+        "교량 재가설 2개소",
+        "보 및 낙차공 재가설 1개소"
+      ],
+      "project_status": "구축필요",
+      "implementation_period": "9~10차년",
+      "implementation_method": "소하천정비사업",
+      "cost_million_krw": 2268,
+      "expected_damage_million_krw": null,
+      "damage_history": "'09년 7월 집중호우시 하천급류로 인한 피해발생",
+      "priority": "전체 16/17위(하천재해 8/9위)",
+      "implementer": "의왕시(안전총괄과)",
+      "related_ministry": "행정안전부",
+      "coordinates": {
+        "lat": 37.375,
+        "lon": 126.998333,
+        "source": "관리대장 경위도(도분초)"
+      },
+      "note": "토사재해 능안천지구(UW-C-01)와 동명 별개 지구 — 지구명+재해유형 복합키로 구분",
+      "evidence": {
+        "source_asset_id": "SRC-UW-JGP-2022",
+        "doc_title": "제2차 의왕시 자연재해저감 종합계획 관리대장(2022.7)",
+        "pdf_page": 7,
+        "page_label": "관리대장 p.7"
+      }
+    },
+    {
+      "district_code": "UW-A-08",
+      "ledger_code": "A-08",
+      "code_origin": "관리대장 지구코드",
+      "district_name": "한직천지구",
+      "admin_code": "41430",
+      "admin_name": "경기도 의왕시",
+      "disaster_type": "하천재해",
+      "disaster_subtype": "침수위험지구",
+      "hazard_codes": [
+        "T10206",
+        "T10107"
+      ],
+      "location": "의왕시 학의동 1025-6",
+      "river_name": "한직천(소하천)",
+      "station": "No.0+000~0+386",
+      "risk_factors": [
+        "계획빈도에서 제방여유고 좌안 최대 1.08m·우안 최대 1.09m 부족, 하폭 최대 6m 부족",
+        "교량 4개소 여유고·연장·경간장 등 시설능력 부족"
+      ],
+      "risk_thresholds": [
+        {
+          "target": "제방여유고(좌안)",
+          "operator": "부족(최대)",
+          "value": 1.08,
+          "unit": "m",
+          "basis": "계획빈도 하도 능력검토"
+        },
+        {
+          "target": "제방여유고(우안)",
+          "operator": "부족(최대)",
+          "value": 1.09,
+          "unit": "m",
+          "basis": "계획빈도 하도 능력검토"
+        },
+        {
+          "target": "하폭",
+          "operator": "부족(최대)",
+          "value": 6,
+          "unit": "m",
+          "basis": "계획빈도 하도 능력검토"
+        },
+        {
+          "target": "교량 시설능력(여유고·연장·경간장)",
+          "operator": "부족",
+          "value": 4,
+          "unit": "개소",
+          "basis": "시설물 능력검토"
+        }
+      ],
+      "grade": "상세 위험도지수 9.6(초고위험)",
+      "mitigation": [
+        "축제 L=413m",
+        "교량 재가설 2개소",
+        "보 및 낙차공 재가설 1개소"
+      ],
+      "project_status": "구축필요",
+      "implementation_period": "6~7차년",
+      "implementation_method": "소하천정비사업",
+      "cost_million_krw": 1884,
+      "expected_damage_million_krw": null,
+      "damage_history": "'09년 7월 집중호우시 하천급류로 인한 피해발생",
+      "priority": "전체 12/17위(하천재해 6/9위)",
+      "implementer": "의왕시(안전총괄과)",
+      "related_ministry": "행정안전부",
+      "coordinates": {
+        "lat": 37.385556,
+        "lon": 126.996944,
+        "source": "관리대장 경위도(도분초)"
+      },
+      "note": null,
+      "evidence": {
+        "source_asset_id": "SRC-UW-JGP-2022",
+        "doc_title": "제2차 의왕시 자연재해저감 종합계획 관리대장(2022.7)",
+        "pdf_page": 8,
+        "page_label": "관리대장 p.8"
+      }
+    },
+    {
+      "district_code": "UW-A-09",
+      "ledger_code": "A-09",
+      "code_origin": "관리대장 지구코드",
+      "district_name": "덕장천지구",
+      "admin_code": "41430",
+      "admin_name": "경기도 의왕시",
+      "disaster_type": "하천재해",
+      "disaster_subtype": "침수위험지구",
+      "hazard_codes": [
+        "T10206",
+        "T10107"
+      ],
+      "location": "의왕시 포일동 222",
+      "river_name": "한직천(소하천)",
+      "station": "No.0+000~0+386",
+      "risk_factors": [
+        "계획빈도에서 제방여유고 좌안 최대 1.92m·우안 최대 1.92m 부족, 하폭 최대 3m 부족",
+        "교량 5개소 여유고·연장·경간장 등 시설능력 부족"
+      ],
+      "risk_thresholds": [
+        {
+          "target": "제방여유고(좌안)",
+          "operator": "부족(최대)",
+          "value": 1.92,
+          "unit": "m",
+          "basis": "계획빈도 하도 능력검토"
+        },
+        {
+          "target": "제방여유고(우안)",
+          "operator": "부족(최대)",
+          "value": 1.92,
+          "unit": "m",
+          "basis": "계획빈도 하도 능력검토"
+        },
+        {
+          "target": "하폭",
+          "operator": "부족(최대)",
+          "value": 3,
+          "unit": "m",
+          "basis": "계획빈도 하도 능력검토"
+        },
+        {
+          "target": "교량 시설능력(여유고·연장·경간장)",
+          "operator": "부족",
+          "value": 5,
+          "unit": "개소",
+          "basis": "시설물 능력검토"
+        }
+      ],
+      "grade": "상세 위험도지수 7.8(고위험)",
+      "mitigation": [
+        "축제 L=1,545m",
+        "고호 L=660m",
+        "교량 재가설 5개소"
+      ],
+      "project_status": "구축필요",
+      "implementation_period": "3~5차년",
+      "implementation_method": "소하천정비사업",
+      "cost_million_krw": 4127,
+      "expected_damage_million_krw": null,
+      "damage_history": "'09년 7월 집중호우시 하천급류로 인한 피해발생",
+      "priority": "전체 17/17위(하천재해 9/9위)",
+      "implementer": "의왕시(안전총괄과)",
+      "related_ministry": "행정안전부",
+      "coordinates": {
+        "lat": 37.394444,
+        "lon": 126.991667,
+        "source": "관리대장 경위도(도분초)"
+      },
+      "note": "관리대장 원문의 하천명·측점란에 '한직천(소하천) 0+000~0+386'으로 기재(덕장천지구 카드) — 원문 기재값 그대로 수록",
+      "evidence": {
+        "source_asset_id": "SRC-UW-JGP-2022",
+        "doc_title": "제2차 의왕시 자연재해저감 종합계획 관리대장(2022.7)",
+        "pdf_page": 9,
+        "page_label": "관리대장 p.9"
+      }
+    },
+    {
+      "district_code": "UW-B-01",
+      "ledger_code": "B-01",
+      "code_origin": "관리대장 지구코드",
+      "district_name": "고천A지구",
+      "admin_code": "41430",
+      "admin_name": "경기도 의왕시",
+      "disaster_type": "내수재해",
+      "disaster_subtype": "침수위험지구",
+      "hazard_codes": [
+        "T10107",
+        "T10106"
+      ],
+      "location": "의왕시 고천동 일원(고천동 332-37)",
+      "river_name": null,
+      "station": null,
+      "risk_factors": [
+        "우수관로 통수단면 부족에 따른 내수배제 불량으로 롯데첨단소재 의왕사업장 주변 공업지역 일대 침수피해 가능성"
+      ],
+      "risk_thresholds": [
+        {
+          "target": "우수관로 통수단면",
+          "operator": "부족",
+          "value": null,
+          "unit": null,
+          "basis": "지형조건·우수배제시스템 정량 검토(수치 미기재)"
+        }
+      ],
+      "grade": "상세 위험도지수 8.0(고위험)",
+      "mitigation": [
+        "우수관로 정비 L=1,670.1m"
+      ],
+      "project_status": "구축필요",
+      "implementation_period": "8~10차년",
+      "implementation_method": "도시침수 예방사업",
+      "cost_million_krw": 3849,
+      "expected_damage_million_krw": null,
+      "damage_history": null,
+      "priority": "전체 7/17위(내수재해 3/3위)",
+      "implementer": "의왕시(상하수과)",
+      "related_ministry": "환경부",
+      "coordinates": {
+        "lat": 37.351944,
+        "lon": 126.966111,
+        "source": "관리대장 경위도(도분초)"
+      },
+      "note": null,
+      "evidence": {
+        "source_asset_id": "SRC-UW-JGP-2022",
+        "doc_title": "제2차 의왕시 자연재해저감 종합계획 관리대장(2022.7)",
+        "pdf_page": 10,
+        "page_label": "관리대장 p.10"
+      }
+    },
+    {
+      "district_code": "UW-B-02",
+      "ledger_code": "B-02",
+      "code_origin": "관리대장 지구코드",
+      "district_name": "내손A지구",
+      "admin_code": "41430",
+      "admin_name": "경기도 의왕시",
+      "disaster_type": "내수재해",
+      "disaster_subtype": "침수위험지구",
+      "hazard_codes": [
+        "T10107",
+        "T10106"
+      ],
+      "location": "의왕시 내손동 일원(내손동 754)",
+      "river_name": null,
+      "station": null,
+      "risk_factors": [
+        "우수관로 통수단면 부족에 따른 내수배제 불량으로 계원대사거리~안양농수산물시장 일대 침수피해 가능성"
+      ],
+      "risk_thresholds": [
+        {
+          "target": "우수관로 통수단면",
+          "operator": "부족",
+          "value": null,
+          "unit": null,
+          "basis": "지형조건·우수배제시스템 정량 검토(수치 미기재)"
+        }
+      ],
+      "grade": "상세 위험도지수 12.0(초고위험)",
+      "mitigation": [
+        "우수관로 정비 L=1,476.4m"
+      ],
+      "project_status": "구축필요",
+      "implementation_period": "3~5차년",
+      "implementation_method": "도시침수 예방사업",
+      "cost_million_krw": 4070,
+      "expected_damage_million_krw": null,
+      "damage_history": "'09년 7월 집중호우시 내손동 일대 주택 침수피해 발생",
+      "damage_events": [
+        {
+          "occurred": "2009-07",
+          "event_name": "집중호우",
+          "hazard_codes": [
+            "T10107",
+            "T10106"
+          ],
+          "description": "2009년 7월 집중호우 시 내손동 일대 주택 침수피해 발생(관리대장 피해이력)",
+          "evidence": {
+            "doc_title": "제2차 의왕시 자연재해저감 종합계획 관리대장(2022.7)",
+            "chapter": "내손A지구(B-02)",
+            "page": 11
+          }
+        }
+      ],
+      "priority": "전체 6/17위(내수재해 2/3위)",
+      "implementer": "의왕시(상하수과)",
+      "related_ministry": "환경부",
+      "coordinates": {
+        "lat": 37.373611,
+        "lon": 126.968889,
+        "source": "관리대장 경위도(도분초)"
+      },
+      "note": null,
+      "evidence": {
+        "source_asset_id": "SRC-UW-JGP-2022",
+        "doc_title": "제2차 의왕시 자연재해저감 종합계획 관리대장(2022.7)",
+        "pdf_page": 11,
+        "page_label": "관리대장 p.11"
+      }
+    },
+    {
+      "district_code": "UW-B-03",
+      "ledger_code": "B-03",
+      "code_origin": "관리대장 지구코드",
+      "district_name": "오전B지구",
+      "admin_code": "41430",
+      "admin_name": "경기도 의왕시",
+      "disaster_type": "내수재해",
+      "disaster_subtype": "침수위험지구",
+      "hazard_codes": [
+        "T10107",
+        "T10106"
+      ],
+      "location": "의왕시 왕곡동·고천동 일원(왕곡동 613)",
+      "river_name": null,
+      "station": null,
+      "risk_factors": [
+        "우수관로 통수단면 부족에 따른 내수배제 불량으로 왕곡천복개구간 일대 침수피해 가능성"
+      ],
+      "risk_thresholds": [
+        {
+          "target": "우수관로 통수단면",
+          "operator": "부족",
+          "value": null,
+          "unit": null,
+          "basis": "지형조건·우수배제시스템 정량 검토(수치 미기재)"
+        }
+      ],
+      "grade": "상세 위험도지수 12.0(초고위험)",
+      "mitigation": [
+        "우수관로 정비 L=1,725.2m"
+      ],
+      "project_status": "구축필요",
+      "implementation_period": "6~8차년",
+      "implementation_method": "도시침수 예방사업",
+      "cost_million_krw": 3836,
+      "expected_damage_million_krw": null,
+      "damage_history": "'16년 7월·'17년 7월 집중호우시 고천동 300-4 일대 주택 침수피해 발생",
+      "damage_events": [
+        {
+          "occurred": "2016-07",
+          "event_name": "집중호우",
+          "hazard_codes": [
+            "T10107",
+            "T10106"
+          ],
+          "description": "2016년 7월 집중호우 시 고천동 300-4 일대 주택 침수피해 발생(관리대장 피해이력)",
+          "evidence": {
+            "doc_title": "제2차 의왕시 자연재해저감 종합계획 관리대장(2022.7)",
+            "chapter": "오전B지구(B-03)",
+            "page": 12
+          }
+        },
+        {
+          "occurred": "2017-07",
+          "event_name": "집중호우",
+          "hazard_codes": [
+            "T10107",
+            "T10106"
+          ],
+          "description": "2017년 7월 집중호우 시 고천동 300-4 일대 주택 침수피해 발생(관리대장 피해이력)",
+          "evidence": {
+            "doc_title": "제2차 의왕시 자연재해저감 종합계획 관리대장(2022.7)",
+            "chapter": "오전B지구(B-03)",
+            "page": 12
+          }
+        }
+      ],
+      "priority": "전체 5/17위(내수재해 1/3위)",
+      "implementer": "의왕시(상하수과)",
+      "related_ministry": "환경부",
+      "coordinates": {
+        "lat": 37.353056,
+        "lon": 126.921944,
+        "source": "관리대장 경위도(도분초)"
+      },
+      "note": null,
+      "evidence": {
+        "source_asset_id": "SRC-UW-JGP-2022",
+        "doc_title": "제2차 의왕시 자연재해저감 종합계획 관리대장(2022.7)",
+        "pdf_page": 12,
+        "page_label": "관리대장 p.12"
+      }
+    },
+    {
+      "district_code": "UW-C-01",
+      "ledger_code": "C-01",
+      "code_origin": "관리대장 지구코드",
+      "district_name": "능안천지구(토사재해)",
+      "admin_code": "41430",
+      "admin_name": "경기도 의왕시",
+      "disaster_type": "토사재해",
+      "disaster_subtype": "유실위험지구",
+      "hazard_codes": [
+        "T10401"
+      ],
+      "location": "의왕시 내손동 175",
+      "river_name": null,
+      "station": null,
+      "risk_factors": [
+        "RUSLE 토사유출량 검토 결과 토사발생 위험도 '매우심함'",
+        "소하천내 토사 퇴적, 하류부 영향범위내 위락시설·주거지 산재"
+      ],
+      "risk_thresholds": [
+        {
+          "target": "토사유출량(RUSLE)",
+          "operator": "=",
+          "value": 7310.6,
+          "unit": "ton/storm",
+          "basis": "30년빈도 단일호우"
+        },
+        {
+          "target": "비토사유출량(RUSLE)",
+          "operator": "=",
+          "value": 342.4,
+          "unit": "ton/ha/storm",
+          "basis": "30년빈도 단일호우 — 위험도 '매우심함'"
+        }
+      ],
+      "grade": "상세 위험도지수 7.2(고위험)",
+      "mitigation": [
+        "사방댐 1개소(V=5,900m³)",
+        "계류보전 L=200m"
+      ],
+      "project_status": "구축필요",
+      "implementation_period": "9차년",
+      "implementation_method": "사방사업",
+      "cost_million_krw": 652,
+      "expected_damage_million_krw": null,
+      "damage_history": null,
+      "priority": "전체 15/17위(토사재해 3/3위)",
+      "implementer": "의왕시(공원녹지과)",
+      "related_ministry": "산림청",
+      "coordinates": {
+        "lat": 37.371667,
+        "lon": 126.985833,
+        "source": "관리대장 경위도(도분초)"
+      },
+      "note": "하천재해 능안천지구(UW-A-07)와 동명 별개 지구 — 지구명+재해유형 복합키로 구분",
+      "evidence": {
+        "source_asset_id": "SRC-UW-JGP-2022",
+        "doc_title": "제2차 의왕시 자연재해저감 종합계획 관리대장(2022.7)",
+        "pdf_page": 13,
+        "page_label": "관리대장 p.13"
+      }
+    },
+    {
+      "district_code": "UW-C-02",
+      "ledger_code": "C-02",
+      "code_origin": "관리대장 지구코드",
+      "district_name": "학의1지구",
+      "admin_code": "41430",
+      "admin_name": "경기도 의왕시",
+      "disaster_type": "토사재해",
+      "disaster_subtype": "유실위험지구",
+      "hazard_codes": [
+        "T10401"
+      ],
+      "location": "의왕시 학의동 산4",
+      "river_name": null,
+      "station": null,
+      "risk_factors": [
+        "RUSLE 토사유출량 검토 결과 토사발생 위험도 '매우심함'",
+        "일부 사면 토사유출 가능성, 일부 구간 세굴 진행으로 추가 토사유실 예상"
+      ],
+      "risk_thresholds": [
+        {
+          "target": "토사유출량(RUSLE)",
+          "operator": "=",
+          "value": 1388.4,
+          "unit": "ton/storm",
+          "basis": "30년빈도 단일호우"
+        },
+        {
+          "target": "비토사유출량(RUSLE)",
+          "operator": "=",
+          "value": 210.4,
+          "unit": "ton/ha/storm",
+          "basis": "30년빈도 단일호우 — 위험도 '매우심함'"
+        }
+      ],
+      "grade": "상세 위험도지수 6.4(고위험)",
+      "mitigation": [
+        "계류보전 L=450m"
+      ],
+      "project_status": "구축필요",
+      "implementation_period": "6차년",
+      "implementation_method": "사방사업",
+      "cost_million_krw": 260,
+      "expected_damage_million_krw": null,
+      "damage_history": null,
+      "priority": "전체 11/17위(토사재해 1/3위)",
+      "implementer": "의왕시(공원녹지과)",
+      "related_ministry": "산림청",
+      "coordinates": {
+        "lat": 37.390833,
+        "lon": 127.016389,
+        "source": "관리대장 경위도(도분초)"
+      },
+      "note": null,
+      "evidence": {
+        "source_asset_id": "SRC-UW-JGP-2022",
+        "doc_title": "제2차 의왕시 자연재해저감 종합계획 관리대장(2022.7)",
+        "pdf_page": 14,
+        "page_label": "관리대장 p.14"
+      }
+    },
+    {
+      "district_code": "UW-C-03",
+      "ledger_code": "C-03",
+      "code_origin": "관리대장 지구코드",
+      "district_name": "오링개천지구",
+      "admin_code": "41430",
+      "admin_name": "경기도 의왕시",
+      "disaster_type": "토사재해",
+      "disaster_subtype": "유실위험지구",
+      "hazard_codes": [
+        "T10401"
+      ],
+      "location": "의왕시 학의동 산112-1",
+      "river_name": null,
+      "station": null,
+      "risk_factors": [
+        "RUSLE 토사유출량 검토 결과 토사발생 위험도 '심함'",
+        "일부 사면 토사유출 가능성, 하류부 도시개발로 예상피해규모 증가 예상"
+      ],
+      "risk_thresholds": [
+        {
+          "target": "토사유출량(RUSLE)",
+          "operator": "=",
+          "value": 2128.3,
+          "unit": "ton/storm",
+          "basis": "30년빈도 단일호우"
+        },
+        {
+          "target": "비토사유출량(RUSLE)",
+          "operator": "=",
+          "value": 68.3,
+          "unit": "ton/ha/storm",
+          "basis": "30년빈도 단일호우 — 위험도 '심함'"
+        }
+      ],
+      "grade": "상세 위험도지수 7.2(고위험)",
+      "mitigation": [
+        "사방댐 1개소(V=1,800m³)"
+      ],
+      "project_status": "구축필요",
+      "implementation_period": "10차년",
+      "implementation_method": "사방사업",
+      "cost_million_krw": 473,
+      "expected_damage_million_krw": null,
+      "damage_history": null,
+      "priority": "전체 13/17위(토사재해 2/3위)",
+      "implementer": "의왕시(공원녹지과)",
+      "related_ministry": "산림청",
+      "coordinates": {
+        "lat": 37.363611,
+        "lon": 127.009722,
+        "source": "관리대장 경위도(도분초)"
+      },
+      "note": null,
+      "evidence": {
+        "source_asset_id": "SRC-UW-JGP-2022",
+        "doc_title": "제2차 의왕시 자연재해저감 종합계획 관리대장(2022.7)",
+        "pdf_page": 15,
+        "page_label": "관리대장 p.15"
+      }
+    },
+    {
+      "district_code": "UW-D-01",
+      "ledger_code": "D-01",
+      "code_origin": "관리대장 지구코드",
+      "district_name": "청계지구",
+      "admin_code": "41430",
+      "admin_name": "경기도 의왕시",
+      "disaster_type": "대설재해",
+      "disaster_subtype": "고립위험지구",
+      "hazard_codes": [],
+      "location": "의왕시 청계동 산8-61",
+      "river_name": null,
+      "station": null,
+      "risk_factors": [
+        "설해 위험도 평가 결과 3등급",
+        "폭설·한파 등으로 잦은 도로 기능 마비(학현오고개 2차로 구간)"
+      ],
+      "risk_thresholds": [
+        {
+          "target": "설해 위험도 등급",
+          "operator": "=",
+          "value": 3,
+          "unit": "등급",
+          "basis": "설해 위험도 평가"
+        },
+        {
+          "target": "연평균 강설일수",
+          "operator": "=",
+          "value": 3.2,
+          "unit": "일",
+          "basis": "설해 위험요인 검토"
+        }
+      ],
+      "grade": "상세 위험도지수 5.6(고위험)",
+      "mitigation": [
+        "자동염수분사시설 설치 L=2,200m"
+      ],
+      "project_status": "구축필요",
+      "implementation_period": "4차년",
+      "implementation_method": "자동염수분사장치 설치사업",
+      "cost_million_krw": 997,
+      "expected_damage_million_krw": null,
+      "damage_history": null,
+      "priority": "전체 4/17위(대설재해 2/2위)",
+      "implementer": "의왕시(도로건설과)",
+      "related_ministry": "행정안전부",
+      "coordinates": {
+        "lat": 37.394444,
+        "lon": 127.029722,
+        "source": "관리대장 경위도(도분초)"
+      },
+      "note": "대설재해는 사업 대상 재난 5종(호우·홍수·수해/침수·태풍·산사태) 외 유형 — hazard_codes 미부여",
+      "evidence": {
+        "source_asset_id": "SRC-UW-JGP-2022",
+        "doc_title": "제2차 의왕시 자연재해저감 종합계획 관리대장(2022.7)",
+        "pdf_page": 16,
+        "page_label": "관리대장 p.16"
+      }
+    },
+    {
+      "district_code": "UW-D-02",
+      "ledger_code": "D-02",
+      "code_origin": "관리대장 지구코드",
+      "district_name": "학현지구",
+      "admin_code": "41430",
+      "admin_name": "경기도 의왕시",
+      "disaster_type": "대설재해",
+      "disaster_subtype": "고립위험지구",
+      "hazard_codes": [],
+      "location": "의왕시 학의동 산21-1",
+      "river_name": null,
+      "station": null,
+      "risk_factors": [
+        "설해 위험도 평가 결과 3등급",
+        "폭설·한파 등으로 잦은 도로 기능 마비(학현터널 진출입부 2차로 구간)"
+      ],
+      "risk_thresholds": [
+        {
+          "target": "설해 위험도 등급",
+          "operator": "=",
+          "value": 3,
+          "unit": "등급",
+          "basis": "설해 위험도 평가"
+        },
+        {
+          "target": "연평균 강설일수",
+          "operator": "=",
+          "value": 3.2,
+          "unit": "일",
+          "basis": "설해 위험요인 검토"
+        }
+      ],
+      "grade": "상세 위험도지수 5.6(고위험)",
+      "mitigation": [
+        "자동염수분사시설 설치 L=700m"
+      ],
+      "project_status": "구축필요",
+      "implementation_period": "1~2차년",
+      "implementation_method": "자동염수분사장치 설치사업",
+      "cost_million_krw": 323,
+      "expected_damage_million_krw": null,
+      "damage_history": null,
+      "priority": "전체 3/17위(대설재해 1/2위)",
+      "implementer": "의왕시(도로건설과)",
+      "related_ministry": "행정안전부",
+      "coordinates": {
+        "lat": 37.389444,
+        "lon": 127.016111,
+        "source": "관리대장 경위도(도분초)"
+      },
+      "note": "대설재해는 사업 대상 재난 5종 외 유형 — hazard_codes 미부여",
+      "evidence": {
+        "source_asset_id": "SRC-UW-JGP-2022",
+        "doc_title": "제2차 의왕시 자연재해저감 종합계획 관리대장(2022.7)",
+        "pdf_page": 17,
+        "page_label": "관리대장 p.17"
+      }
+    },
+    {
+      "district_code": "GM-A-03",
+      "ledger_code": "A.3",
+      "code_origin": "관리대장 지구코드",
+      "district_name": "성수천지구",
+      "admin_code": "47190",
+      "admin_name": "경상북도 구미시",
+      "disaster_type": "하천재해",
+      "disaster_subtype": "침수위험지구",
+      "hazard_codes": [
+        "T10206",
+        "T10107"
+      ],
+      "location": "구미시 산동읍 성수리 430-4",
+      "river_name": "성수천",
+      "station": "No.27+52~65+85",
+      "risk_factors": [
+        "하폭·제방고 부족, 시설물 노후에 따른 주거지·농경지 침수피해 우려",
+        "소하천정비종합계획(변경)(2017)의 정비계획 미시행으로 인명피해 발생 우려"
+      ],
+      "risk_thresholds": [
+        {
+          "target": "하폭",
+          "operator": "부족",
+          "value": null,
+          "unit": null,
+          "basis": "구미시 소하천정비종합계획(변경)(2017) 검토(수치 미기재)"
+        },
+        {
+          "target": "제방고",
+          "operator": "부족",
+          "value": null,
+          "unit": null,
+          "basis": "구미시 소하천정비종합계획(변경)(2017) 검토(수치 미기재)"
+        }
+      ],
+      "grade": null,
+      "mitigation": [
+        "축제 L=1,333m",
+        "보축 L=2,977m",
+        "교량 재설치 3개소",
+        "보 및 낙차공 재설치 4개소"
+      ],
+      "project_status": "구축필요",
+      "implementation_period": "1~4차년",
+      "implementation_method": "자연재해위험개선지구 정비사업",
+      "cost_million_krw": 12266,
+      "expected_damage_million_krw": 93909,
+      "damage_history": null,
+      "priority": "전체 4/65위",
+      "implementer": "구미시(하천과)",
+      "related_ministry": "행정안전부",
+      "coordinates": {
+        "lat": 36.162222,
+        "lon": 128.411111,
+        "source": "관리대장 경위도(도분초)"
+      },
+      "note": null,
+      "evidence": {
+        "source_asset_id": "SRC-GM-JGP-2021",
+        "doc_title": "제2차 구미시 자연재해저감종합계획 관리대장(2021.9)",
+        "pdf_page": 3,
+        "page_label": "관리대장 A-3"
+      }
+    },
+    {
+      "district_code": "GM-A-04",
+      "ledger_code": "A.4",
+      "code_origin": "관리대장 지구코드",
+      "district_name": "구미천지구",
+      "admin_code": "47190",
+      "admin_name": "경상북도 구미시",
+      "disaster_type": "하천재해",
+      "disaster_subtype": "침수위험지구",
+      "hazard_codes": [
+        "T10206",
+        "T10107"
+      ],
+      "location": "구미시 원평동(원평2동) 964-640",
+      "river_name": "구미천",
+      "station": "No.29+00~34+83",
+      "risk_factors": [
+        "제방고에 근접하는 고수위 빈발, 제방고 부족에 따른 주거지 침수 우려",
+        "정비계획 수립 후 미시행된 인명피해 위험지역"
+      ],
+      "risk_thresholds": [
+        {
+          "target": "제방고",
+          "operator": "부족",
+          "value": null,
+          "unit": null,
+          "basis": "구미천 하천기본계획(변경)(2014) 검토(수치 미기재)"
+        }
+      ],
+      "grade": null,
+      "mitigation": [
+        "축제 L=757m",
+        "보축 L=1,042m",
+        "교량 재설치 1개소",
+        "낙차공 재설치 4개소"
+      ],
+      "project_status": "구축필요",
+      "implementation_period": "1~5차년",
+      "implementation_method": "풍수해생활권 종합정비사업",
+      "cost_million_krw": 30992,
+      "expected_damage_million_krw": 74491,
+      "damage_history": null,
+      "damage_events": [
+        {
+          "occurred": "2012-09",
+          "event_name": "태풍 산바",
+          "hazard_codes": [
+            "T10105",
+            "T10206",
+            "T10107"
+          ],
+          "description": "2012년 9월 15~17일 태풍 산바 — 구미시 이재민 147명·재산피해액 약 82억원(최근 10년 최대 규모), 선주교 관측소 수위·환산홍수량 급상승 기록",
+          "evidence": {
+            "doc_title": "제2차 구미시 자연재해저감종합계획(2021.9)",
+            "chapter": "제2장 2.7.2 계획 수립 중점방향",
+            "page": 705,
+            "passage_id": "PSG-GM-JGP-2-0705-01"
+          }
+        }
+      ],
+      "priority": "전체 3/65위",
+      "implementer": "구미시(안전재난과)",
+      "related_ministry": "행정안전부",
+      "coordinates": {
+        "lat": 36.133611,
+        "lon": 128.335278,
+        "source": "관리대장 경위도(도분초)"
+      },
+      "note": null,
+      "evidence": {
+        "source_asset_id": "SRC-GM-JGP-2021",
+        "doc_title": "제2차 구미시 자연재해저감종합계획 관리대장(2021.9)",
+        "pdf_page": 4,
+        "page_label": "관리대장 A-4"
+      }
+    },
+    {
+      "district_code": "GM-A-07",
+      "ledger_code": "A.7",
+      "code_origin": "관리대장 지구코드",
+      "district_name": "한천지구",
+      "admin_code": "47190",
+      "admin_name": "경상북도 구미시",
+      "disaster_type": "하천재해",
+      "disaster_subtype": "침수위험지구",
+      "hazard_codes": [
+        "T10206",
+        "T10107"
+      ],
+      "location": "구미시 양호동 607-4",
+      "river_name": "한천",
+      "station": "No.2+00~125+024",
+      "risk_factors": [
+        "지방하천 정비 미실시로 하천 범람에 의한 주거지·농경지 침수피해 우려",
+        "지방하천종합정비계획(2016)의 제방고 부족 정비계획 미시행으로 인명피해 발생 우려"
+      ],
+      "risk_thresholds": [
+        {
+          "target": "제방고",
+          "operator": "부족",
+          "value": null,
+          "unit": null,
+          "basis": "지방하천종합정비계획(2016) 검토(수치 미기재)"
+        }
+      ],
+      "grade": null,
+      "mitigation": [
+        "축제 L=738m",
+        "보축 L=5,397m",
+        "교량 재설치 8개소",
+        "보 및 낙차공 재설치 11개소"
+      ],
+      "project_status": "구축필요",
+      "implementation_period": "1~5차년",
+      "implementation_method": "자연재해위험개선지구 정비사업",
+      "cost_million_krw": 56050,
+      "expected_damage_million_krw": 165509,
+      "damage_history": null,
+      "priority": "전체 2/65위",
+      "implementer": "구미시(하천과)",
+      "related_ministry": "행정안전부",
+      "coordinates": {
+        "lat": 36.130556,
+        "lon": 128.396667,
+        "source": "관리대장 경위도(도분초)"
+      },
+      "note": null,
+      "evidence": {
+        "source_asset_id": "SRC-GM-JGP-2021",
+        "doc_title": "제2차 구미시 자연재해저감종합계획 관리대장(2021.9)",
+        "pdf_page": 7,
+        "page_label": "관리대장 A-7"
+      }
+    },
+    {
+      "district_code": "GM-B-10",
+      "ledger_code": "B.10",
+      "code_origin": "관리대장 지구코드",
+      "district_name": "비산배수펌프장지구",
+      "admin_code": "47190",
+      "admin_name": "경상북도 구미시",
+      "disaster_type": "내수재해",
+      "disaster_subtype": "침수위험지구",
+      "hazard_codes": [
+        "T10107",
+        "T10106"
+      ],
+      "location": "구미시 비산동(공단동) 131-2",
+      "river_name": null,
+      "station": null,
+      "risk_factors": [
+        "우수저류시설 미설치·우수관거 통수단면적 부족으로 집중호우시 산업단지지역 침수피해 발생가능성 높음",
+        "우수관거 확장 또는 우수저류시설 설치 필요하나 지리적 여건상 정비 불가지역"
+      ],
+      "risk_thresholds": [
+        {
+          "target": "배수펌프장 용량",
+          "operator": "부족",
+          "value": 750,
+          "unit": "m³/min",
+          "basis": "현재 용량 — 증설 목표 1,250m³/min"
+        },
+        {
+          "target": "유수지 용량",
+          "operator": "부족",
+          "value": 6800,
+          "unit": "m³",
+          "basis": "현재 용량 — 증설 목표 15,050m³"
+        },
+        {
+          "target": "우수관거 통수단면적",
+          "operator": "부족",
+          "value": null,
+          "unit": null,
+          "basis": "구미시 하수도정비기본계획 변경(2014) 검토(수치 미기재)"
+        }
+      ],
+      "grade": null,
+      "mitigation": [
+        "비산배수펌프장 증설(Q=750→1,250m³/min)",
+        "유수지 증설(V=6,800→15,050m³)",
+        "우수관거 신설(Box 2.5×2.0, L=401.8m)"
+      ],
+      "project_status": "구축필요",
+      "implementation_period": "1~4차년",
+      "implementation_method": "자연재해위험개선지구 정비사업",
+      "cost_million_krw": 15770,
+      "expected_damage_million_krw": 34285,
+      "damage_history": null,
+      "priority": "전체 5/65위",
+      "implementer": "구미시(안전재난과)",
+      "related_ministry": "행정안전부",
+      "coordinates": {
+        "lat": 36.118611,
+        "lon": 128.389444,
+        "source": "관리대장 경위도(도분초)"
+      },
+      "note": null,
+      "evidence": {
+        "source_asset_id": "SRC-GM-JGP-2021",
+        "doc_title": "제2차 구미시 자연재해저감종합계획 관리대장(2021.9)",
+        "pdf_page": 32,
+        "page_label": "관리대장 B-10"
+      }
+    },
+    {
+      "district_code": "GM-B-13",
+      "ledger_code": "B.13",
+      "code_origin": "관리대장 지구코드",
+      "district_name": "구포3지구",
+      "admin_code": "47190",
+      "admin_name": "경상북도 구미시",
+      "disaster_type": "내수재해",
+      "disaster_subtype": "침수위험지구",
+      "hazard_codes": [
+        "T10107",
+        "T10106"
+      ],
+      "location": "구미시 구포동 644-5",
+      "river_name": null,
+      "station": null,
+      "risk_factors": [
+        "구미국가산업단지 2단지 지역 우수관거 통수단면적 부족으로 재해발생시 인명·재산피해 가능성 높음",
+        "침수피해 이력·위험요인 분석 결과 우수관거 통수능 증대 필요 지역"
+      ],
+      "risk_thresholds": [
+        {
+          "target": "우수관거 통수단면적",
+          "operator": "부족",
+          "value": null,
+          "unit": null,
+          "basis": "구미시 하수도정비기본계획 변경(2014) 검토(수치 미기재)"
+        }
+      ],
+      "grade": null,
+      "mitigation": [
+        "배수펌프장 신설(Q=1,500m³/min, V=18,000m³)",
+        "우수관거 증설(BOX3.0×3.0 L=589.0m, BOX2.0×2.0 L=523.4m, D1500 L=248.9m)"
+      ],
+      "project_status": "구축필요",
+      "implementation_period": "6~10차년",
+      "implementation_method": "자연재해위험개선지구 정비사업",
+      "cost_million_krw": 35214,
+      "expected_damage_million_krw": 86547,
+      "damage_history": null,
+      "priority": "전체 45/65위",
+      "implementer": "구미시(안전재난과)",
+      "related_ministry": "행정안전부",
+      "coordinates": {
+        "lat": 36.127778,
+        "lon": 128.409444,
+        "source": "관리대장 경위도(도분초)"
+      },
+      "note": null,
+      "evidence": {
+        "source_asset_id": "SRC-GM-JGP-2021",
+        "doc_title": "제2차 구미시 자연재해저감종합계획 관리대장(2021.9)",
+        "pdf_page": 35,
+        "page_label": "관리대장 B-13"
+      }
+    },
+    {
+      "district_code": "GM-C-01",
+      "ledger_code": "C.1",
+      "code_origin": "관리대장 지구코드",
+      "district_name": "황산지구",
+      "admin_code": "47190",
+      "admin_name": "경상북도 구미시",
+      "disaster_type": "사면재해",
+      "disaster_subtype": "붕괴위험지구",
+      "hazard_codes": [
+        "T10401"
+      ],
+      "location": "구미시 고아읍 황산리 산69",
+      "river_name": null,
+      "station": null,
+      "risk_factors": [
+        "사면내 식생이 없어 풍화 진행 중 — 낙석방지울타리 설치 완료에도 추가 안전보강시설 필요",
+        "지속적인 침식으로 2차피해(인접도로) 발생 우려"
+      ],
+      "risk_thresholds": [
+        {
+          "target": "사면 안정성(풍화·침식)",
+          "operator": "위험",
+          "value": null,
+          "unit": null,
+          "basis": "급경사지 재해위험도 평가기준(2018) 검토(수치 미기재)"
+        }
+      ],
+      "grade": null,
+      "mitigation": [
+        "산마루측구 L=120m",
+        "낙석방지망 A=2,500m²(L=250m×H평균 10m)"
+      ],
+      "project_status": "구축필요",
+      "implementation_period": "6차년",
+      "implementation_method": "급경사지 붕괴위험지역 정비사업",
+      "cost_million_krw": 710,
+      "expected_damage_million_krw": 6686,
+      "damage_history": null,
+      "priority": "전체 37/65위",
+      "implementer": "구미시(안전재난과)",
+      "related_ministry": "행정안전부",
+      "coordinates": {
+        "lat": 36.21,
+        "lon": 128.286111,
+        "source": "관리대장 경위도(도분초)"
+      },
+      "note": null,
+      "evidence": {
+        "source_asset_id": "SRC-GM-JGP-2021",
+        "doc_title": "제2차 구미시 자연재해저감종합계획 관리대장(2021.9)",
+        "pdf_page": 36,
+        "page_label": "관리대장 C-1"
+      }
+    },
+    {
+      "district_code": "NW-A-01",
+      "ledger_code": null,
+      "code_origin": "주요현황 서식에 지구코드 미기재 — 재해유형별 일련코드 부여(하천 A·내수 B·사면 C)",
+      "district_name": "주촌지구(하천재해)",
+      "admin_code": "45190",
+      "admin_name": "전라북도 남원시",
+      "disaster_type": "하천재해",
+      "disaster_subtype": null,
+      "hazard_codes": [
+        "T10206",
+        "T10107"
+      ],
+      "location": "남원시 주천면 송치리 1193-56 일원",
+      "river_name": null,
+      "station": null,
+      "risk_factors": [
+        "침수 위험"
+      ],
+      "risk_thresholds": [
+        {
+          "target": "침수 위험",
+          "operator": "해당",
+          "value": null,
+          "unit": null,
+          "basis": "주요현황 서식 위험요인란(임계값 수치 미기재)"
+        }
+      ],
+      "grade": null,
+      "mitigation": [
+        "축제 L=1,180m",
+        "보축 L=2,225m",
+        "교량 재가설 11개소",
+        "보 및 낙차공 7개소"
+      ],
+      "project_status": "구축필요",
+      "implementation_period": null,
+      "implementation_method": null,
+      "cost_million_krw": 19576,
+      "expected_damage_million_krw": null,
+      "damage_history": null,
+      "damage_events": [
+        {
+          "occurred": "2020-08",
+          "event_name": "집중호우",
+          "hazard_codes": [
+            "T10107",
+            "T10206"
+          ],
+          "description": "2020년 8월 7~9일 집중호우 — 남원시 평균 411.1mm(대강면 누적 534mm·금지면 500mm)의 기록적 강우, 관내 하천 수계 침수피해 및 개선복구 계획 수립",
+          "evidence": {
+            "doc_title": "제2차 남원시 자연재해저감 종합계획(2022.4)",
+            "chapter": "제2장 2.3.2 주요 자연재해 특성 분석",
+            "page": 121,
+            "passage_id": "PSG-NW-JGP-2-0121-01"
+          }
+        }
+      ],
+      "priority": "전체 5/137위",
+      "implementer": "전라북도(공항하천과)",
+      "related_ministry": null,
+      "coordinates": null,
+      "note": "사면재해 주촌지구(NW-C-01)와 동명 별개 지구 — 지구명+재해유형 복합키로 구분. 폴더명 '전라남도'는 오기, 전라북도(45190)로 태깅",
+      "evidence": {
+        "source_asset_id": "SRC-NW-JGP-2022",
+        "doc_title": "제2차 남원시 자연재해저감 종합계획 수립 주요현황(작성서식 2)(2022.4)",
+        "pdf_page": 7,
+        "page_label": "주요현황 제6쪽"
+      }
+    },
+    {
+      "district_code": "NW-A-02",
+      "ledger_code": null,
+      "code_origin": "주요현황 서식에 지구코드 미기재 — 재해유형별 일련코드 부여(하천 A·내수 B·사면 C)",
+      "district_name": "요천지구",
+      "admin_code": "45190",
+      "admin_name": "전라북도 남원시",
+      "disaster_type": "하천재해",
+      "disaster_subtype": null,
+      "hazard_codes": [
+        "T10206",
+        "T10107"
+      ],
+      "location": "남원시 이백면 남계리 1052-1 일원",
+      "river_name": null,
+      "station": null,
+      "risk_factors": [
+        "침수 위험"
+      ],
+      "risk_thresholds": [
+        {
+          "target": "침수 위험",
+          "operator": "해당",
+          "value": null,
+          "unit": null,
+          "basis": "주요현황 서식 위험요인란(임계값 수치 미기재)"
+        }
+      ],
+      "grade": null,
+      "mitigation": [
+        "보축 L=11,415m"
+      ],
+      "project_status": "구축필요",
+      "implementation_period": null,
+      "implementation_method": null,
+      "cost_million_krw": 33221,
+      "expected_damage_million_krw": null,
+      "damage_history": null,
+      "damage_events": [
+        {
+          "occurred": "2020-08",
+          "event_name": "집중호우",
+          "hazard_codes": [
+            "T10107",
+            "T10206"
+          ],
+          "description": "2020년 8월 7~9일 집중호우 — 남원시 평균 411.1mm의 기록적 강우, 요천 합류부 침수피해 저감을 위한 개선복구·유로변경 등 복구계획 서술",
+          "evidence": {
+            "doc_title": "제2차 남원시 자연재해저감 종합계획(2022.4)",
+            "chapter": "제2장 2.3.2 주요 자연재해 특성 분석",
+            "page": 120,
+            "passage_id": "PSG-NW-JGP-2-0120-01"
+          }
+        },
+        {
+          "occurred": "2010-08",
+          "event_name": "집중호우(홍수)",
+          "hazard_codes": [
+            "T10206",
+            "T10107"
+          ],
+          "description": "2010년 8월 12~18일 홍수 — 남원관측소 1시간 최대 58mm(20년빈도 상당) 기록, 요천 수계 홍수분석 대상 사상",
+          "evidence": {
+            "doc_title": "요천권역(국가하천) 하천기본계획(변경)(2021)",
+            "chapter": "제2장 2.3.3 홍수피해현황 및 취약지역",
+            "page": 97,
+            "passage_id": "PSG-YC-RVP-2-0097-01"
+          }
+        }
+      ],
+      "priority": "전체 20/137위",
+      "implementer": "전라북도(공항하천과)",
+      "related_ministry": null,
+      "coordinates": null,
+      "note": "폴더명 '전라남도'는 오기, 전라북도(45190)로 태깅",
+      "evidence": {
+        "source_asset_id": "SRC-NW-JGP-2022",
+        "doc_title": "제2차 남원시 자연재해저감 종합계획 수립 주요현황(작성서식 2)(2022.4)",
+        "pdf_page": 7,
+        "page_label": "주요현황 제6쪽"
+      }
+    },
+    {
+      "district_code": "NW-A-03",
+      "ledger_code": null,
+      "code_origin": "주요현황 서식에 지구코드 미기재 — 재해유형별 일련코드 부여(하천 A·내수 B·사면 C)",
+      "district_name": "유암지구",
+      "admin_code": "45190",
+      "admin_name": "전라북도 남원시",
+      "disaster_type": "하천재해",
+      "disaster_subtype": null,
+      "hazard_codes": [
+        "T10206",
+        "T10107"
+      ],
+      "location": "남원시 수지면 산정리 388-3",
+      "river_name": null,
+      "station": null,
+      "risk_factors": [
+        "침수 위험"
+      ],
+      "risk_thresholds": [
+        {
+          "target": "침수 위험",
+          "operator": "해당",
+          "value": null,
+          "unit": null,
+          "basis": "주요현황 서식 위험요인란(임계값 수치 미기재)"
+        }
+      ],
+      "grade": null,
+      "mitigation": [
+        "축제 L=1,000m",
+        "교량 재가설 3개소",
+        "보 및 낙차공 7개소"
+      ],
+      "project_status": "구축필요",
+      "implementation_period": null,
+      "implementation_method": null,
+      "cost_million_krw": 2630,
+      "expected_damage_million_krw": null,
+      "damage_history": null,
+      "priority": "전체 1/137위",
+      "implementer": "남원시(건설과)",
+      "related_ministry": null,
+      "coordinates": null,
+      "note": "투자우선순위 전체 1위. 폴더명 '전라남도'는 오기, 전라북도(45190)로 태깅",
+      "evidence": {
+        "source_asset_id": "SRC-NW-JGP-2022",
+        "doc_title": "제2차 남원시 자연재해저감 종합계획 수립 주요현황(작성서식 2)(2022.4)",
+        "pdf_page": 9,
+        "page_label": "주요현황 제8쪽"
+      }
+    },
+    {
+      "district_code": "NW-A-04",
+      "ledger_code": null,
+      "code_origin": "주요현황 서식에 지구코드 미기재 — 재해유형별 일련코드 부여(하천 A·내수 B·사면 C)",
+      "district_name": "천사지구",
+      "admin_code": "45190",
+      "admin_name": "전라북도 남원시",
+      "disaster_type": "하천재해",
+      "disaster_subtype": null,
+      "hazard_codes": [
+        "T10206",
+        "T10107"
+      ],
+      "location": "남원시 도통동 574",
+      "river_name": null,
+      "station": null,
+      "risk_factors": [
+        "침수 위험"
+      ],
+      "risk_thresholds": [
+        {
+          "target": "침수 위험",
+          "operator": "해당",
+          "value": null,
+          "unit": null,
+          "basis": "주요현황 서식 위험요인란(임계값 수치 미기재)"
+        }
+      ],
+      "grade": null,
+      "mitigation": [
+        "축제 L=827m",
+        "보축 L=424m",
+        "교량 재가설 12개소"
+      ],
+      "project_status": "구축필요",
+      "implementation_period": null,
+      "implementation_method": null,
+      "cost_million_krw": 1397,
+      "expected_damage_million_krw": null,
+      "damage_history": null,
+      "priority": "전체 7/137위",
+      "implementer": "남원시(건설과)",
+      "related_ministry": null,
+      "coordinates": null,
+      "note": "폴더명 '전라남도'는 오기, 전라북도(45190)로 태깅",
+      "evidence": {
+        "source_asset_id": "SRC-NW-JGP-2022",
+        "doc_title": "제2차 남원시 자연재해저감 종합계획 수립 주요현황(작성서식 2)(2022.4)",
+        "pdf_page": 15,
+        "page_label": "주요현황 제14쪽"
+      }
+    },
+    {
+      "district_code": "NW-B-01",
+      "ledger_code": null,
+      "code_origin": "주요현황 서식에 지구코드 미기재 — 재해유형별 일련코드 부여(하천 A·내수 B·사면 C)",
+      "district_name": "사석지구",
+      "admin_code": "45190",
+      "admin_name": "전라북도 남원시",
+      "disaster_type": "내수재해",
+      "disaster_subtype": null,
+      "hazard_codes": [
+        "T10107",
+        "T10106"
+      ],
+      "location": "남원시 대강면 사석리 2112번지 일원",
+      "river_name": null,
+      "station": null,
+      "risk_factors": [
+        "침수 위험"
+      ],
+      "risk_thresholds": [
+        {
+          "target": "침수 위험",
+          "operator": "해당",
+          "value": null,
+          "unit": null,
+          "basis": "주요현황 서식 위험요인란(임계값 수치 미기재)"
+        }
+      ],
+      "grade": null,
+      "mitigation": [
+        "우수관거정비 L=1,100m",
+        "펌프장 신설 3개소"
+      ],
+      "project_status": "구축필요",
+      "implementation_period": null,
+      "implementation_method": null,
+      "cost_million_krw": 30767,
+      "expected_damage_million_krw": null,
+      "damage_history": null,
+      "priority": "전체 10/137위",
+      "implementer": "한국농어촌공사",
+      "related_ministry": null,
+      "coordinates": null,
+      "note": "하천재해 사석2·사석3지구(대강면 사석리)와 별개의 내수재해 지구. 폴더명 '전라남도'는 오기, 전라북도(45190)로 태깅",
+      "evidence": {
+        "source_asset_id": "SRC-NW-JGP-2022",
+        "doc_title": "제2차 남원시 자연재해저감 종합계획 수립 주요현황(작성서식 2)(2022.4)",
+        "pdf_page": 15,
+        "page_label": "주요현황 제14쪽"
+      }
+    },
+    {
+      "district_code": "NW-C-01",
+      "ledger_code": null,
+      "code_origin": "주요현황 서식에 지구코드 미기재 — 재해유형별 일련코드 부여(하천 A·내수 B·사면 C)",
+      "district_name": "주촌지구(사면재해)",
+      "admin_code": "45190",
+      "admin_name": "전라북도 남원시",
+      "disaster_type": "사면재해",
+      "disaster_subtype": null,
+      "hazard_codes": [
+        "T10401"
+      ],
+      "location": "남원시 운봉읍 주촌리 산41-30",
+      "river_name": null,
+      "station": null,
+      "risk_factors": [
+        "붕괴위험"
+      ],
+      "risk_thresholds": [
+        {
+          "target": "사면 붕괴위험",
+          "operator": "해당",
+          "value": null,
+          "unit": null,
+          "basis": "주요현황 서식 위험요인란(임계값 수치 미기재)"
+        }
+      ],
+      "grade": null,
+      "mitigation": [
+        "돌망태(V=350㎥)",
+        "면고르기(A=5,100㎡)",
+        "개거(L=350m)",
+        "산마루측구(L=350m)"
+      ],
+      "project_status": "구축필요",
+      "implementation_period": null,
+      "implementation_method": null,
+      "cost_million_krw": 569,
+      "expected_damage_million_krw": null,
+      "damage_history": null,
+      "priority": "전체 25/137위",
+      "implementer": "남원시(안전재난과)",
+      "related_ministry": null,
+      "coordinates": null,
+      "note": "하천재해 주촌지구(NW-A-01)와 동명 별개 지구 — 지구명+재해유형 복합키로 구분. 폴더명 '전라남도'는 오기, 전라북도(45190)로 태깅",
+      "evidence": {
+        "source_asset_id": "SRC-NW-JGP-2022",
+        "doc_title": "제2차 남원시 자연재해저감 종합계획 수립 주요현황(작성서식 2)(2022.4)",
+        "pdf_page": 16,
+        "page_label": "주요현황 제15쪽"
+      }
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ApiEnvelope",
+  "type": "object",
+  "required": [
+    "data",
+    "meta",
+    "warnings",
+    "errors"
+  ],
+  "properties": {
+    "data": {},
+    "meta": {
+      "type": "object",
+      "required": [
+        "request_id",
+        "provider",
+        "data_status",
+        "fallback_used"
+      ],
+      "properties": {
+        "request_id": {
+          "type": "string"
+        },
+        "provider": {
+          "type": "string"
+        },
+        "data_status": {
+          "type": "string",
+          "enum": [
+            "actual",
+            "actual_backed",
+            "open_api",
+            "t3q_supplied",
+            "derived",
+            "scenario",
+            "scenario_input",
+            "mock",
+            "synthetic_demo",
+            "provisional",
+            "not_available"
+          ]
+        },
+        "fallback_used": {
+          "type": "boolean"
+        },
+        "generated_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": true
+    },
+    "warnings": {
+      "type": "array"
+    },
+    "errors": {
+      "type": "array"
+    }
+  },
+  "additionalProperties": false
+}

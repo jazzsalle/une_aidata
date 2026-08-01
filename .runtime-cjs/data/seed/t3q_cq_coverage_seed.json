@@ -1,0 +1,168 @@
+{
+    "dataset": "t3q_cq_coverage",
+    "version": "1.2",
+    "as_of": "2026-07-31",
+    "coverage_basis": "T3Q 구조 + UNE Mock Event·Passage·GIS Seed",
+    "items": [
+        {
+            "cq_id": "CQ-01",
+            "question": "관내 어떤 하천이 범람 위험인가",
+            "design_state": "covered",
+            "runtime_state": "mock",
+            "required_schema_types": [
+                "FloodVulnerableZonePassage",
+                "WaterLevelPassage",
+                "MonitoringPointPassage",
+                "DisasterEventMasterPassage"
+            ],
+            "search_filters": [
+                "admin_code",
+                "taxonomy:T102",
+                "river_name",
+                "reference_time"
+            ],
+            "screen_outputs": [
+                "하천·취약지구 지도강조",
+                "계획홍수량·계획홍수위·제방고",
+                "참조관측소·현재관측",
+                "원문근거"
+            ],
+            "current_providers": [
+                "rivers.json",
+                "districts.json",
+                "PublicObservationProvider",
+                "UNE RAG/Seed",
+                "T3Q-structure MockProvider"
+            ],
+            "blocking_items": [],
+            "fallback": "현재 Mock 계약으로 독립 동작. 향후 실제 Provider 교체"
+        },
+        {
+            "cq_id": "CQ-02",
+            "question": "저지대 침수 위험 지역은 어디인가",
+            "design_state": "covered",
+            "runtime_state": "mock",
+            "required_schema_types": [
+                "FloodVulnerableZonePassage",
+                "HazardZonePassage",
+                "SpatialReferencePassage",
+                "DisasterEventMasterPassage"
+            ],
+            "search_filters": [
+                "admin_code",
+                "taxonomy:T10106",
+                "bbox",
+                "risk_grade"
+            ],
+            "screen_outputs": [
+                "저지대·내수재해 위험지구",
+                "홍수위험지역 레이어",
+                "침수흔적도",
+                "과거 피해근거"
+            ],
+            "current_providers": [
+                "districts.json",
+                "flood_traces_seed.geojson",
+                "LocalGeoJsonProvider",
+                "T3Q-structure MockProvider"
+            ],
+            "blocking_items": [],
+            "fallback": "현재 Mock 계약으로 독립 동작. 향후 실제 Provider 교체"
+        },
+        {
+            "cq_id": "CQ-03",
+            "question": "급경사지 산사태 위험 지역은 어디인가",
+            "design_state": "covered",
+            "runtime_state": "mock",
+            "required_schema_types": [
+                "HazardZonePassage",
+                "PotentialRiskFactorPassage",
+                "SpatialReferencePassage"
+            ],
+            "search_filters": [
+                "admin_code",
+                "taxonomy:T10401",
+                "risk_grade",
+                "bbox"
+            ],
+            "screen_outputs": [
+                "사면·토사재해 위험지구",
+                "위험요인·등급",
+                "근거문서·페이지",
+                "지도 이동"
+            ],
+            "current_providers": [
+                "districts.json",
+                "UNE RAG/Seed",
+                "T3Q-structure MockProvider"
+            ],
+            "blocking_items": [],
+            "fallback": "현재 Mock 계약으로 독립 동작. 향후 실제 Provider 교체"
+        },
+        {
+            "cq_id": "CQ-04",
+            "question": "어떤 수위계와 우량계를 모니터링해야 하는가",
+            "design_state": "covered",
+            "runtime_state": "mock",
+            "required_schema_types": [
+                "MonitoringPointPassage",
+                "WaterLevelPassage",
+                "FloodWarningPassage",
+                "FloodVulnerableZonePassage"
+            ],
+            "search_filters": [
+                "admin_code",
+                "river_name",
+                "station_type",
+                "distance_km"
+            ],
+            "screen_outputs": [
+                "관측소명·코드·거리",
+                "현재값·관측시각",
+                "단계별 제공수위",
+                "공식/시나리오 상태"
+            ],
+            "current_providers": [
+                "hydrology_station_candidates_seed.json",
+                "rivers.json",
+                "HrfcoHydrologyProvider",
+                "T3Q-structure MockProvider"
+            ],
+            "blocking_items": [],
+            "fallback": "현재 Mock 계약으로 독립 동작. 향후 실제 Provider 교체"
+        },
+        {
+            "cq_id": "CQ-05",
+            "question": "과거 침수지역은 어디인가",
+            "design_state": "covered",
+            "runtime_state": "mock",
+            "required_schema_types": [
+                "DisasterEventMasterPassage",
+                "DamageRecordPassage",
+                "SituationReportPassage",
+                "AIAnalysisPassage"
+            ],
+            "search_filters": [
+                "admin_code",
+                "taxonomy:T10106|T10206",
+                "occurred_from_to",
+                "AI_SIM"
+            ],
+            "screen_outputs": [
+                "유사사례 Top-K",
+                "피해·대응·복구",
+                "침수 위치·흔적",
+                "Passage 근거·Event ID"
+            ],
+            "current_providers": [
+                "damage_recovery_events_seed.json",
+                "districts.damage_events",
+                "UNE RAG/Seed",
+                "T3Q-structure MockProvider"
+            ],
+            "blocking_items": [],
+            "fallback": "현재 Mock 계약으로 독립 동작. 향후 실제 Provider 교체"
+        }
+    ],
+    "runtime_policy": "MOCK_ONLY"
+}

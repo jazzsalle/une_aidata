@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://une.example/contracts/t3q-passage.schema.json",
+  "title": "T3Q Passage Compatibility Contract",
+  "type": "object",
+  "required": [
+    "passage_id",
+    "schema_type",
+    "taxonomy_codes",
+    "lineage",
+    "data_status"
+  ],
+  "properties": {
+    "passage_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "schema_type": {
+      "type": "string",
+      "minLength": 1
+    },
+    "ref_disaster_event_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "taxonomy_codes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^T[0-9]+$"
+      }
+    },
+    "title": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "content": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "admin_code": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[0-9]{5}$"
+    },
+    "legal_region_code": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[0-9]{10}$"
+    },
+    "lineage": {
+      "type": "object",
+      "properties": {
+        "source_asset_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source_file": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source_sheet": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source_row": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "document_page": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "data_status": {
+      "enum": [
+        "actual",
+        "actual_backed",
+        "open_api",
+        "t3q_supplied",
+        "derived",
+        "scenario",
+        "scenario_input",
+        "mock",
+        "synthetic_demo",
+        "provisional",
+        "not_available"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

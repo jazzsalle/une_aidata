@@ -1,0 +1,4 @@
+import { badRequest, body, envelope } from '../../../server/http';
+import type { T3qSearchRequest } from '../../../server/contracts';
+import { searchT3qPreview } from '../../../server/providers/t3qGateway';
+export async function POST(request:Request){try{const input=await body<Partial<T3qSearchRequest>>(request);const query=input.query?.trim();if(!query)return badRequest('query는 필수입니다.');const topK=Math.min(Math.max(Number(input.top_k??5),1),20);const payload:T3qSearchRequest={query,admin_code:input.admin_code??null,taxonomy_codes:Array.isArray(input.taxonomy_codes)?input.taxonomy_codes.map(String):[],schema_types:Array.isArray(input.schema_types)?input.schema_types.map(String):[],top_k:topK};const result=await searchT3qPreview(payload);return envelope(result,{provider:'T3qStructureMockProvider',dataStatus:'mock',warnings:result.warnings});}catch(error){return badRequest(error instanceof Error?error.message:'T3Q 검색 미리보기 실패');}}

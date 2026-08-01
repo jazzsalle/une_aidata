@@ -1,0 +1,145 @@
+{
+  "dataset": "satellite_evidence_sets_seed",
+  "version": "0.9",
+  "updated": "2026-07-30",
+  "description": "홍수 PRE/EVENT/POST 위성영상·수계마스크를 사건 단위 증거세트로 등록하고 출처·상태·무결성·교체이력을 관리하는 POC Seed",
+  "target_regions": [
+    {
+      "admin_code": "26000",
+      "name": "부산광역시"
+    },
+    {
+      "admin_code": "42810",
+      "name": "강원특별자치도 인제군"
+    },
+    {
+      "admin_code": "47230",
+      "name": "경상북도 영천시"
+    }
+  ],
+  "sets": [
+    {
+      "evidence_set_id": "ESET-FLOOD-SAMPLE-001",
+      "title": "홍수 PRE·EVENT·POST 시연용 증거세트",
+      "version": "0.9-seed-1",
+      "event_id": "POC-FLOOD-IMAGE-SAMPLE-001",
+      "hazards": [
+        "T10206",
+        "T10107"
+      ],
+      "event_start_at": "2026-07-15T00:00:00+09:00",
+      "event_end_at": "2026-07-17T18:00:00+09:00",
+      "phase_policy": {
+        "pre_target": "event_start_at - 12 days",
+        "event_window": "event_start_at <= acquired_at <= event_end_at + 2 days",
+        "post_target": "event_end_at + 12 days"
+      },
+      "area": {
+        "area_id": "DEMO-FLOOD-TILE-001",
+        "admin_code": "DEMO-EXT",
+        "admin_name": "시연용 외부지역 표본",
+        "is_target_region": false,
+        "area_scope": "OUTSIDE_POC_TARGET_REGION",
+        "target_area_note": "부산·인제·영천 시범서비스 대상지역 자료가 아닌 POC 시연용 표본"
+      },
+      "asset_ids": [
+        "SAT-DEMO-FLOOD-001-PRE",
+        "SAT-DEMO-FLOOD-001-PRE-MASK",
+        "SAT-DEMO-FLOOD-001-EVENT",
+        "SAT-DEMO-FLOOD-001-EVENT-MASK",
+        "SAT-DEMO-FLOOD-001-POST",
+        "SAT-DEMO-FLOOD-001-POST-MASK"
+      ],
+      "tile_size_px": [
+        256,
+        256
+      ],
+      "display_mode": "standalone_tile_card",
+      "map_overlay_allowed": false,
+      "base_map": "VWorld 2D",
+      "data_status": "mock",
+      "official_data": false,
+      "shared_demo": true,
+      "is_prediction": false,
+      "provider": "StaticSeedSatelliteProvider",
+      "replacement_provider": "ThreeDLabsSatelliteProvider",
+      "replacement_status": "pending_source_delivery",
+      "provenance": {
+        "pre_post_source": "사용자 첨부 참고영상·수계마스크",
+        "event_source": "PRE·POST 기반 생성 Seed",
+        "generated_event_assets": [
+          "SAT-DEMO-FLOOD-001-EVENT",
+          "SAT-DEMO-FLOOD-001-EVENT-MASK"
+        ],
+        "source_notes_path": "/seed/imagery/sample-flood/SOURCE_NOTES.md"
+      },
+      "integrity": {
+        "algorithm": "SHA-256",
+        "verified_at": "2026-07-30T19:38:00+09:00",
+        "assets": [
+          {
+            "asset_id": "SAT-DEMO-FLOOD-001-PRE",
+            "file": "seed/imagery/sample-flood/tiles/pre_satellite_256.png",
+            "sha256": "dbe8b0e7f9d6986f01769aec821ac09aedcf438f1822ac989bbb0c29fbeede4a",
+            "bytes": 42190,
+            "width": 256,
+            "height": 256
+          },
+          {
+            "asset_id": "SAT-DEMO-FLOOD-001-PRE-MASK",
+            "file": "seed/imagery/sample-flood/tiles/pre_water_mask_256.png",
+            "sha256": "c21636daedeea92f4488541b1bdcf607cce4bbfd46f51e5c9b45f873a6bf872e",
+            "bytes": 1426,
+            "width": 256,
+            "height": 256
+          },
+          {
+            "asset_id": "SAT-DEMO-FLOOD-001-EVENT",
+            "file": "seed/imagery/sample-flood/tiles/event_satellite_256.png",
+            "sha256": "d515103aa36b155974ff5b6a75bea5c789e2cdb6031bf4fe40e72f5a6d253530",
+            "bytes": 45227,
+            "width": 256,
+            "height": 256
+          },
+          {
+            "asset_id": "SAT-DEMO-FLOOD-001-EVENT-MASK",
+            "file": "seed/imagery/sample-flood/tiles/event_water_mask_256.png",
+            "sha256": "d557a5595f1764fb5c83c15a33af438075084e9c2481e6ac78a910b60b89d59f",
+            "bytes": 1305,
+            "width": 256,
+            "height": 256
+          },
+          {
+            "asset_id": "SAT-DEMO-FLOOD-001-POST",
+            "file": "seed/imagery/sample-flood/tiles/post_satellite_256.png",
+            "sha256": "be7d04acbc3de4f4a87a78ea772f29f08ccbe1b7096997d200162b2c896c3255",
+            "bytes": 40521,
+            "width": 256,
+            "height": 256
+          },
+          {
+            "asset_id": "SAT-DEMO-FLOOD-001-POST-MASK",
+            "file": "seed/imagery/sample-flood/tiles/post_water_mask_256.png",
+            "sha256": "1e56cb475a28a790b167309febef2a4af5a066ec299b3dde6d4b2252992df018",
+            "bytes": 1442,
+            "width": 256,
+            "height": 256
+          }
+        ]
+      },
+      "usage_limits": [
+        "위치정합·면적산정·침수심·피해예측에 사용하지 않음",
+        "현재 상황의 실제 피해로 자동 기입하지 않음",
+        "정식 쓰리디랩스 자료 수령 시 동일 계약으로 교체"
+      ],
+      "display_badges": [
+        "대상지역 외 POC Seed",
+        "공식자료 아님",
+        "EVENT 생성자료 포함",
+        "256×256 독립 타일",
+        "지도 오버레이 미적용",
+        "쓰리디랩스 교체 예정"
+      ]
+    }
+  ]
+}

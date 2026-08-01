@@ -1,0 +1,94 @@
+{
+  "package": "UNE Disaster Safety POC Vercel Source",
+  "version": "1.2.0",
+  "generated_at": "2026-07-31T20:15:00+09:00",
+  "runtime_policy": "MOCK_ONLY",
+  "base_version": "1.1.0",
+  "design_document": "통합설계서 v1.5",
+  "compatibility": {
+    "kept": [
+      "v1.1 전체 화면·Seed·위성·보고서·접근성 자산"
+    ],
+    "changed": [
+      "T3Q live/pending 전제→Mock-only",
+      "GIS 3종 pending→Mock 활성"
+    ],
+    "future": [
+      "공식 T3Q 규격 제공 시 Provider/Adapter 교체"
+    ]
+  },
+  "critical_files": [
+    {
+      "path": "data/seed/t3q_mock_event_master_seed.json",
+      "sha256": "dfc749661bdd5b10c5337b7b6fb5e873f6dd3ec6d3470e151b7e2064d6ae3fbb",
+      "bytes": 2816
+    },
+    {
+      "path": "data/seed/t3q_mock_passages_seed.json",
+      "sha256": "a3ac6b4f1951b07b1ccf58432dd7fea69535e805c17d0ec71a8ad28a94a3385c",
+      "bytes": 12253
+    },
+    {
+      "path": "data/seed/t3q_mock_ontology_relations_seed.json",
+      "sha256": "aa03102cd8e52d632c301b4ca5e289d28b629948d7d06e3beb24c8b335826bcb",
+      "bytes": 4747
+    },
+    {
+      "path": "data/seed/t3q_mock_search_scenarios_seed.json",
+      "sha256": "bd4517bef9ebfc2e0b63c5213ba90763e944a5ca3d7eeeff469d6808505781c5",
+      "bytes": 2739
+    },
+    {
+      "path": "data/seed/mock_flood_risk_areas.geojson",
+      "sha256": "deea0fff47d73db5df90542648076decd22c3167ff85eea085e4f523eed463d8",
+      "bytes": 4985
+    },
+    {
+      "path": "data/seed/mock_dangerous_reservoirs.geojson",
+      "sha256": "701785a97d65f44390ac14ade73d07a8348bd69cc28af55ccb24219f45396c8e",
+      "bytes": 3712
+    },
+    {
+      "path": "data/seed/mock_storm_flood_improvement_districts.geojson",
+      "sha256": "9ec0ad9c26eb680b26412c758084007d1b3d186ec41ffe45cc5bcdecae43a79d",
+      "bytes": 5111
+    },
+    {
+      "path": "server/providers/t3qGateway.ts",
+      "sha256": "bd98f38b595a0870c86f0ae4ce435878a04b538e1efe0d309d6c18328dba349c",
+      "bytes": 2345
+    },
+    {
+      "path": "apps/web/src/components/T3qMockSearchPanel.tsx",
+      "sha256": "bac1c10c600beab6f9887f17218e96c8697e5c8bb91cb00cdcbfa69c5791ab74",
+      "bytes": 3301
+    },
+    {
+      "path": "apps/web/src/features/map/VWorldMapAdapter.ts",
+      "sha256": "0e7e09d1608227bd8b56dcc882a4952ba0045d8c4d39759ce49f595c62fce695",
+      "bytes": 8405
+    },
+    {
+      "path": "contracts/openapi/poc-backend.yaml",
+      "sha256": "e99d3efaa9850c85de0340a3b0442700d69b7c44ea6d05a59d4068c36c8dbc65",
+      "bytes": 7042
+    },
+    {
+      "path": "decisions/ADR-015-mock-first-t3q-contract.md",
+      "sha256": "b3a36a1015c8b2b6349d3dc273fad735ca0dc9db65bad57376d0b10007570f42",
+      "bytes": 869
+    }
+  ],
+  "validation": {
+    "functions_typescript": "PASS",
+    "python_smoke_all": "PASS",
+    "multi_page_a11y_structure": "PASS",
+    "repo_structure": "PASS",
+    "web_build": "NOT_RUN_REGISTRY_MISSING_PLAYWRIGHT"
+  },
+  "safety_rules": [
+    "Mock를 실제 T3Q 데이터로 표시하지 않음",
+    "Mock GIS를 실제 위험위치로 해석하지 않음",
+    "Mock 피해정보를 예측으로 사용하지 않음"
+  ]
+}

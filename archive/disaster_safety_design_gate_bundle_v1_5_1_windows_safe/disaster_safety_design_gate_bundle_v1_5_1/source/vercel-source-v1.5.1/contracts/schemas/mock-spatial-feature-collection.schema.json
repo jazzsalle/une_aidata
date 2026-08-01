@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://une.example/contracts/mock-spatial-feature-collection.schema.json",
+  "title": "Mock Spatial FeatureCollection",
+  "type": "object",
+  "required": [
+    "type",
+    "metadata",
+    "features"
+  ],
+  "properties": {
+    "type": {
+      "const": "FeatureCollection"
+    },
+    "metadata": {
+      "type": "object",
+      "required": [
+        "runtime_policy",
+        "data_status",
+        "official_data",
+        "notice"
+      ],
+      "properties": {
+        "runtime_policy": {
+          "const": "MOCK_ONLY"
+        },
+        "data_status": {
+          "const": "mock"
+        },
+        "official_data": {
+          "const": false
+        },
+        "notice": {
+          "type": "string"
+        }
+      }
+    },
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "type",
+          "geometry",
+          "properties"
+        ],
+        "properties": {
+          "type": {
+            "const": "Feature"
+          },
+          "geometry": {
+            "type": "object"
+          },
+          "properties": {
+            "type": "object",
+            "required": [
+              "feature_id",
+              "layer_id",
+              "schema_type",
+              "ref_disaster_event_id",
+              "admin_code",
+              "data_status",
+              "official_data",
+              "is_prediction",
+              "display_badges"
+            ],
+            "properties": {
+              "data_status": {
+                "const": "mock"
+              },
+              "official_data": {
+                "const": false
+              },
+              "is_prediction": {
+                "const": false
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": true
+}

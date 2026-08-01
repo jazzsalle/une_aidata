@@ -1,0 +1,28 @@
+{
+  "source_version": "0.9",
+  "design_version": "1.2",
+  "generated_at": "2026-07-30T19:38:00+09:00",
+  "new_files": [
+    "data/seed/satellite_evidence_sets_seed.json",
+    "api/v1/satellite-evidence-sets.ts",
+    "server/providers/satelliteEvidenceSets.ts",
+    "apps/web/src/components/EvidenceSetSelector.tsx",
+    "scripts/smoke_satellite_evidence_sets.py",
+    "decisions/ADR-012-satellite-evidence-set-registry.md",
+    "docs/19_satellite_evidence_set_registry.md"
+  ],
+  "decisions": [
+    "6개 타일을 SatelliteEvidenceSet 단위로 관리",
+    "SHA-256·256×256 검증",
+    "대상지역 외 Seed 상태 유지",
+    "ThreeDLabs Provider 교체경계",
+    "VWorld 2D 지도 오버레이 금지"
+  ],
+  "pending": [
+    "npm install/typecheck/build",
+    "Vercel Preview",
+    "VWorld 실키",
+    "ThreeDLabs 정식자료",
+    "UNE RAG·공공 API 실호출"
+  ]
+}

@@ -1,0 +1,38 @@
+{
+    "dataset": "report_draft_seed",
+    "version": "0.4",
+    "notice": "담당자 검토용 상황보고서 초안 예시. 자동 제출·공식 보고가 아니다.",
+    "reports": [
+        {
+            "report_id": "RPT-NW-SEED-001",
+            "situation_id": "SIT-NW-POC-001",
+            "status": "DRAFT",
+            "ndms_submission": false,
+            "sections": {
+                "overview": "남원시 요천 인접지역 호우·홍수 시나리오 상황. 공공 API 연계 전 POC 시나리오 값 사용.",
+                "current_conditions": [
+                    "호우경보 시나리오",
+                    "3시간 누적강우 95mm",
+                    "남원수위표 수위·유량 상승 시나리오"
+                ],
+                "priority_areas": [
+                    "요천지구 우선 확인 1순위 - 현재 강우조건, 계획 위험요인, 과거 피해이력 결합"
+                ],
+                "similar_event_reference": [
+                    "과거 유사사례 피해·대응·복구 정보는 참고자료이며 현재 피해예측이 아님"
+                ],
+                "response_procedure": [
+                    "부산 북구청 매뉴얼을 참고한 잠정 공통절차 - 현장점검, 접근통제, 대피대상 확인, 상황보고"
+                ],
+                "operator_actions": [],
+                "damage_status": "현재 피해현황은 담당자 입력 전 미확인. Seed 피해자료는 보고서 근거가 아닌 유사사례 참고로만 표시.",
+                "limitations": [
+                    "실시간 공공 API 미연계 상태",
+                    "피해·복구는 임의 Seed",
+                    "대상지 정식 행동매뉴얼 미확보"
+                ]
+            }
+        }
+    ],
+    "package_version": "0.5"
+}

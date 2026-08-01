@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://une.example/contracts/procedure-step.schema.json",
+  "title": "ProcedureStep",
+  "type": "object",
+  "required": [
+    "procedure_id",
+    "stage_code",
+    "stage_name",
+    "sequence",
+    "action_title",
+    "action_description",
+    "required_information",
+    "official_for_target_municipality",
+    "data_status",
+    "operator_confirmation_required"
+  ],
+  "properties": {
+    "step_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "procedure_id": {
+      "type": "string"
+    },
+    "stage_code": {
+      "type": "string"
+    },
+    "stage_name": {
+      "type": "string"
+    },
+    "sequence": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "action_title": {
+      "type": "string"
+    },
+    "action_description": {
+      "type": "string"
+    },
+    "required_information": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "alert_levels": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "expected_outputs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "target_admin_codes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "source_admin": {
+      "type": "string"
+    },
+    "source_document": {
+      "type": "string"
+    },
+    "source_page_label": {
+      "type": "string"
+    },
+    "source_section": {
+      "type": "string"
+    },
+    "template_name": {
+      "type": "string"
+    },
+    "public_level": {
+      "type": "string"
+    },
+    "replacement_required": {
+      "type": "boolean"
+    },
+    "official_for_target_municipality": {
+      "type": "boolean"
+    },
+    "operator_confirmation_required": {
+      "type": "boolean"
+    },
+    "data_status": {
+      "type": "string",
+      "enum": [
+        "actual",
+        "actual_backed",
+        "open_api",
+        "t3q_supplied",
+        "derived",
+        "scenario",
+        "scenario_input",
+        "mock",
+        "synthetic_demo",
+        "provisional",
+        "not_available"
+      ]
+    },
+    "admin_code": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "map_targets": {
+      "type": "array"
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "evidence": {
+      "type": "array"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,848 @@
+openapi: 3.0.3
+info:
+  title: UNE Disaster Safety POC Backend
+  version: 1.5.1
+  description: Source v1.5.1의 실제 Vercel Function 31개와 동기화한 Provider-neutral 계약. 모든 응답은 ApiEnvelope를 사용한다.
+servers:
+- url: /
+paths:
+  /api/health:
+    get:
+      operationId: healthCheck
+      summary: 서비스 상태와 Source 버전 조회
+      responses:
+        '200':
+          description: ApiEnvelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+        '400':
+          description: 입력값 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /api/v1/situations:
+    post:
+      operationId: createSituation
+      summary: 현재상황 생성·병합
+      responses:
+        '200':
+          description: ApiEnvelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+        '400':
+          description: 입력값 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSituationRequest'
+  /api/v1/scenarios:
+    get:
+      operationId: listScenarios
+      summary: 시연용 현재상황 목록
+      responses:
+        '200':
+          description: ApiEnvelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+        '400':
+          description: 입력값 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /api/v1/observations/query:
+    post:
+      operationId: queryObservations
+      summary: 공공 API 우선·Scenario Fallback 관측조회
+      responses:
+        '200':
+          description: ApiEnvelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+        '400':
+          description: 입력값 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ObservationQueryRequest'
+  /api/v1/observations/kma-nowcast:
+    get:
+      operationId: getKmaNowcast
+      summary: 기상청 초단기실황 조회
+      responses:
+        '200':
+          description: ApiEnvelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+        '400':
+          description: 입력값 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+      parameters:
+      - in: query
+        name: admin_code
+        required: true
+        schema:
+          type: string
+  /api/v1/observations/hydrology:
+    get:
+      operationId: getHydrology
+      summary: 홍수통제소 수위·유량 조회
+      responses:
+        '200':
+          description: ApiEnvelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+        '400':
+          description: 입력값 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+      parameters:
+      - in: query
+        name: admin_code
+        required: true
+        schema:
+          type: string
+  /api/v1/priority-areas/query:
+    post:
+      operationId: queryPriorityAreas
+      summary: 우선 확인지역 상대순위 산정
+      responses:
+        '200':
+          description: ApiEnvelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+        '400':
+          description: 입력값 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SituationReferenceRequest'
+  /api/v1/similar-events/search:
+    post:
+      operationId: searchSimilarEvents
+      summary: 15개 Event 대상 요인별 유사도 검색
+      responses:
+        '200':
+          description: ApiEnvelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+        '400':
+          description: 입력값 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SimilarEventSearchRequest'
+  /api/v1/similar-events/detail:
+    get:
+      operationId: getSimilarEventDetail
+      summary: 유사사례 상세·피해·대응·복구·근거 조회
+      responses:
+        '200':
+          description: ApiEnvelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+        '400':
+          description: 입력값 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+      parameters:
+      - in: query
+        name: event_id
+        required: true
+        schema:
+          type: string
+  /api/v1/similarity/weight-profiles:
+    get:
+      operationId: getSimilarityWeightProfiles
+      summary: 재난유형별 유사도 가중치 Profile
+      responses:
+        '200':
+          description: ApiEnvelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+        '400':
+          description: 입력값 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /api/v1/risk-knowledge/search:
+    post:
+      operationId: searchRiskKnowledge
+      summary: 구조화 위험지식·UNE RAG 근거 검색
+      responses:
+        '200':
+          description: ApiEnvelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+        '400':
+          description: 입력값 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RiskKnowledgeRequest'
+  /api/v1/procedures:
+    get:
+      operationId: getProcedures
+      summary: 지역·재난유형·단계별 대응절차
+      responses:
+        '200':
+          description: ApiEnvelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+        '400':
+          description: 입력값 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+      parameters:
+      - in: query
+        name: admin_code
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: hazard_code
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: alert_level
+        required: false
+        schema:
+          type: string
+  /api/v1/agent/messages:
+    post:
+      operationId: sendAgentMessage
+      summary: 허용 Tool 기반 Agent 응답
+      responses:
+        '200':
+          description: ApiEnvelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+        '400':
+          description: 입력값 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgentMessageRequest'
+  /api/v1/reports/drafts:
+    post:
+      operationId: createReportDraft
+      summary: 상황보고서 검토용 초안 생성
+      responses:
+        '200':
+          description: ApiEnvelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+        '400':
+          description: 입력값 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportDraftRequest'
+  /api/v1/map/layers:
+    get:
+      operationId: getLayerCatalog
+      summary: 지도 레이어 카탈로그
+      responses:
+        '200':
+          description: ApiEnvelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+        '400':
+          description: 입력값 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /api/v1/flood-traces:
+    get:
+      operationId: getFloodTraces
+      summary: 침수흔적 POC Seed 조회
+      responses:
+        '200':
+          description: ApiEnvelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+        '400':
+          description: 입력값 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+      parameters:
+      - in: query
+        name: admin_code
+        required: false
+        schema:
+          type: string
+  /api/v1/satellite-assets:
+    get:
+      operationId: getSatelliteAssets
+      summary: 위성영상·수계마스크 자산 목록
+      responses:
+        '200':
+          description: ApiEnvelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+        '400':
+          description: 입력값 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+      parameters:
+      - in: query
+        name: admin_code
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: area_id
+        required: false
+        schema:
+          type: string
+  /api/v1/satellite-assets/metrics:
+    get:
+      operationId: getSatelliteAssetMetrics
+      summary: 수계마스크 픽셀 상대변화 지표
+      responses:
+        '200':
+          description: ApiEnvelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+        '400':
+          description: 입력값 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+      parameters:
+      - in: query
+        name: event_id
+        required: false
+        schema:
+          type: string
+  /api/v1/satellite-assets/select:
+    post:
+      operationId: selectSatelliteAssets
+      summary: PRE·EVENT·POST 후보 선정
+      responses:
+        '200':
+          description: ApiEnvelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+        '400':
+          description: 입력값 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SatelliteSelectionRequest'
+  /api/v1/satellite-evidence-sets:
+    get:
+      operationId: getSatelliteEvidenceSets
+      summary: SatelliteEvidenceSet Registry 조회
+      responses:
+        '200':
+          description: ApiEnvelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+        '400':
+          description: 입력값 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+      parameters:
+      - in: query
+        name: evidence_set_id
+        required: false
+        schema:
+          type: string
+  /api/v1/integrations/status:
+    get:
+      operationId: getIntegrationStatus
+      summary: 외부연계 설정·검증 상태
+      responses:
+        '200':
+          description: ApiEnvelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+        '400':
+          description: 입력값 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /api/v1/integrations/une-rag-probe:
+    get:
+      operationId: probeUneRagOpenApi
+      summary: UNE RAG OpenAPI 도달성 확인
+      responses:
+        '200':
+          description: ApiEnvelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+        '400':
+          description: 입력값 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /api/v1/t3q/alignment:
+    get:
+      operationId: getT3qAlignment
+      summary: T3Q Event·Passage·taxonomy 정합상태
+      responses:
+        '200':
+          description: ApiEnvelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+        '400':
+          description: 입력값 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /api/v1/t3q/readiness:
+    get:
+      operationId: getT3qReadiness
+      summary: T3Q 연계 준비상태
+      responses:
+        '200':
+          description: ApiEnvelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+        '400':
+          description: 입력값 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /api/v1/t3q/cq-coverage:
+    get:
+      operationId: getT3qCqCoverage
+      summary: CQ 5문 커버리지
+      responses:
+        '200':
+          description: ApiEnvelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+        '400':
+          description: 입력값 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+      parameters:
+      - in: query
+        name: admin_code
+        required: false
+        schema:
+          type: string
+  /api/v1/t3q/search-preview:
+    post:
+      operationId: searchT3qPreview
+      summary: Event·Passage 구조 기반 Mock 검색
+      responses:
+        '200':
+          description: ApiEnvelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+        '400':
+          description: 입력값 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/T3qSearchRequest'
+  /api/v1/mock/catalog:
+    get:
+      operationId: getMockCatalog
+      summary: Mock 계약 카탈로그
+      responses:
+        '200':
+          description: ApiEnvelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+        '400':
+          description: 입력값 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /api/v1/mock/spatial:
+    get:
+      operationId: getMockSpatial
+      summary: Mock 공간 레이어 GeoJSON
+      responses:
+        '200':
+          description: ApiEnvelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+        '400':
+          description: 입력값 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+      parameters:
+      - in: query
+        name: layer_id
+        required: true
+        schema:
+          type: string
+          enum:
+          - L-FLOOD-RISK-AREA
+          - L-DANGEROUS-RESERVOIR
+          - L-STORM-FLOOD-IMPROVEMENT
+  /api/v1/mock/scenarios:
+    get:
+      operationId: getMockScenarios
+      summary: CQ 5문 Mock 검색 시나리오
+      responses:
+        '200':
+          description: ApiEnvelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+        '400':
+          description: 입력값 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /api/v1/contracts/providers:
+    get:
+      operationId: getProviderContracts
+      summary: Provider-neutral 공급계약·선택상태
+      responses:
+        '200':
+          description: ApiEnvelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+        '400':
+          description: 입력값 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+  /api/v1/contracts/provider-conformance:
+    get:
+      operationId: getProviderConformance
+      summary: Provider 계약 적합성 8개 케이스
+      responses:
+        '200':
+          description: ApiEnvelope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+        '400':
+          description: 입력값 오류
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiEnvelope'
+components:
+  schemas:
+    DataStatus:
+      type: string
+      enum:
+      - actual
+      - actual_backed
+      - open_api
+      - t3q_supplied
+      - derived
+      - scenario
+      - scenario_input
+      - mock
+      - synthetic_demo
+      - provisional
+      - not_available
+    ApiMeta:
+      type: object
+      required:
+      - request_id
+      - provider
+      - data_status
+      - fallback_used
+      properties:
+        request_id:
+          type: string
+        provider:
+          type: string
+        data_status:
+          $ref: '#/components/schemas/DataStatus'
+        fallback_used:
+          type: boolean
+        generated_at:
+          type: string
+          format: date-time
+          nullable: true
+    ApiEnvelope:
+      type: object
+      required:
+      - data
+      - meta
+      - warnings
+      - errors
+      properties:
+        data: {}
+        meta:
+          $ref: '#/components/schemas/ApiMeta'
+        warnings:
+          type: array
+          items:
+            type: string
+        errors:
+          type: array
+          items:
+            type: string
+    CreateSituationRequest:
+      type: object
+      required:
+      - admin_code
+      - hazards
+      properties:
+        admin_code:
+          type: string
+        reference_time:
+          type: string
+          format: date-time
+        mode:
+          type: string
+          enum:
+          - live
+          - hybrid
+          - scenario
+        hazards:
+          type: array
+          items:
+            type: string
+        observations:
+          type: array
+          items:
+            type: object
+        user_input:
+          type: object
+    ObservationQueryRequest:
+      type: object
+      required:
+      - admin_code
+      properties:
+        admin_code:
+          type: string
+        reference_time:
+          type: string
+          format: date-time
+    SituationReferenceRequest:
+      type: object
+      properties:
+        situation_id:
+          type: string
+        situation:
+          type: object
+      anyOf:
+      - required:
+        - situation_id
+      - required:
+        - situation
+    SimilarEventSearchRequest:
+      allOf:
+      - $ref: '#/components/schemas/SituationReferenceRequest'
+      - type: object
+        properties:
+          top_k:
+            type: integer
+            minimum: 1
+            maximum: 15
+    RiskKnowledgeRequest:
+      type: object
+      properties:
+        admin_code:
+          type: string
+        query:
+          type: string
+    AgentMessageRequest:
+      type: object
+      required:
+      - message
+      properties:
+        situation_id:
+          type: string
+        situation:
+          type: object
+        message:
+          type: string
+          minLength: 1
+          maxLength: 4000
+    ReportDraftRequest:
+      type: object
+      properties:
+        situation_id:
+          type: string
+        situation:
+          type: object
+        selected_similar_event_ids:
+          type: array
+          items:
+            type: string
+        evidence_selection:
+          type: object
+    SatelliteSelectionRequest:
+      type: object
+      properties:
+        event:
+          type: object
+        candidates:
+          type: array
+          items:
+            type: object
+    T3qSearchRequest:
+      type: object
+      required:
+      - query
+      properties:
+        query:
+          type: string
+          minLength: 1
+          maxLength: 2000
+        admin_code:
+          type: string
+          nullable: true
+        taxonomy_codes:
+          type: array
+          items:
+            type: string
+        schema_types:
+          type: array
+          items:
+            type: string
+        top_k:
+          type: integer
+          minimum: 1
+          maximum: 20
+          default: 5

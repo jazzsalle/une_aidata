@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ProviderConformanceGateResult",
+  "type": "object",
+  "required": ["version", "generated_at", "summary", "results"],
+  "properties": {
+    "version": {"type": "string"},
+    "generated_at": {"type": "string"},
+    "summary": {
+      "type": "object",
+      "required": ["total", "pass", "conditional_pass", "blocked", "fail"],
+      "properties": {
+        "total": {"type": "integer", "minimum": 0},
+        "pass": {"type": "integer", "minimum": 0},
+        "conditional_pass": {"type": "integer", "minimum": 0},
+        "blocked": {"type": "integer", "minimum": 0},
+        "fail": {"type": "integer", "minimum": 0}
+      }
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "case_id",
+          "name",
+          "actual_status",
+          "expected_status",
+          "lifecycle",
+          "matched",
+          "messages"
+        ],
+        "properties": {
+          "case_id": {"type": "string"},
+          "name": {"type": "string"},
+          "actual_status": {
+            "enum": ["PASS", "CONDITIONAL_PASS", "BLOCKED", "FAIL"]
+          },
+          "expected_status": {
+            "enum": ["PASS", "CONDITIONAL_PASS", "BLOCKED", "FAIL"]
+          },
+          "lifecycle": {
+            "enum": ["DRAFT", "FIXTURE_VALIDATED", "SHADOW_TESTED", "SELECTABLE", "DEFAULT"]
+          },
+          "matched": {"type": "boolean"},
+          "messages": {
+            "type": "array",
+            "items": {"type": "string"}
+          }
+        }
+      }
+    }
+  }
+}

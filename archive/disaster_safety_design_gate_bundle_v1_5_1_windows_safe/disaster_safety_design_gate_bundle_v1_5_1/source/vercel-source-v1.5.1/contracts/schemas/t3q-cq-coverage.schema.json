@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://une.example/contracts/t3q-cq-coverage.schema.json",
+  "title": "T3Q Competency Question Coverage",
+  "type": "object",
+  "required": [
+    "items"
+  ],
+  "properties": {
+    "dataset": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "as_of": {
+      "type": "string",
+      "format": "date"
+    },
+    "coverage_basis": {
+      "type": "string"
+    },
+    "items": {
+      "type": "array",
+      "minItems": 5,
+      "items": {
+        "type": "object",
+        "required": [
+          "cq_id",
+          "question",
+          "design_state",
+          "runtime_state",
+          "required_schema_types",
+          "search_filters",
+          "screen_outputs",
+          "current_providers",
+          "blocking_items",
+          "fallback"
+        ],
+        "properties": {
+          "cq_id": {
+            "pattern": "^CQ-[0-9]{2}$"
+          },
+          "question": {
+            "type": "string"
+          },
+          "design_state": {
+            "enum": [
+              "covered",
+              "partial",
+              "missing"
+            ]
+          },
+          "runtime_state": {
+            "enum": [
+              "mock",
+              "verified",
+              "configured",
+              "partial",
+              "seed",
+              "pending",
+              "error"
+            ]
+          },
+          "required_schema_types": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "search_filters": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "screen_outputs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "current_providers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "blocking_items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "fallback": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,267 @@
+{
+  "dataset": "provider_conformance_cases",
+  "version": "1.5",
+  "as_of": "2026-08-01",
+  "purpose": "Mock/Seed contract를 향후 T3Q/Open API 공급계약으로 교체하기 전에 도메인별 최소 콘텐츠·공통 메타데이터·단위·시각·공간·근거 규칙을 검증한다.",
+  "lifecycle": [
+    "DRAFT",
+    "FIXTURE_VALIDATED",
+    "SHADOW_TESTED",
+    "SELECTABLE",
+    "DEFAULT"
+  ],
+  "result_status": [
+    "PASS",
+    "CONDITIONAL_PASS",
+    "BLOCKED",
+    "FAIL"
+  ],
+  "common_rules": {
+    "required_metadata": [
+      "data_status",
+      "source_type",
+      "provider_id",
+      "official_data",
+      "provisional",
+      "reference_at",
+      "schema_version",
+      "evidence",
+      "quality"
+    ],
+    "timestamp_format": "RFC3339_WITH_TIMEZONE",
+    "null_policy": "미제공 항목은 임의 생성하지 않고 null 또는 NOT_AVAILABLE로 표시",
+    "evidence_policy": "T3Q event/risk/spatial 데이터는 원문 또는 lineage 근거를 최소 1건 포함. Open API observation은 endpoint·station_id·observed_at을 근거로 사용",
+    "ui_policy": "Provider 원천 필드가 아니라 공통 Domain Model만 화면에서 참조",
+    "fallback_policy": "외부 Provider 실패 시 자동으로 실제값처럼 합성하지 않고 상태배지와 Fallback 출처를 함께 표시"
+  },
+  "domain_contracts": {
+    "event": {
+      "provider_candidates": ["mock", "t3q"],
+      "required_fields": [
+        "event_id",
+        "taxonomy_codes",
+        "region",
+        "occurred_from",
+        "occurred_to",
+        "conditions",
+        "damage",
+        "responses",
+        "recovery",
+        "similarity",
+        "evidence",
+        "spatial_objects"
+      ],
+      "conditional_fields": [
+        "similarity.factors",
+        "similarity.event_score",
+        "evidence[].passage_id",
+        "evidence[].source_asset_id",
+        "evidence[].lineage"
+      ]
+    },
+    "risk": {
+      "provider_candidates": ["mock", "t3q"],
+      "required_fields": [
+        "risk_id",
+        "hazard_codes",
+        "admin_code",
+        "district",
+        "risk_factors",
+        "thresholds",
+        "mitigation",
+        "geometry_ref",
+        "evidence"
+      ]
+    },
+    "observation": {
+      "provider_candidates": ["mock", "openapi", "t3q"],
+      "required_fields": [
+        "station_id",
+        "type",
+        "location",
+        "value",
+        "unit",
+        "observed_at",
+        "quality",
+        "alert_thresholds",
+        "source"
+      ],
+      "freshness_minutes": {
+        "rainfall": 30,
+        "water_level": 30,
+        "flow": 60,
+        "warning": 60
+      }
+    },
+    "spatial": {
+      "provider_candidates": ["mock", "t3q", "openapi"],
+      "required_fields": [
+        "spatial_object_id",
+        "layer_id",
+        "geometry",
+        "crs",
+        "properties",
+        "admin_code",
+        "hazard_codes",
+        "effective_at",
+        "evidence"
+      ],
+      "geometry_types": ["Point", "LineString", "Polygon", "MultiPolygon"],
+      "accepted_crs": ["EPSG:4326", "CRS84"]
+    }
+  },
+  "cases": [
+    {
+      "case_id": "PCG-001",
+      "name": "전체 Mock/Seed 기본운영",
+      "provider_selection": {
+        "event": "mock",
+        "risk": "mock",
+        "observation": "mock",
+        "spatial": "mock"
+      },
+      "fixtures": {
+        "event": "VALID",
+        "risk": "VALID",
+        "observation": "VALID",
+        "spatial": "VALID"
+      },
+      "expected_status": "PASS",
+      "expected_lifecycle": "SELECTABLE",
+      "note": "현 POC 기본 운영모드. 화면에 Mock/Seed 상태를 명시한다."
+    },
+    {
+      "case_id": "PCG-002",
+      "name": "T3Q Event Provider 미연계",
+      "provider_selection": {
+        "event": "t3q",
+        "risk": "mock",
+        "observation": "mock",
+        "spatial": "mock"
+      },
+      "fixtures": {
+        "event": "MISSING",
+        "risk": "VALID",
+        "observation": "VALID",
+        "spatial": "VALID"
+      },
+      "expected_status": "BLOCKED",
+      "expected_lifecycle": "DRAFT",
+      "note": "Endpoint·대표응답·인증정보가 없으므로 T3Q Event를 선택할 수 없다."
+    },
+    {
+      "case_id": "PCG-003",
+      "name": "Open API Observation Provider 미연계",
+      "provider_selection": {
+        "event": "mock",
+        "risk": "mock",
+        "observation": "openapi",
+        "spatial": "mock"
+      },
+      "fixtures": {
+        "event": "VALID",
+        "risk": "VALID",
+        "observation": "MISSING",
+        "spatial": "VALID"
+      },
+      "expected_status": "BLOCKED",
+      "expected_lifecycle": "DRAFT",
+      "note": "관측소 코드·시각·단위·품질 Fixture 없이는 실제 관측 Provider로 전환하지 않는다."
+    },
+    {
+      "case_id": "PCG-004",
+      "name": "T3Q Event + Open API Observation 혼합운영",
+      "provider_selection": {
+        "event": "t3q",
+        "risk": "mock",
+        "observation": "openapi",
+        "spatial": "mock"
+      },
+      "fixtures": {
+        "event": "VALID",
+        "risk": "VALID",
+        "observation": "VALID",
+        "spatial": "VALID"
+      },
+      "expected_status": "CONDITIONAL_PASS",
+      "expected_lifecycle": "FIXTURE_VALIDATED",
+      "note": "Fixture 수준 계약 적합. 실제 Endpoint shadow 시험과 화면 출처배지 검증 후 SELECTABLE로 승격한다."
+    },
+    {
+      "case_id": "PCG-005",
+      "name": "Spatial Geometry CRS 오류",
+      "provider_selection": {
+        "event": "mock",
+        "risk": "mock",
+        "observation": "mock",
+        "spatial": "t3q"
+      },
+      "fixtures": {
+        "event": "VALID",
+        "risk": "VALID",
+        "observation": "VALID",
+        "spatial": "INVALID_CRS"
+      },
+      "expected_status": "FAIL",
+      "expected_lifecycle": "DRAFT",
+      "note": "좌표계 또는 geometry 구조가 공통 공간계약과 다르면 지도에 표출하지 않는다."
+    },
+    {
+      "case_id": "PCG-006",
+      "name": "Event Evidence·lineage 누락",
+      "provider_selection": {
+        "event": "t3q",
+        "risk": "mock",
+        "observation": "mock",
+        "spatial": "mock"
+      },
+      "fixtures": {
+        "event": "MISSING_EVIDENCE",
+        "risk": "VALID",
+        "observation": "VALID",
+        "spatial": "VALID"
+      },
+      "expected_status": "FAIL",
+      "expected_lifecycle": "DRAFT",
+      "note": "유사사례 결과는 Event ID만으로 수용하지 않으며 Passage·원문 근거가 필요하다."
+    },
+    {
+      "case_id": "PCG-007",
+      "name": "관측정보 최신성 초과",
+      "provider_selection": {
+        "event": "mock",
+        "risk": "mock",
+        "observation": "openapi",
+        "spatial": "mock"
+      },
+      "fixtures": {
+        "event": "VALID",
+        "risk": "VALID",
+        "observation": "STALE",
+        "spatial": "VALID"
+      },
+      "expected_status": "CONDITIONAL_PASS",
+      "expected_lifecycle": "FIXTURE_VALIDATED",
+      "note": "데이터를 폐기하지 않고 STALE 배지와 관측시각을 표시하며 우선확인지역 산정 신뢰도를 낮춘다."
+    },
+    {
+      "case_id": "PCG-008",
+      "name": "위험지식 임계값 단위 누락",
+      "provider_selection": {
+        "event": "mock",
+        "risk": "t3q",
+        "observation": "mock",
+        "spatial": "mock"
+      },
+      "fixtures": {
+        "event": "VALID",
+        "risk": "MISSING_UNIT",
+        "observation": "VALID",
+        "spatial": "VALID"
+      },
+      "expected_status": "FAIL",
+      "expected_lifecycle": "DRAFT",
+      "note": "임계값은 값·단위·산정근거를 세트로 제공해야 비교·표출할 수 있다."
+    }
+  ]
+}

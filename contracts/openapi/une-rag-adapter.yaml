@@ -1,0 +1,24 @@
+openapi: 3.0.3
+info:
+  title: UNE RAG Adapter Contract
+  version: 0.5.0
+paths:
+  /search:
+    post:
+      summary: UNE RAG 고유 API를 공통 검색결과로 정규화
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [query]
+              properties:
+                query: {type: string}
+                top_k: {type: integer, default: 10}
+                admin_codes: {type: array, items: {type: string}}
+                hazard_codes: {type: array, items: {type: string}}
+                document_types: {type: array, items: {type: string}}
+      responses:
+        '200':
+          description: Normalized search result

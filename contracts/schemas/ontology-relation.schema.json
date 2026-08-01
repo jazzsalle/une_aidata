@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://une.example/contracts/ontology-relation.schema.json",
+  "title": "Ontology Relation Compatibility Contract",
+  "type": "object",
+  "required": [
+    "relation_type",
+    "source_id",
+    "target_id",
+    "data_status"
+  ],
+  "properties": {
+    "relation_id": {
+      "type": "string"
+    },
+    "relation_type": {
+      "enum": [
+        "ref_event",
+        "spatial",
+        "references",
+        "type_match",
+        "relates_to",
+        "derived",
+        "code_ref"
+      ]
+    },
+    "source_id": {
+      "type": "string"
+    },
+    "target_id": {
+      "type": "string"
+    },
+    "source_schema": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "target_schema": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "data_status": {
+      "enum": [
+        "actual",
+        "actual_backed",
+        "open_api",
+        "t3q_supplied",
+        "derived",
+        "scenario",
+        "scenario_input",
+        "mock",
+        "synthetic_demo",
+        "provisional",
+        "not_available"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

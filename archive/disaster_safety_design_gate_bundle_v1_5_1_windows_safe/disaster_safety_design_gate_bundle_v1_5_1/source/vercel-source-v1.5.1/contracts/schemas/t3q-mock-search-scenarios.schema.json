@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://une.example/contracts/t3q-mock-search-scenarios.schema.json",
+  "title": "T3Q Mock Search Scenarios",
+  "type": "object",
+  "required": [
+    "dataset",
+    "version",
+    "runtime_policy",
+    "scenarios"
+  ],
+  "properties": {
+    "runtime_policy": {
+      "const": "MOCK_FIRST_PROVIDER_NEUTRAL"
+    },
+    "scenarios": {
+      "type": "array",
+      "minItems": 5,
+      "items": {
+        "type": "object",
+        "required": [
+          "scenario_id",
+          "cq_id",
+          "query",
+          "admin_code",
+          "taxonomy_codes",
+          "schema_types",
+          "expected_layers",
+          "expected_event_ids"
+        ],
+        "properties": {
+          "scenario_id": {
+            "type": "string"
+          },
+          "cq_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "query": {
+            "type": "string",
+            "minLength": 1
+          },
+          "admin_code": {
+            "type": "string"
+          },
+          "taxonomy_codes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "schema_types": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "expected_layers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "expected_event_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "expected_warning": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "dataset": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

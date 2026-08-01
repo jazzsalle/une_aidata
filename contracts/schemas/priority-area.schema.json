@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PriorityAreaResult",
+  "type": "object",
+  "required": [
+    "situation_id",
+    "method",
+    "official_risk_score",
+    "areas"
+  ],
+  "properties": {
+    "situation_id": {
+      "type": "string"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "method": {
+      "type": "string"
+    },
+    "official_risk_score": {
+      "const": false
+    },
+    "areas": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "rank",
+          "spatial_object_id",
+          "score",
+          "reasons",
+          "required_checks",
+          "operator_confirmation_required"
+        ],
+        "properties": {
+          "rank": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "spatial_object_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "score": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "component_scores": {
+            "type": "object"
+          },
+          "reasons": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "required_checks": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "data_quality": {
+            "type": [
+              "object",
+              "null"
+            ]
+          },
+          "operator_confirmation_required": {
+            "const": true
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": false
+}

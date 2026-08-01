@@ -1,0 +1,2399 @@
+{
+  "dataset": "t3q_mock_passages",
+  "version": "1.3",
+  "runtime_policy": "MOCK_FIRST_PROVIDER_NEUTRAL",
+  "counts": {
+    "total": 73
+  },
+  "passages": [
+    {
+      "ref_disaster_event_id": "EVT::20100901-TYPH-41430-001",
+      "taxonomy_codes": [
+        "T10105",
+        "T10206"
+      ],
+      "admin_code": "41430",
+      "legal_region_code": null,
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-001-01",
+      "schema_type": "DisasterEventMasterPassage",
+      "title": "태풍 곤파스 - 안양천지구",
+      "content": "경기도 의왕시 안양천지구에서 기록·가정된 태풍 곤파스 - 안양천지구 사건 기본정보.",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20100901-TYPH-41430-001-01",
+        "source_file": "제2차 의왕시 자연재해저감 종합계획(2022.7)",
+        "source_sheet": null,
+        "source_row": 1,
+        "document_page": 98,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20100901-TYPH-41430-001",
+      "taxonomy_codes": [
+        "T10105",
+        "T10206"
+      ],
+      "admin_code": "41430",
+      "legal_region_code": null,
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-001-02",
+      "schema_type": "DamageRecordPassage",
+      "title": "태풍 곤파스 - 안양천지구 피해정보",
+      "content": "2010년 태풍 곤파스 시 안양천 충훈1교 관측 최고수위 EL.17.09m 기록 — 200년빈도 계획홍수위 대비 분석 대상이 된 주요 홍수 사상",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20100901-TYPH-41430-001-01",
+        "source_file": "제2차 의왕시 자연재해저감 종합계획(2022.7)",
+        "source_sheet": null,
+        "source_row": 1,
+        "document_page": 98,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20100901-TYPH-41430-001",
+      "taxonomy_codes": [
+        "T10105",
+        "T10206"
+      ],
+      "admin_code": "41430",
+      "legal_region_code": null,
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-001-03",
+      "schema_type": "ResponseRecordPassage",
+      "title": "태풍 곤파스 - 안양천지구 대응정보",
+      "content": "대응조치 원문·정형자료 미확보",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20100901-TYPH-41430-001-01",
+        "source_file": "제2차 의왕시 자연재해저감 종합계획(2022.7)",
+        "source_sheet": null,
+        "source_row": 1,
+        "document_page": 98,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20100901-TYPH-41430-001",
+      "taxonomy_codes": [
+        "T10105",
+        "T10206"
+      ],
+      "admin_code": "41430",
+      "legal_region_code": null,
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-001-04",
+      "schema_type": "FloodVulnerableZonePassage",
+      "title": "안양천지구 위험지식",
+      "content": "계획빈도에서 제방여유고 좌안 최대 2.96m·우안 최대 2.96m 부족, 하폭 최대 9m 부족 / 교량 5개소 여유고·연장·경간장 등 시설능력 부족",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20100901-TYPH-41430-001-01",
+        "source_file": "제2차 의왕시 자연재해저감 종합계획(2022.7)",
+        "source_sheet": null,
+        "source_row": 1,
+        "document_page": 98,
+        "version": "1.3"
+      },
+      "spatial_object_ids": [
+        "UW-A-01"
+      ]
+    },
+    {
+      "ref_disaster_event_id": "EVT::20090701-FLOOD-41430-001",
+      "taxonomy_codes": [
+        "T10107",
+        "T10206"
+      ],
+      "admin_code": "41430",
+      "legal_region_code": null,
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-002-01",
+      "schema_type": "DisasterEventMasterPassage",
+      "title": "집중호우 - 오전천지구",
+      "content": "경기도 의왕시 오전천지구에서 기록·가정된 집중호우 - 오전천지구 사건 기본정보.",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20090701-FLOOD-41430-001-01",
+        "source_file": "제2차 의왕시 자연재해저감 종합계획 위험지구 후보지 위험요인 분석표",
+        "source_sheet": null,
+        "source_row": 2,
+        "document_page": 3,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20090701-FLOOD-41430-001",
+      "taxonomy_codes": [
+        "T10107",
+        "T10206"
+      ],
+      "admin_code": "41430",
+      "legal_region_code": null,
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-002-02",
+      "schema_type": "DamageRecordPassage",
+      "title": "집중호우 - 오전천지구 피해정보",
+      "content": "2009년 7월 집중호우 시 하천급류로 인한 피해 발생(관리대장 피해이력). 위험지구 후보지 위험요인 분석표 피해이력(A) 3점 — 최근 10년내 피해이력 있음",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20090701-FLOOD-41430-001-01",
+        "source_file": "제2차 의왕시 자연재해저감 종합계획 위험지구 후보지 위험요인 분석표",
+        "source_sheet": null,
+        "source_row": 2,
+        "document_page": 3,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20090701-FLOOD-41430-001",
+      "taxonomy_codes": [
+        "T10107",
+        "T10206"
+      ],
+      "admin_code": "41430",
+      "legal_region_code": null,
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-002-03",
+      "schema_type": "ResponseRecordPassage",
+      "title": "집중호우 - 오전천지구 대응정보",
+      "content": "대응조치 원문·정형자료 미확보",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20090701-FLOOD-41430-001-01",
+        "source_file": "제2차 의왕시 자연재해저감 종합계획 위험지구 후보지 위험요인 분석표",
+        "source_sheet": null,
+        "source_row": 2,
+        "document_page": 3,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20090701-FLOOD-41430-001",
+      "taxonomy_codes": [
+        "T10107",
+        "T10206"
+      ],
+      "admin_code": "41430",
+      "legal_region_code": null,
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-002-04",
+      "schema_type": "FloodVulnerableZonePassage",
+      "title": "오전천지구 위험지식",
+      "content": "계획빈도에서 제방여유고 좌안 최대 1.82m·우안 최대 1.82m 부족, 하폭 최대 18m 부족 / 교량 11개소 여유고·연장·경간장 등 시설능력 부족",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20090701-FLOOD-41430-001-01",
+        "source_file": "제2차 의왕시 자연재해저감 종합계획 위험지구 후보지 위험요인 분석표",
+        "source_sheet": null,
+        "source_row": 2,
+        "document_page": 3,
+        "version": "1.3"
+      },
+      "spatial_object_ids": [
+        "UW-A-02"
+      ]
+    },
+    {
+      "ref_disaster_event_id": "EVT::20090701-FLOOD-41430-002",
+      "taxonomy_codes": [
+        "T10107",
+        "T10106"
+      ],
+      "admin_code": "41430",
+      "legal_region_code": null,
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-003-01",
+      "schema_type": "DisasterEventMasterPassage",
+      "title": "집중호우 - 내손A지구",
+      "content": "경기도 의왕시 내손A지구에서 기록·가정된 집중호우 - 내손A지구 사건 기본정보.",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20090701-FLOOD-41430-002-01",
+        "source_file": "제2차 의왕시 자연재해저감 종합계획 관리대장(2022.7)",
+        "source_sheet": null,
+        "source_row": 3,
+        "document_page": 11,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20090701-FLOOD-41430-002",
+      "taxonomy_codes": [
+        "T10107",
+        "T10106"
+      ],
+      "admin_code": "41430",
+      "legal_region_code": null,
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-003-02",
+      "schema_type": "DamageRecordPassage",
+      "title": "집중호우 - 내손A지구 피해정보",
+      "content": "2009년 7월 집중호우 시 내손동 일대 주택 침수피해 발생(관리대장 피해이력)",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20090701-FLOOD-41430-002-01",
+        "source_file": "제2차 의왕시 자연재해저감 종합계획 관리대장(2022.7)",
+        "source_sheet": null,
+        "source_row": 3,
+        "document_page": 11,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20090701-FLOOD-41430-002",
+      "taxonomy_codes": [
+        "T10107",
+        "T10106"
+      ],
+      "admin_code": "41430",
+      "legal_region_code": null,
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-003-03",
+      "schema_type": "ResponseRecordPassage",
+      "title": "집중호우 - 내손A지구 대응정보",
+      "content": "대응조치 원문·정형자료 미확보",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20090701-FLOOD-41430-002-01",
+        "source_file": "제2차 의왕시 자연재해저감 종합계획 관리대장(2022.7)",
+        "source_sheet": null,
+        "source_row": 3,
+        "document_page": 11,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20090701-FLOOD-41430-002",
+      "taxonomy_codes": [
+        "T10107",
+        "T10106"
+      ],
+      "admin_code": "41430",
+      "legal_region_code": null,
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-003-04",
+      "schema_type": "FloodVulnerableZonePassage",
+      "title": "내손A지구 위험지식",
+      "content": "우수관로 통수단면 부족에 따른 내수배제 불량으로 계원대사거리~안양농수산물시장 일대 침수피해 가능성",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20090701-FLOOD-41430-002-01",
+        "source_file": "제2차 의왕시 자연재해저감 종합계획 관리대장(2022.7)",
+        "source_sheet": null,
+        "source_row": 3,
+        "document_page": 11,
+        "version": "1.3"
+      },
+      "spatial_object_ids": [
+        "UW-B-02"
+      ]
+    },
+    {
+      "ref_disaster_event_id": "EVT::20160701-FLOOD-41430-001",
+      "taxonomy_codes": [
+        "T10107",
+        "T10106"
+      ],
+      "admin_code": "41430",
+      "legal_region_code": null,
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-004-01",
+      "schema_type": "DisasterEventMasterPassage",
+      "title": "집중호우 - 오전B지구",
+      "content": "경기도 의왕시 오전B지구에서 기록·가정된 집중호우 - 오전B지구 사건 기본정보.",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20160701-FLOOD-41430-001-01",
+        "source_file": "제2차 의왕시 자연재해저감 종합계획 관리대장(2022.7)",
+        "source_sheet": null,
+        "source_row": 4,
+        "document_page": 12,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20160701-FLOOD-41430-001",
+      "taxonomy_codes": [
+        "T10107",
+        "T10106"
+      ],
+      "admin_code": "41430",
+      "legal_region_code": null,
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-004-02",
+      "schema_type": "DamageRecordPassage",
+      "title": "집중호우 - 오전B지구 피해정보",
+      "content": "2016년 7월 집중호우 시 고천동 300-4 일대 주택 침수피해 발생(관리대장 피해이력)",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20160701-FLOOD-41430-001-01",
+        "source_file": "제2차 의왕시 자연재해저감 종합계획 관리대장(2022.7)",
+        "source_sheet": null,
+        "source_row": 4,
+        "document_page": 12,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20160701-FLOOD-41430-001",
+      "taxonomy_codes": [
+        "T10107",
+        "T10106"
+      ],
+      "admin_code": "41430",
+      "legal_region_code": null,
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-004-03",
+      "schema_type": "ResponseRecordPassage",
+      "title": "집중호우 - 오전B지구 대응정보",
+      "content": "대응조치 원문·정형자료 미확보",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20160701-FLOOD-41430-001-01",
+        "source_file": "제2차 의왕시 자연재해저감 종합계획 관리대장(2022.7)",
+        "source_sheet": null,
+        "source_row": 4,
+        "document_page": 12,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20160701-FLOOD-41430-001",
+      "taxonomy_codes": [
+        "T10107",
+        "T10106"
+      ],
+      "admin_code": "41430",
+      "legal_region_code": null,
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-004-04",
+      "schema_type": "FloodVulnerableZonePassage",
+      "title": "오전B지구 위험지식",
+      "content": "우수관로 통수단면 부족에 따른 내수배제 불량으로 왕곡천복개구간 일대 침수피해 가능성",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20160701-FLOOD-41430-001-01",
+        "source_file": "제2차 의왕시 자연재해저감 종합계획 관리대장(2022.7)",
+        "source_sheet": null,
+        "source_row": 4,
+        "document_page": 12,
+        "version": "1.3"
+      },
+      "spatial_object_ids": [
+        "UW-B-03"
+      ]
+    },
+    {
+      "ref_disaster_event_id": "EVT::20170701-FLOOD-41430-001",
+      "taxonomy_codes": [
+        "T10107",
+        "T10106"
+      ],
+      "admin_code": "41430",
+      "legal_region_code": null,
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-005-01",
+      "schema_type": "DisasterEventMasterPassage",
+      "title": "집중호우 - 오전B지구",
+      "content": "경기도 의왕시 오전B지구에서 기록·가정된 집중호우 - 오전B지구 사건 기본정보.",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20170701-FLOOD-41430-001-01",
+        "source_file": "제2차 의왕시 자연재해저감 종합계획 관리대장(2022.7)",
+        "source_sheet": null,
+        "source_row": 5,
+        "document_page": 12,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20170701-FLOOD-41430-001",
+      "taxonomy_codes": [
+        "T10107",
+        "T10106"
+      ],
+      "admin_code": "41430",
+      "legal_region_code": null,
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-005-02",
+      "schema_type": "DamageRecordPassage",
+      "title": "집중호우 - 오전B지구 피해정보",
+      "content": "2017년 7월 집중호우 시 고천동 300-4 일대 주택 침수피해 발생(관리대장 피해이력)",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20170701-FLOOD-41430-001-01",
+        "source_file": "제2차 의왕시 자연재해저감 종합계획 관리대장(2022.7)",
+        "source_sheet": null,
+        "source_row": 5,
+        "document_page": 12,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20170701-FLOOD-41430-001",
+      "taxonomy_codes": [
+        "T10107",
+        "T10106"
+      ],
+      "admin_code": "41430",
+      "legal_region_code": null,
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-005-03",
+      "schema_type": "ResponseRecordPassage",
+      "title": "집중호우 - 오전B지구 대응정보",
+      "content": "대응조치 원문·정형자료 미확보",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20170701-FLOOD-41430-001-01",
+        "source_file": "제2차 의왕시 자연재해저감 종합계획 관리대장(2022.7)",
+        "source_sheet": null,
+        "source_row": 5,
+        "document_page": 12,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20170701-FLOOD-41430-001",
+      "taxonomy_codes": [
+        "T10107",
+        "T10106"
+      ],
+      "admin_code": "41430",
+      "legal_region_code": null,
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-005-04",
+      "schema_type": "FloodVulnerableZonePassage",
+      "title": "오전B지구 위험지식",
+      "content": "우수관로 통수단면 부족에 따른 내수배제 불량으로 왕곡천복개구간 일대 침수피해 가능성",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20170701-FLOOD-41430-001-01",
+        "source_file": "제2차 의왕시 자연재해저감 종합계획 관리대장(2022.7)",
+        "source_sheet": null,
+        "source_row": 5,
+        "document_page": 12,
+        "version": "1.3"
+      },
+      "spatial_object_ids": [
+        "UW-B-03"
+      ]
+    },
+    {
+      "ref_disaster_event_id": "EVT::20120901-TYPH-47190-001",
+      "taxonomy_codes": [
+        "T10105",
+        "T10206",
+        "T10107"
+      ],
+      "admin_code": "47190",
+      "legal_region_code": null,
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-006-01",
+      "schema_type": "DisasterEventMasterPassage",
+      "title": "태풍 산바 - 구미천지구",
+      "content": "경상북도 구미시 구미천지구에서 기록·가정된 태풍 산바 - 구미천지구 사건 기본정보.",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20120901-TYPH-47190-001-01",
+        "source_file": "제2차 구미시 자연재해저감종합계획(2021.9)",
+        "source_sheet": null,
+        "source_row": 6,
+        "document_page": 705,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20120901-TYPH-47190-001",
+      "taxonomy_codes": [
+        "T10105",
+        "T10206",
+        "T10107"
+      ],
+      "admin_code": "47190",
+      "legal_region_code": null,
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-006-02",
+      "schema_type": "DamageRecordPassage",
+      "title": "태풍 산바 - 구미천지구 피해정보",
+      "content": "2012년 9월 15~17일 태풍 산바 — 구미시 이재민 147명·재산피해액 약 82억원(최근 10년 최대 규모), 선주교 관측소 수위·환산홍수량 급상승 기록",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20120901-TYPH-47190-001-01",
+        "source_file": "제2차 구미시 자연재해저감종합계획(2021.9)",
+        "source_sheet": null,
+        "source_row": 6,
+        "document_page": 705,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20120901-TYPH-47190-001",
+      "taxonomy_codes": [
+        "T10105",
+        "T10206",
+        "T10107"
+      ],
+      "admin_code": "47190",
+      "legal_region_code": null,
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-006-03",
+      "schema_type": "ResponseRecordPassage",
+      "title": "태풍 산바 - 구미천지구 대응정보",
+      "content": "대응조치 원문·정형자료 미확보",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20120901-TYPH-47190-001-01",
+        "source_file": "제2차 구미시 자연재해저감종합계획(2021.9)",
+        "source_sheet": null,
+        "source_row": 6,
+        "document_page": 705,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20120901-TYPH-47190-001",
+      "taxonomy_codes": [
+        "T10105",
+        "T10206",
+        "T10107"
+      ],
+      "admin_code": "47190",
+      "legal_region_code": null,
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-006-04",
+      "schema_type": "FloodVulnerableZonePassage",
+      "title": "구미천지구 위험지식",
+      "content": "제방고에 근접하는 고수위 빈발, 제방고 부족에 따른 주거지 침수 우려 / 정비계획 수립 후 미시행된 인명피해 위험지역",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20120901-TYPH-47190-001-01",
+        "source_file": "제2차 구미시 자연재해저감종합계획(2021.9)",
+        "source_sheet": null,
+        "source_row": 6,
+        "document_page": 705,
+        "version": "1.3"
+      },
+      "spatial_object_ids": [
+        "GM-A-04"
+      ]
+    },
+    {
+      "ref_disaster_event_id": "EVT::20200801-FLOOD-45190-001",
+      "taxonomy_codes": [
+        "T10107",
+        "T10206"
+      ],
+      "admin_code": "45190",
+      "legal_region_code": null,
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-007-01",
+      "schema_type": "DisasterEventMasterPassage",
+      "title": "집중호우 - 주촌지구(하천재해)",
+      "content": "전라북도 남원시 주촌지구(하천재해)에서 기록·가정된 집중호우 - 주촌지구(하천재해) 사건 기본정보.",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20200801-FLOOD-45190-001-01",
+        "source_file": "제2차 남원시 자연재해저감 종합계획(2022.4)",
+        "source_sheet": null,
+        "source_row": 7,
+        "document_page": 121,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20200801-FLOOD-45190-001",
+      "taxonomy_codes": [
+        "T10107",
+        "T10206"
+      ],
+      "admin_code": "45190",
+      "legal_region_code": null,
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-007-02",
+      "schema_type": "DamageRecordPassage",
+      "title": "집중호우 - 주촌지구(하천재해) 피해정보",
+      "content": "2020년 8월 7~9일 집중호우 — 남원시 평균 411.1mm(대강면 누적 534mm·금지면 500mm)의 기록적 강우, 관내 하천 수계 침수피해 및 개선복구 계획 수립",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20200801-FLOOD-45190-001-01",
+        "source_file": "제2차 남원시 자연재해저감 종합계획(2022.4)",
+        "source_sheet": null,
+        "source_row": 7,
+        "document_page": 121,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20200801-FLOOD-45190-001",
+      "taxonomy_codes": [
+        "T10107",
+        "T10206"
+      ],
+      "admin_code": "45190",
+      "legal_region_code": null,
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-007-03",
+      "schema_type": "ResponseRecordPassage",
+      "title": "집중호우 - 주촌지구(하천재해) 대응정보",
+      "content": "대응조치 원문·정형자료 미확보",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20200801-FLOOD-45190-001-01",
+        "source_file": "제2차 남원시 자연재해저감 종합계획(2022.4)",
+        "source_sheet": null,
+        "source_row": 7,
+        "document_page": 121,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20200801-FLOOD-45190-001",
+      "taxonomy_codes": [
+        "T10107",
+        "T10206"
+      ],
+      "admin_code": "45190",
+      "legal_region_code": null,
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-007-04",
+      "schema_type": "FloodVulnerableZonePassage",
+      "title": "주촌지구(하천재해) 위험지식",
+      "content": "침수 위험",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20200801-FLOOD-45190-001-01",
+        "source_file": "제2차 남원시 자연재해저감 종합계획(2022.4)",
+        "source_sheet": null,
+        "source_row": 7,
+        "document_page": 121,
+        "version": "1.3"
+      },
+      "spatial_object_ids": [
+        "NW-A-01"
+      ]
+    },
+    {
+      "ref_disaster_event_id": "EVT::20200801-FLOOD-45190-002",
+      "taxonomy_codes": [
+        "T10107",
+        "T10206"
+      ],
+      "admin_code": "45190",
+      "legal_region_code": null,
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-008-01",
+      "schema_type": "DisasterEventMasterPassage",
+      "title": "집중호우 - 요천지구",
+      "content": "전라북도 남원시 요천지구에서 기록·가정된 집중호우 - 요천지구 사건 기본정보.",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20200801-FLOOD-45190-002-01",
+        "source_file": "제2차 남원시 자연재해저감 종합계획(2022.4)",
+        "source_sheet": null,
+        "source_row": 8,
+        "document_page": 120,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20200801-FLOOD-45190-002",
+      "taxonomy_codes": [
+        "T10107",
+        "T10206"
+      ],
+      "admin_code": "45190",
+      "legal_region_code": null,
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-008-02",
+      "schema_type": "DamageRecordPassage",
+      "title": "집중호우 - 요천지구 피해정보",
+      "content": "2020년 8월 7~9일 집중호우 — 남원시 평균 411.1mm의 기록적 강우, 요천 합류부 침수피해 저감을 위한 개선복구·유로변경 등 복구계획 서술",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20200801-FLOOD-45190-002-01",
+        "source_file": "제2차 남원시 자연재해저감 종합계획(2022.4)",
+        "source_sheet": null,
+        "source_row": 8,
+        "document_page": 120,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20200801-FLOOD-45190-002",
+      "taxonomy_codes": [
+        "T10107",
+        "T10206"
+      ],
+      "admin_code": "45190",
+      "legal_region_code": null,
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-008-03",
+      "schema_type": "ResponseRecordPassage",
+      "title": "집중호우 - 요천지구 대응정보",
+      "content": "대응조치 원문·정형자료 미확보",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20200801-FLOOD-45190-002-01",
+        "source_file": "제2차 남원시 자연재해저감 종합계획(2022.4)",
+        "source_sheet": null,
+        "source_row": 8,
+        "document_page": 120,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20200801-FLOOD-45190-002",
+      "taxonomy_codes": [
+        "T10107",
+        "T10206"
+      ],
+      "admin_code": "45190",
+      "legal_region_code": null,
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-008-04",
+      "schema_type": "FloodVulnerableZonePassage",
+      "title": "요천지구 위험지식",
+      "content": "침수 위험",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20200801-FLOOD-45190-002-01",
+        "source_file": "제2차 남원시 자연재해저감 종합계획(2022.4)",
+        "source_sheet": null,
+        "source_row": 8,
+        "document_page": 120,
+        "version": "1.3"
+      },
+      "spatial_object_ids": [
+        "NW-A-02"
+      ]
+    },
+    {
+      "ref_disaster_event_id": "EVT::20100801-FLOOD-45190-001",
+      "taxonomy_codes": [
+        "T10206",
+        "T10107"
+      ],
+      "admin_code": "45190",
+      "legal_region_code": null,
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-009-01",
+      "schema_type": "DisasterEventMasterPassage",
+      "title": "집중호우(홍수) - 요천지구",
+      "content": "전라북도 남원시 요천지구에서 기록·가정된 집중호우(홍수) - 요천지구 사건 기본정보.",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20100801-FLOOD-45190-001-01",
+        "source_file": "요천권역(국가하천) 하천기본계획(변경)(2021)",
+        "source_sheet": null,
+        "source_row": 9,
+        "document_page": 97,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20100801-FLOOD-45190-001",
+      "taxonomy_codes": [
+        "T10206",
+        "T10107"
+      ],
+      "admin_code": "45190",
+      "legal_region_code": null,
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-009-02",
+      "schema_type": "DamageRecordPassage",
+      "title": "집중호우(홍수) - 요천지구 피해정보",
+      "content": "2010년 8월 12~18일 홍수 — 남원관측소 1시간 최대 58mm(20년빈도 상당) 기록, 요천 수계 홍수분석 대상 사상",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20100801-FLOOD-45190-001-01",
+        "source_file": "요천권역(국가하천) 하천기본계획(변경)(2021)",
+        "source_sheet": null,
+        "source_row": 9,
+        "document_page": 97,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20100801-FLOOD-45190-001",
+      "taxonomy_codes": [
+        "T10206",
+        "T10107"
+      ],
+      "admin_code": "45190",
+      "legal_region_code": null,
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-009-03",
+      "schema_type": "ResponseRecordPassage",
+      "title": "집중호우(홍수) - 요천지구 대응정보",
+      "content": "대응조치 원문·정형자료 미확보",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20100801-FLOOD-45190-001-01",
+        "source_file": "요천권역(국가하천) 하천기본계획(변경)(2021)",
+        "source_sheet": null,
+        "source_row": 9,
+        "document_page": 97,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20100801-FLOOD-45190-001",
+      "taxonomy_codes": [
+        "T10206",
+        "T10107"
+      ],
+      "admin_code": "45190",
+      "legal_region_code": null,
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-009-04",
+      "schema_type": "FloodVulnerableZonePassage",
+      "title": "요천지구 위험지식",
+      "content": "침수 위험",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20100801-FLOOD-45190-001-01",
+        "source_file": "요천권역(국가하천) 하천기본계획(변경)(2021)",
+        "source_sheet": null,
+        "source_row": 9,
+        "document_page": 97,
+        "version": "1.3"
+      },
+      "spatial_object_ids": [
+        "NW-A-02"
+      ]
+    },
+    {
+      "ref_disaster_event_id": "EVT::20240718-FLOOD-41430-901",
+      "taxonomy_codes": [
+        "T10107",
+        "T10206",
+        "T10106"
+      ],
+      "admin_code": "41430",
+      "legal_region_code": null,
+      "data_status": "synthetic_demo",
+      "source_type": "SYNTHETIC_DEMO",
+      "provider_id": "mock_event_provider",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "합성 시연자료",
+        "공식자료 아님",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-010-01",
+      "schema_type": "DisasterEventMasterPassage",
+      "title": "의왕 안양천 호우·수위상승 시연사례",
+      "content": "경기도 의왕시 안양천지구에서 기록·가정된 의왕 안양천 호우·수위상승 시연사례 사건 기본정보.",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20240718-FLOOD-41430-901-01",
+        "source_file": "damage_recovery_events_seed.json",
+        "source_sheet": null,
+        "source_row": 10,
+        "document_page": null,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20240718-FLOOD-41430-901",
+      "taxonomy_codes": [
+        "T10107",
+        "T10206",
+        "T10106"
+      ],
+      "admin_code": "41430",
+      "legal_region_code": null,
+      "data_status": "synthetic_demo",
+      "source_type": "SYNTHETIC_DEMO",
+      "provider_id": "mock_event_provider",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "합성 시연자료",
+        "공식자료 아님",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-010-02",
+      "schema_type": "DamageRecordPassage",
+      "title": "의왕 안양천 호우·수위상승 시연사례 피해정보",
+      "content": "{'human': {'evacuees': 22}, 'private_facility': [{'category': '상가·지하공간 침수', 'count': 7, 'unit': '개소'}], 'public_facility': [{'category': '도로 일시통제', 'count': 3, 'unit': '구간'}], 'is_prediction': False}",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20240718-FLOOD-41430-901-01",
+        "source_file": "damage_recovery_events_seed.json",
+        "source_sheet": null,
+        "source_row": 10,
+        "document_page": null,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20240718-FLOOD-41430-901",
+      "taxonomy_codes": [
+        "T10107",
+        "T10206",
+        "T10106"
+      ],
+      "admin_code": "41430",
+      "legal_region_code": null,
+      "data_status": "synthetic_demo",
+      "source_type": "SYNTHETIC_DEMO",
+      "provider_id": "mock_event_provider",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "합성 시연자료",
+        "공식자료 아님",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-010-03",
+      "schema_type": "ResponseRecordPassage",
+      "title": "의왕 안양천 호우·수위상승 시연사례 대응정보",
+      "content": "안양천 하천변 접근통제 / 교량·저지대 현장확인 / 배수장비 투입",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20240718-FLOOD-41430-901-01",
+        "source_file": "damage_recovery_events_seed.json",
+        "source_sheet": null,
+        "source_row": 10,
+        "document_page": null,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20240718-FLOOD-41430-901",
+      "taxonomy_codes": [
+        "T10107",
+        "T10206",
+        "T10106"
+      ],
+      "admin_code": "41430",
+      "legal_region_code": null,
+      "data_status": "synthetic_demo",
+      "source_type": "SYNTHETIC_DEMO",
+      "provider_id": "mock_event_provider",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "합성 시연자료",
+        "공식자료 아님",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-010-04",
+      "schema_type": "FloodVulnerableZonePassage",
+      "title": "안양천지구 위험지식",
+      "content": "제방여유고 부족 / 하폭 부족 / 교량 시설능력 부족",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20240718-FLOOD-41430-901-01",
+        "source_file": "damage_recovery_events_seed.json",
+        "source_sheet": null,
+        "source_row": 10,
+        "document_page": null,
+        "version": "1.3"
+      },
+      "spatial_object_ids": [
+        "UW-A-01",
+        "MOCK-FRA-41430-001"
+      ]
+    },
+    {
+      "ref_disaster_event_id": "EVT::20240805-SLOPE-41430-901",
+      "taxonomy_codes": [
+        "T10107",
+        "T10401"
+      ],
+      "admin_code": "41430",
+      "legal_region_code": null,
+      "data_status": "synthetic_demo",
+      "source_type": "SYNTHETIC_DEMO",
+      "provider_id": "mock_event_provider",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "합성 시연자료",
+        "공식자료 아님",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-011-01",
+      "schema_type": "DisasterEventMasterPassage",
+      "title": "의왕 사면 토사유출 시연사례",
+      "content": "경기도 의왕시 능안천지구에서 기록·가정된 의왕 사면 토사유출 시연사례 사건 기본정보.",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20240805-SLOPE-41430-901-01",
+        "source_file": "damage_recovery_events_seed.json",
+        "source_sheet": null,
+        "source_row": 11,
+        "document_page": null,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20240805-SLOPE-41430-901",
+      "taxonomy_codes": [
+        "T10107",
+        "T10401"
+      ],
+      "admin_code": "41430",
+      "legal_region_code": null,
+      "data_status": "synthetic_demo",
+      "source_type": "SYNTHETIC_DEMO",
+      "provider_id": "mock_event_provider",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "합성 시연자료",
+        "공식자료 아님",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-011-02",
+      "schema_type": "DamageRecordPassage",
+      "title": "의왕 사면 토사유출 시연사례 피해정보",
+      "content": "{'public_facility': [{'category': '도로 토사유입', 'count': 1, 'unit': '구간'}], 'is_prediction': False}",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20240805-SLOPE-41430-901-01",
+        "source_file": "damage_recovery_events_seed.json",
+        "source_sheet": null,
+        "source_row": 11,
+        "document_page": null,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20240805-SLOPE-41430-901",
+      "taxonomy_codes": [
+        "T10107",
+        "T10401"
+      ],
+      "admin_code": "41430",
+      "legal_region_code": null,
+      "data_status": "synthetic_demo",
+      "source_type": "SYNTHETIC_DEMO",
+      "provider_id": "mock_event_provider",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "합성 시연자료",
+        "공식자료 아님",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-011-03",
+      "schema_type": "ResponseRecordPassage",
+      "title": "의왕 사면 토사유출 시연사례 대응정보",
+      "content": "사면 하부 도로 통제 / 인접시설 이용자 안내",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20240805-SLOPE-41430-901-01",
+        "source_file": "damage_recovery_events_seed.json",
+        "source_sheet": null,
+        "source_row": 11,
+        "document_page": null,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20240805-SLOPE-41430-901",
+      "taxonomy_codes": [
+        "T10107",
+        "T10401"
+      ],
+      "admin_code": "41430",
+      "legal_region_code": null,
+      "data_status": "synthetic_demo",
+      "source_type": "SYNTHETIC_DEMO",
+      "provider_id": "mock_event_provider",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "합성 시연자료",
+        "공식자료 아님",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-011-04",
+      "schema_type": "HazardZonePassage",
+      "title": "능안천지구 위험지식",
+      "content": "토사발생 위험도 높음 / 사면 배수 취약",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20240805-SLOPE-41430-901-01",
+        "source_file": "damage_recovery_events_seed.json",
+        "source_sheet": null,
+        "source_row": 11,
+        "document_page": null,
+        "version": "1.3"
+      },
+      "spatial_object_ids": [
+        "UW-C-01"
+      ]
+    },
+    {
+      "ref_disaster_event_id": "EVT::20230810-TYPH-47190-901",
+      "taxonomy_codes": [
+        "T10105",
+        "T10107",
+        "T10206"
+      ],
+      "admin_code": "47190",
+      "legal_region_code": null,
+      "data_status": "synthetic_demo",
+      "source_type": "SYNTHETIC_DEMO",
+      "provider_id": "mock_event_provider",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "합성 시연자료",
+        "공식자료 아님",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-012-01",
+      "schema_type": "DisasterEventMasterPassage",
+      "title": "구미 태풍·호우 복합 시연사례",
+      "content": "경상북도 구미시 구미천지구에서 기록·가정된 구미 태풍·호우 복합 시연사례 사건 기본정보.",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20230810-TYPH-47190-901-01",
+        "source_file": "damage_recovery_events_seed.json",
+        "source_sheet": null,
+        "source_row": 12,
+        "document_page": null,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20230810-TYPH-47190-901",
+      "taxonomy_codes": [
+        "T10105",
+        "T10107",
+        "T10206"
+      ],
+      "admin_code": "47190",
+      "legal_region_code": null,
+      "data_status": "synthetic_demo",
+      "source_type": "SYNTHETIC_DEMO",
+      "provider_id": "mock_event_provider",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "합성 시연자료",
+        "공식자료 아님",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-012-02",
+      "schema_type": "DamageRecordPassage",
+      "title": "구미 태풍·호우 복합 시연사례 피해정보",
+      "content": "{'human': {'evacuees': 34}, 'agriculture': [{'category': '농경지 침수', 'value': 15, 'unit': 'ha'}], 'public_facility': [{'category': '호안 피해', 'value': 120, 'unit': 'm'}], 'is_prediction': False}",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20230810-TYPH-47190-901-01",
+        "source_file": "damage_recovery_events_seed.json",
+        "source_sheet": null,
+        "source_row": 12,
+        "document_page": null,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20230810-TYPH-47190-901",
+      "taxonomy_codes": [
+        "T10105",
+        "T10107",
+        "T10206"
+      ],
+      "admin_code": "47190",
+      "legal_region_code": null,
+      "data_status": "synthetic_demo",
+      "source_type": "SYNTHETIC_DEMO",
+      "provider_id": "mock_event_provider",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "합성 시연자료",
+        "공식자료 아님",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-012-03",
+      "schema_type": "ResponseRecordPassage",
+      "title": "구미 태풍·호우 복합 시연사례 대응정보",
+      "content": "구미천 인접지역 예찰·통제 / 농경지·도로 피해 확인",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20230810-TYPH-47190-901-01",
+        "source_file": "damage_recovery_events_seed.json",
+        "source_sheet": null,
+        "source_row": 12,
+        "document_page": null,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20230810-TYPH-47190-901",
+      "taxonomy_codes": [
+        "T10105",
+        "T10107",
+        "T10206"
+      ],
+      "admin_code": "47190",
+      "legal_region_code": null,
+      "data_status": "synthetic_demo",
+      "source_type": "SYNTHETIC_DEMO",
+      "provider_id": "mock_event_provider",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "합성 시연자료",
+        "공식자료 아님",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-012-04",
+      "schema_type": "FloodVulnerableZonePassage",
+      "title": "구미천지구 위험지식",
+      "content": "태풍 동반 집중호우 / 하천시설 피해 가능",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20230810-TYPH-47190-901-01",
+        "source_file": "damage_recovery_events_seed.json",
+        "source_sheet": null,
+        "source_row": 12,
+        "document_page": null,
+        "version": "1.3"
+      },
+      "spatial_object_ids": [
+        "GM-A-04",
+        "MOCK-FRA-47190-001"
+      ]
+    },
+    {
+      "ref_disaster_event_id": "EVT::20240712-SLOPE-47190-901",
+      "taxonomy_codes": [
+        "T10107",
+        "T10401"
+      ],
+      "admin_code": "47190",
+      "legal_region_code": null,
+      "data_status": "synthetic_demo",
+      "source_type": "SYNTHETIC_DEMO",
+      "provider_id": "mock_event_provider",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "합성 시연자료",
+        "공식자료 아님",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-013-01",
+      "schema_type": "DisasterEventMasterPassage",
+      "title": "구미 황산 사면 붕괴위험 시연사례",
+      "content": "경상북도 구미시 황산지구에서 기록·가정된 구미 황산 사면 붕괴위험 시연사례 사건 기본정보.",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20240712-SLOPE-47190-901-01",
+        "source_file": "damage_recovery_events_seed.json",
+        "source_sheet": null,
+        "source_row": 13,
+        "document_page": null,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20240712-SLOPE-47190-901",
+      "taxonomy_codes": [
+        "T10107",
+        "T10401"
+      ],
+      "admin_code": "47190",
+      "legal_region_code": null,
+      "data_status": "synthetic_demo",
+      "source_type": "SYNTHETIC_DEMO",
+      "provider_id": "mock_event_provider",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "합성 시연자료",
+        "공식자료 아님",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-013-02",
+      "schema_type": "DamageRecordPassage",
+      "title": "구미 황산 사면 붕괴위험 시연사례 피해정보",
+      "content": "{'public_facility': [{'category': '사면 낙석', 'count': 1, 'unit': '개소'}], 'is_prediction': False}",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20240712-SLOPE-47190-901-01",
+        "source_file": "damage_recovery_events_seed.json",
+        "source_sheet": null,
+        "source_row": 13,
+        "document_page": null,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20240712-SLOPE-47190-901",
+      "taxonomy_codes": [
+        "T10107",
+        "T10401"
+      ],
+      "admin_code": "47190",
+      "legal_region_code": null,
+      "data_status": "synthetic_demo",
+      "source_type": "SYNTHETIC_DEMO",
+      "provider_id": "mock_event_provider",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "합성 시연자료",
+        "공식자료 아님",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-013-03",
+      "schema_type": "ResponseRecordPassage",
+      "title": "구미 황산 사면 붕괴위험 시연사례 대응정보",
+      "content": "사면 접근 통제 / 낙석방지시설 점검",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20240712-SLOPE-47190-901-01",
+        "source_file": "damage_recovery_events_seed.json",
+        "source_sheet": null,
+        "source_row": 13,
+        "document_page": null,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20240712-SLOPE-47190-901",
+      "taxonomy_codes": [
+        "T10107",
+        "T10401"
+      ],
+      "admin_code": "47190",
+      "legal_region_code": null,
+      "data_status": "synthetic_demo",
+      "source_type": "SYNTHETIC_DEMO",
+      "provider_id": "mock_event_provider",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "합성 시연자료",
+        "공식자료 아님",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-013-04",
+      "schema_type": "HazardZonePassage",
+      "title": "황산지구 위험지식",
+      "content": "사면 풍화 / 낙석·침식 가능",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20240712-SLOPE-47190-901-01",
+        "source_file": "damage_recovery_events_seed.json",
+        "source_sheet": null,
+        "source_row": 13,
+        "document_page": null,
+        "version": "1.3"
+      },
+      "spatial_object_ids": [
+        "GM-C-01"
+      ]
+    },
+    {
+      "ref_disaster_event_id": "EVT::20200713-FLOOD-45190-901",
+      "taxonomy_codes": [
+        "T10107",
+        "T10206",
+        "T10106"
+      ],
+      "admin_code": "45190",
+      "legal_region_code": null,
+      "data_status": "synthetic_demo",
+      "source_type": "SYNTHETIC_DEMO",
+      "provider_id": "mock_event_provider",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "합성 시연자료",
+        "공식자료 아님",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-014-01",
+      "schema_type": "DisasterEventMasterPassage",
+      "title": "남원 요천 홍수 대응 시연사례",
+      "content": "전북특별자치도 남원시 요천지구에서 기록·가정된 남원 요천 홍수 대응 시연사례 사건 기본정보.",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20200713-FLOOD-45190-901-01",
+        "source_file": "damage_recovery_events_seed.json",
+        "source_sheet": null,
+        "source_row": 14,
+        "document_page": null,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20200713-FLOOD-45190-901",
+      "taxonomy_codes": [
+        "T10107",
+        "T10206",
+        "T10106"
+      ],
+      "admin_code": "45190",
+      "legal_region_code": null,
+      "data_status": "synthetic_demo",
+      "source_type": "SYNTHETIC_DEMO",
+      "provider_id": "mock_event_provider",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "합성 시연자료",
+        "공식자료 아님",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-014-02",
+      "schema_type": "DamageRecordPassage",
+      "title": "남원 요천 홍수 대응 시연사례 피해정보",
+      "content": "{'human': {'evacuees': 46}, 'private_facility': [{'category': '주택·상가 침수', 'count': 18, 'unit': '동'}], 'agriculture': [{'category': '농경지 침수', 'value': 24.5, 'unit': 'ha'}], 'is_prediction': False}",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20200713-FLOOD-45190-901-01",
+        "source_file": "damage_recovery_events_seed.json",
+        "source_sheet": null,
+        "source_row": 14,
+        "document_page": null,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20200713-FLOOD-45190-901",
+      "taxonomy_codes": [
+        "T10107",
+        "T10206",
+        "T10106"
+      ],
+      "admin_code": "45190",
+      "legal_region_code": null,
+      "data_status": "synthetic_demo",
+      "source_type": "SYNTHETIC_DEMO",
+      "provider_id": "mock_event_provider",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "합성 시연자료",
+        "공식자료 아님",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-014-03",
+      "schema_type": "ResponseRecordPassage",
+      "title": "남원 요천 홍수 대응 시연사례 대응정보",
+      "content": "요천 인접 저지대 예찰·통제 / 주민 사전대피 및 임시주거시설 안내",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20200713-FLOOD-45190-901-01",
+        "source_file": "damage_recovery_events_seed.json",
+        "source_sheet": null,
+        "source_row": 14,
+        "document_page": null,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20200713-FLOOD-45190-901",
+      "taxonomy_codes": [
+        "T10107",
+        "T10206",
+        "T10106"
+      ],
+      "admin_code": "45190",
+      "legal_region_code": null,
+      "data_status": "synthetic_demo",
+      "source_type": "SYNTHETIC_DEMO",
+      "provider_id": "mock_event_provider",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "합성 시연자료",
+        "공식자료 아님",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-014-04",
+      "schema_type": "FloodVulnerableZonePassage",
+      "title": "요천지구 위험지식",
+      "content": "요천 합류부 침수 위험 / 기록적 강우",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20200713-FLOOD-45190-901-01",
+        "source_file": "damage_recovery_events_seed.json",
+        "source_sheet": null,
+        "source_row": 14,
+        "document_page": null,
+        "version": "1.3"
+      },
+      "spatial_object_ids": [
+        "NW-A-02",
+        "MOCK-FRA-45190-001"
+      ]
+    },
+    {
+      "ref_disaster_event_id": "EVT::20230809-FLOOD-45190-902",
+      "taxonomy_codes": [
+        "T10107",
+        "T10206"
+      ],
+      "admin_code": "45190",
+      "legal_region_code": null,
+      "data_status": "synthetic_demo",
+      "source_type": "SYNTHETIC_DEMO",
+      "provider_id": "mock_event_provider",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "합성 시연자료",
+        "공식자료 아님",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-015-01",
+      "schema_type": "DisasterEventMasterPassage",
+      "title": "남원 선제통제로 피해가 제한된 비교 시연사례",
+      "content": "전북특별자치도 남원시 주촌지구에서 기록·가정된 남원 선제통제로 피해가 제한된 비교 시연사례 사건 기본정보.",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20230809-FLOOD-45190-902-01",
+        "source_file": "damage_recovery_events_seed.json",
+        "source_sheet": null,
+        "source_row": 15,
+        "document_page": null,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20230809-FLOOD-45190-902",
+      "taxonomy_codes": [
+        "T10107",
+        "T10206"
+      ],
+      "admin_code": "45190",
+      "legal_region_code": null,
+      "data_status": "synthetic_demo",
+      "source_type": "SYNTHETIC_DEMO",
+      "provider_id": "mock_event_provider",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "합성 시연자료",
+        "공식자료 아님",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-015-02",
+      "schema_type": "DamageRecordPassage",
+      "title": "남원 선제통제로 피해가 제한된 비교 시연사례 피해정보",
+      "content": "{'human': {'evacuees': 8}, 'public_facility': [{'category': '도로 일시통제', 'count': 1, 'unit': '구간'}], 'damage_note': '선제통제로 시연상 피해규모가 작게 설정됨', 'is_prediction': False}",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20230809-FLOOD-45190-902-01",
+        "source_file": "damage_recovery_events_seed.json",
+        "source_sheet": null,
+        "source_row": 15,
+        "document_page": null,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20230809-FLOOD-45190-902",
+      "taxonomy_codes": [
+        "T10107",
+        "T10206"
+      ],
+      "admin_code": "45190",
+      "legal_region_code": null,
+      "data_status": "synthetic_demo",
+      "source_type": "SYNTHETIC_DEMO",
+      "provider_id": "mock_event_provider",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "합성 시연자료",
+        "공식자료 아님",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-015-03",
+      "schema_type": "ResponseRecordPassage",
+      "title": "남원 선제통제로 피해가 제한된 비교 시연사례 대응정보",
+      "content": "저지대 도로 조기통제 / 취약가구 사전 연락·대피 확인",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20230809-FLOOD-45190-902-01",
+        "source_file": "damage_recovery_events_seed.json",
+        "source_sheet": null,
+        "source_row": 15,
+        "document_page": null,
+        "version": "1.3"
+      },
+      "spatial_object_ids": []
+    },
+    {
+      "ref_disaster_event_id": "EVT::20230809-FLOOD-45190-902",
+      "taxonomy_codes": [
+        "T10107",
+        "T10206"
+      ],
+      "admin_code": "45190",
+      "legal_region_code": null,
+      "data_status": "synthetic_demo",
+      "source_type": "SYNTHETIC_DEMO",
+      "provider_id": "mock_event_provider",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "합성 시연자료",
+        "공식자료 아님",
+        "T3Q API 교체대상"
+      ],
+      "passage_id": "MOCK-PSG-015-04",
+      "schema_type": "FloodVulnerableZonePassage",
+      "title": "주촌지구 위험지식",
+      "content": "하천 수위 급상승 / 저지대 도로 침수 가능",
+      "lineage": {
+        "source_asset_id": "EVD-EVT::20230809-FLOOD-45190-902-01",
+        "source_file": "damage_recovery_events_seed.json",
+        "source_sheet": null,
+        "source_row": 15,
+        "document_page": null,
+        "version": "1.3"
+      },
+      "spatial_object_ids": [
+        "NW-A-01"
+      ]
+    },
+    {
+      "passage_id": "MOCK-PSG-001-05",
+      "schema_type": "MonitoringPointPassage",
+      "ref_disaster_event_id": "EVT::20100901-TYPH-41430-001",
+      "taxonomy_codes": [
+        "T10105",
+        "T10206"
+      ],
+      "title": "경기도 의왕시 참조 관측정보",
+      "content": "현재 강우·수위·유량은 Open API 또는 시나리오 입력으로 공급하고, 계획 산정지점과 공식 관측소를 구분한다.",
+      "admin_code": "41430",
+      "legal_region_code": null,
+      "lineage": {
+        "source_asset_id": "DR-ACT-UW-A-01-201009-01",
+        "source_file": "hydrology_station_candidates_seed.json",
+        "source_sheet": null,
+        "source_row": 1,
+        "document_page": null,
+        "version": "1.3"
+      },
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "spatial_object_ids": []
+    },
+    {
+      "passage_id": "MOCK-PSG-002-05",
+      "schema_type": "MonitoringPointPassage",
+      "ref_disaster_event_id": "EVT::20090701-FLOOD-41430-001",
+      "taxonomy_codes": [
+        "T10107",
+        "T10206"
+      ],
+      "title": "경기도 의왕시 참조 관측정보",
+      "content": "현재 강우·수위·유량은 Open API 또는 시나리오 입력으로 공급하고, 계획 산정지점과 공식 관측소를 구분한다.",
+      "admin_code": "41430",
+      "legal_region_code": null,
+      "lineage": {
+        "source_asset_id": "DR-ACT-UW-A-02-200907-01",
+        "source_file": "hydrology_station_candidates_seed.json",
+        "source_sheet": null,
+        "source_row": 2,
+        "document_page": null,
+        "version": "1.3"
+      },
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "spatial_object_ids": []
+    },
+    {
+      "passage_id": "MOCK-PSG-003-05",
+      "schema_type": "MonitoringPointPassage",
+      "ref_disaster_event_id": "EVT::20090701-FLOOD-41430-002",
+      "taxonomy_codes": [
+        "T10107",
+        "T10106"
+      ],
+      "title": "경기도 의왕시 참조 관측정보",
+      "content": "현재 강우·수위·유량은 Open API 또는 시나리오 입력으로 공급하고, 계획 산정지점과 공식 관측소를 구분한다.",
+      "admin_code": "41430",
+      "legal_region_code": null,
+      "lineage": {
+        "source_asset_id": "DR-ACT-UW-B-02-200907-02",
+        "source_file": "hydrology_station_candidates_seed.json",
+        "source_sheet": null,
+        "source_row": 3,
+        "document_page": null,
+        "version": "1.3"
+      },
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "spatial_object_ids": []
+    },
+    {
+      "passage_id": "MOCK-PSG-004-05",
+      "schema_type": "MonitoringPointPassage",
+      "ref_disaster_event_id": "EVT::20160701-FLOOD-41430-001",
+      "taxonomy_codes": [
+        "T10107",
+        "T10106"
+      ],
+      "title": "경기도 의왕시 참조 관측정보",
+      "content": "현재 강우·수위·유량은 Open API 또는 시나리오 입력으로 공급하고, 계획 산정지점과 공식 관측소를 구분한다.",
+      "admin_code": "41430",
+      "legal_region_code": null,
+      "lineage": {
+        "source_asset_id": "DR-ACT-UW-B-03-201607-01",
+        "source_file": "hydrology_station_candidates_seed.json",
+        "source_sheet": null,
+        "source_row": 4,
+        "document_page": null,
+        "version": "1.3"
+      },
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "spatial_object_ids": []
+    },
+    {
+      "passage_id": "MOCK-PSG-005-05",
+      "schema_type": "MonitoringPointPassage",
+      "ref_disaster_event_id": "EVT::20170701-FLOOD-41430-001",
+      "taxonomy_codes": [
+        "T10107",
+        "T10106"
+      ],
+      "title": "경기도 의왕시 참조 관측정보",
+      "content": "현재 강우·수위·유량은 Open API 또는 시나리오 입력으로 공급하고, 계획 산정지점과 공식 관측소를 구분한다.",
+      "admin_code": "41430",
+      "legal_region_code": null,
+      "lineage": {
+        "source_asset_id": "DR-ACT-UW-B-03-201707-01",
+        "source_file": "hydrology_station_candidates_seed.json",
+        "source_sheet": null,
+        "source_row": 5,
+        "document_page": null,
+        "version": "1.3"
+      },
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "spatial_object_ids": []
+    },
+    {
+      "passage_id": "MOCK-PSG-006-05",
+      "schema_type": "MonitoringPointPassage",
+      "ref_disaster_event_id": "EVT::20120901-TYPH-47190-001",
+      "taxonomy_codes": [
+        "T10105",
+        "T10206",
+        "T10107"
+      ],
+      "title": "경상북도 구미시 참조 관측정보",
+      "content": "현재 강우·수위·유량은 Open API 또는 시나리오 입력으로 공급하고, 계획 산정지점과 공식 관측소를 구분한다.",
+      "admin_code": "47190",
+      "legal_region_code": null,
+      "lineage": {
+        "source_asset_id": "DR-ACT-GM-A-04-201209-01",
+        "source_file": "hydrology_station_candidates_seed.json",
+        "source_sheet": null,
+        "source_row": 6,
+        "document_page": null,
+        "version": "1.3"
+      },
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "spatial_object_ids": []
+    },
+    {
+      "passage_id": "MOCK-PSG-007-05",
+      "schema_type": "MonitoringPointPassage",
+      "ref_disaster_event_id": "EVT::20200801-FLOOD-45190-001",
+      "taxonomy_codes": [
+        "T10107",
+        "T10206"
+      ],
+      "title": "전라북도 남원시 참조 관측정보",
+      "content": "현재 강우·수위·유량은 Open API 또는 시나리오 입력으로 공급하고, 계획 산정지점과 공식 관측소를 구분한다.",
+      "admin_code": "45190",
+      "legal_region_code": null,
+      "lineage": {
+        "source_asset_id": "DR-ACT-NW-A-01-202008-01",
+        "source_file": "hydrology_station_candidates_seed.json",
+        "source_sheet": null,
+        "source_row": 7,
+        "document_page": null,
+        "version": "1.3"
+      },
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "spatial_object_ids": []
+    },
+    {
+      "passage_id": "MOCK-PSG-008-05",
+      "schema_type": "MonitoringPointPassage",
+      "ref_disaster_event_id": "EVT::20200801-FLOOD-45190-002",
+      "taxonomy_codes": [
+        "T10107",
+        "T10206"
+      ],
+      "title": "전라북도 남원시 참조 관측정보",
+      "content": "현재 강우·수위·유량은 Open API 또는 시나리오 입력으로 공급하고, 계획 산정지점과 공식 관측소를 구분한다.",
+      "admin_code": "45190",
+      "legal_region_code": null,
+      "lineage": {
+        "source_asset_id": "DR-ACT-NW-A-02-202008-02",
+        "source_file": "hydrology_station_candidates_seed.json",
+        "source_sheet": null,
+        "source_row": 8,
+        "document_page": null,
+        "version": "1.3"
+      },
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "spatial_object_ids": []
+    },
+    {
+      "passage_id": "MOCK-PSG-009-05",
+      "schema_type": "MonitoringPointPassage",
+      "ref_disaster_event_id": "EVT::20100801-FLOOD-45190-001",
+      "taxonomy_codes": [
+        "T10206",
+        "T10107"
+      ],
+      "title": "전라북도 남원시 참조 관측정보",
+      "content": "현재 강우·수위·유량은 Open API 또는 시나리오 입력으로 공급하고, 계획 산정지점과 공식 관측소를 구분한다.",
+      "admin_code": "45190",
+      "legal_region_code": null,
+      "lineage": {
+        "source_asset_id": "DR-ACT-NW-A-02-201008-01",
+        "source_file": "hydrology_station_candidates_seed.json",
+        "source_sheet": null,
+        "source_row": 9,
+        "document_page": null,
+        "version": "1.3"
+      },
+      "data_status": "actual_backed",
+      "source_type": "DOCUMENT_EXTRACT",
+      "provider_id": "une_seed_from_plan",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "문서 근거 기반",
+        "수치 미확보 항목 있음",
+        "T3Q API 교체대상"
+      ],
+      "spatial_object_ids": []
+    },
+    {
+      "passage_id": "MOCK-PSG-010-05",
+      "schema_type": "MonitoringPointPassage",
+      "ref_disaster_event_id": "EVT::20240718-FLOOD-41430-901",
+      "taxonomy_codes": [
+        "T10107",
+        "T10206",
+        "T10106"
+      ],
+      "title": "경기도 의왕시 참조 관측정보",
+      "content": "현재 강우·수위·유량은 Open API 또는 시나리오 입력으로 공급하고, 계획 산정지점과 공식 관측소를 구분한다.",
+      "admin_code": "41430",
+      "legal_region_code": null,
+      "lineage": {
+        "source_asset_id": "DR-SYN-UW-001",
+        "source_file": "hydrology_station_candidates_seed.json",
+        "source_sheet": null,
+        "source_row": 10,
+        "document_page": null,
+        "version": "1.3"
+      },
+      "data_status": "synthetic_demo",
+      "source_type": "SYNTHETIC_DEMO",
+      "provider_id": "mock_event_provider",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "합성 시연자료",
+        "공식자료 아님",
+        "T3Q API 교체대상"
+      ],
+      "spatial_object_ids": []
+    },
+    {
+      "passage_id": "MOCK-PSG-012-05",
+      "schema_type": "MonitoringPointPassage",
+      "ref_disaster_event_id": "EVT::20230810-TYPH-47190-901",
+      "taxonomy_codes": [
+        "T10105",
+        "T10107",
+        "T10206"
+      ],
+      "title": "경상북도 구미시 참조 관측정보",
+      "content": "현재 강우·수위·유량은 Open API 또는 시나리오 입력으로 공급하고, 계획 산정지점과 공식 관측소를 구분한다.",
+      "admin_code": "47190",
+      "legal_region_code": null,
+      "lineage": {
+        "source_asset_id": "DR-SYN-GM-001",
+        "source_file": "hydrology_station_candidates_seed.json",
+        "source_sheet": null,
+        "source_row": 12,
+        "document_page": null,
+        "version": "1.3"
+      },
+      "data_status": "synthetic_demo",
+      "source_type": "SYNTHETIC_DEMO",
+      "provider_id": "mock_event_provider",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "합성 시연자료",
+        "공식자료 아님",
+        "T3Q API 교체대상"
+      ],
+      "spatial_object_ids": []
+    },
+    {
+      "passage_id": "MOCK-PSG-014-05",
+      "schema_type": "MonitoringPointPassage",
+      "ref_disaster_event_id": "EVT::20200713-FLOOD-45190-901",
+      "taxonomy_codes": [
+        "T10107",
+        "T10206",
+        "T10106"
+      ],
+      "title": "전북특별자치도 남원시 참조 관측정보",
+      "content": "현재 강우·수위·유량은 Open API 또는 시나리오 입력으로 공급하고, 계획 산정지점과 공식 관측소를 구분한다.",
+      "admin_code": "45190",
+      "legal_region_code": null,
+      "lineage": {
+        "source_asset_id": "DR-SYN-NW-001",
+        "source_file": "hydrology_station_candidates_seed.json",
+        "source_sheet": null,
+        "source_row": 14,
+        "document_page": null,
+        "version": "1.3"
+      },
+      "data_status": "synthetic_demo",
+      "source_type": "SYNTHETIC_DEMO",
+      "provider_id": "mock_event_provider",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "합성 시연자료",
+        "공식자료 아님",
+        "T3Q API 교체대상"
+      ],
+      "spatial_object_ids": []
+    },
+    {
+      "passage_id": "MOCK-PSG-015-05",
+      "schema_type": "MonitoringPointPassage",
+      "ref_disaster_event_id": "EVT::20230809-FLOOD-45190-902",
+      "taxonomy_codes": [
+        "T10107",
+        "T10206"
+      ],
+      "title": "전북특별자치도 남원시 참조 관측정보",
+      "content": "현재 강우·수위·유량은 Open API 또는 시나리오 입력으로 공급하고, 계획 산정지점과 공식 관측소를 구분한다.",
+      "admin_code": "45190",
+      "legal_region_code": null,
+      "lineage": {
+        "source_asset_id": "DR-SYN-NW-002",
+        "source_file": "hydrology_station_candidates_seed.json",
+        "source_sheet": null,
+        "source_row": 15,
+        "document_page": null,
+        "version": "1.3"
+      },
+      "data_status": "synthetic_demo",
+      "source_type": "SYNTHETIC_DEMO",
+      "provider_id": "mock_event_provider",
+      "official_data": false,
+      "schema_version": "1.3",
+      "display_badges": [
+        "합성 시연자료",
+        "공식자료 아님",
+        "T3Q API 교체대상"
+      ],
+      "spatial_object_ids": []
+    }
+  ]
+}

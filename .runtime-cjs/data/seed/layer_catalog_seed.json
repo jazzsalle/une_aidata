@@ -1,0 +1,139 @@
+{
+    "dataset": "layer_catalog_seed",
+    "version": "1.2",
+    "layers": [
+        {
+            "layer_id": "L-ADMIN",
+            "name": "행정경계",
+            "renderer": "polygon",
+            "provider": "LocalGeoJsonProvider",
+            "default_visible": true,
+            "public_level": "PUBLIC"
+        },
+        {
+            "layer_id": "L-RIVER",
+            "name": "하천",
+            "renderer": "line",
+            "provider": "VWorldProvider",
+            "fallback": "LocalGeoJsonProvider",
+            "default_visible": true,
+            "public_level": "PUBLIC"
+        },
+        {
+            "layer_id": "L-RISK",
+            "name": "풍수해 위험지구",
+            "renderer": "point_polygon",
+            "provider": "LocalGeoJsonProvider",
+            "default_visible": true,
+            "public_level": "INTERNAL"
+        },
+        {
+            "layer_id": "L-EVENT",
+            "name": "과거 재난사례",
+            "renderer": "marker_polygon",
+            "provider": "SimilarEventService",
+            "default_visible": false,
+            "public_level": "INTERNAL"
+        },
+        {
+            "layer_id": "L-FLOOD-TRACE",
+            "name": "침수흔적도",
+            "renderer": "polygon",
+            "provider": "StaticSeedFloodTraceProvider",
+            "future_provider": "T3qOrPublicProvider",
+            "default_visible": false,
+            "public_level": "INTERNAL"
+        },
+        {
+            "layer_id": "L-SAT",
+            "name": "위성영상",
+            "renderer": "raster_tile",
+            "provider": "StaticSeedSatelliteProvider",
+            "future_provider": "ThreeDLabsSatelliteProvider",
+            "default_visible": false,
+            "public_level": "INTERNAL"
+        },
+        {
+            "layer_id": "L-CHANGE",
+            "name": "변화탐지 결과",
+            "renderer": "polygon_raster",
+            "provider": "StaticSeedSatelliteProvider",
+            "future_provider": "ThreeDLabsSatelliteProvider",
+            "default_visible": false,
+            "public_level": "INTERNAL"
+        },
+        {
+            "layer_id": "L-STATION",
+            "name": "관측소",
+            "renderer": "marker",
+            "provider": "PublicObservationProvider",
+            "future_provider": null,
+            "default_visible": false,
+            "public_level": "INTERNAL",
+            "fallback": "ScenarioObservationProvider"
+        },
+        {
+            "layer_id": "L-SHELTER",
+            "name": "대피소",
+            "renderer": "marker",
+            "provider": "StaticSeedProvider",
+            "future_provider": "PublicFacilityProvider",
+            "default_visible": false,
+            "public_level": "PUBLIC"
+        },
+        {
+            "layer_id": "L-DAMAGE-RECOVERY",
+            "name": "과거 피해·복구 위치",
+            "renderer": "marker_polygon",
+            "provider": "StaticDamageRecoverySeedProvider",
+            "future_provider": "T3qNdmsDamageRecoveryProvider",
+            "default_visible": false,
+            "public_level": "INTERNAL",
+            "data_meaning": "과거 참고정보이며 현재 피해예측 아님"
+        },
+        {
+            "layer_id": "L-FLOOD-RISK-AREA",
+            "name": "홍수위험지역",
+            "renderer": "polygon",
+            "provider": "MockSpatialProvider",
+            "fallback": "LocalMockGeoJsonProvider",
+            "future_provider": "T3qFloodVulnerableZoneProvider",
+            "default_visible": false,
+            "public_level": "INTERNAL",
+            "data_status": "mock",
+            "data_meaning": "홍수취약·위험지역 공간범위. T3Q 확정 Geometry/속성 계약 수신 후 활성화",
+            "mock_file": "mock_flood_risk_areas.geojson",
+            "activation_note": "현재는 Mock 활성. 실제 T3Q/공식 GIS 계약 확정 시 Provider만 교체"
+        },
+        {
+            "layer_id": "L-DANGEROUS-RESERVOIR",
+            "name": "위험저수지",
+            "renderer": "marker_polygon",
+            "provider": "MockSpatialProvider",
+            "fallback": "LocalMockGeoJsonProvider",
+            "future_provider": "T3qWaterInfrastructureProvider",
+            "default_visible": false,
+            "public_level": "INTERNAL",
+            "data_status": "mock",
+            "data_meaning": "위험저수지 위치·시설상태·관리정보. 피해예측 용도가 아님",
+            "mock_file": "mock_dangerous_reservoirs.geojson",
+            "activation_note": "현재는 Mock 활성. 실제 T3Q/공식 GIS 계약 확정 시 Provider만 교체"
+        },
+        {
+            "layer_id": "L-STORM-FLOOD-IMPROVEMENT",
+            "name": "풍수해개선지구",
+            "renderer": "polygon",
+            "provider": "MockSpatialProvider",
+            "fallback": "LocalMockGeoJsonProvider",
+            "future_provider": "T3qHazardReductionProjectProvider",
+            "default_visible": false,
+            "public_level": "INTERNAL",
+            "data_status": "mock",
+            "data_meaning": "풍수해 저감·개선사업 대상지구와 사업현황",
+            "mock_file": "mock_storm_flood_improvement_districts.geojson",
+            "activation_note": "현재는 Mock 활성. 실제 T3Q/공식 GIS 계약 확정 시 Provider만 교체"
+        }
+    ],
+    "package_version": "1.2",
+    "runtime_policy": "MOCK_ONLY"
+}

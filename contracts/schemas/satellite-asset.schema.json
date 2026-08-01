@@ -1,0 +1,241 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SatelliteAsset",
+  "type": "object",
+  "required": [
+    "asset_id",
+    "admin_code",
+    "phase",
+    "acquired_at",
+    "sensor_type",
+    "data_status",
+    "official_data"
+  ],
+  "properties": {
+    "asset_id": {
+      "type": "string"
+    },
+    "admin_code": {
+      "type": "string"
+    },
+    "area_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "event_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "phase": {
+      "type": "string"
+    },
+    "acquired_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "sensor_type": {
+      "type": "string"
+    },
+    "satellite_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "spatial_resolution_m": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "cloud_cover_pct": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "image_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "thumbnail_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "footprint": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "processing": {
+      "type": "object"
+    },
+    "data_status": {
+      "type": "string",
+      "enum": [
+        "actual",
+        "actual_backed",
+        "open_api",
+        "t3q_supplied",
+        "derived",
+        "scenario",
+        "scenario_input",
+        "mock",
+        "synthetic_demo",
+        "provisional",
+        "not_available"
+      ]
+    },
+    "official_data": {
+      "type": "boolean"
+    },
+    "future_provider": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "admin_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "area_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "asset_kind": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "SATELLITE",
+        "WATER_MASK",
+        null
+      ]
+    },
+    "phase_label": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "phase_selection_rule": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "shared_demo": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "area_scope": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "target_area_note": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "tile_size_px": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "prefixItems": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "integer"
+        }
+      ],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "display_mode": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "map_overlay_allowed": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "base_map_relation": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source_authenticity": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "water_mask_encoding": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "display_badges": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string"
+      }
+    },
+    "value_status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "quality": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "river_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

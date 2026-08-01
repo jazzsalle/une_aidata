@@ -1,0 +1,153 @@
+{
+    "dataset": "public_api_catalog_seed",
+    "version": "0.4",
+    "generated_at": "2026-07-30",
+    "purpose": "POC 최소 실시간 상황인지용 공공 API 후보와 Provider 매핑. 실제 Endpoint·파라미터는 활용신청 후 공식 명세로 확정한다.",
+    "sources": [
+        {
+            "api_id": "KMA_SHORT_FORECAST",
+            "official_name": "기상청_단기예보 조회서비스",
+            "portal_data_id": "15084084",
+            "portal_url": "https://www.data.go.kr/data/15084084/openapi.do",
+            "data_type": [
+                "초단기실황",
+                "초단기예보",
+                "단기예보"
+            ],
+            "poc_usage": [
+                "현재 강수량·기온·풍속 보조",
+                "지역별 단기 상황 Context"
+            ],
+            "provider": "KmaShortForecastProvider",
+            "auth_status": "key_required",
+            "integration_priority": 1,
+            "fallback": "ScenarioObservationProvider"
+        },
+        {
+            "api_id": "KMA_SPECIAL_ALERT",
+            "official_name": "기상청_특보 조회서비스",
+            "portal_data_id": "15139476",
+            "portal_url": "https://www.data.go.kr/data/15139476/openapi.do",
+            "data_type": [
+                "기상특보",
+                "특보현황"
+            ],
+            "poc_usage": [
+                "호우·태풍 특보단계",
+                "판단기준 매칭 시작조건"
+            ],
+            "provider": "KmaAlertProvider",
+            "auth_status": "key_required",
+            "integration_priority": 1,
+            "fallback": "ScenarioObservationProvider"
+        },
+        {
+            "api_id": "SAFETYDATA_WATER_LEVEL_10MIN",
+            "official_name": "행정안전부_홍수통제소수위10분",
+            "portal_data_id": "15153508",
+            "portal_url": "https://www.data.go.kr/data/15153508/openapi.do",
+            "data_type": [
+                "10분 수위"
+            ],
+            "poc_usage": [
+                "현재 수위",
+                "수위 상승추세",
+                "우선 확인지역 산정"
+            ],
+            "provider": "FloodControlWaterLevelProvider",
+            "auth_status": "safetydata_application_required",
+            "integration_priority": 1,
+            "fallback": "ScenarioObservationProvider"
+        },
+        {
+            "api_id": "SAFETYDATA_RAINFALL_10MIN",
+            "official_name": "행정안전부_홍수통제소 우량 10분",
+            "portal_data_id": "15150667",
+            "portal_url": "https://www.data.go.kr/data/15150667/openapi.do",
+            "data_type": [
+                "10분 우량"
+            ],
+            "poc_usage": [
+                "관측소 강우",
+                "1·3·12시간 누적 계산",
+                "우선 확인지역 산정"
+            ],
+            "provider": "FloodControlRainfallProvider",
+            "auth_status": "safetydata_application_required",
+            "integration_priority": 1,
+            "fallback": "ScenarioObservationProvider"
+        },
+        {
+            "api_id": "SAFETYDATA_DISCHARGE_10MIN",
+            "official_name": "행정안전부_홍수통제소유량분",
+            "portal_data_id": "15150614",
+            "portal_url": "https://www.data.go.kr/data/15150614/openapi.do",
+            "data_type": [
+                "10분 유량"
+            ],
+            "poc_usage": [
+                "현재 유량",
+                "계획홍수량 대비 참고비율",
+                "우선 확인지역 산정 보조"
+            ],
+            "provider": "FloodControlDischargeProvider",
+            "auth_status": "safetydata_application_required",
+            "integration_priority": 1,
+            "fallback": "ScenarioObservationProvider"
+        },
+        {
+            "api_id": "SAFETYDATA_WATER_STATION_META",
+            "official_name": "행정안전부_공유플랫폼_수위측정관측소제원정보",
+            "portal_data_id": "15139754",
+            "portal_url": "https://www.data.go.kr/data/15139754/openapi.do",
+            "data_type": [
+                "관측소코드",
+                "하천명",
+                "주소",
+                "좌표"
+            ],
+            "poc_usage": [
+                "관측소-하천-지역 매핑",
+                "지도 관측소 위치"
+            ],
+            "provider": "WaterStationMetadataProvider",
+            "auth_status": "safetydata_application_required",
+            "integration_priority": 1,
+            "fallback": "StaticStationSeedProvider"
+        },
+        {
+            "api_id": "VWORLD",
+            "official_name": "VWorld 공간정보 오픈API",
+            "portal_data_id": null,
+            "portal_url": "https://www.vworld.kr/dev/v4api.do",
+            "data_type": [
+                "2D 지도",
+                "검색",
+                "지오코더",
+                "2D 데이터",
+                "WMS/WFS"
+            ],
+            "poc_usage": [
+                "배경지도",
+                "공간객체 표출",
+                "주소-좌표 변환"
+            ],
+            "provider": "VWorldProvider",
+            "auth_status": "issued",
+            "integration_priority": 0,
+            "fallback": "LocalGeoJsonProvider"
+        }
+    ],
+    "security": {
+        "store_key_in": "environment_or_secret_manager",
+        "prohibited": [
+            "source_code",
+            "git_commit",
+            "docx",
+            "browser_log",
+            "api_response_log"
+        ],
+        "frontend_direct_key": "도메인 제한 적용이 필요한 VWorld 호출만 허용하고, 서버 호출 가능한 API는 Backend Proxy 우선"
+    },
+    "package_version": "0.5"
+}
