@@ -4,7 +4,7 @@
 2026-08-02
 
 ## Current goal
-Phase 3 — /evidence PRE/EVENT/POST 및 근거 선택 흐름 완성 (합격 기준: evaluation_criteria.md Phase 3)
+Phase 4 — /report 선택 근거·유사도·대응비교 연계 (합격 기준: evaluation_criteria.md Phase 4)
 
 ## Done
 - 기준선 정리: vercel-source-v1.5.1을 리포 루트로 승격, gate bundle은 archive/ 보관
@@ -13,6 +13,11 @@ Phase 3 — /evidence PRE/EVENT/POST 및 근거 선택 흐름 완성 (합격 기
 - **Phase 1 완료 (2026-08-02, evaluator PASS)**: npm install 성공(package-lock.json 생성, playwright 1.62.1 정상 — 404 재발 없음), validate·contracts(OpenAPI 31/31, JSON Schema 260/18)·typecheck:functions·typecheck:web·runtime-gate·provider-conformance 전부 PASS, `npm run build` 성공(apps/web/dist 산출). 계약 파일 변경 0건.
 
 ## Done this session
+- **Phase 3 완료 (2026-08-02, evaluator PASS)**: /evidence PRE/EVENT/POST 및 근거 선택 흐름 완성
+  - apiClient.ts: FORCE_SEED의 selectFloodPhaseAssets가 server/domain/satellitePhaseSelection.ts를 직접 import(단일 소스)해 seed 자산으로 실제 선정 수행 — offset_days_from_target·selection_reason 3건 화면 표시
+  - scripts/smoke_evidence_console.py 신규(9스텝: 타일 6개 256×256, phase note, mock 배지, 근거 선택→/report 반영→reload 복원, console/api 에러 0) + package.json에 test:evidence-console 등록
+  - scripts/smoke_report_context.py: Windows cp949 호환(encoding='utf-8')
+  - 회귀 재통과: typecheck·contracts·validate·위성 smoke 4종·dashboard/evidence console smoke·runtime-gate·conformance·build, 계약·Seed 동결 영역 diff 0
 - **Phase 2 완료 (2026-08-02, evaluator PASS)**: /dashboard Mock/Seed 진입~조회 흐름 완결
   - apiClient.ts: FORCE_SEED(`VITE_USE_SEED_DIRECTLY=true`)에서 비-fallback 5종(loadObservations·createSituation·sendAgentMessage·selectFloodPhaseAssets·searchT3qMock)이 /api 요청 없이 seed 기반 동작
   - SituationAgentPanel.tsx: apply/submit unhandled rejection 제거, inline-error(role=alert) 표시
@@ -28,7 +33,7 @@ Phase 3 — /evidence PRE/EVENT/POST 및 근거 선택 흐름 완성 (합격 기
 - `apps/web/public/seed/priority_areas_seed.json`의 `SIT-GM-POC-001`(47190 구미) rank 1이 `spatial_object_id: "GM-A-01"` 참조하나 `geo.json`에 해당 feature 없음(GM 계열은 GM-A-03/04/07, GM-B-10/13, GM-C-01만 존재). 현재 UI 가드로 비차단 안내 처리됨. 근본 수정은 seed 동결 해제 승인 필요 — 택1: (a) geo.json에 GM-A-01 feature 추가, (b) priority_areas_seed의 참조 ID를 기존 ID로 교체
 
 ## Next steps
-1. `/phase-run 3` 실행 — /evidence PRE/EVENT/POST phase 선택 규칙(offset_days_from_target·selection_reason 표시), 256×256 독립 타일, 근거 선택 상태 /report 전달, mock/seed 표시 유지
+1. `/phase-run 4` 실행 — /report 선택 근거·유사도·대응비교 연계 (Phase 3에서 /evidence→/report 반영·SimilarEvent·Seed Fallback 표시가 이미 상당 부분 동작 확인됨 — planner가 잔여 격차 조사 필요)
 2. 주의: API·Schema·Seed 계약 변경 금지, 외부 Provider 연결·대규모 UI 개편 착수 금지
 
 ## Blockers

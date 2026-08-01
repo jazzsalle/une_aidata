@@ -23,6 +23,7 @@
     "test:observation-provider": "python3 scripts/smoke_public_observation_provider.py",
     "test:report-context": "python3 scripts/smoke_report_context.py",
     "test:e2e": "npm --workspace @une-disaster/web run test:e2e",
+    "test:evidence-console": "python3 scripts/smoke_evidence_console.py",
     "test:integration-adapters": "python3 scripts/smoke_integration_adapters.py",
     "test:flood-imagery": "python3 scripts/smoke_flood_imagery_tiles.py",
     "test:flood-phase-selection": "python3 scripts/smoke_flood_phase_selection.py",
