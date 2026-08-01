@@ -24,3 +24,7 @@ Thumbs.db
 logs/
 artifacts/
 coverage/
+
+# playwright
+test-results/
+playwright-report/

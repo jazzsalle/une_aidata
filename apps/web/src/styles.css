@@ -290,6 +290,30 @@ th { background: #f2f6f9; }
 @media(max-width:1100px){.flood-phase-grid{grid-template-columns:1fr}.phase-tile-pair{grid-template-columns:repeat(2,minmax(0,256px));}}
 @media(max-width:620px){.phase-tile-pair{grid-template-columns:1fr}.phase-tile-pair img{width:min(256px,100%);height:auto;aspect-ratio:1/1;}}
 
+/* SCR-EVD-001 구역 1: 위성영상 좌우·스와이프 비교 */
+.satellite-compare-tool{margin:18px 0;padding:14px;border:1px solid #c8d3de;border-radius:10px;background:#fff;}
+.satellite-compare-tool h3{margin:0 0 6px;}
+.compare-mode-fieldset{display:flex;gap:16px;align-items:center;margin:0 0 14px;padding:10px 12px;border:1px solid #d7dde5;border-radius:8px;}
+.compare-mode-fieldset legend{font-weight:700;padding:0 6px;}
+.compare-mode-fieldset label{display:inline-flex;align-items:center;gap:6px;min-height:44px;}
+.compare-side-pair{display:grid;grid-template-columns:repeat(2,minmax(0,256px));gap:14px;}
+.compare-side-pair figure{margin:0;}
+.compare-side-pair img{display:block;width:256px;height:256px;max-width:100%;object-fit:cover;border:1px solid #5f6b76;background:#000;}
+.compare-side-pair figcaption{display:grid;gap:2px;margin-top:7px;font-size:.88rem;}
+.compare-swipe-block{display:grid;gap:12px;}
+.compare-swipe-stage{position:relative;width:256px;height:256px;max-width:100%;border:1px solid #5f6b76;background:#000;}
+.compare-swipe-stage img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;}
+.compare-swipe-line{position:absolute;top:0;bottom:0;width:2px;margin-left:-1px;background:#ffd54d;box-shadow:0 0 0 1px rgba(0,0,0,.55);}
+.compare-swipe-controls{display:grid;gap:8px;max-width:420px;}
+.compare-swipe-controls label{font-weight:700;}
+.compare-swipe-controls input[type="range"]{width:min(256px,100%);}
+.compare-swipe-value{font-size:.88rem;color:#43566a;}
+.compare-swipe-quick{display:flex;gap:8px;}
+.compare-swipe-quick button{min-width:56px;min-height:44px;border:1px solid #b7c7d8;border-radius:8px;background:#f7fafc;}
+.compare-swipe-quick button[aria-pressed="true"]{background:#dcebf7;border-color:#5b7898;font-weight:700;}
+.compare-note{margin:12px 0 0;font-size:.88rem;color:#43566a;}
+@media(max-width:620px){.compare-side-pair{grid-template-columns:1fr}.compare-side-pair img{width:min(256px,100%);height:auto;aspect-ratio:1/1;}}
+
 /* v0.8 phase selection and mask-relative metrics */
 .phase-selection-note{font-size:.78rem;color:#43566a;background:#eef4f8;border-radius:6px;padding:6px 8px;margin:0 0 10px;}
 .mask-metrics-panel{margin:18px 0;padding:14px;border:1px solid #c8d3de;border-radius:10px;background:#f8fbfd;}
