@@ -15,7 +15,7 @@ Phase 2 — /dashboard Mock/Seed 사용자 흐름 완성 (합격 기준: evaluat
 ## Done this session
 - Phase 1 실행: planner→generator(T1 install ∥ T2 python 검증 → T3+T5 typecheck·build ∥ T4 runtime/provider gate)→evaluator PASS
 - 호환 수정 3건: VWorldMapAdapter.ts(DEFAULT_CENTER fallback, TS noUncheckedIndexedAccess), apps/web/tsconfig.node.json(TS 6.0 allowImportingTsExtensions 제거), tsconfig.runtime.json(ignoreDeprecations "6.0"), scripts/browser_runtime_regression.py(chromium 경로 조건화 — Linux 하드코딩 제거)
-- 환경 참고: Python 의존성 jsonschema·playwright는 pip 수동 설치 필요(리포에 requirements 파일 없음), Git Bash에는 pyenv-win shim으로 python3 사용 가능
+- 환경 참고: Python 의존성은 `python -m pip install -r requirements.txt` + `python -m playwright install chromium`으로 설치(requirements.txt 추가됨), Git Bash에는 pyenv-win shim으로 python3 사용 가능
 
 ## In progress
 - 없음 (Phase 1 완료 직후 상태)
@@ -28,7 +28,7 @@ Phase 2 — /dashboard Mock/Seed 사용자 흐름 완성 (합격 기준: evaluat
 - 없음. (@playwright/test 404는 재발하지 않음 — 1.62.1 설치 완료)
 
 ## How to run
-- 의존성: `npm install` (Node >= 22.12.0)
+- 의존성: `npm install` (Node >= 22.12.0) + `python -m pip install -r requirements.txt` + `python -m playwright install chromium`
 - 검증: `npm run validate` → `npm run test:contracts` → `npm run typecheck:functions` → `npm run test:runtime-gate` → `npm run test:provider-conformance`
 - 빌드: `npm run build` / 개발: `npm run dev:web`
 - Windows: `python3` 대신 `python`, `.sh`는 Git Bash로 실행

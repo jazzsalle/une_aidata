@@ -1,0 +1,7 @@
+# Python 의존성 — 검증/스모크 스크립트(scripts/) 실행용
+# 설치: python -m pip install -r requirements.txt
+# 이후 1회: python -m playwright install chromium  (runtime-gate 브라우저 회귀용)
+jsonschema>=4.18
+PyYAML>=6.0
+playwright>=1.40
+Pillow>=10.0
