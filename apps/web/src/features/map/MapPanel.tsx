@@ -17,6 +17,8 @@ export function MapPanel({ adminCode, highlightedFeatureId, initialVisible, comp
   const ref = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<VWorldMapHandle | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [mapReady, setMapReady] = useState(false);
+  const [highlightNotice, setHighlightNotice] = useState<string | null>(null);
   const [status, setStatus] = useState<{ state: MapConnectionState; message: string }>({ state: 'connecting', message: '지도 초기화 중' });
   const [baseMap, setBaseMap] = useState<BaseMapType>('base');
   const [visible, setVisible] = useState<Record<string, boolean>>({ L1: true, L2: true, L3: true, 'L-FLOOD-TRACE': false, 'L-FLOOD-RISK-AREA': false, 'L-DANGEROUS-RESERVOIR': false, 'L-STORM-FLOOD-IMPROVEMENT': false, ...initialVisible });
@@ -28,6 +30,7 @@ export function MapPanel({ adminCode, highlightedFeatureId, initialVisible, comp
       .then((handle) => {
         if (!active) { handle.destroy(); return; }
         mapRef.current = handle;
+        setMapReady(true);
       })
       .catch((mapError: unknown) => setError(mapError instanceof Error ? mapError.message : '지도 초기화 실패'));
     return () => { active = false; mapRef.current?.destroy(); mapRef.current = null; };
@@ -35,8 +38,12 @@ export function MapPanel({ adminCode, highlightedFeatureId, initialVisible, comp
 
   useEffect(() => mapRef.current?.setRegion(adminCode), [adminCode]);
   useEffect(() => {
-    if (highlightedFeatureId && !mapRef.current?.highlightFeature(highlightedFeatureId)) setError(`지도 객체를 찾지 못했습니다: ${highlightedFeatureId}`);
-  }, [highlightedFeatureId]);
+    if (!highlightedFeatureId) { setHighlightNotice(null); return; }
+    if (!mapReady || !mapRef.current) return;
+    // 지도 Action은 존재하는 GeoJSON ID만 실행: 없는 ID는 비차단 안내로 처리하고 흐름을 유지한다.
+    if (mapRef.current.highlightFeature(highlightedFeatureId)) setHighlightNotice(null);
+    else setHighlightNotice(`'${highlightedFeatureId}' 위치는 현재 지도 공간자료에 없어 지도 이동을 건너뛰었습니다. 목록 정보는 계속 확인할 수 있습니다.`);
+  }, [highlightedFeatureId, mapReady]);
 
   function toggle(code: string) {
     const next = !visible[code];
@@ -55,6 +62,7 @@ export function MapPanel({ adminCode, highlightedFeatureId, initialVisible, comp
       <div ref={ref} className="map-canvas" aria-hidden="true" />
       <div className={`map-connection ${status.state}`} role="status"><span className="status-dot" aria-hidden="true" />{status.message}</div>
       {error ? <div className="map-error" role="alert">{error}</div> : null}
+      {highlightNotice ? <div className="map-highlight-notice" role="status" aria-live="polite">{highlightNotice}</div> : null}
       <div className="map-basemap-switch" role="group" aria-label="배경지도 선택">
         <button type="button" aria-pressed={baseMap === 'base'} onClick={() => changeBaseMap('base')}>일반지도</button>
         <button type="button" aria-pressed={baseMap === 'satellite'} onClick={() => changeBaseMap('satellite')}>영상지도</button>

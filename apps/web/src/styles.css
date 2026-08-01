@@ -53,6 +53,7 @@ button { cursor: pointer; }
 .map-key-notice, .map-error { position: absolute; top: 12px; left: 12px; z-index: 3; border-radius: 6px; padding: 8px 10px; font-size: 12px; }
 .map-key-notice { background: rgba(255, 247, 220, .93); color: #725200; border: 1px solid #e4c56f; }
 .map-error { background: rgba(255, 233, 232, .95); color: #8b2420; }
+.map-highlight-notice { position: absolute; top: 52px; left: 12px; z-index: 4; border-radius: 6px; padding: 8px 10px; font-size: 12px; max-width: 320px; background: rgba(255, 247, 220, .93); color: #725200; border: 1px solid #e4c56f; }
 .map-layer-chips { position: absolute; left: 12px; bottom: 12px; display: flex; gap: 6px; flex-wrap: wrap; z-index: 3; }
 .chip { border: 1px solid rgba(37, 78, 111, .22); border-radius: 18px; padding: 6px 9px; background: rgba(255,255,255,.92); color: #34536c; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
 
