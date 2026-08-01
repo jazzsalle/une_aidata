@@ -110,3 +110,23 @@
 - `/api/v1/t3q/search-preview` Seed Fallback은 T3Q 실데이터로 표시하지 않는다.
 - 홍수위험지역·위험저수지·풍수해개선지구는 좌표계·Geometry·속성·공개등급 검증 전 활성화하지 않는다.
 - 변경 후 `python3 scripts/smoke_t3q_readiness.py`, `python3 scripts/smoke_t3q_search_preview.py`, `tsc -p tsconfig.functions.json --noEmit`을 실행한다.
+
+
+## Phase
+
+개발은 아래 Phase 순서로 진행한다(`/phase-run N`). 정본 설계 문서는 `재난안전_AI데이터_시범서비스_글로드코드_개발인계문서_v1.0.md`, 합격 기준은 `evaluation_criteria.md`.
+Windows 환경 참고: npm 스크립트의 `python3`는 `python`으로, `.sh`는 Git Bash로 실행한다.
+
+| Phase | 목표 | 산출물 |
+|---|---|---|
+| 1 | 기준선 재현·빌드 정상화 (npm install→validate→contracts→typecheck→runtime/provider gate→build) | package-lock.json, 빌드 산출물, 결과 보고 |
+| 2 | /dashboard Mock/Seed 사용자 흐름 완성 | 대시보드 완결 흐름 |
+| 3 | /evidence PRE/EVENT/POST 및 근거 선택 흐름 완성 | 근거 페이지 완결 흐름 |
+| 4 | /report 선택 근거·유사도·대응비교 연계 | 보고서 페이지 연계 |
+| 5 | Playwright E2E | e2e 스펙 통과 |
+| 6 | Vercel Preview 배포 + VWorld 허용 도메인 확인 | Preview URL, 도메인 검증 |
+| 7 | 외부 Provider별 Fixture 연계 (FIXTURE_VALIDATED) | Fixture 연계, conformance 재통과 |
+| 8 | 실제 Provider Shadow Test 및 단계별 승격 | SHADOW_TESTED→SELECTABLE, 회귀시험 |
+
+- 모든 Phase에서 OpenAPI·JSON Schema·Seed ID·Provider 계약 변경 금지 (변경 필요 시 영향범위 보고 후 승인 대기).
+- 실제 T3Q·공공 API 호출 금지, DEFAULT 전환 금지 (Phase 8도 승인 기반 단계 승격만).
