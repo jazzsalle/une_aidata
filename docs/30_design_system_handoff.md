@@ -111,17 +111,19 @@
 
 ### B-5. 유동 타이포 스케일
 
-| 토큰 | 현재 값 | 320px 환산 | 2560px 환산 | 주 사용처 |
-|---|---|---|---|---|
-| `--fs-xs` | `clamp(.6875rem, .26vw + .521rem, .9375rem)` | 11px | 15px | 배지·캡션·표 본문(`.comparison-table`, `.plan-station-table`), `.agent-turn-role/-time`, `.map-popup-flag` |
-| `--fs-sm` | `clamp(.75rem, .26vw + .583rem, 1rem)` | 12px | 16px | 카드 본문, `.map-popup-facts`, `.seed-badge`, `.panel-tabs button` |
-| `--fs-md` | `clamp(.875rem, .33vw + .667rem, 1.1875rem)` | 14px | 19px | 대화 본문 `.agent-turn`, `.agent-input`, `.report-preview-doc`, `.global-nav a`, `.map-popup-head h3` |
-| `--fs-lg` | `clamp(1rem, .39vw + .75rem, 1.375rem)` | 16px | 22px | h2 (`.section-heading-row h2`, `.report-*  h2`, `.report-doc-heading`) |
-| `--fs-xl` | `clamp(1.1875rem, .59vw + .8125rem, 1.75rem)` | 19px | 28px | `.report-doc-title` |
+아래 환산값은 **루트 폰트 배율을 반영한 실제 렌더 크기**다(320·1366px는 root 16px, 1920px는 17px, 2560px는 19px).
+
+| 토큰 | 현재 값 | 320px | 1366px | 1920px | 2560px | 주 사용처 |
+|---|---|---|---|---|---|---|
+| `--fs-xs` | `clamp(.6875rem, .26vw + .521rem, .9375rem)` | 11.0px | 11.9px | 13.8px | 16.6px | 배지·캡션·표 본문(`.comparison-table`, `.plan-station-table`), `.agent-turn-role/-time`, `.map-popup-flag` |
+| `--fs-sm` | `clamp(.75rem, .26vw + .583rem, 1rem)` | 12.0px | 12.9px | 14.9px | 17.7px | 카드 본문, `.map-popup-facts`, `.seed-badge`, `.panel-tabs button` |
+| `--fs-md` | `clamp(.875rem, .33vw + .667rem, 1.1875rem)` | 14.0px | 15.2px | 17.7px | 21.1px | 대화 본문 `.agent-turn`, `.agent-input`, `.report-preview-doc`, `.global-nav a`, `.map-popup-head h3` |
+| `--fs-lg` | `clamp(1rem, .39vw + .75rem, 1.375rem)` | 16.0px | 17.3px | 20.1px | 24.2px | h2 (`.section-heading-row h2`, `.report-*  h2`, `.report-doc-heading`) |
+| `--fs-xl` | `clamp(1.1875rem, .59vw + .8125rem, 1.75rem)` | 19.0px | 20.8px | 24.2px | 30.5px | `.report-doc-title` |
 
 h1은 토큰이 아니라 `.page-heading h1 { font-size: clamp(22px, 2.2vw, 38px) }`이며, 560px 이하에서 `clamp(20px, 6vw, 26px)`로 축소된다.
 
-**루트 폰트 배율**(rem 기반 토큰이 함께 커진다): `≥1600px` → `106.25%`, `≥2000px` → `112.5%`, `≥2400px` → `118.75%`.
+**루트 폰트 배율**(rem 기반 토큰이 함께 커진다): `≥1600px` → `106.25%`, `≥2000px` → `112.5%`, `≥2400px` → `118.75%`. clamp의 `vw` 성분과 이 배율이 **곱해져** 넓은 화면에서 증가폭이 커진다 — B-7 참조.
 
 ### B-6. 레이아웃 변수
 
@@ -131,6 +133,29 @@ h1은 토큰이 아니라 `.page-heading h1 { font-size: clamp(22px, 2.2vw, 38px
 | `--sticky-offset` | `148px` | sticky 요소 상단 오프셋 — `.report-outline`, `.report-preview`, `.page-subnav`(−16px) (≥1600px: 160 / ≥2000px: 172 / ≥2400px: 184) |
 | `--left-panel-w` | (기본값 없음) | **런타임 주입** — `PanelResizer.tsx`가 인라인으로 넣는다. 없으면 `.dashboard-grid`가 `clamp(300px, 19vw, 460px)` 사용 |
 | `--map-popup-tail-x` | 기본 `20px` | **런타임 주입** — `MapPanel.tsx`가 말풍선 꼬리 x좌표를 px로 넣는다 |
+
+### B-7. 타이포 스케일 — **디자인 확정 대기 (결정 지점)**
+
+현재 값은 **잠정값**이다. 반응형 작업 당시 "상황실 대형 모니터를 원거리에서 본다"는
+전제로 확대한 설계 판단이며, **접근성·품질지침이 요구한 크기가 아니다**.
+
+- KWCAG 2.2 / WCAG 2.2 에는 **최소 글자크기 규정이 없다**.
+- 관련 기준 1.4.4(Resize text 200%)는 크기가 아니라 **상대단위(rem) 사용 여부**의 문제이고,
+  현재 rem 기반이라 이미 충족한다. 따라서 **크기를 줄여도 접근성 위반이 아니다**.
+- 반응형 작업 이전 하드코딩 값은 본문 13~14px / 보조 11~12px 였다(현재 1920px에서 17.7 / 13.8px).
+
+**디자인 산출물이 오면 교체할 지점은 두 곳뿐이다.**
+
+| 교체 지점 | 위치 | 내용 |
+|---|---|---|
+| 유동 타이포 5개 | `apps/web/src/styles.css` `:root` (B-5 표) | `--fs-xs|sm|md|lg|xl` 의 `clamp(최소, vw기울기 + rem기준, 최대)` |
+| 루트 배율 3개 | `apps/web/src/styles.css` 확대 브레이크포인트 | `:root { font-size: 106.25% / 112.5% / 118.75% }` (≥1600 / ≥2000 / ≥2400px) |
+
+**요청 형식**: 완성 CSS가 아니라 **type scale**(크기·행간·자간·굵기)과 **뷰포트별 기준값**
+(예: 1366 / 1920 / 2560px에서의 본문·보조·제목 크기)으로 주면 위 두 지점에 바로 반영한다.
+
+**축소하더라도 지켜야 할 것**: rem 기반 유지(1.4.4), 대비 AA, 320px reflow 가로 스크롤 0,
+터치타깃 44px. 작은 글씨에 연회색 조합 금지(D-1 참조).
 
 ---
 
