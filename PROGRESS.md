@@ -1,7 +1,7 @@
 # PROGRESS.md — 회사↔집 인계 기록
 
 ## Last updated
-2026-08-02
+2026-08-03 (집 PC 작업 종료 — 다음 세션은 회사 PC)
 
 ## Current goal
 Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: evaluation_criteria.md Phase 8, 승격마다 사용자 승인 필요)
@@ -53,6 +53,15 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 - 환경 참고: Python 의존성은 `python -m pip install -r requirements.txt` + `python -m playwright install chromium`으로 설치, Git Bash에는 pyenv-win shim으로 python3 사용 가능. **주의: PowerShell에서 `npm run test:runtime-gate` 실행 시 WSL bash로 해석돼 실패할 수 있음 — Git Bash에서 실행할 것**
 
 ## In progress
+- **UI 재구성 완료 (2026-08-03)** — 발주처·행안부 담당자가 볼 화면 기준으로 정리. 전 항목 배포 완료:
+  - 수계마스크 픽셀 분석 **제거**(영상분석은 벤더 산출물 범위 — OpenAPI 31→30, 승인된 계약 변경)
+  - 와이드 모니터 대응: 사이드 상한 축소(340/400) + **본문 폭 상한 제거**(`--page-max: none`) → 해상도에 따라 중앙 지도만 신축 (지도 폭 1366:627 → 1920:1065 → 2560:1675 → 3840:2950, 전 구간 가로 스크롤 0)
+  - 상단 여백 확보: 헤더 2줄→**1줄 통합**(`.header-row`), 큰 제목·설명 블록 제거, h1은 헤더로 축소 이동 → 1920px 상단 여백 267→81px
+  - `현재 판단` 카드: `지도에서 보기` 버튼 제거 → **카드 클릭=지도 이동**, 재해유형 태그·위치 요약, `상세보기`→모달. 신규 공용 `DistrictDetail.tsx`(지도 팝업과 공유)·`DetailModal.tsx`
+  - `과거 피해·대응·복구 사례`(구 NDMS 교체 대비 Seed): 원시 JSON 덤프 제거 → 피해금액·복구비 억원 환산·집계 출처·시설구분 표로 재구성, 원시 구조는 `응답 구조 보기` 팝업으로
+  - PRE·EVENT·POST 영상자료 **메타데이터 표 삭제**(타일 카드와 정보 중복, a11y 검증 토큰은 실제 대안으로 교체)
+  - `docs/30_design_system_handoff.md` 최신화 + 캡처 11장 재촬영
+- **재해대장 조인 완료 (2026-08-02)**: 행안부 재해대장 115,563행에서 5건 매칭 — 유사사례에 실제 피해금액·복구비 표시(예: 구미 태풍 산바 80.9억/311.9억, 남원 2020 호우 437.6억/1,504.5억)
 - **AI Agent 상호작용 강화 완료 (2026-08-02)** — POC1(`ref/` 화면캡쳐 3종) 재현:
   - 지도 모든 POI 클릭 → 요약 팝업(위험요인·임계값표·저감대책·사업비·우선순위·근거 문서/페이지). L1 위험지구는 `loadPlanReference()`로 상세 전개
   - 선택 대상 → AI Agent 컨텍스트 칩(최대 5건) → 질의와 함께 전송. **주어 없는 질문("여긴 왜 위험해?")도 성립**. 서버 agent는 컨텍스트·키워드(하천/기준유량/위험지구/피해사례/절차/관측소) 규칙 해석 + evidence에 근거 문서·페이지 부착
@@ -77,6 +86,15 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 
 ## Pending approval (Seed 불일치 영향범위 보고)
 - `apps/web/public/seed/priority_areas_seed.json`의 `SIT-GM-POC-001`(47190 구미) rank 1이 `spatial_object_id: "GM-A-01"` 참조하나 `geo.json`에 해당 feature 없음(GM 계열은 GM-A-03/04/07, GM-B-10/13, GM-C-01만 존재). 현재 UI 가드로 비차단 안내 처리됨. 근본 수정은 seed 동결 해제 승인 필요 — 택1: (a) geo.json에 GM-A-01 feature 추가, (b) priority_areas_seed의 참조 ID를 기존 ID로 교체
+
+## 회사 PC에서 이어서 할 일 (2026-08-03 기준 우선순위)
+0. `git pull` → (신규 환경이면 `npm install` + `pip install -r requirements.txt` + `python -m playwright install chromium`)
+1. **GM-A-01 seed 불일치 결정** — 승인 한 번이면 끝. 아래 "Pending approval" 절 택1. 검수에서 눈에 띌 수 있는 항목
+2. **kma_nowcast 실연계** — 공공데이터포털 키 발급이 유일한 선행조건. 가장 간단한 Phase 8 진행 건
+3. 디자인 산출물 수령 시 타이포 스케일 확정 (`docs/30` B-7 — 교체 지점 2곳뿐)
+4. 부산·인제·영천 계획 PDF 수령 시 전사 (코드 변경 불필요)
+
+**현재 상태 요약**: Phase 1~7 완료. Phase 8은 une_rag만 SHADOW_TESTED(SELECTABLE 보류 — 내부망이라 외부 시연 불가), 나머지는 FIXTURE_VALIDATED. **실제 연결된 Provider는 없으며 배포본은 전부 Seed/Mock 동작.** 전 게이트 통과 상태(typecheck·OpenAPI 30/30/30·JSON Schema·conformance·runtime gate·fixture gate 18/18·a11y·build).
 
 ## Next steps (Phase 8 잔여 — provider별 독립 진행)
 1. **kma_nowcast (가장 간단, 권장 1순위)**: 공공데이터포털에서 기상청 초단기실황 활용신청 → 서비스키 확보 → 로컬 셸에서 `DATA_GO_KR_SERVICE_KEY=<키>` 설정 후 `npm run test:provider-shadow -- --provider kma_nowcast` → 결과 검토 후 승인1(SHADOW_TESTED) → Vercel Preview env 설정(승인2)·회귀 재통과 → SELECTABLE
