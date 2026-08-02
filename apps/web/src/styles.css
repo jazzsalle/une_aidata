@@ -207,8 +207,19 @@ button:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-
 .page-status { max-width: min(520px, 100%); border: 1px solid #9bc7a9; background: #edf8f0; color: #245b35 !important; border-radius: var(--r-md); padding: 9px 12px; font-size: var(--fs-sm); line-height: 1.5; }
 .site-footer { display: flex; justify-content: space-between; gap: 12px; padding: 10px var(--page-pad); border-top: 1px solid var(--c-line); background: var(--c-surface); color: #5c7084; font-size: var(--fs-xs); }
 
-.dashboard-grid { min-height: var(--panel-min-h); display: grid; grid-template-columns: clamp(300px, 19vw, 460px) minmax(420px, 1fr) clamp(350px, 23.5vw, 560px); gap: var(--sp-gap); }
+/* 1열은 사용자가 조절한 폭(--left-panel-w)을 쓰고, 값이 없으면 기본 clamp를 유지한다. */
+.dashboard-grid { min-height: var(--panel-min-h); display: grid; grid-template-columns: var(--left-panel-w, clamp(300px, 19vw, 460px)) 26px minmax(420px, 1fr) clamp(350px, 23.5vw, 560px); gap: var(--sp-gap); }
 .dashboard-grid > .left-panel, .dashboard-grid > .right-panel, .dashboard-grid > .map-panel { min-height: var(--panel-min-h); }
+
+/* 좌측 패널 폭 조절 구분자: 드래그 외에 버튼·키보드 대체조작을 함께 제공한다. */
+.panel-resizer { position: relative; display: flex; align-items: center; justify-content: center; align-self: stretch; }
+.panel-resizer-handle { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; border-radius: var(--r-sm); cursor: col-resize; touch-action: none; }
+.panel-resizer-handle::before { content: ""; width: 4px; height: 100%; border-radius: 3px; background: var(--c-line); }
+.panel-resizer-handle:hover::before, .panel-resizer.dragging .panel-resizer-handle::before { background: var(--c-brand); }
+.panel-resizer-buttons { position: relative; z-index: 1; display: flex; flex-direction: column; gap: var(--sp-1); }
+.panel-resizer-buttons button { display: flex; align-items: center; justify-content: center; width: 26px; height: 44px; padding: 0; border: 1px solid #bccbd8; border-radius: var(--r-sm); background: var(--c-surface); color: var(--c-brand); font-size: 12px; line-height: 1; box-shadow: var(--sh-1); }
+.panel-resizer-buttons button:hover { background: var(--c-brand-soft); border-color: #9cc4e5; }
+body.panel-resizing { cursor: col-resize; user-select: none; -webkit-user-select: none; }
 .dashboard-timeline { margin-top: 12px; background: var(--c-surface); border: 1px solid var(--c-line); border-radius: var(--r-lg); padding: var(--sp-5); box-shadow: 0 2px 9px rgba(24,49,77,.06); }
 .section-heading-row { display: flex; justify-content: space-between; align-items: start; gap: 18px; margin-bottom: 12px; }
 .section-heading-row h2 { margin: 0 0 4px; font-size: var(--fs-lg); color: #183e5d; }
@@ -283,6 +294,8 @@ th { background: #f2f6f9; }
 .map-layer-chips .chip { min-height: 44px; }
 
 @media (max-width: 1280px) {
+  /* 3열이 아닌 구간에서는 구분자를 숨기고 --left-panel-w도 사용하지 않는다. */
+  .panel-resizer { display: none; }
   .dashboard-grid { grid-template-columns: 290px minmax(430px,1fr); }
   .dashboard-grid > .right-panel { grid-column: 1 / -1; min-height: 420px; }
   .report-layout { grid-template-columns: 200px 1fr; }
@@ -456,7 +469,10 @@ th { background: #f2f6f9; }
   color: #fff;
   border-bottom-right-radius: var(--r-sm);
 }
+/* 답변은 좌측 패널 폭을 넓혔을 때 실제로 더 넓게 읽히도록 스레드 폭을 더 사용한다.
+   (질문·답변 좌우 정렬 구분은 유지) */
 .agent-turn.assistant {
+  max-width: 94%;
   margin-right: auto;
   background: var(--c-brand-soft);
   color: #22405c;

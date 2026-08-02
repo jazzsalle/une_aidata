@@ -6,6 +6,7 @@ import { MapPanel } from '../features/map/MapPanel';
 import { IntegrationStatusPanel } from '../components/IntegrationStatusPanel';
 import { T3qReadinessPanel } from '../components/T3qReadinessPanel';
 import { T3qMockSearchPanel } from '../components/T3qMockSearchPanel';
+import { PanelResizer, useResizableLeftPanel } from '../components/PanelResizer';
 
 interface Props {
   situation: CurrentSituation | null;
@@ -21,10 +22,12 @@ interface Props {
 }
 
 export function DashboardPage(props: Props) {
+  const leftPanel = useResizableLeftPanel();
   return (
     <>
-      <div className="dashboard-grid">
+      <div className="dashboard-grid" ref={leftPanel.gridRef} style={leftPanel.style}>
         <SituationAgentPanel situation={props.situation} onSituationCreated={props.onSituationCreated} onAgentResponse={props.onAgentResponse} />
+        <PanelResizer control={leftPanel} />
         <MapPanel adminCode={props.situation?.admin_code ?? '45190'} highlightedFeatureId={props.highlightedFeature} />
         <InsightPanel priorities={props.priorities} procedures={props.procedures} similarEvents={props.events} selectedEventId={props.selectedEventId} onHighlight={props.onHighlight} onSelectEvent={props.onSelectEvent} />
       </div>
