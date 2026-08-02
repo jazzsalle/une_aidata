@@ -1,13 +1,12 @@
 import { useState } from 'react';
 import { moveTabFocus } from '../hooks/useRovingTabs';
-import type { AgentResponse, PriorityAreaResult, ProcedureStep, SimilarEvent } from '../types/contracts';
+import type { PriorityAreaResult, ProcedureStep, SimilarEvent } from '../types/contracts';
 
 interface Props {
   priorities: PriorityAreaResult | null;
   procedures: ProcedureStep[];
   similarEvents: SimilarEvent[];
   selectedEventId: string | null;
-  agentResponse: AgentResponse | null;
   onHighlight(id: string): void;
   onSelectEvent(id: string): void;
 }
@@ -15,7 +14,7 @@ interface Props {
 const tabs=['현재 판단','유사사례','대응절차','계획·근거'] as const;
 type Tab=(typeof tabs)[number];
 
-export function InsightPanel({priorities,procedures,similarEvents,selectedEventId,agentResponse,onHighlight,onSelectEvent}:Props){
+export function InsightPanel({priorities,procedures,similarEvents,selectedEventId,onHighlight,onSelectEvent}:Props){
   const [tab,setTab]=useState<Tab>('현재 판단');
   const selectedEvent=similarEvents.find((event)=>event.event_id===selectedEventId)??similarEvents[0]??null;
 
@@ -27,7 +26,6 @@ export function InsightPanel({priorities,procedures,similarEvents,selectedEventI
       {tab==='현재 판단'&&<>
         <div className="notice-card warning"><strong>우선 확인 상대순위</strong><p>공식 위험도·피해예측 결과가 아니며 담당자 확인이 필요합니다.</p></div>
         {priorities?.areas.map(area=><article className="priority-card" key={area.spatial_object_id}><div className="rank">{area.rank}</div><div><div className="priority-title"><strong>{area.name}</strong><span>{area.score}점</span></div><ul>{area.reasons.slice(0,3).map(reason=><li key={reason}>{reason}</li>)}</ul><button type="button" onClick={()=>onHighlight(area.spatial_object_id)}>지도에서 보기</button></div></article>)}
-        {agentResponse&&<div className="agent-result"><strong>Agent 답변</strong><p>{agentResponse.answer}</p></div>}
       </>}
 
       {tab==='유사사례'&&<div className="event-list">

@@ -296,7 +296,7 @@ def main() -> int:
                     raise AssertionError(f'Passage 목록에 "근거 Passage:" 없음: {passage_items}')
                 if passage_id not in passage_items:
                     raise AssertionError(f'Passage 목록에 passage_id {passage_id} 없음: {passage_items}')
-                preview = page.locator('.report-preview pre').inner_text()
+                preview = page.locator('.report-preview .report-preview-doc').inner_text()
                 if '근거 Passage:' not in preview:
                     raise AssertionError('markdown 미리보기에 "근거 Passage:" 부착 없음')
                 if passage_id not in preview:

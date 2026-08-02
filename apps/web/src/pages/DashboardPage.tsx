@@ -13,7 +13,6 @@ interface Props {
   procedures: ProcedureStep[];
   events: SimilarEvent[];
   selectedEventId: string | null;
-  agentResponse: AgentResponse | null;
   highlightedFeature: string | null;
   onSituationCreated(situation: CurrentSituation): void;
   onAgentResponse(response: AgentResponse): void;
@@ -27,7 +26,7 @@ export function DashboardPage(props: Props) {
       <div className="dashboard-grid">
         <SituationAgentPanel situation={props.situation} onSituationCreated={props.onSituationCreated} onAgentResponse={props.onAgentResponse} />
         <MapPanel adminCode={props.situation?.admin_code ?? '45190'} highlightedFeatureId={props.highlightedFeature} />
-        <InsightPanel priorities={props.priorities} procedures={props.procedures} similarEvents={props.events} selectedEventId={props.selectedEventId} agentResponse={props.agentResponse} onHighlight={props.onHighlight} onSelectEvent={props.onSelectEvent} />
+        <InsightPanel priorities={props.priorities} procedures={props.procedures} similarEvents={props.events} selectedEventId={props.selectedEventId} onHighlight={props.onHighlight} onSelectEvent={props.onSelectEvent} />
       </div>
       <IntegrationStatusPanel />
       <T3qReadinessPanel adminCode={props.situation?.admin_code} />

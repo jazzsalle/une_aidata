@@ -269,7 +269,7 @@ def main() -> int:
                     raise AssertionError(f'과거 사례 1건 표시 없음: {text}')
                 if not page.locator('.report-selected-evidence .safety-note', has_text='시범 대상지역 자료가 아닙니다').count():
                     raise AssertionError('대상지역 외 증거세트 safety-note 없음')
-                preview = page.locator('.report-preview pre').inner_text()
+                preview = page.locator('.report-preview .report-preview-doc').inner_text()
                 for fragment in (f'PRE·EVENT·POST 증거세트 {evidence_set_id}', '6개 타일', '침수흔적도 Seed 근거 포함 (공식 침수범위 아님)'):
                     if fragment not in preview:
                         raise AssertionError(f'초안 미리보기에 "{fragment}" 없음')

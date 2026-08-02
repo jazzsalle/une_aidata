@@ -1,5 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import type { CurrentSituation, PriorityAreaResult, ReportDraft, ReportEvidenceSelection, SimilarEvent } from '../types/contracts';
+import type { ReportBlock, ReportDocument, ReportSection } from '../domain/reportDocument';
+import { listBlock, noteBlock, rankedListBlock, textBlock, toMarkdown } from '../domain/reportDocument';
 
 interface Props {
   situation: CurrentSituation | null;
@@ -16,6 +18,71 @@ function asText(value: unknown) {
 
 function isSeedReference(event: SimilarEvent) {
   return event.data_status === 'mock' || event.data_status === 'synthetic_demo' || event.similarity.profile_id === 'SEED-FALLBACK';
+}
+
+interface ReportDocumentInput {
+  overview: string;
+  conditions: string;
+  actions: string;
+  damageStatus: string;
+  priorities: PriorityAreaResult | null;
+  selectedEvents: SimilarEvent[];
+  selection: ReportEvidenceSelection;
+}
+
+/**
+ * 화면 입력·선택 근거를 보고서 문서 구조로 만든다(순수함수).
+ * 마크다운 문자열은 toMarkdown(document)로만 파생하며, 여기서 문자열을 조립하지 않는다.
+ * 과거 참고정보 프레이밍만 사용하고 피해예측·공식 위험도·자동 조치결정을 만들지 않는다.
+ */
+export function buildReportDocument({ overview, conditions, actions, damageStatus, priorities, selectedEvents, selection }: ReportDocumentInput): ReportDocument {
+  const priorityBlock = priorities
+    ? rankedListBlock(priorities.areas.slice(0, 5).map((area) => ({ marker: area.rank, text: `${area.name} - ${area.reasons.join(', ')}` })))
+    : textBlock('미확인');
+  const eventItems = selectedEvents.map((event) => {
+    const factorText=event.similarity.factors
+      .filter((factor)=>factor.availability==='AVAILABLE')
+      .sort((a,b)=>b.contribution_score-a.contribution_score)
+      .slice(0,4)
+      .map((factor)=>`${factor.factor_name} ${factor.contribution_score.toFixed(1)}점`)
+      .join(', ');
+    const responseChildren=event.response_comparison
+      .map((item)=>`현재 확인: ${item.current_required_check} / 과거 조치: ${item.past_event_action??'근거 미확보'}`);
+    const passageChildren=event.evidence
+      .map((item)=>`근거 Passage: ${item.title} (${item.passage_id??item.evidence_id})`);
+    return {
+      text: `${event.event_name}: 사건 유사도 ${event.similarity.event_similarity_score}점, 비교범위 ${event.similarity.comparison_coverage}%, 신뢰 ${event.similarity.confidence_status}, 데이터상태 ${event.data_status} (${factorText || '비교요인 미확보'})`,
+      children: [
+        ...(isSeedReference(event) ? ['Seed 참고사례 · T3Q 실데이터 아님'] : []),
+        ...(responseChildren.length > 0 ? responseChildren : ['대응비교 미확보']),
+        ...(passageChildren.length > 0 ? passageChildren : ['근거 Passage 미확보']),
+        '과거 참고정보이며 권고·자동 결정 아님 (담당자 확인 필요)',
+        '현재 피해예측 아님'
+      ]
+    };
+  });
+  const eventBlock = eventItems.length > 0 ? listBlock(eventItems) : textBlock('선택된 참고사례 없음');
+  const satelliteBlock = selection.satellite_event_set
+    ? listBlock([{ text: `PRE·EVENT·POST 증거세트 ${selection.satellite_event_set.evidence_set_id??selection.satellite_event_set.event_id} · ${selection.satellite_event_set.asset_ids.length}개 타일 · 출처버전 ${selection.satellite_event_set.provenance_version??'미확인'} · 대상지역 일치 ${selection.satellite_event_set.target_region_match?'예':'아니오'}` }])
+    : selection.satellite_pair
+      ? listBlock([{ text: `기준영상 ${selection.satellite_pair.left_asset_id} / 비교영상 ${selection.satellite_pair.right_asset_id}` }])
+      : textBlock('선택된 위성영상 근거 없음');
+  const floodBlock = listBlock([{ text: selection.include_flood_trace ? '침수흔적도 Seed 근거 포함 (공식 침수범위 아님)' : '침수흔적도 근거 미선택' }]);
+  return {
+    title: '재난상황 보고서 초안',
+    sections: [
+      { id: 'overview', level: 2, heading: '1. 상황 개요', blocks: [textBlock(overview || '미입력')] },
+      { id: 'conditions', level: 2, heading: '2. 현재 조건', blocks: [textBlock(conditions || '미입력')] },
+      { id: 'priority', level: 2, heading: '3. 우선 확인지역', blocks: [priorityBlock] },
+      { id: 'evidence', level: 2, heading: '4. 피해·변화 참고근거', blocks: [] },
+      { id: 'evidence-satellite', level: 3, heading: '위성영상', blocks: [satelliteBlock] },
+      { id: 'evidence-flood', level: 3, heading: '침수흔적도', blocks: [floodBlock] },
+      { id: 'evidence-events', level: 3, heading: '과거 피해·대응·복구 사례', blocks: [eventBlock] },
+      { id: 'actions', level: 2, heading: '5. 담당자 조치결과', blocks: [textBlock(actions || '미입력')] },
+      { id: 'damage', level: 2, heading: '6. 피해현황', blocks: [textBlock(damageStatus || '미확인')] }
+    ],
+    closing: [noteBlock('본 문서는 담당자 검토용 초안이며 NDMS 자동 제출 또는 공식 피해예측 결과가 아닙니다.')]
+  };
 }
 
 export function ReportEditor({ situation, priorities, events, report, selection }: Props) {
@@ -71,30 +138,13 @@ export function ReportEditor({ situation, priorities, events, report, selection 
     return warnings;
   }, [overview, conditions, actions, damageStatus, selection, events]);
 
-  const markdown = useMemo(() => {
-    const priorityText = priorities?.areas.slice(0, 5).map((area) => `${area.rank}. ${area.name} - ${area.reasons.join(', ')}`).join('\n') ?? '미확인';
-    const eventText = selectedEvents.map((event) => {
-      const factorText=event.similarity.factors
-        .filter((factor)=>factor.availability==='AVAILABLE')
-        .sort((a,b)=>b.contribution_score-a.contribution_score)
-        .slice(0,4)
-        .map((factor)=>`${factor.factor_name} ${factor.contribution_score.toFixed(1)}점`)
-        .join(', ');
-      const seedLabel=isSeedReference(event)?'\n  - Seed 참고사례 · T3Q 실데이터 아님':'';
-      const responseText=event.response_comparison
-        .map((item)=>`  - 현재 확인: ${item.current_required_check} / 과거 조치: ${item.past_event_action??'근거 미확보'}`)
-        .join('\n');
-      const passageText=event.evidence
-        .map((item)=>`  - 근거 Passage: ${item.title} (${item.passage_id??item.evidence_id})`)
-        .join('\n');
-      return `- ${event.event_name}: 사건 유사도 ${event.similarity.event_similarity_score}점, 비교범위 ${event.similarity.comparison_coverage}%, 신뢰 ${event.similarity.confidence_status}, 데이터상태 ${event.data_status} (${factorText || '비교요인 미확보'})${seedLabel}\n${responseText || '  - 대응비교 미확보'}\n${passageText || '  - 근거 Passage 미확보'}\n  - 과거 참고정보이며 권고·자동 결정 아님 (담당자 확인 필요)\n  - 현재 피해예측 아님`;
-    }).join('\n') || '선택된 참고사례 없음';
-    const satelliteText=selection.satellite_event_set?`- PRE·EVENT·POST 증거세트 ${selection.satellite_event_set.evidence_set_id??selection.satellite_event_set.event_id} · ${selection.satellite_event_set.asset_ids.length}개 타일 · 출처버전 ${selection.satellite_event_set.provenance_version??'미확인'} · 대상지역 일치 ${selection.satellite_event_set.target_region_match?'예':'아니오'}`:(selection.satellite_pair?`- 기준영상 ${selection.satellite_pair.left_asset_id} / 비교영상 ${selection.satellite_pair.right_asset_id}`:'선택된 위성영상 근거 없음');
-    const floodText=selection.include_flood_trace?'- 침수흔적도 Seed 근거 포함 (공식 침수범위 아님)':'- 침수흔적도 근거 미선택';
-    const maskMetrics=(report?.sections as any)?.flood_mask_pixel_metrics?.phases as Array<{phase:string;water_ratio_pct:number;delta_ratio_points_from_pre:number}>|undefined;
-    const maskMetricText=maskMetrics?.map(m=>`- ${m.phase}: 흰색 픽셀 ${m.water_ratio_pct}% (PRE 대비 ${m.delta_ratio_points_from_pre>0?'+':''}${m.delta_ratio_points_from_pre}%p)`).join('\n')??'- 선택된 수계마스크 상대변화 없음';
-    return `# 재난상황 보고서 초안\n\n## 1. 상황 개요\n${overview || '미입력'}\n\n## 2. 현재 조건\n${conditions || '미입력'}\n\n## 3. 우선 확인지역\n${priorityText}\n\n## 4. 피해·변화 참고근거\n### 위성영상\n${satelliteText}\n\n### 침수흔적도\n${floodText}\n\n### 과거 피해·대응·복구 사례\n${eventText}\n\n## 5. 담당자 조치결과\n${actions || '미입력'}\n\n## 6. 피해현황\n${damageStatus || '미확인'}\n\n> 본 문서는 담당자 검토용 초안이며 NDMS 자동 제출 또는 공식 피해예측 결과가 아닙니다.`;
-  }, [overview, conditions, actions, damageStatus, priorities, selectedEvents, selection, report]);
+  // 보고서를 문자열이 아닌 문서 구조로 만든다. 마크다운(다운로드)과 화면 렌더는 이 구조에서만 파생한다.
+  const draftDocument = useMemo<ReportDocument>(
+    () => buildReportDocument({ overview, conditions, actions, damageStatus, priorities, selectedEvents, selection }),
+    [overview, conditions, actions, damageStatus, priorities, selectedEvents, selection]
+  );
+
+  const markdown = useMemo(() => toMarkdown(draftDocument), [draftDocument]);
 
   function saveDraft() {
     if (!situation) return;
@@ -161,8 +211,67 @@ export function ReportEditor({ situation, priorities, events, report, selection 
       </section>
       <aside className="report-preview" id="report-preview" aria-labelledby="preview-title">
         <h2 id="preview-title">초안 미리보기</h2>
-        <pre tabIndex={0}>{markdown}</pre>
+        <ReportDocumentView document={draftDocument} />
+        <details className="report-preview-source">
+          <summary>Markdown 원문 보기 (다운로드 파일과 동일)</summary>
+          <pre tabIndex={0}>{markdown}</pre>
+        </details>
       </aside>
     </div>
+  );
+}
+
+/** 사용자 입력 텍스트를 문단·줄바꿈만 보존해 렌더한다(마크다운 기호는 화면에 노출하지 않는다). */
+function ReportTextBlock({ value }: { value: string }) {
+  const paragraphs = value.split(/\n{2,}/).map((paragraph) => paragraph.split('\n'));
+  return <>{paragraphs.map((lines, index) => (
+    <p className="report-doc-paragraph" key={index}>
+      {lines.map((line, lineIndex) => <Fragment key={lineIndex}>{lineIndex > 0 ? <br /> : null}{line}</Fragment>)}
+    </p>
+  ))}</>;
+}
+
+function ReportBlockView({ block }: { block: ReportBlock }) {
+  if (block.kind === 'text') return <ReportTextBlock value={block.value} />;
+  if (block.kind === 'note') return <blockquote className="report-doc-note"><p>{block.value}</p></blockquote>;
+  if (block.kind === 'ranked-list') {
+    if (block.items.length === 0) return null;
+    return <ol className="report-doc-ranked-list">
+      {block.items.map((item, index) => <li className="report-doc-ranked-item" key={index} value={item.marker}>{item.text}</li>)}
+    </ol>;
+  }
+  if (block.items.length === 0) return null;
+  return <ul className="report-doc-list">
+    {block.items.map((item, index) => <li className="report-doc-item" key={index}>
+      <span className="report-doc-item-text">{item.text}</span>
+      {item.children && item.children.length > 0
+        ? <ul className="report-doc-sublist">{item.children.map((child, childIndex) => <li className="report-doc-subitem" key={childIndex}>{child}</li>)}</ul>
+        : null}
+    </li>)}
+  </ul>;
+}
+
+function ReportSectionView({ section }: { section: ReportSection }) {
+  const blocks = section.blocks.map((block, index) => <ReportBlockView block={block} key={index} />);
+  if (section.level === 3) {
+    return <section className="report-doc-subsection">
+      <h4 className="report-doc-subheading">{section.heading}</h4>
+      {blocks}
+    </section>;
+  }
+  return <section className="report-doc-section">
+    <h3 className="report-doc-heading">{section.heading}</h3>
+    {blocks}
+  </section>;
+}
+
+/** 문서 구조를 시맨틱 HTML로 표현한다. 마크다운 원문(#, -, >)은 details 안에서만 제공한다. */
+function ReportDocumentView({ document: doc }: { document: ReportDocument }) {
+  return (
+    <article className="report-preview-doc" tabIndex={0} aria-label={`${doc.title} 미리보기 문서`}>
+      <p className="report-doc-title">{doc.title}</p>
+      {doc.sections.map((section) => <ReportSectionView section={section} key={section.id} />)}
+      {doc.closing.map((block, index) => <ReportBlockView block={block} key={index} />)}
+    </article>
   );
 }

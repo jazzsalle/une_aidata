@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-02T06:44:54.043Z",
+  "generated_at": "2026-08-02T07:41:07.467Z",
   "gate": "provider-fixture-gate",
   "source_version": "1.5.1-provider-fixture-gate",
   "runtime_mode": "FIXTURE_ONLY_NO_NETWORK",
@@ -32,7 +32,7 @@
           "pass": true
         }
       ],
-      "validated_at": "2026-08-02T06:44:54.043Z"
+      "validated_at": "2026-08-02T07:41:07.467Z"
     },
     {
       "provider_id": "hrfco_hydrology",
@@ -54,7 +54,7 @@
           "pass": true
         }
       ],
-      "validated_at": "2026-08-02T06:44:54.043Z"
+      "validated_at": "2026-08-02T07:41:07.467Z"
     },
     {
       "provider_id": "une_rag",
@@ -76,7 +76,7 @@
           "pass": true
         }
       ],
-      "validated_at": "2026-08-02T06:44:54.043Z"
+      "validated_at": "2026-08-02T07:41:07.467Z"
     },
     {
       "provider_id": "t3q_event",
@@ -98,7 +98,7 @@
           "pass": true
         }
       ],
-      "validated_at": "2026-08-02T06:44:54.043Z"
+      "validated_at": "2026-08-02T07:41:07.467Z"
     },
     {
       "provider_id": "t3q_risk",
@@ -120,7 +120,7 @@
           "pass": true
         }
       ],
-      "validated_at": "2026-08-02T06:44:54.043Z"
+      "validated_at": "2026-08-02T07:41:07.467Z"
     },
     {
       "provider_id": "t3q_spatial",
@@ -142,7 +142,7 @@
           "pass": true
         }
       ],
-      "validated_at": "2026-08-02T06:44:54.043Z"
+      "validated_at": "2026-08-02T07:41:07.467Z"
     }
   ]
 }
