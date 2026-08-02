@@ -1,8 +1,8 @@
 {
   "dataset": "damage_recovery_events_seed",
   "version": "1.3",
-  "as_of": "2026-08-01",
-  "notice": "9건은 자연재해저감종합계획의 피해이력 문구를 구조화한 ACTUAL_BACKED 레코드이며, 6건은 유사도·대응비교·API 교체계약 검증용 SYNTHETIC_DEMO이다. 실제 NDMS 데이터 또는 피해예측 결과가 아니다.",
+  "as_of": "2026-08-02",
+  "notice": "9건은 자연재해저감종합계획의 피해이력 문구를 구조화한 ACTUAL_BACKED 레코드이며, 6건은 유사도·대응비교·API 교체계약 검증용 SYNTHETIC_DEMO이다. ACTUAL_BACKED 5건의 damage.ledger_aggregate는 행정안전부 재해대장보고서(2010~2025)에서 재난년도·시군구·재난명 기준으로 집계한 공공시설 피해금액·복구비 실집계값(단위 천원, 시군구 전체 합계)이며 과거 집계이지 피해예측이 아니다. 나머지 항목은 실제 NDMS 데이터 또는 피해예측 결과가 아니다.",
   "future_provider": "T3qEventPassageProvider",
   "runtime_policy": "MOCK_FIRST_PROVIDER_NEUTRAL",
   "counts": {
@@ -64,8 +64,79 @@
       },
       "damage": {
         "description": "2010년 태풍 곤파스 시 안양천 충훈1교 관측 최고수위 EL.17.09m 기록 — 200년빈도 계획홍수위 대비 분석 대상이 된 주요 홍수 사상",
-        "quantities_status": "NOT_AVAILABLE",
-        "is_prediction": false
+        "quantities_status": "AVAILABLE_PUBLIC_FACILITY_LEDGER",
+        "is_prediction": false,
+        "damage_note": "행정안전부 재해대장보고서(2010~2025) 집계 — 의왕시 2010년 「09.01 태풍 곤파스」 재해대장 7건, 공공시설 피해금액 1,444,649천원(약 14.4억원) · 복구비 1,863,885천원(약 18.6억원) [중앙보고 기준, 중앙확정 7건]. 금액단위 천원. 시군구 전체 합계이며 위험지구 단위 금액이 아니고, 인명·사유재산 피해는 미포함이다. 과거 확정 집계값이며 피해예측이 아니다.",
+        "ledger_aggregate": {
+          "source_document": "행정안전부 재해대장보고서(2010~2025)",
+          "source_dataset_id": "DISASTER_LEDGER_REPORT_2010_2025",
+          "source_file": "20260708_2010~2025재해대장보고서_New.xlsx",
+          "source_organization": "행정안전부",
+          "official_data": true,
+          "data_status": "actual",
+          "value_status": "actual",
+          "is_prediction": false,
+          "reference_only": true,
+          "record_scope": "공공시설 재해대장(피해시설 단위) 집계 — 인명피해·사유재산 피해는 포함하지 않음",
+          "aggregation_scope": "시군구 전체 합계(위험지구·행정동 단위 귀속 금액 아님)",
+          "aggregation_basis": "재난년도 + 시도·시군구 + 재난명 일치 행 전체 합계",
+          "match_rule": "재난년도 + 시도·시군구 + 재난유형 + 재난명(월/태풍 사상) 일치 후보가 유일한 경우에만 매칭",
+          "matched_disaster_year": "2010",
+          "matched_disaster_name": "09.01 태풍 곤파스",
+          "matched_sido": "경기도",
+          "matched_sigungu": "의왕시",
+          "matched_row_count": 7,
+          "currency_unit": "KRW_THOUSAND",
+          "unit_label": "천원",
+          "damage_amount_local_report": 1444649,
+          "recovery_cost_local_report": 1863885,
+          "damage_amount_central_confirmed": 1444649,
+          "recovery_cost_central_confirmed": 1863885,
+          "confirmation_status": "중앙확정",
+          "recovery_stage_counts": {
+            "중앙확정": 7
+          },
+          "registration_counts": {
+            "대응": 7
+          },
+          "affected_dong_count": 4,
+          "facility_breakdown": [
+            {
+              "facility_type": "도시개발시설",
+              "row_count": 4,
+              "damage_local": 1274525,
+              "recovery_local": 1675919,
+              "damage_central": 1274525,
+              "recovery_central": 1675919
+            },
+            {
+              "facility_type": "군사시설",
+              "row_count": 1,
+              "damage_local": 88057,
+              "recovery_local": 105899,
+              "damage_central": 88057,
+              "recovery_central": 105899
+            },
+            {
+              "facility_type": "방재청기타",
+              "row_count": 1,
+              "damage_local": 70067,
+              "recovery_local": 70067,
+              "damage_central": 70067,
+              "recovery_central": 70067
+            },
+            {
+              "facility_type": "가로수",
+              "row_count": 1,
+              "damage_local": 12000,
+              "recovery_local": 12000,
+              "damage_central": 12000,
+              "recovery_central": 12000
+            }
+          ],
+          "generated_by": "scripts/build_damage_quantities_from_ledger.py",
+          "generated_at": "2026-08-02"
+        }
       },
       "response": [],
       "recovery": [],
@@ -87,6 +158,30 @@
             "chapter": "제2장 2.3.3 주요자연재해특성분석",
             "district_code": "UW-A-01"
           }
+        },
+        {
+          "evidence_id": "EVD-EVT::20100901-TYPH-41430-001-LEDGER-01",
+          "source_type": "DISASTER_LEDGER_REPORT",
+          "data_status": "actual",
+          "title": "행정안전부 재해대장보고서(2010~2025) 공공시설 피해·복구 집계",
+          "page": null,
+          "passage_id": null,
+          "excerpt": "경기도 의왕시 2010년 「09.01 태풍 곤파스」 재해대장 7건 — 공공시설 피해금액 1,444,649천원 · 복구비 1,863,885천원(시군구 전체 합계, 단위 천원, 복구단계 중앙확정, 과거 집계값·피해예측 아님)",
+          "lineage": {
+            "source_file": "20260708_2010~2025재해대장보고서_New.xlsx",
+            "source_organization": "행정안전부",
+            "dataset_id": "DISASTER_LEDGER_REPORT_2010_2025",
+            "disaster_year": "2010",
+            "disaster_name": "09.01 태풍 곤파스",
+            "sido": "경기도",
+            "sigungu": "의왕시",
+            "row_count": 7,
+            "currency_unit": "KRW_THOUSAND",
+            "aggregation_scope": "시군구 전체 합계(위험지구·행정동 단위 귀속 금액 아님)",
+            "official_data": true,
+            "is_prediction": false,
+            "generated_by": "scripts/build_damage_quantities_from_ledger.py"
+          }
         }
       ],
       "data_status": "actual_backed",
@@ -98,6 +193,7 @@
       "is_prediction": false,
       "display_badges": [
         "문서 근거 기반",
+        "재해대장 공공시설 피해·복구 집계 반영",
         "수치 미확보 항목 있음",
         "T3Q API 교체대상"
       ]
@@ -518,8 +614,143 @@
       },
       "damage": {
         "description": "2012년 9월 15~17일 태풍 산바 — 구미시 이재민 147명·재산피해액 약 82억원(최근 10년 최대 규모), 선주교 관측소 수위·환산홍수량 급상승 기록",
-        "quantities_status": "NOT_AVAILABLE",
-        "is_prediction": false
+        "quantities_status": "AVAILABLE_PUBLIC_FACILITY_LEDGER",
+        "is_prediction": false,
+        "damage_note": "행정안전부 재해대장보고서(2010~2025) 집계 — 구미시 2012년 「제16호 태풍 산바」 재해대장 207건, 공공시설 피해금액 8,087,505천원(약 80.9억원) · 복구비 31,193,743천원(약 311.9억원) [중앙보고 기준, 중앙확정 207건]. 금액단위 천원. 시군구 전체 합계이며 위험지구 단위 금액이 아니고, 인명·사유재산 피해는 미포함이다. 과거 확정 집계값이며 피해예측이 아니다.",
+        "ledger_aggregate": {
+          "source_document": "행정안전부 재해대장보고서(2010~2025)",
+          "source_dataset_id": "DISASTER_LEDGER_REPORT_2010_2025",
+          "source_file": "20260708_2010~2025재해대장보고서_New.xlsx",
+          "source_organization": "행정안전부",
+          "official_data": true,
+          "data_status": "actual",
+          "value_status": "actual",
+          "is_prediction": false,
+          "reference_only": true,
+          "record_scope": "공공시설 재해대장(피해시설 단위) 집계 — 인명피해·사유재산 피해는 포함하지 않음",
+          "aggregation_scope": "시군구 전체 합계(위험지구·행정동 단위 귀속 금액 아님)",
+          "aggregation_basis": "재난년도 + 시도·시군구 + 재난명 일치 행 전체 합계",
+          "match_rule": "재난년도 + 시도·시군구 + 재난유형 + 재난명(월/태풍 사상) 일치 후보가 유일한 경우에만 매칭",
+          "matched_disaster_year": "2012",
+          "matched_disaster_name": "제16호 태풍 산바",
+          "matched_sido": "경상북도",
+          "matched_sigungu": "구미시",
+          "matched_row_count": 207,
+          "currency_unit": "KRW_THOUSAND",
+          "unit_label": "천원",
+          "damage_amount_local_report": 8087505,
+          "recovery_cost_local_report": 31193743,
+          "damage_amount_central_confirmed": 8087505,
+          "recovery_cost_central_confirmed": 31193743,
+          "confirmation_status": "중앙확정",
+          "recovery_stage_counts": {
+            "중앙확정": 207
+          },
+          "registration_counts": {
+            "대응": 207
+          },
+          "affected_dong_count": 15,
+          "facility_breakdown": [
+            {
+              "facility_type": "하천",
+              "row_count": 37,
+              "damage_local": 4558004,
+              "recovery_local": 16298658,
+              "damage_central": 4558004,
+              "recovery_central": 16298658
+            },
+            {
+              "facility_type": "소규모시설",
+              "row_count": 48,
+              "damage_local": 835035,
+              "recovery_local": 2193930,
+              "damage_central": 835035,
+              "recovery_central": 2193930
+            },
+            {
+              "facility_type": "산사태",
+              "row_count": 10,
+              "damage_local": 821695,
+              "recovery_local": 2077602,
+              "damage_central": 821695,
+              "recovery_central": 2077602
+            },
+            {
+              "facility_type": "소하천",
+              "row_count": 53,
+              "damage_local": 699771,
+              "recovery_local": 8607655,
+              "damage_central": 699771,
+              "recovery_central": 8607655
+            },
+            {
+              "facility_type": "수리시설",
+              "row_count": 30,
+              "damage_local": 596841,
+              "recovery_local": 893891,
+              "damage_central": 596841,
+              "recovery_central": 893891
+            },
+            {
+              "facility_type": "수위우량관측시설",
+              "row_count": 1,
+              "damage_local": 170000,
+              "recovery_local": 170000,
+              "damage_central": 170000,
+              "recovery_central": 170000
+            },
+            {
+              "facility_type": "임도",
+              "row_count": 2,
+              "damage_local": 152265,
+              "recovery_local": 152265,
+              "damage_central": 152265,
+              "recovery_central": 152265
+            },
+            {
+              "facility_type": "농림부기타",
+              "row_count": 9,
+              "damage_local": 104319,
+              "recovery_local": 241343,
+              "damage_central": 104319,
+              "recovery_central": 241343
+            },
+            {
+              "facility_type": "도로-행안부",
+              "row_count": 9,
+              "damage_local": 77883,
+              "recovery_local": 156014,
+              "damage_central": 77883,
+              "recovery_central": 156014
+            },
+            {
+              "facility_type": "공원시설",
+              "row_count": 3,
+              "damage_local": 44212,
+              "recovery_local": 263697,
+              "damage_central": 44212,
+              "recovery_central": 263697
+            },
+            {
+              "facility_type": "농어촌도로",
+              "row_count": 4,
+              "damage_local": 24038,
+              "recovery_local": 115225,
+              "damage_central": 24038,
+              "recovery_central": 115225
+            },
+            {
+              "facility_type": "도로-국토부",
+              "row_count": 1,
+              "damage_local": 3442,
+              "recovery_local": 23463,
+              "damage_central": 3442,
+              "recovery_central": 23463
+            }
+          ],
+          "generated_by": "scripts/build_damage_quantities_from_ledger.py",
+          "generated_at": "2026-08-02"
+        }
       },
       "response": [],
       "recovery": [],
@@ -541,6 +772,30 @@
             "chapter": "제2장 2.7.2 계획 수립 중점방향",
             "district_code": "GM-A-04"
           }
+        },
+        {
+          "evidence_id": "EVD-EVT::20120901-TYPH-47190-001-LEDGER-01",
+          "source_type": "DISASTER_LEDGER_REPORT",
+          "data_status": "actual",
+          "title": "행정안전부 재해대장보고서(2010~2025) 공공시설 피해·복구 집계",
+          "page": null,
+          "passage_id": null,
+          "excerpt": "경상북도 구미시 2012년 「제16호 태풍 산바」 재해대장 207건 — 공공시설 피해금액 8,087,505천원 · 복구비 31,193,743천원(시군구 전체 합계, 단위 천원, 복구단계 중앙확정, 과거 집계값·피해예측 아님)",
+          "lineage": {
+            "source_file": "20260708_2010~2025재해대장보고서_New.xlsx",
+            "source_organization": "행정안전부",
+            "dataset_id": "DISASTER_LEDGER_REPORT_2010_2025",
+            "disaster_year": "2012",
+            "disaster_name": "제16호 태풍 산바",
+            "sido": "경상북도",
+            "sigungu": "구미시",
+            "row_count": 207,
+            "currency_unit": "KRW_THOUSAND",
+            "aggregation_scope": "시군구 전체 합계(위험지구·행정동 단위 귀속 금액 아님)",
+            "official_data": true,
+            "is_prediction": false,
+            "generated_by": "scripts/build_damage_quantities_from_ledger.py"
+          }
         }
       ],
       "data_status": "actual_backed",
@@ -552,6 +807,7 @@
       "is_prediction": false,
       "display_badges": [
         "문서 근거 기반",
+        "재해대장 공공시설 피해·복구 집계 반영",
         "수치 미확보 항목 있음",
         "T3Q API 교체대상"
       ]
@@ -608,8 +864,320 @@
       },
       "damage": {
         "description": "2020년 8월 7~9일 집중호우 — 남원시 평균 411.1mm(대강면 누적 534mm·금지면 500mm)의 기록적 강우, 관내 하천 수계 침수피해 및 개선복구 계획 수립",
-        "quantities_status": "NOT_AVAILABLE",
-        "is_prediction": false
+        "quantities_status": "AVAILABLE_PUBLIC_FACILITY_LEDGER",
+        "is_prediction": false,
+        "damage_note": "행정안전부 재해대장보고서(2010~2025) 집계 — 남원시 2020년 「7.28~8.11 호우(12차 전환)」 재해대장 538건, 공공시설 피해금액 43,761,407천원(약 437.6억원) · 복구비 150,447,006천원(약 1,504.5억원) [중앙보고 기준, 중앙취합중 538건]. 시군구 보고 기준은 피해 43,761,407천원·복구비 151,547,006천원. 금액단위 천원. 시군구 전체 합계이며 위험지구 단위 금액이 아니고, 인명·사유재산 피해는 미포함이다. 중앙확정 이전 단계(취합중)를 포함한 과거 집계값이며 피해예측이 아니다.",
+        "ledger_aggregate": {
+          "source_document": "행정안전부 재해대장보고서(2010~2025)",
+          "source_dataset_id": "DISASTER_LEDGER_REPORT_2010_2025",
+          "source_file": "20260708_2010~2025재해대장보고서_New.xlsx",
+          "source_organization": "행정안전부",
+          "official_data": true,
+          "data_status": "actual",
+          "value_status": "actual",
+          "is_prediction": false,
+          "reference_only": true,
+          "record_scope": "공공시설 재해대장(피해시설 단위) 집계 — 인명피해·사유재산 피해는 포함하지 않음",
+          "aggregation_scope": "시군구 전체 합계(위험지구·행정동 단위 귀속 금액 아님)",
+          "aggregation_basis": "재난년도 + 시도·시군구 + 재난명 일치 행 전체 합계",
+          "match_rule": "재난년도 + 시도·시군구 + 재난유형 + 재난명(월/태풍 사상) 일치 후보가 유일한 경우에만 매칭",
+          "matched_disaster_year": "2020",
+          "matched_disaster_name": "7.28~8.11 호우(12차 전환)",
+          "matched_sido": "전라북도",
+          "matched_sigungu": "남원시",
+          "matched_row_count": 538,
+          "currency_unit": "KRW_THOUSAND",
+          "unit_label": "천원",
+          "damage_amount_local_report": 43761407,
+          "recovery_cost_local_report": 151547006,
+          "damage_amount_central_confirmed": 43761407,
+          "recovery_cost_central_confirmed": 150447006,
+          "confirmation_status": "중앙확정 이전 단계 포함",
+          "recovery_stage_counts": {
+            "중앙취합중": 538
+          },
+          "registration_counts": {
+            "대응": 531,
+            "복구": 7
+          },
+          "affected_dong_count": 22,
+          "facility_breakdown": [
+            {
+              "facility_type": "산사태",
+              "row_count": 130,
+              "damage_local": 12250378,
+              "recovery_local": 23252849,
+              "damage_central": 12250378,
+              "recovery_central": 23252849
+            },
+            {
+              "facility_type": "수리시설",
+              "row_count": 121,
+              "damage_local": 5571222,
+              "recovery_local": 12927865,
+              "damage_central": 5571222,
+              "recovery_central": 12927865
+            },
+            {
+              "facility_type": "하천 기본시설",
+              "row_count": 30,
+              "damage_local": 5377677,
+              "recovery_local": 58082943,
+              "damage_central": 5377677,
+              "recovery_central": 57082943
+            },
+            {
+              "facility_type": "임도",
+              "row_count": 18,
+              "damage_local": 4481385,
+              "recovery_local": 6576625,
+              "damage_central": 4481385,
+              "recovery_central": 6576625
+            },
+            {
+              "facility_type": "소하천",
+              "row_count": 42,
+              "damage_local": 4258511,
+              "recovery_local": 16567809,
+              "damage_central": 4258511,
+              "recovery_central": 16467809
+            },
+            {
+              "facility_type": "오수분뇨처리시설",
+              "row_count": 8,
+              "damage_local": 2200000,
+              "recovery_local": 3608106,
+              "damage_central": 2200000,
+              "recovery_central": 3608106
+            },
+            {
+              "facility_type": "도로",
+              "row_count": 27,
+              "damage_local": 1955377,
+              "recovery_local": 4375688,
+              "damage_central": 1955377,
+              "recovery_central": 4375688
+            },
+            {
+              "facility_type": "도로-국토부",
+              "row_count": 23,
+              "damage_local": 1517563,
+              "recovery_local": 7978819,
+              "damage_central": 1517563,
+              "recovery_central": 7978819
+            },
+            {
+              "facility_type": "소규모시설",
+              "row_count": 54,
+              "damage_local": 1482693,
+              "recovery_local": 3485767,
+              "damage_central": 1482693,
+              "recovery_central": 3485767
+            },
+            {
+              "facility_type": "하천 친수시설",
+              "row_count": 6,
+              "damage_local": 1256171,
+              "recovery_local": 2604908,
+              "damage_central": 1256171,
+              "recovery_central": 2604908
+            },
+            {
+              "facility_type": "공원시설",
+              "row_count": 1,
+              "damage_local": 912696,
+              "recovery_local": 912696,
+              "damage_central": 912696,
+              "recovery_central": 912696
+            },
+            {
+              "facility_type": "상수도",
+              "row_count": 17,
+              "damage_local": 447692,
+              "recovery_local": 498196,
+              "damage_central": 447692,
+              "recovery_central": 498196
+            },
+            {
+              "facility_type": "하수도",
+              "row_count": 6,
+              "damage_local": 409913,
+              "recovery_local": 1176625,
+              "damage_central": 409913,
+              "recovery_central": 1176625
+            },
+            {
+              "facility_type": "체육시설",
+              "row_count": 3,
+              "damage_local": 285459,
+              "recovery_local": 476233,
+              "damage_central": 285459,
+              "recovery_central": 476233
+            },
+            {
+              "facility_type": "교량",
+              "row_count": 1,
+              "damage_local": 278268,
+              "recovery_local": 1929475,
+              "damage_central": 278268,
+              "recovery_central": 1929475
+            },
+            {
+              "facility_type": "문화관광부기타",
+              "row_count": 8,
+              "damage_local": 271012,
+              "recovery_local": 144197,
+              "damage_central": 271012,
+              "recovery_central": 144197
+            },
+            {
+              "facility_type": "사회복지시설",
+              "row_count": 6,
+              "damage_local": 235000,
+              "recovery_local": 263000,
+              "damage_central": 235000,
+              "recovery_central": 263000
+            },
+            {
+              "facility_type": "농림부기타",
+              "row_count": 2,
+              "damage_local": 87574,
+              "recovery_local": 112386,
+              "damage_central": 87574,
+              "recovery_central": 112386
+            },
+            {
+              "facility_type": "폐기물처리시설",
+              "row_count": 3,
+              "damage_local": 80006,
+              "recovery_local": 2355926,
+              "damage_central": 80006,
+              "recovery_central": 2355926
+            },
+            {
+              "facility_type": "철도시설",
+              "row_count": 1,
+              "damage_local": 79724,
+              "recovery_local": 460214,
+              "damage_central": 79724,
+              "recovery_central": 460214
+            },
+            {
+              "facility_type": "공설시장",
+              "row_count": 1,
+              "damage_local": 78000,
+              "recovery_local": 19615,
+              "damage_central": 78000,
+              "recovery_central": 19615
+            },
+            {
+              "facility_type": "행안부기타",
+              "row_count": 2,
+              "damage_local": 59391,
+              "recovery_local": 0,
+              "damage_central": 59391,
+              "recovery_central": 0
+            },
+            {
+              "facility_type": "국민관광지",
+              "row_count": 2,
+              "damage_local": 52672,
+              "recovery_local": 54619,
+              "damage_central": 52672,
+              "recovery_central": 54619
+            },
+            {
+              "facility_type": "농어촌도로",
+              "row_count": 1,
+              "damage_local": 52190,
+              "recovery_local": 128827,
+              "damage_central": 52190,
+              "recovery_central": 128827
+            },
+            {
+              "facility_type": "학교시설",
+              "row_count": 1,
+              "damage_local": 25988,
+              "recovery_local": 58006,
+              "damage_central": 25988,
+              "recovery_central": 58006
+            },
+            {
+              "facility_type": "수목원시설",
+              "row_count": 1,
+              "damage_local": 15082,
+              "recovery_local": 15082,
+              "damage_central": 15082,
+              "recovery_central": 15082
+            },
+            {
+              "facility_type": "공원묘지",
+              "row_count": 1,
+              "damage_local": 15000,
+              "recovery_local": 15000,
+              "damage_central": 15000,
+              "recovery_central": 15000
+            },
+            {
+              "facility_type": "가로수",
+              "row_count": 1,
+              "damage_local": 11534,
+              "recovery_local": 11534,
+              "damage_central": 11534,
+              "recovery_central": 11534
+            },
+            {
+              "facility_type": "환경부기타",
+              "row_count": 1,
+              "damage_local": 10229,
+              "recovery_local": 0,
+              "damage_central": 10229,
+              "recovery_central": 0
+            },
+            {
+              "facility_type": "산업자원부기타",
+              "row_count": 1,
+              "damage_local": 3000,
+              "recovery_local": 3000,
+              "damage_central": 3000,
+              "recovery_central": 3000
+            },
+            {
+              "facility_type": "육상쓰레기",
+              "row_count": 8,
+              "damage_local": 0,
+              "recovery_local": 3450996,
+              "damage_central": 0,
+              "recovery_central": 3450996
+            },
+            {
+              "facility_type": "공공건물",
+              "row_count": 1,
+              "damage_local": 0,
+              "recovery_local": 0,
+              "damage_central": 0,
+              "recovery_central": 0
+            },
+            {
+              "facility_type": "도시개발시설",
+              "row_count": 1,
+              "damage_local": 0,
+              "recovery_local": 0,
+              "damage_central": 0,
+              "recovery_central": 0
+            },
+            {
+              "facility_type": "복지부기타",
+              "row_count": 9,
+              "damage_local": 0,
+              "recovery_local": 0,
+              "damage_central": 0,
+              "recovery_central": 0
+            }
+          ],
+          "generated_by": "scripts/build_damage_quantities_from_ledger.py",
+          "generated_at": "2026-08-02"
+        }
       },
       "response": [],
       "recovery": [],
@@ -627,6 +1195,30 @@
             "chapter": "제2장 2.3.2 주요 자연재해 특성 분석",
             "district_code": "NW-A-01"
           }
+        },
+        {
+          "evidence_id": "EVD-EVT::20200801-FLOOD-45190-001-LEDGER-01",
+          "source_type": "DISASTER_LEDGER_REPORT",
+          "data_status": "actual",
+          "title": "행정안전부 재해대장보고서(2010~2025) 공공시설 피해·복구 집계",
+          "page": null,
+          "passage_id": null,
+          "excerpt": "전라북도 남원시 2020년 「7.28~8.11 호우(12차 전환)」 재해대장 538건 — 공공시설 피해금액 43,761,407천원 · 복구비 150,447,006천원(시군구 전체 합계, 단위 천원, 복구단계 중앙확정 이전 단계 포함, 과거 집계값·피해예측 아님)",
+          "lineage": {
+            "source_file": "20260708_2010~2025재해대장보고서_New.xlsx",
+            "source_organization": "행정안전부",
+            "dataset_id": "DISASTER_LEDGER_REPORT_2010_2025",
+            "disaster_year": "2020",
+            "disaster_name": "7.28~8.11 호우(12차 전환)",
+            "sido": "전라북도",
+            "sigungu": "남원시",
+            "row_count": 538,
+            "currency_unit": "KRW_THOUSAND",
+            "aggregation_scope": "시군구 전체 합계(위험지구·행정동 단위 귀속 금액 아님)",
+            "official_data": true,
+            "is_prediction": false,
+            "generated_by": "scripts/build_damage_quantities_from_ledger.py"
+          }
         }
       ],
       "data_status": "actual_backed",
@@ -638,6 +1230,7 @@
       "is_prediction": false,
       "display_badges": [
         "문서 근거 기반",
+        "재해대장 공공시설 피해·복구 집계 반영",
         "수치 미확보 항목 있음",
         "T3Q API 교체대상"
       ]
@@ -694,8 +1287,320 @@
       },
       "damage": {
         "description": "2020년 8월 7~9일 집중호우 — 남원시 평균 411.1mm의 기록적 강우, 요천 합류부 침수피해 저감을 위한 개선복구·유로변경 등 복구계획 서술",
-        "quantities_status": "NOT_AVAILABLE",
-        "is_prediction": false
+        "quantities_status": "AVAILABLE_PUBLIC_FACILITY_LEDGER",
+        "is_prediction": false,
+        "damage_note": "행정안전부 재해대장보고서(2010~2025) 집계 — 남원시 2020년 「7.28~8.11 호우(12차 전환)」 재해대장 538건, 공공시설 피해금액 43,761,407천원(약 437.6억원) · 복구비 150,447,006천원(약 1,504.5억원) [중앙보고 기준, 중앙취합중 538건]. 시군구 보고 기준은 피해 43,761,407천원·복구비 151,547,006천원. 금액단위 천원. 시군구 전체 합계이며 위험지구 단위 금액이 아니고, 인명·사유재산 피해는 미포함이다. 중앙확정 이전 단계(취합중)를 포함한 과거 집계값이며 피해예측이 아니다.",
+        "ledger_aggregate": {
+          "source_document": "행정안전부 재해대장보고서(2010~2025)",
+          "source_dataset_id": "DISASTER_LEDGER_REPORT_2010_2025",
+          "source_file": "20260708_2010~2025재해대장보고서_New.xlsx",
+          "source_organization": "행정안전부",
+          "official_data": true,
+          "data_status": "actual",
+          "value_status": "actual",
+          "is_prediction": false,
+          "reference_only": true,
+          "record_scope": "공공시설 재해대장(피해시설 단위) 집계 — 인명피해·사유재산 피해는 포함하지 않음",
+          "aggregation_scope": "시군구 전체 합계(위험지구·행정동 단위 귀속 금액 아님)",
+          "aggregation_basis": "재난년도 + 시도·시군구 + 재난명 일치 행 전체 합계",
+          "match_rule": "재난년도 + 시도·시군구 + 재난유형 + 재난명(월/태풍 사상) 일치 후보가 유일한 경우에만 매칭",
+          "matched_disaster_year": "2020",
+          "matched_disaster_name": "7.28~8.11 호우(12차 전환)",
+          "matched_sido": "전라북도",
+          "matched_sigungu": "남원시",
+          "matched_row_count": 538,
+          "currency_unit": "KRW_THOUSAND",
+          "unit_label": "천원",
+          "damage_amount_local_report": 43761407,
+          "recovery_cost_local_report": 151547006,
+          "damage_amount_central_confirmed": 43761407,
+          "recovery_cost_central_confirmed": 150447006,
+          "confirmation_status": "중앙확정 이전 단계 포함",
+          "recovery_stage_counts": {
+            "중앙취합중": 538
+          },
+          "registration_counts": {
+            "대응": 531,
+            "복구": 7
+          },
+          "affected_dong_count": 22,
+          "facility_breakdown": [
+            {
+              "facility_type": "산사태",
+              "row_count": 130,
+              "damage_local": 12250378,
+              "recovery_local": 23252849,
+              "damage_central": 12250378,
+              "recovery_central": 23252849
+            },
+            {
+              "facility_type": "수리시설",
+              "row_count": 121,
+              "damage_local": 5571222,
+              "recovery_local": 12927865,
+              "damage_central": 5571222,
+              "recovery_central": 12927865
+            },
+            {
+              "facility_type": "하천 기본시설",
+              "row_count": 30,
+              "damage_local": 5377677,
+              "recovery_local": 58082943,
+              "damage_central": 5377677,
+              "recovery_central": 57082943
+            },
+            {
+              "facility_type": "임도",
+              "row_count": 18,
+              "damage_local": 4481385,
+              "recovery_local": 6576625,
+              "damage_central": 4481385,
+              "recovery_central": 6576625
+            },
+            {
+              "facility_type": "소하천",
+              "row_count": 42,
+              "damage_local": 4258511,
+              "recovery_local": 16567809,
+              "damage_central": 4258511,
+              "recovery_central": 16467809
+            },
+            {
+              "facility_type": "오수분뇨처리시설",
+              "row_count": 8,
+              "damage_local": 2200000,
+              "recovery_local": 3608106,
+              "damage_central": 2200000,
+              "recovery_central": 3608106
+            },
+            {
+              "facility_type": "도로",
+              "row_count": 27,
+              "damage_local": 1955377,
+              "recovery_local": 4375688,
+              "damage_central": 1955377,
+              "recovery_central": 4375688
+            },
+            {
+              "facility_type": "도로-국토부",
+              "row_count": 23,
+              "damage_local": 1517563,
+              "recovery_local": 7978819,
+              "damage_central": 1517563,
+              "recovery_central": 7978819
+            },
+            {
+              "facility_type": "소규모시설",
+              "row_count": 54,
+              "damage_local": 1482693,
+              "recovery_local": 3485767,
+              "damage_central": 1482693,
+              "recovery_central": 3485767
+            },
+            {
+              "facility_type": "하천 친수시설",
+              "row_count": 6,
+              "damage_local": 1256171,
+              "recovery_local": 2604908,
+              "damage_central": 1256171,
+              "recovery_central": 2604908
+            },
+            {
+              "facility_type": "공원시설",
+              "row_count": 1,
+              "damage_local": 912696,
+              "recovery_local": 912696,
+              "damage_central": 912696,
+              "recovery_central": 912696
+            },
+            {
+              "facility_type": "상수도",
+              "row_count": 17,
+              "damage_local": 447692,
+              "recovery_local": 498196,
+              "damage_central": 447692,
+              "recovery_central": 498196
+            },
+            {
+              "facility_type": "하수도",
+              "row_count": 6,
+              "damage_local": 409913,
+              "recovery_local": 1176625,
+              "damage_central": 409913,
+              "recovery_central": 1176625
+            },
+            {
+              "facility_type": "체육시설",
+              "row_count": 3,
+              "damage_local": 285459,
+              "recovery_local": 476233,
+              "damage_central": 285459,
+              "recovery_central": 476233
+            },
+            {
+              "facility_type": "교량",
+              "row_count": 1,
+              "damage_local": 278268,
+              "recovery_local": 1929475,
+              "damage_central": 278268,
+              "recovery_central": 1929475
+            },
+            {
+              "facility_type": "문화관광부기타",
+              "row_count": 8,
+              "damage_local": 271012,
+              "recovery_local": 144197,
+              "damage_central": 271012,
+              "recovery_central": 144197
+            },
+            {
+              "facility_type": "사회복지시설",
+              "row_count": 6,
+              "damage_local": 235000,
+              "recovery_local": 263000,
+              "damage_central": 235000,
+              "recovery_central": 263000
+            },
+            {
+              "facility_type": "농림부기타",
+              "row_count": 2,
+              "damage_local": 87574,
+              "recovery_local": 112386,
+              "damage_central": 87574,
+              "recovery_central": 112386
+            },
+            {
+              "facility_type": "폐기물처리시설",
+              "row_count": 3,
+              "damage_local": 80006,
+              "recovery_local": 2355926,
+              "damage_central": 80006,
+              "recovery_central": 2355926
+            },
+            {
+              "facility_type": "철도시설",
+              "row_count": 1,
+              "damage_local": 79724,
+              "recovery_local": 460214,
+              "damage_central": 79724,
+              "recovery_central": 460214
+            },
+            {
+              "facility_type": "공설시장",
+              "row_count": 1,
+              "damage_local": 78000,
+              "recovery_local": 19615,
+              "damage_central": 78000,
+              "recovery_central": 19615
+            },
+            {
+              "facility_type": "행안부기타",
+              "row_count": 2,
+              "damage_local": 59391,
+              "recovery_local": 0,
+              "damage_central": 59391,
+              "recovery_central": 0
+            },
+            {
+              "facility_type": "국민관광지",
+              "row_count": 2,
+              "damage_local": 52672,
+              "recovery_local": 54619,
+              "damage_central": 52672,
+              "recovery_central": 54619
+            },
+            {
+              "facility_type": "농어촌도로",
+              "row_count": 1,
+              "damage_local": 52190,
+              "recovery_local": 128827,
+              "damage_central": 52190,
+              "recovery_central": 128827
+            },
+            {
+              "facility_type": "학교시설",
+              "row_count": 1,
+              "damage_local": 25988,
+              "recovery_local": 58006,
+              "damage_central": 25988,
+              "recovery_central": 58006
+            },
+            {
+              "facility_type": "수목원시설",
+              "row_count": 1,
+              "damage_local": 15082,
+              "recovery_local": 15082,
+              "damage_central": 15082,
+              "recovery_central": 15082
+            },
+            {
+              "facility_type": "공원묘지",
+              "row_count": 1,
+              "damage_local": 15000,
+              "recovery_local": 15000,
+              "damage_central": 15000,
+              "recovery_central": 15000
+            },
+            {
+              "facility_type": "가로수",
+              "row_count": 1,
+              "damage_local": 11534,
+              "recovery_local": 11534,
+              "damage_central": 11534,
+              "recovery_central": 11534
+            },
+            {
+              "facility_type": "환경부기타",
+              "row_count": 1,
+              "damage_local": 10229,
+              "recovery_local": 0,
+              "damage_central": 10229,
+              "recovery_central": 0
+            },
+            {
+              "facility_type": "산업자원부기타",
+              "row_count": 1,
+              "damage_local": 3000,
+              "recovery_local": 3000,
+              "damage_central": 3000,
+              "recovery_central": 3000
+            },
+            {
+              "facility_type": "육상쓰레기",
+              "row_count": 8,
+              "damage_local": 0,
+              "recovery_local": 3450996,
+              "damage_central": 0,
+              "recovery_central": 3450996
+            },
+            {
+              "facility_type": "공공건물",
+              "row_count": 1,
+              "damage_local": 0,
+              "recovery_local": 0,
+              "damage_central": 0,
+              "recovery_central": 0
+            },
+            {
+              "facility_type": "도시개발시설",
+              "row_count": 1,
+              "damage_local": 0,
+              "recovery_local": 0,
+              "damage_central": 0,
+              "recovery_central": 0
+            },
+            {
+              "facility_type": "복지부기타",
+              "row_count": 9,
+              "damage_local": 0,
+              "recovery_local": 0,
+              "damage_central": 0,
+              "recovery_central": 0
+            }
+          ],
+          "generated_by": "scripts/build_damage_quantities_from_ledger.py",
+          "generated_at": "2026-08-02"
+        }
       },
       "response": [],
       "recovery": [],
@@ -713,6 +1618,30 @@
             "chapter": "제2장 2.3.2 주요 자연재해 특성 분석",
             "district_code": "NW-A-02"
           }
+        },
+        {
+          "evidence_id": "EVD-EVT::20200801-FLOOD-45190-002-LEDGER-01",
+          "source_type": "DISASTER_LEDGER_REPORT",
+          "data_status": "actual",
+          "title": "행정안전부 재해대장보고서(2010~2025) 공공시설 피해·복구 집계",
+          "page": null,
+          "passage_id": null,
+          "excerpt": "전라북도 남원시 2020년 「7.28~8.11 호우(12차 전환)」 재해대장 538건 — 공공시설 피해금액 43,761,407천원 · 복구비 150,447,006천원(시군구 전체 합계, 단위 천원, 복구단계 중앙확정 이전 단계 포함, 과거 집계값·피해예측 아님)",
+          "lineage": {
+            "source_file": "20260708_2010~2025재해대장보고서_New.xlsx",
+            "source_organization": "행정안전부",
+            "dataset_id": "DISASTER_LEDGER_REPORT_2010_2025",
+            "disaster_year": "2020",
+            "disaster_name": "7.28~8.11 호우(12차 전환)",
+            "sido": "전라북도",
+            "sigungu": "남원시",
+            "row_count": 538,
+            "currency_unit": "KRW_THOUSAND",
+            "aggregation_scope": "시군구 전체 합계(위험지구·행정동 단위 귀속 금액 아님)",
+            "official_data": true,
+            "is_prediction": false,
+            "generated_by": "scripts/build_damage_quantities_from_ledger.py"
+          }
         }
       ],
       "data_status": "actual_backed",
@@ -724,6 +1653,7 @@
       "is_prediction": false,
       "display_badges": [
         "문서 근거 기반",
+        "재해대장 공공시설 피해·복구 집계 반영",
         "수치 미확보 항목 있음",
         "T3Q API 교체대상"
       ]
@@ -780,8 +1710,192 @@
       },
       "damage": {
         "description": "2010년 8월 12~18일 홍수 — 남원관측소 1시간 최대 58mm(20년빈도 상당) 기록, 요천 수계 홍수분석 대상 사상",
-        "quantities_status": "NOT_AVAILABLE",
-        "is_prediction": false
+        "quantities_status": "AVAILABLE_PUBLIC_FACILITY_LEDGER",
+        "is_prediction": false,
+        "damage_note": "행정안전부 재해대장보고서(2010~2025) 집계 — 남원시 2010년 「8.13~18 호우」 재해대장 475건, 공공시설 피해금액 17,818,939천원(약 178.2억원) · 복구비 46,430,256천원(약 464.3억원) [중앙보고 기준, 중앙확정 475건]. 시군구 보고 기준은 피해 22,392,306천원·복구비 41,575,545천원. 금액단위 천원. 시군구 전체 합계이며 위험지구 단위 금액이 아니고, 인명·사유재산 피해는 미포함이다. 과거 확정 집계값이며 피해예측이 아니다.",
+        "ledger_aggregate": {
+          "source_document": "행정안전부 재해대장보고서(2010~2025)",
+          "source_dataset_id": "DISASTER_LEDGER_REPORT_2010_2025",
+          "source_file": "20260708_2010~2025재해대장보고서_New.xlsx",
+          "source_organization": "행정안전부",
+          "official_data": true,
+          "data_status": "actual",
+          "value_status": "actual",
+          "is_prediction": false,
+          "reference_only": true,
+          "record_scope": "공공시설 재해대장(피해시설 단위) 집계 — 인명피해·사유재산 피해는 포함하지 않음",
+          "aggregation_scope": "시군구 전체 합계(위험지구·행정동 단위 귀속 금액 아님)",
+          "aggregation_basis": "재난년도 + 시도·시군구 + 재난명 일치 행 전체 합계",
+          "match_rule": "재난년도 + 시도·시군구 + 재난유형 + 재난명(월/태풍 사상) 일치 후보가 유일한 경우에만 매칭",
+          "matched_disaster_year": "2010",
+          "matched_disaster_name": "8.13~18 호우",
+          "matched_sido": "전라북도",
+          "matched_sigungu": "남원시",
+          "matched_row_count": 475,
+          "currency_unit": "KRW_THOUSAND",
+          "unit_label": "천원",
+          "damage_amount_local_report": 22392306,
+          "recovery_cost_local_report": 41575545,
+          "damage_amount_central_confirmed": 17818939,
+          "recovery_cost_central_confirmed": 46430256,
+          "confirmation_status": "중앙확정",
+          "recovery_stage_counts": {
+            "중앙확정": 475
+          },
+          "registration_counts": {
+            "대응": 415,
+            "복구": 60
+          },
+          "affected_dong_count": 20,
+          "facility_breakdown": [
+            {
+              "facility_type": "산사태",
+              "row_count": 168,
+              "damage_local": 3852942,
+              "recovery_local": 5016769,
+              "damage_central": 3852942,
+              "recovery_central": 4873089
+            },
+            {
+              "facility_type": "소하천",
+              "row_count": 58,
+              "damage_local": 5319087,
+              "recovery_local": 9813082,
+              "damage_central": 3326599,
+              "recovery_central": 8989178
+            },
+            {
+              "facility_type": "하천",
+              "row_count": 16,
+              "damage_local": 4471395,
+              "recovery_local": 9790833,
+              "damage_central": 2799152,
+              "recovery_central": 14958449
+            },
+            {
+              "facility_type": "수리시설",
+              "row_count": 47,
+              "damage_local": 1951970,
+              "recovery_local": 5188700,
+              "damage_central": 1951970,
+              "recovery_central": 5426667
+            },
+            {
+              "facility_type": "소규모시설",
+              "row_count": 86,
+              "damage_local": 1806794,
+              "recovery_local": 3068447,
+              "damage_central": 1790738,
+              "recovery_central": 3047599
+            },
+            {
+              "facility_type": "임도",
+              "row_count": 9,
+              "damage_local": 2554920,
+              "recovery_local": 2686520,
+              "damage_central": 1325400,
+              "recovery_central": 2774962
+            },
+            {
+              "facility_type": "농어촌도로",
+              "row_count": 7,
+              "damage_local": 569759,
+              "recovery_local": 1775419,
+              "damage_central": 1006994,
+              "recovery_central": 1568010
+            },
+            {
+              "facility_type": "농림부기타",
+              "row_count": 36,
+              "damage_local": 527258,
+              "recovery_local": 2151828,
+              "damage_central": 527258,
+              "recovery_central": 2151828
+            },
+            {
+              "facility_type": "도로-행안부",
+              "row_count": 9,
+              "damage_local": 477595,
+              "recovery_local": 800693,
+              "damage_central": 489699,
+              "recovery_central": 830507
+            },
+            {
+              "facility_type": "문화관광부기타",
+              "row_count": 2,
+              "damage_local": 236900,
+              "recovery_local": 277241,
+              "damage_central": 201066,
+              "recovery_central": 253291
+            },
+            {
+              "facility_type": "상수도",
+              "row_count": 14,
+              "damage_local": 154335,
+              "recovery_local": 318988,
+              "damage_central": 154335,
+              "recovery_central": 318988
+            },
+            {
+              "facility_type": "도로-국토부",
+              "row_count": 6,
+              "damage_local": 207101,
+              "recovery_local": 250786,
+              "damage_central": 130536,
+              "recovery_central": 801449
+            },
+            {
+              "facility_type": "하수도",
+              "row_count": 2,
+              "damage_local": 112258,
+              "recovery_local": 133122,
+              "damage_central": 112258,
+              "recovery_central": 133122
+            },
+            {
+              "facility_type": "체육시설",
+              "row_count": 5,
+              "damage_local": 47696,
+              "recovery_local": 87485,
+              "damage_central": 47696,
+              "recovery_central": 87485
+            },
+            {
+              "facility_type": "문화재시설",
+              "row_count": 6,
+              "damage_local": 38470,
+              "recovery_local": 45616,
+              "damage_central": 38470,
+              "recovery_central": 45616
+            },
+            {
+              "facility_type": "국민관광지",
+              "row_count": 1,
+              "damage_local": 32944,
+              "recovery_local": 110127,
+              "damage_central": 32944,
+              "recovery_central": 110127
+            },
+            {
+              "facility_type": "행안부기타",
+              "row_count": 2,
+              "damage_local": 30882,
+              "recovery_local": 59889,
+              "damage_central": 30882,
+              "recovery_central": 59889
+            },
+            {
+              "facility_type": "산림청기타",
+              "row_count": 1,
+              "damage_local": 0,
+              "recovery_local": 0,
+              "damage_central": 0,
+              "recovery_central": 0
+            }
+          ],
+          "generated_by": "scripts/build_damage_quantities_from_ledger.py",
+          "generated_at": "2026-08-02"
+        }
       },
       "response": [],
       "recovery": [],
@@ -799,6 +1913,30 @@
             "chapter": "제2장 2.3.3 홍수피해현황 및 취약지역",
             "district_code": "NW-A-02"
           }
+        },
+        {
+          "evidence_id": "EVD-EVT::20100801-FLOOD-45190-001-LEDGER-01",
+          "source_type": "DISASTER_LEDGER_REPORT",
+          "data_status": "actual",
+          "title": "행정안전부 재해대장보고서(2010~2025) 공공시설 피해·복구 집계",
+          "page": null,
+          "passage_id": null,
+          "excerpt": "전라북도 남원시 2010년 「8.13~18 호우」 재해대장 475건 — 공공시설 피해금액 17,818,939천원 · 복구비 46,430,256천원(시군구 전체 합계, 단위 천원, 복구단계 중앙확정, 과거 집계값·피해예측 아님)",
+          "lineage": {
+            "source_file": "20260708_2010~2025재해대장보고서_New.xlsx",
+            "source_organization": "행정안전부",
+            "dataset_id": "DISASTER_LEDGER_REPORT_2010_2025",
+            "disaster_year": "2010",
+            "disaster_name": "8.13~18 호우",
+            "sido": "전라북도",
+            "sigungu": "남원시",
+            "row_count": 475,
+            "currency_unit": "KRW_THOUSAND",
+            "aggregation_scope": "시군구 전체 합계(위험지구·행정동 단위 귀속 금액 아님)",
+            "official_data": true,
+            "is_prediction": false,
+            "generated_by": "scripts/build_damage_quantities_from_ledger.py"
+          }
         }
       ],
       "data_status": "actual_backed",
@@ -810,6 +1948,7 @@
       "is_prediction": false,
       "display_badges": [
         "문서 근거 기반",
+        "재해대장 공공시설 피해·복구 집계 반영",
         "수치 미확보 항목 있음",
         "T3Q API 교체대상"
       ]
