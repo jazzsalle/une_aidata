@@ -334,13 +334,36 @@ th { background: #f2f6f9; }
 .damage-event-card > header div { display: flex; flex-direction: column; gap: 4px; }
 .damage-event-card > header small { color: #667c90; }
 .damage-event-card > header > span { align-self: start; border-radius: 999px; padding: 5px 9px; background: #dcecf7; color: #155b88; font-weight: 800; }
-.damage-columns { display: grid; grid-template-columns: 1.25fr 1fr 1fr; gap: 12px; padding: 12px; }
+.damage-columns { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr) minmax(0, 1fr); gap: 12px; padding: 12px; }
 .damage-columns section { min-width: 0; }
-.damage-columns h3 { margin: 0 0 7px; font-size: 15px; }
-.damage-columns pre { max-height: 220px; overflow: auto; white-space: pre-wrap; background: #f6f8fa; border-radius: 7px; padding: 9px; font-size: 11px; }
+.damage-columns h3 { margin: 0 0 7px; font-size: 15px; color: #183e5d; }
 .damage-columns ol { margin: 0; padding-left: 20px; line-height: 1.6; }
-.damage-event-card > footer { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 12px; border-top: 1px solid #d9e2ea; }
-.damage-event-card > footer span { border-radius: 999px; background: #fff1d7; color: #614608; padding: 4px 8px; font-size: 11px; }
+.damage-event-card > footer { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 10px 12px; border-top: 1px solid #d9e2ea; }
+.damage-event-card > footer span { border-radius: 999px; background: #fff1d7; color: #614608; padding: 4px 8px; font-size: var(--fs-xs); }
+
+/* =========================================================================
+   v1.9 과거 피해·대응·복구 사례 카드 본문
+   - 원시 JSON 덤프를 없애고 금액·서술·이력·출처를 담당자가 읽는 형태로 정리한다.
+   - 금액은 재해대장 원값(천원)과 억원 환산을 항상 함께 보여준다(임의 환산·보정 아님).
+   ========================================================================= */
+.damage-summary h3 + h3 { margin-top: 14px; }
+.damage-amount-list { list-style: none; margin: 0 0 8px; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 8px; }
+.damage-amount-list li { display: flex; flex-direction: column; gap: 2px; padding: 9px 11px; border: 1px solid #cfdce7; border-left: 4px solid #2b6796; border-radius: 8px; background: #f5f9fc; }
+.damage-amount-label { color: #4a5f72; font-size: var(--fs-xs); font-weight: 700; line-height: 1.45; word-break: keep-all; }
+.damage-amount-value { color: #14405f; font-size: var(--fs-md); font-weight: 800; line-height: 1.4; overflow-wrap: anywhere; }
+.damage-scope-note, .damage-no-quantity, .damage-description, .damage-history-empty { margin: 0 0 8px; color: var(--c-text-soft); font-size: var(--fs-sm); line-height: 1.55; word-break: keep-all; overflow-wrap: break-word; }
+.damage-no-quantity { padding: 9px 11px; border: 1px dashed #b9c6d2; border-radius: 8px; background: #f7f9fb; color: #4a5f72; }
+.damage-description { color: var(--c-text); }
+.damage-quantity-facts, .damage-source-facts { margin-bottom: 8px; }
+.damage-facility-details { border: 1px solid #d5dfe8; border-radius: 8px; background: #fbfcfd; }
+.damage-facility-details > summary { display: flex; align-items: center; min-height: 44px; padding: 6px 11px; color: #1d4f75; font-size: var(--fs-sm); font-weight: 700; cursor: pointer; }
+.damage-facility-details .table-scroll { margin: 0; padding: 0 11px 11px; }
+.damage-history { margin: 0; padding-left: 20px; font-size: var(--fs-sm); line-height: 1.6; }
+.damage-history li { margin-bottom: 4px; word-break: keep-all; overflow-wrap: break-word; }
+.damage-card-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 0 12px 10px; }
+.damage-structure-button { min-height: 44px; padding: 8px 14px; border: 1px solid #b6c6d4; border-radius: 8px; background: #fff; color: #1d4f75; font-size: var(--fs-sm); font-weight: 700; }
+.damage-structure-hint { color: var(--c-text-soft); font-size: var(--fs-xs); line-height: 1.5; word-break: keep-all; }
+.structure-json { max-height: 260px; overflow: auto; white-space: pre-wrap; word-break: break-all; background: #f6f8fa; border: 1px solid #dde4ea; border-radius: 7px; padding: 9px; font-size: var(--fs-xs); line-height: 1.5; }
 
 .report-layout { display: grid; grid-template-columns: clamp(215px, 13.5vw, 320px) minmax(380px, 1.15fr) minmax(340px, .95fr); gap: var(--sp-gap); align-items: start; }
 .report-outline, .report-form, .report-preview { background: var(--c-surface); border: 1px solid var(--c-line); border-radius: var(--r-lg); padding: clamp(14px, 1.05vw, 26px); box-shadow: 0 2px 9px rgba(24,49,77,.06); }
