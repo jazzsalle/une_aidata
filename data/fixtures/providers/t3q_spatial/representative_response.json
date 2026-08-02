@@ -1,0 +1,83 @@
+{
+  "_fixture_meta": {
+    "fixture": true,
+    "official_data": false,
+    "source_description": "T3Q Spatial(SpatialObject/FeatureCollection) API 가정 형식 기반 POC 표본, 실호출 아님",
+    "created_for": "phase7-fixture-validation",
+    "usage": "매핑 검증 전용 — 홍수위험지역·위험저수지·풍수해개선지구 류 Geometry 표본은 mock이며 좌표계·Geometry·속성·공개등급 검증 전이므로 화면(지도) 활성화 용도가 아니다(v1.1 규칙).",
+    "parser_target": "provider_contracts_seed.json spatial 도메인 required_fields(spatial_object_id/layer_id/geometry/crs/properties/admin_code/hazard_codes/effective_at/evidence) 매핑 검증",
+    "note": "좌표는 대상지역과 무관한 임의 표본값(경도 127.0x, 위도 36.0x 부근)이며 실제 공간데이터가 아니다."
+  },
+  "result_code": "SUCCESS",
+  "feature_collection": {
+    "type": "FeatureCollection",
+    "crs": {
+      "type": "name",
+      "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" }
+    },
+    "features": [
+      {
+        "type": "Feature",
+        "id": "SPO::SAMPLE-99999-FRA-001",
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [127.001, 36.001],
+              [127.011, 36.001],
+              [127.011, 36.009],
+              [127.001, 36.009],
+              [127.001, 36.001]
+            ]
+          ]
+        },
+        "properties": {
+          "spatial_object_id": "SPO::SAMPLE-99999-FRA-001",
+          "layer_id": "L-FLOOD-RISK-AREA",
+          "admin_code": "99999",
+          "hazard_codes": ["T10106", "T10206"],
+          "effective_at": "2026-07-31T00:00:00+09:00",
+          "name": "표본 홍수위험 Mock 구역 (POC)",
+          "data_status": "mock",
+          "official_data": false,
+          "is_prediction": false,
+          "map_activation_allowed": false,
+          "evidence": [
+            {
+              "passage_id": "SAMPLE-T3Q-PSG-0003",
+              "source_file": "표본 문서 (POC).pdf",
+              "document_page": 3
+            }
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "id": "SPO::SAMPLE-99999-RES-001",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [127.021, 36.015]
+        },
+        "properties": {
+          "spatial_object_id": "SPO::SAMPLE-99999-RES-001",
+          "layer_id": "L-DANGEROUS-RESERVOIR",
+          "admin_code": "99999",
+          "hazard_codes": ["T102", "T202"],
+          "effective_at": "2026-07-31T00:00:00+09:00",
+          "name": "표본 위험저수지 Mock 시설 (POC)",
+          "data_status": "mock",
+          "official_data": false,
+          "is_prediction": false,
+          "map_activation_allowed": false,
+          "evidence": [
+            {
+              "passage_id": "SAMPLE-T3Q-PSG-0004",
+              "source_file": "표본 문서 (POC).pdf",
+              "document_page": 4
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

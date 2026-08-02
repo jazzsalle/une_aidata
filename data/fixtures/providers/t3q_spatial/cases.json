@@ -1,0 +1,29 @@
+{
+  "_fixture_meta": {
+    "fixture": true,
+    "official_data": false,
+    "source_description": "t3q_spatial provider fixture 검증 케이스 목록 (POC 표본, 실호출 아님)",
+    "created_for": "phase7-fixture-validation"
+  },
+  "provider_id": "t3q_spatial",
+  "cases": [
+    {
+      "case_id": "T3QSPA-REP-01",
+      "kind": "representative",
+      "fixture_file": "representative_response.json",
+      "expectation": "feature_collection.features[] 2건(Polygon/Point)이 spatial 도메인 required_fields(spatial_object_id/layer_id/geometry/crs/properties/admin_code/hazard_codes/effective_at/evidence)에 매핑되고, mock Geometry는 map_activation_allowed=false로 지도 활성화 없이 매핑 검증에만 사용된다."
+    },
+    {
+      "case_id": "T3QSPA-ERR-01",
+      "kind": "error",
+      "fixture_file": "error_response.json",
+      "expectation": "CRS_NOT_CONFIRMED 시 좌표계·공개등급 미확정 상태를 유지하고 임의 표출 없이 local_geojson_provider Fallback(기존 mock GeoJSON Seed)을 사용한다."
+    },
+    {
+      "case_id": "T3QSPA-TMO-01",
+      "kind": "timeout",
+      "fixture_file": null,
+      "expectation": "fixture 파일 없이 시뮬레이션 대상 — 호출 Timeout을 모의하여 pending 상태와 local_geojson_provider Fallback 유지 확인(실제 T3Q 호출 금지)."
+    }
+  ]
+}

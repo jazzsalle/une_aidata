@@ -1,0 +1,47 @@
+{
+  "_fixture_meta": {
+    "fixture": true,
+    "official_data": false,
+    "source_description": "T3Q Event Master 검색 API 가정 형식 기반 POC 표본, 실호출 아님",
+    "created_for": "phase7-fixture-validation",
+    "parser_target": "server/contracts.ts T3qEventMaster/T3qPassage(PassageLineage) — Adapter 매핑 검증 전용",
+    "note": "T3Q 외부 API/MCP는 미확정(pending)이며 응답 Envelope는 확정 시 Adapter 내부에서만 교체한다. event_id·지역코드 99999·수치는 명백한 POC 표본이며 실제 T3Q 데이터가 아니다. Seed의 Event ID와 충돌하지 않도록 SAMPLE 접두를 사용했다."
+  },
+  "result_code": "SUCCESS",
+  "events": [
+    {
+      "event_id": "EVT::SAMPLE-20260701-FLOOD-99999-001",
+      "disaster_type": "FLOOD",
+      "taxonomy_codes": ["T10107", "T10206"],
+      "region_code_5": "99999",
+      "legal_region_code_10": null,
+      "sequence": 1,
+      "event_status": "종료",
+      "started_at": "2026-07-01T00:00:00+09:00",
+      "ended_at": "2026-07-03T00:00:00+09:00",
+      "crisis_level": "LVL_02",
+      "risk_factors": ["표본 하천재해", "표본 침수위험지구"]
+    }
+  ],
+  "passages": [
+    {
+      "passage_id": "SAMPLE-T3Q-PSG-0001",
+      "schema_type": "DisasterEventMasterPassage",
+      "ref_disaster_event_id": "EVT::SAMPLE-20260701-FLOOD-99999-001",
+      "taxonomy_codes": ["T10107", "T10206"],
+      "title": "표본 호우 사건 기본정보 (POC 표본)",
+      "content": "T3Q Passage lineage 매핑 검증용 POC 표본 문단이다. 실제 재난 기록이 아니다.",
+      "admin_code": "99999",
+      "legal_region_code": null,
+      "lineage": {
+        "source_asset_id": "SAMPLE-ASSET-0001",
+        "source_file": "표본 문서 (POC).pdf",
+        "source_sheet": null,
+        "source_row": 1,
+        "document_page": 1,
+        "version": "sample-1.0"
+      },
+      "data_status": "mock"
+    }
+  ]
+}

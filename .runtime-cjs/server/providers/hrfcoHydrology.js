@@ -3,6 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.hrfcoConfigured = hrfcoConfigured;
 exports.hydrologyStationStatus = hydrologyStationStatus;
 exports.fetchHrfcoHydrology = fetchHrfcoHydrology;
+exports.mapHrfcoFixturePayload = mapHrfcoFixturePayload;
+exports.mapHrfcoFixtureError = mapHrfcoFixtureError;
 const env_js_1 = require("../env.js");
 function timeoutMs() {
     const value = Number((0, env_js_1.env)('HRFCO_TIMEOUT_MS') ?? '12000');
@@ -124,4 +126,30 @@ async function fetchHrfcoHydrology(adminCode, referenceTime = new Date()) {
     if (flow !== undefined)
         observations.push({ observation_id: `HRFCO-${stationCode}-FLOW-${observedAt}`, type: 'FLOW_RATE', station_id: stationCode, name: status.station.official_station_name ?? `${status.station.river_name ?? '하천'} 유량`, value: flow, unit: (0, env_js_1.env)('HRFCO_FLOW_UNIT') ?? '㎥/s', observed_at: observedAt, source_provider: 'HRFCO_STANDARD_HYDROLOGY_DB', value_status: 'actual', official_data: true });
     return { observations, station: status.station };
+}
+function mapHrfcoFixturePayload(payload, ctx) {
+    const station = ctx.station ?? parseStationMap()[ctx.adminCode];
+    if (!station?.official_station_code)
+        return { observations: [], warning: `홍수통제소 공식 관측소 코드 미확정: ${ctx.adminCode}`, station };
+    const referenceTime = ctx.referenceTime ?? new Date();
+    const rows = arrayFromPayload(payload);
+    const latest = rows.map((item) => (item && typeof item === 'object' ? item : {})).find((row) => numeric(row, ['wl', 'waterLevel', 'water_level', 'wlev', 'level']) !== undefined || numeric(row, ['fw', 'flow', 'flowRate', 'flow_rate', 'q']) !== undefined);
+    if (!latest)
+        return { observations: [], warning: '홍수통제소 응답에서 수위·유량 필드를 찾지 못했습니다.', station };
+    const observedAt = normalizeTimestamp(stringValue(latest, ['ymdhm', 'obsdt', 'observed_at', 'datetime', 'tm', 'dateTime']), referenceTime.toISOString());
+    const stationCode = stringValue(latest, ['wlobscd', 'stationCode', 'station_code', 'obsCode']) ?? station.official_station_code;
+    const waterLevel = numeric(latest, ['wl', 'waterLevel', 'water_level', 'wlev', 'level']);
+    const flow = numeric(latest, ['fw', 'flow', 'flowRate', 'flow_rate', 'q']);
+    const observations = [];
+    if (waterLevel !== undefined)
+        observations.push({ observation_id: `HRFCO-${stationCode}-WL-${observedAt}`, type: 'WATER_LEVEL', station_id: stationCode, name: station.official_station_name ?? `${station.river_name ?? '하천'} 수위`, value: waterLevel, unit: (0, env_js_1.env)('HRFCO_WATERLEVEL_UNIT') ?? 'm', observed_at: observedAt, source_provider: 'HRFCO_STANDARD_HYDROLOGY_DB_FixtureValidation', value_status: 'mock', official_data: false });
+    if (flow !== undefined)
+        observations.push({ observation_id: `HRFCO-${stationCode}-FLOW-${observedAt}`, type: 'FLOW_RATE', station_id: stationCode, name: station.official_station_name ?? `${station.river_name ?? '하천'} 유량`, value: flow, unit: (0, env_js_1.env)('HRFCO_FLOW_UNIT') ?? '㎥/s', observed_at: observedAt, source_provider: 'HRFCO_STANDARD_HYDROLOGY_DB_FixtureValidation', value_status: 'mock', official_data: false });
+    return { observations, station };
+}
+// Timeout·예외 검증용: 실경로에서 fetch가 던진 예외(HRFCO_TIMEOUT_MS 초과의 TimeoutError 포함)를
+// publicObservation의 catch 분기와 동일한 연계별 Fallback 형태로 산출한다(실 fetch 없음, uneRag의 mapUneRagFixtureError와 동일 패턴).
+function mapHrfcoFixtureError(error, ctx) {
+    const station = ctx?.station ?? (ctx ? parseStationMap()[ctx.adminCode] : undefined);
+    return { observations: [], warning: `홍수통제소 수위·유량 호출 실패: ${error instanceof Error ? error.message : 'unknown error'}`, station };
 }

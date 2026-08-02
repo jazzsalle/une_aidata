@@ -1,0 +1,42 @@
+{
+  "_fixture_meta": {
+    "fixture": true,
+    "official_data": false,
+    "source_description": "T3Q Risk(RiskKnowledge) API 가정 형식 기반 POC 표본, 실호출 아님",
+    "created_for": "phase7-fixture-validation",
+    "usage": "매핑 검증 전용 — 홍수위험지역·위험저수지 류 Geometry는 mock이며 좌표계·Geometry·속성·공개등급 검증 전이므로 화면 활성화 용도가 아니다(v1.1 규칙).",
+    "parser_target": "provider_contracts_seed.json risk 도메인 required_fields(risk_id/hazard_codes/admin_code/district/risk_factors/thresholds/mitigation/geometry_ref/evidence) 매핑 검증",
+    "note": "지역코드 99999·수치·임계값은 명백한 POC 표본이며 공식 위험등급·피해확률로 해석하지 않는다."
+  },
+  "result_code": "SUCCESS",
+  "risks": [
+    {
+      "risk_id": "RISK::SAMPLE-99999-FLOOD-001",
+      "hazard_codes": ["T10106", "T10206"],
+      "admin_code": "99999",
+      "district": "표본 저지대지구 (POC)",
+      "risk_factors": ["표본 하천 범람", "표본 내수 배제 불량"],
+      "thresholds": {
+        "rainfall_1h_mm": 30,
+        "water_level_m": 2.5,
+        "note": "POC 표본 임계값이며 공식 기준이 아니다"
+      },
+      "mitigation": ["표본 배수펌프장 가동 점검", "표본 저지대 사전 통제"],
+      "geometry_ref": {
+        "spatial_object_id": "SPO::SAMPLE-99999-FRA-001",
+        "layer_id": "L-FLOOD-RISK-AREA",
+        "geometry_status": "mock",
+        "note": "Geometry 본체는 t3q_spatial fixture 참조 — mock이며 화면 활성화 금지"
+      },
+      "evidence": [
+        {
+          "passage_id": "SAMPLE-T3Q-PSG-0002",
+          "source_file": "표본 문서 (POC).pdf",
+          "document_page": 2
+        }
+      ],
+      "data_status": "mock",
+      "official_data": false
+    }
+  ]
+}

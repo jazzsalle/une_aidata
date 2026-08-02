@@ -1,0 +1,29 @@
+{
+  "_fixture_meta": {
+    "fixture": true,
+    "official_data": false,
+    "source_description": "t3q_event provider fixture 검증 케이스 목록 (POC 표본, 실호출 아님)",
+    "created_for": "phase7-fixture-validation"
+  },
+  "provider_id": "t3q_event",
+  "cases": [
+    {
+      "case_id": "T3QEVT-REP-01",
+      "kind": "representative",
+      "fixture_file": "representative_response.json",
+      "expectation": "events[]가 T3qEventMaster(event_id/disaster_type/taxonomy_codes/region_code_5/sequence/event_status/crisis_level), passages[]가 T3qPassage(lineage 포함) 계약에 그대로 매핑되고 결과가 T3Q 실데이터로 표시되지 않는다."
+    },
+    {
+      "case_id": "T3QEVT-ERR-01",
+      "kind": "error",
+      "fixture_file": "error_response.json",
+      "expectation": "result_code=AUTH_FAILED 시 Adapter가 예외를 서비스 오류로 전파하지 않고 mock_contract/pending Fallback(Seed 결과 + warning)을 유지한다."
+    },
+    {
+      "case_id": "T3QEVT-TMO-01",
+      "kind": "timeout",
+      "fixture_file": null,
+      "expectation": "fixture 파일 없이 시뮬레이션 대상 — 호출 Timeout을 모의하여 pending 상태와 Seed Fallback이 유지되는지 확인한다(실제 T3Q 호출 금지)."
+    }
+  ]
+}

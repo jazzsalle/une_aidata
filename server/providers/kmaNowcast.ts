@@ -95,3 +95,44 @@ export async function fetchKmaNowcast(adminCode: string, referenceTime = new Dat
   });
   return { observations, request: { admin_code: adminCode, nx: grid.nx, ny: grid.ny, base_date: baseDate, base_time: baseTime } };
 }
+
+// Fixture 검증 전용 매퍼: 실제 fetch 없이 저장된 payload를 기존 rows/header/CATEGORY 정규화 경로로 통과시킨다.
+// fixture 유래 값은 실측으로 보이면 안 되므로 official_data=false, value_status='mock'을 강제한다(v0.7 규칙).
+export interface KmaFixtureContext { adminCode: string; referenceTime?: Date; }
+
+export function mapKmaFixturePayload(payload: unknown, ctx: KmaFixtureContext): { observations: Observation[]; warning?: string; request?: Record<string, unknown> } {
+  const grid = kmaGrid(ctx.adminCode);
+  if (!grid) return { observations: [], warning: `기상청 격자좌표 미정의: ${ctx.adminCode}` };
+  const { baseDate, baseTime, observedAt } = kstParts(ctx.referenceTime ?? new Date());
+  const h = header(payload);
+  if (h.resultCode && h.resultCode !== '00') {
+    // 실경로는 throw 후 상위(publicObservation)에서 warning fallback으로 수렴하므로 동일 문구로 fallback을 재현한다.
+    return { observations: [], warning: `기상청 초단기실황 호출 실패: 기상청 API ${h.resultCode}: ${h.resultMsg ?? 'unknown'}` };
+  }
+  const observations = rows(payload).flatMap((item, index): Observation[] => {
+    const category = typeof item.category === 'string' ? CATEGORY[item.category] : undefined;
+    if (!category) return [];
+    const raw = item.obsrValue;
+    const numeric = typeof raw === 'number' ? raw : Number(raw);
+    const value = Number.isFinite(numeric) ? numeric : raw ?? null;
+    return [{
+      observation_id: `KMA-${ctx.adminCode}-${item.category ?? index}-${baseDate}${baseTime}`,
+      type: category.type,
+      station_id: `KMA-GRID-${grid.nx}-${grid.ny}`,
+      name: category.name,
+      value,
+      unit: category.unit,
+      observed_at: observedAt,
+      source_provider: 'KMA_ULTRA_SRT_NCST_FixtureValidation',
+      value_status: 'mock',
+      official_data: false,
+    }];
+  });
+  return { observations, request: { admin_code: ctx.adminCode, nx: grid.nx, ny: grid.ny, base_date: baseDate, base_time: baseTime, fixture_validation: true } };
+}
+
+// Timeout·예외 검증용: 실경로에서 fetch가 던진 예외(AbortSignal.timeout의 TimeoutError 포함)를
+// publicObservation의 catch 분기와 동일한 연계별 Fallback 형태로 산출한다(실 fetch 없음, uneRag의 mapUneRagFixtureError와 동일 패턴).
+export function mapKmaFixtureError(error: unknown): { observations: Observation[]; warning: string } {
+  return { observations: [], warning: `기상청 초단기실황 호출 실패: ${error instanceof Error ? error.message : 'unknown error'}` };
+}

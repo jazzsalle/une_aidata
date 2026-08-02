@@ -1,0 +1,15 @@
+{
+  "_fixture_meta": {
+    "fixture": true,
+    "official_data": false,
+    "source_description": "UNE RAG 인증 실패 응답 형식 POC 표본(HTTP 401 본문 가정), 실호출 아님",
+    "created_for": "phase7-fixture-validation",
+    "parser_target": "server/providers/uneRag.ts login()/searchUneRag() — HTTP 비정상 시 warning과 함께 results=[] 반환, Seed 근거 Fallback",
+    "note": "오류 본문 형식도 미확정이므로 대표적 REST 오류 형태의 표본이다. 검증 시 HTTP 상태 401과 함께 사용한다."
+  },
+  "detail": "Invalid credentials (POC 표본 오류 메시지)",
+  "error": {
+    "code": "AUTH_FAILED",
+    "message": "로그인 정보가 올바르지 않습니다. (POC 표본)"
+  }
+}

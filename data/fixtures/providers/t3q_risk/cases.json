@@ -1,0 +1,29 @@
+{
+  "_fixture_meta": {
+    "fixture": true,
+    "official_data": false,
+    "source_description": "t3q_risk provider fixture 검증 케이스 목록 (POC 표본, 실호출 아님)",
+    "created_for": "phase7-fixture-validation"
+  },
+  "provider_id": "t3q_risk",
+  "cases": [
+    {
+      "case_id": "T3QRSK-REP-01",
+      "kind": "representative",
+      "fixture_file": "representative_response.json",
+      "expectation": "risks[]가 risk 도메인 required_fields(risk_id/hazard_codes/admin_code/district/risk_factors/thresholds/mitigation/geometry_ref/evidence)에 결손 없이 매핑되고, geometry_ref는 mock 상태로 화면 활성화 없이 매핑 검증에만 사용된다."
+    },
+    {
+      "case_id": "T3QRSK-ERR-01",
+      "kind": "error",
+      "fixture_file": "error_response.json",
+      "expectation": "NO_DATA 시 데이터 미확보를 정상 결과로 처리하고 local_plan_seed Fallback을 사용하며 임의 위험정보를 합성하지 않는다."
+    },
+    {
+      "case_id": "T3QRSK-TMO-01",
+      "kind": "timeout",
+      "fixture_file": null,
+      "expectation": "fixture 파일 없이 시뮬레이션 대상 — 호출 Timeout을 모의하여 pending 상태와 local_plan_seed Fallback 유지 확인(실제 T3Q 호출 금지)."
+    }
+  ]
+}

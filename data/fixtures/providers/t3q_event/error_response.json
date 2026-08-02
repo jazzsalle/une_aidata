@@ -1,0 +1,16 @@
+{
+  "_fixture_meta": {
+    "fixture": true,
+    "official_data": false,
+    "source_description": "T3Q Event API 오류 응답 가정 형식 POC 표본(인증 실패), 실호출 아님",
+    "created_for": "phase7-fixture-validation",
+    "parser_target": "T3Q Adapter 오류 처리 — 오류 시 mock_contract/pending Fallback 유지, T3Q 실데이터로 표시 금지",
+    "note": "T3Q 오류 형식은 미확정이며 확정 시 Adapter 내부에서만 교체한다."
+  },
+  "result_code": "AUTH_FAILED",
+  "error": {
+    "code": "AUTH_FAILED",
+    "message": "인증 토큰이 유효하지 않습니다. (POC 표본 오류 메시지)",
+    "timestamp": "2026-07-31T09:00:00+09:00"
+  }
+}

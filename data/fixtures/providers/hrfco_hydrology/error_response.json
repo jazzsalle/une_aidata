@@ -1,0 +1,16 @@
+{
+  "_fixture_meta": {
+    "fixture": true,
+    "official_data": false,
+    "source_description": "홍수통제소 수문 API 오류 응답 형식 POC 표본(인증 실패), 실호출 아님",
+    "created_for": "phase7-fixture-validation",
+    "parser_target": "server/providers/hrfcoHydrology.ts — 수위·유량 필드가 없어 '수위·유량 필드를 찾지 못했습니다' warning 경로로 처리",
+    "note": "본문에 wl/fw 배열이 없으므로 파서는 관측값을 생성하지 않고 사용자 입력·Scenario 값을 유지한다(v0.7 규칙 4·7)."
+  },
+  "error": {
+    "code": "UNAUTHORIZED_SERVICE_KEY",
+    "message": "등록되지 않은 인증키입니다. (POC 표본 오류 메시지)",
+    "timestamp": "2026-07-31T09:00:00+09:00"
+  },
+  "list": []
+}

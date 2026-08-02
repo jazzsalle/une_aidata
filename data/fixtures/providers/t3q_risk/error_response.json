@@ -1,0 +1,17 @@
+{
+  "_fixture_meta": {
+    "fixture": true,
+    "official_data": false,
+    "source_description": "T3Q Risk API 오류 응답 가정 형식 POC 표본(결과 없음), 실호출 아님",
+    "created_for": "phase7-fixture-validation",
+    "usage": "매핑 검증 전용 — 오류 시 local_plan_seed Fallback 검증",
+    "note": "T3Q 오류 형식은 미확정이며 확정 시 Adapter 내부에서만 교체한다."
+  },
+  "result_code": "NO_DATA",
+  "error": {
+    "code": "NO_DATA",
+    "message": "조건에 맞는 위험정보가 없습니다. (POC 표본 오류 메시지)",
+    "timestamp": "2026-07-31T09:00:00+09:00"
+  },
+  "risks": []
+}

@@ -1,0 +1,148 @@
+{
+  "generated_at": "2026-08-02T04:21:59.636Z",
+  "gate": "provider-fixture-gate",
+  "source_version": "1.5.1-provider-fixture-gate",
+  "runtime_mode": "FIXTURE_ONLY_NO_NETWORK",
+  "note": "FIXTURE_VALIDATED는 fixture 매핑 검증 완료 상태이며 DEFAULT 전환이 아니다. 실제 T3Q·공공 API 호출 없음. Phase 8 Shadow Test 전 단계.",
+  "network_calls": 0,
+  "summary": {
+    "providers": 6,
+    "cases": 18,
+    "pass": 18,
+    "fail": 0
+  },
+  "providers": [
+    {
+      "provider_id": "kma_nowcast",
+      "lifecycle": "FIXTURE_VALIDATED",
+      "cases": [
+        {
+          "case_id": "KMA-REP-01",
+          "kind": "representative",
+          "pass": true
+        },
+        {
+          "case_id": "KMA-ERR-01",
+          "kind": "error",
+          "pass": true
+        },
+        {
+          "case_id": "KMA-TMO-01",
+          "kind": "timeout",
+          "pass": true
+        }
+      ],
+      "validated_at": "2026-08-02T04:21:59.636Z"
+    },
+    {
+      "provider_id": "hrfco_hydrology",
+      "lifecycle": "FIXTURE_VALIDATED",
+      "cases": [
+        {
+          "case_id": "HRFCO-REP-01",
+          "kind": "representative",
+          "pass": true
+        },
+        {
+          "case_id": "HRFCO-ERR-01",
+          "kind": "error",
+          "pass": true
+        },
+        {
+          "case_id": "HRFCO-TMO-01",
+          "kind": "timeout",
+          "pass": true
+        }
+      ],
+      "validated_at": "2026-08-02T04:21:59.636Z"
+    },
+    {
+      "provider_id": "une_rag",
+      "lifecycle": "FIXTURE_VALIDATED",
+      "cases": [
+        {
+          "case_id": "UNERAG-REP-01",
+          "kind": "representative",
+          "pass": true
+        },
+        {
+          "case_id": "UNERAG-ERR-01",
+          "kind": "error",
+          "pass": true
+        },
+        {
+          "case_id": "UNERAG-TMO-01",
+          "kind": "timeout",
+          "pass": true
+        }
+      ],
+      "validated_at": "2026-08-02T04:21:59.636Z"
+    },
+    {
+      "provider_id": "t3q_event",
+      "lifecycle": "FIXTURE_VALIDATED",
+      "cases": [
+        {
+          "case_id": "T3QEVT-REP-01",
+          "kind": "representative",
+          "pass": true
+        },
+        {
+          "case_id": "T3QEVT-ERR-01",
+          "kind": "error",
+          "pass": true
+        },
+        {
+          "case_id": "T3QEVT-TMO-01",
+          "kind": "timeout",
+          "pass": true
+        }
+      ],
+      "validated_at": "2026-08-02T04:21:59.636Z"
+    },
+    {
+      "provider_id": "t3q_risk",
+      "lifecycle": "FIXTURE_VALIDATED",
+      "cases": [
+        {
+          "case_id": "T3QRSK-REP-01",
+          "kind": "representative",
+          "pass": true
+        },
+        {
+          "case_id": "T3QRSK-ERR-01",
+          "kind": "error",
+          "pass": true
+        },
+        {
+          "case_id": "T3QRSK-TMO-01",
+          "kind": "timeout",
+          "pass": true
+        }
+      ],
+      "validated_at": "2026-08-02T04:21:59.636Z"
+    },
+    {
+      "provider_id": "t3q_spatial",
+      "lifecycle": "FIXTURE_VALIDATED",
+      "cases": [
+        {
+          "case_id": "T3QSPA-REP-01",
+          "kind": "representative",
+          "pass": true
+        },
+        {
+          "case_id": "T3QSPA-ERR-01",
+          "kind": "error",
+          "pass": true
+        },
+        {
+          "case_id": "T3QSPA-TMO-01",
+          "kind": "timeout",
+          "pass": true
+        }
+      ],
+      "validated_at": "2026-08-02T04:21:59.636Z"
+    }
+  ]
+}

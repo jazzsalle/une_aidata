@@ -1,0 +1,25 @@
+{
+  "_fixture_meta": {
+    "fixture": true,
+    "official_data": false,
+    "source_description": "기상청 초단기실황 오류 응답(공공데이터포털 공통 오류코드) 형식 POC 표본, 실호출 아님",
+    "created_for": "phase7-fixture-validation",
+    "parser_target": "server/providers/kmaNowcast.ts header() — resultCode !== '00' 이면 throw 후 연계별 Fallback",
+    "note": "resultCode 30은 공공데이터포털 표준 'SERVICE_KEY_IS_NOT_REGISTERED_ERROR'(등록되지 않은 서비스키) 표본이다."
+  },
+  "response": {
+    "header": {
+      "resultCode": "30",
+      "resultMsg": "SERVICE_KEY_IS_NOT_REGISTERED_ERROR"
+    },
+    "body": {
+      "dataType": "JSON",
+      "items": {
+        "item": []
+      },
+      "pageNo": 1,
+      "numOfRows": 1000,
+      "totalCount": 0
+    }
+  }
+}

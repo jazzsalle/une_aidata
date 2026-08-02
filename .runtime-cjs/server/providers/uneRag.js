@@ -2,6 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.uneRagConfigured = uneRagConfigured;
 exports.searchUneRag = searchUneRag;
+exports.mapUneRagFixturePayload = mapUneRagFixturePayload;
+exports.mapUneRagFixtureError = mapUneRagFixtureError;
 exports.probeUneRagOpenApi = probeUneRagOpenApi;
 const env_js_1 = require("../env.js");
 let cachedToken = null;
@@ -118,6 +120,21 @@ async function searchUneRag(input) {
     catch (error) {
         return { results: [], warning: `UNE RAG 호출 실패: ${error instanceof Error ? error.message : 'unknown error'}` };
     }
+}
+// Fixture 검증 전용 매퍼: 실제 fetch 없이 저장된 payload를 기존 arrayFromPayload/normalize 경로로 통과시킨다.
+// fixture 유래 결과는 실검색 결과로 보이면 안 되므로 data_status='mock'을 강제하고 provider를 metadata에 명시한다(v0.7 규칙).
+function mapUneRagFixturePayload(payload) {
+    const rows = arrayFromPayload(payload).map(normalize).filter((item) => item.content || item.title);
+    const results = rows.map((item) => ({
+        ...item,
+        data_status: 'mock',
+        metadata: { ...(item.metadata ?? {}), fixture_validation: true, provider: 'UNE_RAG_FixtureValidation' },
+    }));
+    return { results, warning: results.length ? undefined : 'UNE RAG 응답은 성공했으나 검색결과 배열을 찾지 못했습니다.' };
+}
+// Timeout·오류 payload 검증용: 실경로 catch 분기와 동일한 Fallback 형태를 산출한다.
+function mapUneRagFixtureError(error) {
+    return { results: [], warning: `UNE RAG 호출 실패: ${error instanceof Error ? error.message : 'unknown error'}` };
 }
 async function probeUneRagOpenApi() {
     const baseUrl = (0, env_js_1.env)('UNE_RAG_BASE_URL');

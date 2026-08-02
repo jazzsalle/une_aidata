@@ -1,0 +1,26 @@
+{
+  "_fixture_meta": {
+    "fixture": true,
+    "official_data": false,
+    "source_description": "홍수통제소 수문 API 공개 명세 형식 기반 POC 표본, 실호출 아님",
+    "created_for": "phase7-fixture-validation",
+    "parser_target": "server/providers/hrfcoHydrology.ts arrayFromPayload()/numeric() — list[] 안의 wl/fw/ymdhm/wlobscd 필드",
+    "note": "관측소 코드 'SAMPLE-ST-01'은 명백한 표본값이며 홍수통제소 공식 관측소 코드가 아니다(v0.7 규칙 3 — 내부 산정지점 코드를 공식 코드로 위장 금지). 수위·유량 수치도 POC 표본값이다."
+  },
+  "list": [
+    {
+      "wlobscd": "SAMPLE-ST-01",
+      "obsnm": "표본 관측지점(POC)",
+      "ymdhm": "202607310900",
+      "wl": "1.23",
+      "fw": "45.6"
+    },
+    {
+      "wlobscd": "SAMPLE-ST-01",
+      "obsnm": "표본 관측지점(POC)",
+      "ymdhm": "202607310850",
+      "wl": "1.19",
+      "fw": "43.2"
+    }
+  ]
+}

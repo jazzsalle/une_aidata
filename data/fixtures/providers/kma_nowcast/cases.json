@@ -1,0 +1,29 @@
+{
+  "_fixture_meta": {
+    "fixture": true,
+    "official_data": false,
+    "source_description": "kma_nowcast provider fixture 검증 케이스 목록 (POC 표본, 실호출 아님)",
+    "created_for": "phase7-fixture-validation"
+  },
+  "provider_id": "kma_nowcast",
+  "cases": [
+    {
+      "case_id": "KMA-REP-01",
+      "kind": "representative",
+      "fixture_file": "representative_response.json",
+      "expectation": "response.body.items.item[] 8건 중 CATEGORY 매핑(RN1/T1H/REH/WSD/VEC/PTY/UUU/VVV) 전부가 Observation으로 변환되고 source_provider=KMA_ULTRA_SRT_NCST, value_status=actual, official_data=true가 유지된다."
+    },
+    {
+      "case_id": "KMA-ERR-01",
+      "kind": "error",
+      "fixture_file": "error_response.json",
+      "expectation": "header.resultCode='30'(!='00')이므로 파서가 오류를 던지고, 호출측은 서비스 전체 오류가 아닌 연계별 Fallback(사용자 입력·Scenario 값 유지)으로 처리한다."
+    },
+    {
+      "case_id": "KMA-TMO-01",
+      "kind": "timeout",
+      "fixture_file": null,
+      "expectation": "fixture 파일 없이 시뮬레이션 대상 — AbortSignal.timeout(12000ms) 초과를 모의하여 TimeoutError가 연계별 Fallback으로 흡수되는지 확인한다."
+    }
+  ]
+}

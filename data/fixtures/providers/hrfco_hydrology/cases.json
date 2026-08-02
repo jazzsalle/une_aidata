@@ -1,0 +1,35 @@
+{
+  "_fixture_meta": {
+    "fixture": true,
+    "official_data": false,
+    "source_description": "hrfco_hydrology provider fixture 검증 케이스 목록 (POC 표본, 실호출 아님)",
+    "created_for": "phase7-fixture-validation"
+  },
+  "provider_id": "hrfco_hydrology",
+  "cases": [
+    {
+      "case_id": "HRFCO-REP-01",
+      "kind": "representative",
+      "fixture_file": "representative_response.json",
+      "expectation": "list[] 첫 행(wl=1.23, fw=45.6, ymdhm=202607310900)에서 WATER_LEVEL·FLOW_RATE Observation 2건이 생성되고 observed_at이 2026-07-31T09:00:00+09:00으로 정규화되며 station_id는 표본코드 SAMPLE-ST-01을 유지한다."
+    },
+    {
+      "case_id": "HRFCO-ERR-01",
+      "kind": "error",
+      "fixture_file": "error_response.json",
+      "expectation": "수위·유량 필드가 없는 오류 본문이므로 observations=[] + warning('수위·유량 필드를 찾지 못했습니다')으로 반환되고 사용자 입력·Scenario 값을 유지한다."
+    },
+    {
+      "case_id": "HRFCO-TMO-01",
+      "kind": "timeout",
+      "fixture_file": null,
+      "expectation": "fixture 파일 없이 시뮬레이션 대상 — HRFCO_TIMEOUT_MS(기본 12000ms) 초과를 모의하여 예외가 연계별 Fallback으로 흡수되는지 확인한다."
+    },
+    {
+      "case_id": "HRFCO-GUARD-01",
+      "kind": "error",
+      "fixture_file": null,
+      "expectation": "HRFCO_STATION_MAP_JSON에 official_station_code가 없으면 API를 호출하지 않고 '공식 관측소 코드 미확정' warning으로 반환한다(v0.7 규칙 4 — fixture 불필요, 설정 시뮬레이션)."
+    }
+  ]
+}

@@ -38,6 +38,7 @@
     "test:provider-contracts": "python3 scripts/smoke_provider_contracts.py",
     "test:similarity-v13": "python3 scripts/smoke_similarity_policy_v13.py",
     "test:runtime-gate": "bash scripts/run_runtime_regression_gate.sh",
+    "test:provider-fixtures": "bash scripts/run_provider_fixture_gate.sh",
     "test:provider-conformance": "python3 scripts/smoke_provider_conformance_gate.py",
     "test:schema-contracts": "python3 scripts/validate_json_schema_contracts.py",
     "test:openapi-contracts": "python3 scripts/validate_openapi_contracts.py",

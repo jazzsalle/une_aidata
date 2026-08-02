@@ -6,6 +6,8 @@ import { hrfcoConfigured } from '../../../providers/hrfcoHydrology.js';
 import { T3Q_RUNTIME_POLICY } from '../../../providers/t3qMetadata.js';
 import type { IntegrationStatus } from '../../../contracts.js';
 
+const FIXTURE_VALIDATED_NOTE=' Fixture 검증 상태: FIXTURE_VALIDATED — 대표응답·오류·Timeout 매핑을 저장된 표본으로 검증했으며 실호출·DEFAULT 전환 아님.';
+
 function status(
   id:string,
   name:string,
@@ -49,7 +51,7 @@ export function GET(){
       'KMA_NOWCAST',
       '기상청 초단기실황',
       kma,
-      kma?'의왕·구미·남원 격자좌표로 공식 초단기실황 호출을 시도합니다.':'공공데이터포털 서비스키가 미설정이며 Scenario 값으로 대체합니다.',
+      (kma?'의왕·구미·남원 격자좌표로 공식 초단기실황 호출을 시도합니다.':'공공데이터포털 서비스키가 미설정이며 Scenario 값으로 대체합니다.')+FIXTURE_VALIDATED_NOTE,
       ['DATA_GO_KR_SERVICE_KEY'],
       kma?'configured':'fallback',
       '공공데이터포털 활용신청 키로 RN1·T1H·REH·WSD 실응답을 검증합니다.',
@@ -58,7 +60,7 @@ export function GET(){
       'HRFCO_HYDRO',
       '홍수통제소 수위·유량',
       hrfco,
-      hrfco?'Endpoint·인증키·공식 관측소 매핑이 설정되었습니다.':'하천기본계획 내부 지점코드와 홍수통제소 공식 관측소 코드를 분리하여 관리합니다. 공식 코드 미확정 시 사용자 입력·Scenario를 유지합니다.',
+      (hrfco?'Endpoint·인증키·공식 관측소 매핑이 설정되었습니다.':'하천기본계획 내부 지점코드와 홍수통제소 공식 관측소 코드를 분리하여 관리합니다. 공식 코드 미확정 시 사용자 입력·Scenario를 유지합니다.')+FIXTURE_VALIDATED_NOTE,
       ['HRFCO_API_BASE_URL','HRFCO_WATERLEVEL_PATH','HRFCO_SERVICE_KEY','HRFCO_STATION_MAP_JSON'],
       hrfco?'configured':'pending',
       '의왕·구미·남원 인접 공식 관측소 코드와 응답 필드명을 확인한 뒤 실호출을 활성화합니다.',
@@ -68,7 +70,7 @@ export function GET(){
       'T3Q_META_ONTOLOGY',
       'T3Q 구조 기반 Mock 계약',
       true,
-      `현재 정책은 ${T3Q_RUNTIME_POLICY}이며 Event·Passage·RefDisasterEventID·T코드·lineage 구조를 UNE Mock 데이터로 구현합니다.`,
+      `현재 정책은 ${T3Q_RUNTIME_POLICY}이며 Event·Passage·RefDisasterEventID·T코드·lineage 구조를 UNE Mock 데이터로 구현합니다.`+FIXTURE_VALIDATED_NOTE,
       [],
       'fallback',
       '외부 API를 요청하지 않고 Mock Contract Test와 화면·검색 시나리오를 수행합니다.',
@@ -86,7 +88,7 @@ export function GET(){
       'UNE_RAG',
       '유니 RAG API',
       rag,
-      rag?'로그인·검색 설정은 완료되었으나 OpenAPI 접근과 실제 응답 매핑 검증이 필요합니다.':'URL·인증정보 또는 검색경로가 미설정되어 Seed 근거로 대체합니다.',
+      (rag?'로그인·검색 설정은 완료되었으나 OpenAPI 접근과 실제 응답 매핑 검증이 필요합니다.':'URL·인증정보 또는 검색경로가 미설정되어 Seed 근거로 대체합니다.')+FIXTURE_VALIDATED_NOTE,
       ['UNE_RAG_BASE_URL','UNE_RAG_SEARCH_PATH','UNE_RAG_USERNAME/UNE_RAG_PASSWORD 또는 UNE_RAG_API_KEY'],
       rag?'configured':'fallback',
       'UNE_RAG_OPENAPI_PATH를 설정하고 /api/v1/integrations/une-rag-probe로 Swagger 경로를 확인합니다.',

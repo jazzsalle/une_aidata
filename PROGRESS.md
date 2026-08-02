@@ -4,7 +4,7 @@
 2026-08-02
 
 ## Current goal
-Phase 7 — 외부 Provider별 Fixture 연계 (FIXTURE_VALIDATED) (합격 기준: evaluation_criteria.md Phase 7)
+Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: evaluation_criteria.md Phase 8, 승격마다 사용자 승인 필요)
 
 ## Done
 - 기준선 정리: vercel-source-v1.5.1을 리포 루트로 승격, gate bundle은 archive/ 보관
@@ -13,6 +13,14 @@ Phase 7 — 외부 Provider별 Fixture 연계 (FIXTURE_VALIDATED) (합격 기준
 - **Phase 1 완료 (2026-08-02, evaluator PASS)**: npm install 성공(package-lock.json 생성, playwright 1.62.1 정상 — 404 재발 없음), validate·contracts(OpenAPI 31/31, JSON Schema 260/18)·typecheck:functions·typecheck:web·runtime-gate·provider-conformance 전부 PASS, `npm run build` 성공(apps/web/dist 산출). 계약 파일 변경 0건.
 
 ## Done this session
+- **Phase 7 완료 (2026-08-02, evaluator PASS)**: 외부 Provider별 Fixture 연계 (FIXTURE_VALIDATED)
+  - data/fixtures/providers/ 6종(kma_nowcast·hrfco_hydrology·une_rag·t3q_event·t3q_risk·t3q_spatial) × 대표응답·오류·cases 18파일
+  - server/providers 매퍼 export: mapKma/mapHrfco/mapUneRag FixturePayload·Error (실 fetch 경로 무변경), t3qFixtureAdapter.ts 신규(라우트 미연결, 매핑 검증 전용)
+  - tests/provider/provider_fixture_gate.cjs + scripts/run_provider_fixture_gate.sh (`npm run test:provider-fixtures`): 6×3=18케이스, fetch 가드로 network calls 0 단언, actual 위장 전수 스캔
+  - FIXTURE_VALIDATED 기록: tests/provider/provider_fixture_validation_result.json + PROVIDER_FIXTURE_VALIDATION.md (seed·계약 무변경, current=mock 유지, DEFAULT 미전환)
+  - integrations/status.ts message에 FIXTURE_VALIDATED 병기 (validation_state enum 불변)
+  - cp949 인코딩 수정: smoke_public_observation_provider.py
+  - 회귀 전체 재통과, 계약 동결 diff 0
 - **Phase 6 완료 (2026-08-02, evaluator PASS)**: Vercel 배포 + VWorld 도메인 확인
   - 배포 URL: **https://une-aidata-web.vercel.app** (프로젝트 une-aidata-web, GitHub main 자동 배포)
   - Hobby 12함수 제한 대응(사용자 승인): api/ 31라우트 → server/routes/** + api/index.ts catch-all 1함수 + vercel.json rewrite `/api/(.*)→/api`. 외부 HTTP 경로·OpenAPI 계약 불변, 검증은 3자 대조(핸들러↔라우팅테이블↔OpenAPI)로 강화
@@ -51,8 +59,8 @@ Phase 7 — 외부 Provider별 Fixture 연계 (FIXTURE_VALIDATED) (합격 기준
 - `apps/web/public/seed/priority_areas_seed.json`의 `SIT-GM-POC-001`(47190 구미) rank 1이 `spatial_object_id: "GM-A-01"` 참조하나 `geo.json`에 해당 feature 없음(GM 계열은 GM-A-03/04/07, GM-B-10/13, GM-C-01만 존재). 현재 UI 가드로 비차단 안내 처리됨. 근본 수정은 seed 동결 해제 승인 필요 — 택1: (a) geo.json에 GM-A-01 feature 추가, (b) priority_areas_seed의 참조 ID를 기존 ID로 교체
 
 ## Next steps
-1. `/phase-run 7` 실행 — 외부 Provider별 Fixture 연계: server/providers 격리 구조로 도메인별 Fixture 연계(실제 API 호출 없음), Provider 상태 FIXTURE_VALIDATED 기록, provider-conformance 재통과
-2. 주의: 실제 T3Q·공공 API 호출 금지, DEFAULT 전환 금지, API·Schema·Seed 계약 변경 금지
+1. `/phase-run 8` 실행 — 실제 Provider Shadow Test 및 단계별 승격. **사용자 준비물 필요**: 실 API 인증정보(공공데이터포털 서비스키, HRFCO Endpoint·키·공식 관측소 코드, UNE RAG URL·계정)를 환경변수로. SHADOW_TESTED→SELECTABLE 승격은 매 단계 사용자 승인 기반 — 자동 진행 불가
+2. 주의: 승격마다 승인 대기, 실제 연계값은 official_data=true·value_status=actual·관측시각·Provider 보유, 연계 실패는 연계별 Fallback, DEFAULT 전환 금지
 3. 참고: 로컬 dev(`npx vercel dev`)는 api/index.ts + rewrite 구조에서 재검증 필요할 수 있음 (Phase 6는 배포 기준으로 검증됨)
 
 ## Blockers

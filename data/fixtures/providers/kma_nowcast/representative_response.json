@@ -1,0 +1,90 @@
+{
+  "_fixture_meta": {
+    "fixture": true,
+    "official_data": false,
+    "source_description": "기상청 초단기실황(getUltraSrtNcst) 공개 명세 기반 POC 표본, 실호출 아님",
+    "created_for": "phase7-fixture-validation",
+    "parser_target": "server/providers/kmaNowcast.ts rows()/header() — response.body.items.item[] + response.header.resultCode",
+    "note": "수치는 POC 검증용 표본값이며 실제 관측값이 아니다. nx/ny는 provider GRID_BY_ADMIN의 41430(의왕시) 격자와 일치시켰다."
+  },
+  "response": {
+    "header": {
+      "resultCode": "00",
+      "resultMsg": "NORMAL_SERVICE"
+    },
+    "body": {
+      "dataType": "JSON",
+      "items": {
+        "item": [
+          {
+            "baseDate": "20260731",
+            "baseTime": "0900",
+            "category": "RN1",
+            "nx": 60,
+            "ny": 122,
+            "obsrValue": "12.5"
+          },
+          {
+            "baseDate": "20260731",
+            "baseTime": "0900",
+            "category": "T1H",
+            "nx": 60,
+            "ny": 122,
+            "obsrValue": "24.1"
+          },
+          {
+            "baseDate": "20260731",
+            "baseTime": "0900",
+            "category": "REH",
+            "nx": 60,
+            "ny": 122,
+            "obsrValue": "88"
+          },
+          {
+            "baseDate": "20260731",
+            "baseTime": "0900",
+            "category": "WSD",
+            "nx": 60,
+            "ny": 122,
+            "obsrValue": "3.4"
+          },
+          {
+            "baseDate": "20260731",
+            "baseTime": "0900",
+            "category": "VEC",
+            "nx": 60,
+            "ny": 122,
+            "obsrValue": "210"
+          },
+          {
+            "baseDate": "20260731",
+            "baseTime": "0900",
+            "category": "PTY",
+            "nx": 60,
+            "ny": 122,
+            "obsrValue": "1"
+          },
+          {
+            "baseDate": "20260731",
+            "baseTime": "0900",
+            "category": "UUU",
+            "nx": 60,
+            "ny": 122,
+            "obsrValue": "1.7"
+          },
+          {
+            "baseDate": "20260731",
+            "baseTime": "0900",
+            "category": "VVV",
+            "nx": 60,
+            "ny": 122,
+            "obsrValue": "-2.9"
+          }
+        ]
+      },
+      "pageNo": 1,
+      "numOfRows": 1000,
+      "totalCount": 8
+    }
+  }
+}
