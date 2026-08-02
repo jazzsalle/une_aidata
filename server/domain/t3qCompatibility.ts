@@ -1,4 +1,4 @@
-import type { T3qDisasterType } from '../contracts';
+import type { T3qDisasterType } from '../contracts.js';
 
 export const UNE_TO_T3Q_TYPE: Record<string,{disasterType:T3qDisasterType;taxonomyCodes:string[]}> = {
   HEAVY_RAIN:{disasterType:'TYPH',taxonomyCodes:['T10107']},

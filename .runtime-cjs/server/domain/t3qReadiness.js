@@ -3,12 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getT3qIntegrationReadiness = getT3qIntegrationReadiness;
 exports.getT3qCqCoverage = getT3qCqCoverage;
 exports.readinessCounts = readinessCounts;
-const seeds_1 = require("../seeds");
+const seeds_js_1 = require("../seeds.js");
 function getT3qIntegrationReadiness() {
-    return seeds_1.seed.t3qReadiness;
+    return seeds_js_1.seed.t3qReadiness;
 }
 function getT3qCqCoverage(adminCode) {
-    const base = seeds_1.seed.t3qCqCoverage;
+    const base = seeds_js_1.seed.t3qCqCoverage;
     if (!adminCode)
         return base;
     return { ...base, coverage_basis: `${base.coverage_basis ?? ''} · 대상 행정코드 ${adminCode}` };

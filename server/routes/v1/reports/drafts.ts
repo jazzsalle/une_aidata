@@ -1,9 +1,9 @@
-import { badRequest, body, envelope } from '../../../http';
-import type { CurrentSituation, ReportEvidenceSelection } from '../../../contracts';
-import { calculatePriorityAreas } from '../../../domain/priorityAreas';
-import { searchSimilarEvents } from '../../../domain/similarEvents';
-import { findSeedSituation } from '../../../domain/situations';
-import { seed } from '../../../seeds';
+import { badRequest, body, envelope } from '../../../http.js';
+import type { CurrentSituation, ReportEvidenceSelection } from '../../../contracts.js';
+import { calculatePriorityAreas } from '../../../domain/priorityAreas.js';
+import { searchSimilarEvents } from '../../../domain/similarEvents.js';
+import { findSeedSituation } from '../../../domain/situations.js';
+import { seed } from '../../../seeds.js';
 
 export async function POST(request: Request){
   try{

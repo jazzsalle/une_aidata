@@ -1,5 +1,5 @@
-import { env } from '../env';
-import type { EvidenceItem } from '../contracts';
+import { env } from '../env.js';
+import type { EvidenceItem } from '../contracts.js';
 
 export interface UneRagResult extends EvidenceItem { content: string; rag_score?: number; metadata?: Record<string, unknown>; }
 export interface UneRagSearchInput { query: string; topK?: number; filters?: Record<string, unknown>; }

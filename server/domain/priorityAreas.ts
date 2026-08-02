@@ -1,5 +1,5 @@
-import type { CurrentSituation, Observation, PriorityArea, PriorityAreaResult } from '../contracts';
-import { seed } from '../seeds';
+import type { CurrentSituation, Observation, PriorityArea, PriorityAreaResult } from '../contracts.js';
+import { seed } from '../seeds.js';
 
 const HAZARD_CODES: Record<string, string[]> = {
   HEAVY_RAIN: ['T10107'], FLOOD: ['T10206'], INUNDATION: ['T10106', 'T10107'],

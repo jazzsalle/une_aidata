@@ -5,12 +5,12 @@ exports.eventProvider = eventProvider;
 exports.providerSelections = providerSelections;
 exports.similarityProfiles = similarityProfiles;
 exports.selectSimilarityProfile = selectSimilarityProfile;
-const env_1 = require("../env");
-const seeds_1 = require("../seeds");
+const env_js_1 = require("../env.js");
+const seeds_js_1 = require("../seeds.js");
 class MockEventProvider {
     id = 'mock_event_provider';
     mode = 'mock';
-    listRecords() { return seeds_1.seed.damageRecovery.records; }
+    listRecords() { return seeds_js_1.seed.damageRecovery.records; }
 }
 class T3qEventProviderStub {
     id = 't3q_event_provider_stub';
@@ -19,15 +19,15 @@ class T3qEventProviderStub {
 }
 function providerMode(domain) {
     const key = `${domain.toUpperCase()}_PROVIDER`;
-    const v = ((0, env_1.env)(key) ?? 'mock').toLowerCase();
+    const v = ((0, env_js_1.env)(key) ?? 'mock').toLowerCase();
     return ['mock', 't3q', 'openapi', 'local'].includes(v) ? v : 'mock';
 }
 function eventProvider() { return providerMode('event') === 't3q' ? new T3qEventProviderStub() : new MockEventProvider(); }
 function providerSelections() {
-    const rows = seeds_1.seed.providerContracts.providers;
+    const rows = seeds_js_1.seed.providerContracts.providers;
     return rows.map(row => { const domain = String(row.domain); const selected = providerMode(domain); return { domain, env_key: String(row.env_key), selected, fallback: String(row.fallback).includes('mock') ? 'mock' : 'local', configured: selected === 'mock' || selected === 'local', message: selected === 'mock' ? 'Mock/Seed 계약으로 동작' : `${selected} Adapter Stub - 외부연계 전` }; });
 }
-function similarityProfiles() { return seeds_1.seed.similarityWeightProfiles.profiles; }
+function similarityProfiles() { return seeds_js_1.seed.similarityWeightProfiles.profiles; }
 function selectSimilarityProfile(hazards) {
     const profiles = similarityProfiles();
     const taxonomy = new Set(hazards);

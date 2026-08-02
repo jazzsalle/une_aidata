@@ -1,5 +1,5 @@
-import { badRequest, envelope } from '../../../http';
-import { seed } from '../../../seeds';
+import { badRequest, envelope } from '../../../http.js';
+import { seed } from '../../../seeds.js';
 const DATASETS:Record<string,unknown>={
   'L-FLOOD-RISK-AREA':seed.mockFloodRiskAreas,
   'L-DANGEROUS-RESERVOIR':seed.mockDangerousReservoirs,

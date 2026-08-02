@@ -1,5 +1,5 @@
-import type { CurrentSituation, Observation, SituationMode } from '../contracts';
-import { seed } from '../seeds';
+import type { CurrentSituation, Observation, SituationMode } from '../contracts.js';
+import { seed } from '../seeds.js';
 
 export interface CreateSituationInput {
   admin_code: string;

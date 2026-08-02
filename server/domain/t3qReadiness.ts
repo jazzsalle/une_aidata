@@ -1,5 +1,5 @@
-import type { T3qCqCoverage, T3qIntegrationReadiness } from '../contracts';
-import { seed } from '../seeds';
+import type { T3qCqCoverage, T3qIntegrationReadiness } from '../contracts.js';
+import { seed } from '../seeds.js';
 
 export function getT3qIntegrationReadiness():T3qIntegrationReadiness{
   return seed.t3qReadiness as unknown as T3qIntegrationReadiness;

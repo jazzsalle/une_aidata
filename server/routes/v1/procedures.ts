@@ -1,5 +1,5 @@
-import { envelope } from '../../http';
-import { seed } from '../../seeds';
+import { envelope } from '../../http.js';
+import { seed } from '../../seeds.js';
 export function GET(request: Request) {
   const url=new URL(request.url); const admin=url.searchParams.get('admin_code');
   const rows=(seed.procedures.procedures as Array<any>).filter((item)=>!admin || item.target_admin_codes?.includes(admin));

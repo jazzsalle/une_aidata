@@ -1,6 +1,6 @@
-import type { T3qEventMaster, T3qPassage, T3qSearchPreview, T3qSearchRequest } from '../contracts';
-import { seed } from '../seeds';
-import { taxonomyPrefixMatch } from '../domain/t3qCompatibility';
+import type { T3qEventMaster, T3qPassage, T3qSearchPreview, T3qSearchRequest } from '../contracts.js';
+import { seed } from '../seeds.js';
+import { taxonomyPrefixMatch } from '../domain/t3qCompatibility.js';
 
 function normalize(text:string|undefined|null){return (text??'').toLocaleLowerCase('ko-KR').replace(/[^0-9a-zA-Z가-힣]+/g,' ').replace(/\s+/g,' ').trim();}
 const QUERY_STOPWORDS=new Set(['관내','어떤','어디','어디인가','무엇','해야','하는가','확인']);

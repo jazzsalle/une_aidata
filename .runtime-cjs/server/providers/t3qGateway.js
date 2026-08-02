@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.t3qSearchConfigured = t3qSearchConfigured;
 exports.t3qRuntimeMode = t3qRuntimeMode;
 exports.searchT3qPreview = searchT3qPreview;
-const seeds_1 = require("../seeds");
-const t3qCompatibility_1 = require("../domain/t3qCompatibility");
+const seeds_js_1 = require("../seeds.js");
+const t3qCompatibility_js_1 = require("../domain/t3qCompatibility.js");
 function normalize(text) { return (text ?? '').toLocaleLowerCase('ko-KR').replace(/[^0-9a-zA-Z가-힣]+/g, ' ').replace(/\s+/g, ' ').trim(); }
 const QUERY_STOPWORDS = new Set(['관내', '어떤', '어디', '어디인가', '무엇', '해야', '하는가', '확인']);
 function queryTokens(query) {
@@ -20,12 +20,12 @@ function containsQuery(passage, query) {
     const hay = normalize(`${passage.title ?? ''} ${passage.content ?? ''} ${passage.schema_type}`);
     return tokens.some(token => hay.includes(token));
 }
-function taxonomyMatches(selected, candidates) { return selected.length === 0 || selected.some(code => candidates.some(candidate => (0, t3qCompatibility_1.taxonomyPrefixMatch)(code, candidate) || (0, t3qCompatibility_1.taxonomyPrefixMatch)(candidate, code))); }
+function taxonomyMatches(selected, candidates) { return selected.length === 0 || selected.some(code => candidates.some(candidate => (0, t3qCompatibility_js_1.taxonomyPrefixMatch)(code, candidate) || (0, t3qCompatibility_js_1.taxonomyPrefixMatch)(candidate, code))); }
 function t3qSearchConfigured() { return false; }
 function t3qRuntimeMode() { return 'mock_only'; }
 async function searchT3qPreview(request) {
-    const allEvents = seeds_1.seed.t3qMockEvents.events;
-    const allPassages = seeds_1.seed.t3qMockPassages.passages;
+    const allEvents = seeds_js_1.seed.t3qMockEvents.events;
+    const allPassages = seeds_js_1.seed.t3qMockPassages.passages;
     let structural = allPassages.filter(row => (!request.admin_code || row.admin_code === request.admin_code) && taxonomyMatches(request.taxonomy_codes, row.taxonomy_codes));
     if (request.schema_types?.length)
         structural = structural.filter(row => request.schema_types.includes(row.schema_type));

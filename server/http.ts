@@ -1,4 +1,4 @@
-import type { DataStatus } from './contracts';
+import type { DataStatus } from './contracts.js';
 
 export interface EnvelopeOptions {
   provider?: string;

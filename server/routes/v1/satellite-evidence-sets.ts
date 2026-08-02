@@ -1,5 +1,5 @@
-import { envelope } from '../../http';
-import { StaticSeedSatelliteEvidenceSetProvider } from '../../providers/satelliteEvidenceSets';
+import { envelope } from '../../http.js';
+import { StaticSeedSatelliteEvidenceSetProvider } from '../../providers/satelliteEvidenceSets.js';
 const provider=new StaticSeedSatelliteEvidenceSetProvider();
 export async function GET(request:Request){
   const url=new URL(request.url); const id=url.searchParams.get('evidence_set_id');

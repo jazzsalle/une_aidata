@@ -1,5 +1,5 @@
-import { envelope } from '../../../http';
-import { seed } from '../../../seeds';
+import { envelope } from '../../../http.js';
+import { seed } from '../../../seeds.js';
 export function GET(request: Request) {
   const url = new URL(request.url);
   const eventId = url.searchParams.get('event_id') ?? 'POC-FLOOD-IMAGE-SAMPLE-001';

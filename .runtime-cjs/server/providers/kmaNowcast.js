@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.kmaGrid = kmaGrid;
 exports.kmaConfigured = kmaConfigured;
 exports.fetchKmaNowcast = fetchKmaNowcast;
-const env_1 = require("../env");
+const env_js_1 = require("../env.js");
 const GRID_BY_ADMIN = {
     '41430': { adminCode: '41430', adminName: '경기도 의왕시', nx: 60, ny: 122 },
     '47190': { adminCode: '47190', adminName: '경상북도 구미시', nx: 84, ny: 97 },
@@ -20,7 +20,7 @@ const CATEGORY = {
     VVV: { type: 'WIND_NORTH_SOUTH', name: '남북바람성분', unit: 'm/s' },
 };
 function kstParts(referenceTime = new Date()) {
-    const lag = Number((0, env_1.env)('KMA_REQUEST_LAG_MINUTES') ?? '45');
+    const lag = Number((0, env_js_1.env)('KMA_REQUEST_LAG_MINUTES') ?? '45');
     const safeLag = Number.isFinite(lag) ? Math.max(10, lag) : 45;
     const kstMs = referenceTime.getTime() + 9 * 60 * 60 * 1000 - safeLag * 60 * 1000;
     const kst = new Date(kstMs);
@@ -48,16 +48,16 @@ function header(payload) {
     return { resultCode: typeof value?.resultCode === 'string' ? value.resultCode : undefined, resultMsg: typeof value?.resultMsg === 'string' ? value.resultMsg : undefined };
 }
 function kmaGrid(adminCode) { return GRID_BY_ADMIN[adminCode]; }
-function kmaConfigured() { return Boolean((0, env_1.env)('DATA_GO_KR_SERVICE_KEY')); }
+function kmaConfigured() { return Boolean((0, env_js_1.env)('DATA_GO_KR_SERVICE_KEY')); }
 async function fetchKmaNowcast(adminCode, referenceTime = new Date()) {
-    const key = (0, env_1.env)('DATA_GO_KR_SERVICE_KEY');
+    const key = (0, env_js_1.env)('DATA_GO_KR_SERVICE_KEY');
     if (!key)
         return { observations: [], warning: 'DATA_GO_KR_SERVICE_KEY 미설정' };
     const grid = kmaGrid(adminCode);
     if (!grid)
         return { observations: [], warning: `기상청 격자좌표 미정의: ${adminCode}` };
     const { baseDate, baseTime, observedAt } = kstParts(referenceTime);
-    const endpoint = (0, env_1.env)('KMA_ULTRA_SRT_NCST_URL') ?? 'https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst';
+    const endpoint = (0, env_js_1.env)('KMA_ULTRA_SRT_NCST_URL') ?? 'https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst';
     const url = new URL(endpoint);
     url.searchParams.set('serviceKey', key);
     url.searchParams.set('pageNo', '1');

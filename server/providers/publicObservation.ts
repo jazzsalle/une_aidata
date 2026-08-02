@@ -1,7 +1,7 @@
-import type { Observation } from '../contracts';
-import { dataMode, env } from '../env';
-import { fetchKmaNowcast } from './kmaNowcast';
-import { fetchHrfcoHydrology } from './hrfcoHydrology';
+import type { Observation } from '../contracts.js';
+import { dataMode, env } from '../env.js';
+import { fetchKmaNowcast } from './kmaNowcast.js';
+import { fetchHrfcoHydrology } from './hrfcoHydrology.js';
 
 export async function fetchPublicObservations(adminCode: string, referenceTime?: string): Promise<{ observations: Observation[]; warnings: string[] }> {
   if (dataMode() === 'scenario') return { observations: [], warnings: ['POC_DATA_MODE=scenario'] };

@@ -1,5 +1,5 @@
-import { envelope } from '../../../http';
-import { probeUneRagOpenApi } from '../../../providers/uneRag';
+import { envelope } from '../../../http.js';
+import { probeUneRagOpenApi } from '../../../providers/uneRag.js';
 
 export async function GET() {
   const result = await probeUneRagOpenApi();

@@ -3,11 +3,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.uneRagConfigured = uneRagConfigured;
 exports.searchUneRag = searchUneRag;
 exports.probeUneRagOpenApi = probeUneRagOpenApi;
-const env_1 = require("../env");
+const env_js_1 = require("../env.js");
 let cachedToken = null;
 function join(base, path) { return `${base.replace(/\/$/, '')}/${path.replace(/^\//, '')}`; }
-function timeoutMs() { const n = Number((0, env_1.env)('UNE_RAG_TIMEOUT_MS') ?? '15000'); return Number.isFinite(n) ? n : 15000; }
-function authMode() { return ((0, env_1.env)('UNE_RAG_AUTH_MODE') ?? 'login').toLowerCase(); }
+function timeoutMs() { const n = Number((0, env_js_1.env)('UNE_RAG_TIMEOUT_MS') ?? '15000'); return Number.isFinite(n) ? n : 15000; }
+function authMode() { return ((0, env_js_1.env)('UNE_RAG_AUTH_MODE') ?? 'login').toLowerCase(); }
 function tokenFromJson(value) {
     if (!value || typeof value !== 'object')
         return undefined;
@@ -17,12 +17,12 @@ function tokenFromJson(value) {
 }
 async function login(baseUrl) {
     if (authMode() === 'apikey')
-        return (0, env_1.env)('UNE_RAG_API_KEY');
+        return (0, env_js_1.env)('UNE_RAG_API_KEY');
     if (authMode() === 'basic')
         return undefined;
     if (cachedToken && cachedToken.expiresAt > Date.now() + 30_000)
         return cachedToken.value;
-    const username = (0, env_1.env)('UNE_RAG_USERNAME'), password = (0, env_1.env)('UNE_RAG_PASSWORD'), path = (0, env_1.env)('UNE_RAG_LOGIN_PATH');
+    const username = (0, env_js_1.env)('UNE_RAG_USERNAME'), password = (0, env_js_1.env)('UNE_RAG_PASSWORD'), path = (0, env_js_1.env)('UNE_RAG_LOGIN_PATH');
     if (!username || !password || !path)
         return undefined;
     const response = await fetch(join(baseUrl, path), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ username, password }), signal: AbortSignal.timeout(timeoutMs()) });
@@ -41,7 +41,7 @@ function valueAtPath(payload, path) {
     return path.split('.').filter(Boolean).reduce((current, segment) => current && typeof current === 'object' ? current[segment] : undefined, payload);
 }
 function arrayFromPayload(payload) {
-    const configured = valueAtPath(payload, (0, env_1.env)('UNE_RAG_RESPONSE_ARRAY_PATH'));
+    const configured = valueAtPath(payload, (0, env_js_1.env)('UNE_RAG_RESPONSE_ARRAY_PATH'));
     if (Array.isArray(configured))
         return configured;
     if (Array.isArray(payload))
@@ -83,13 +83,13 @@ function normalize(item, index) {
     const title = text(row, ['title', 'document_title', 'source_title', 'filename']) ?? text(metadata, ['title', 'document_title', 'source_title', 'filename']) ?? `UNE RAG 검색결과 ${index + 1}`;
     return { evidence_id: `UNE-RAG-${passage ?? index + 1}`, source_type: 'UNE_RAG_PASSAGE', title, content, excerpt: content.slice(0, 360), page, passage_id: passage, score, rag_score: score, data_status: 'actual', metadata };
 }
-function uneRagConfigured() { return Boolean((0, env_1.env)('UNE_RAG_BASE_URL') && ((0, env_1.env)('UNE_RAG_API_KEY') || ((0, env_1.env)('UNE_RAG_USERNAME') && (0, env_1.env)('UNE_RAG_PASSWORD')))); }
+function uneRagConfigured() { return Boolean((0, env_js_1.env)('UNE_RAG_BASE_URL') && ((0, env_js_1.env)('UNE_RAG_API_KEY') || ((0, env_js_1.env)('UNE_RAG_USERNAME') && (0, env_js_1.env)('UNE_RAG_PASSWORD')))); }
 async function searchUneRag(input) {
     const request = typeof input === 'string' ? { query: input } : input;
-    const baseUrl = (0, env_1.env)('UNE_RAG_BASE_URL');
+    const baseUrl = (0, env_js_1.env)('UNE_RAG_BASE_URL');
     if (!baseUrl)
         return { results: [], warning: 'UNE_RAG_BASE_URL 미설정으로 Seed 근거를 사용합니다.' };
-    const path = (0, env_1.env)('UNE_RAG_SEARCH_PATH');
+    const path = (0, env_js_1.env)('UNE_RAG_SEARCH_PATH');
     if (!path)
         return { results: [], warning: 'UNE_RAG_SEARCH_PATH 미설정으로 Seed 근거를 사용합니다.' };
     try {
@@ -97,17 +97,17 @@ async function searchUneRag(input) {
         const token = await login(baseUrl);
         const headers = { 'content-type': 'application/json', 'accept': 'application/json' };
         if (mode === 'basic')
-            headers.authorization = `Basic ${btoa(`${(0, env_1.env)('UNE_RAG_USERNAME') ?? ''}:${(0, env_1.env)('UNE_RAG_PASSWORD') ?? ''}`)}`;
+            headers.authorization = `Basic ${btoa(`${(0, env_js_1.env)('UNE_RAG_USERNAME') ?? ''}:${(0, env_js_1.env)('UNE_RAG_PASSWORD') ?? ''}`)}`;
         else if (token)
             headers.authorization = mode === 'apikey' ? `Bearer ${token}` : `Bearer ${token}`;
-        const topK = request.topK ?? Number((0, env_1.env)('UNE_RAG_DEFAULT_TOP_K') ?? '5');
+        const topK = request.topK ?? Number((0, env_js_1.env)('UNE_RAG_DEFAULT_TOP_K') ?? '5');
         const body = {};
-        body[(0, env_1.env)('UNE_RAG_QUERY_FIELD') ?? 'query'] = request.query;
-        body[(0, env_1.env)('UNE_RAG_TOPK_FIELD') ?? 'top_k'] = topK;
-        body[(0, env_1.env)('UNE_RAG_FILTERS_FIELD') ?? 'filters'] = request.filters ?? {};
-        const dataset = (0, env_1.env)('UNE_RAG_DEFAULT_DATASET');
+        body[(0, env_js_1.env)('UNE_RAG_QUERY_FIELD') ?? 'query'] = request.query;
+        body[(0, env_js_1.env)('UNE_RAG_TOPK_FIELD') ?? 'top_k'] = topK;
+        body[(0, env_js_1.env)('UNE_RAG_FILTERS_FIELD') ?? 'filters'] = request.filters ?? {};
+        const dataset = (0, env_js_1.env)('UNE_RAG_DEFAULT_DATASET');
         if (dataset)
-            body[(0, env_1.env)('UNE_RAG_DATASET_FIELD') ?? 'dataset'] = dataset;
+            body[(0, env_js_1.env)('UNE_RAG_DATASET_FIELD') ?? 'dataset'] = dataset;
         const response = await fetch(join(baseUrl, path), { method: 'POST', headers, body: JSON.stringify(body), signal: AbortSignal.timeout(timeoutMs()) });
         if (!response.ok)
             throw new Error(`HTTP ${response.status}`);
@@ -120,8 +120,8 @@ async function searchUneRag(input) {
     }
 }
 async function probeUneRagOpenApi() {
-    const baseUrl = (0, env_1.env)('UNE_RAG_BASE_URL');
-    const openapiPath = (0, env_1.env)('UNE_RAG_OPENAPI_PATH') ?? '/openapi.json';
+    const baseUrl = (0, env_js_1.env)('UNE_RAG_BASE_URL');
+    const openapiPath = (0, env_js_1.env)('UNE_RAG_OPENAPI_PATH') ?? '/openapi.json';
     if (!baseUrl)
         return { reachable: false, openapi_path: openapiPath, candidate_paths: [], warning: 'UNE_RAG_BASE_URL 미설정' };
     try {

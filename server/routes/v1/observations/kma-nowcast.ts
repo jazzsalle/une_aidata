@@ -1,5 +1,5 @@
-import { badRequest, envelope } from '../../../http';
-import { fetchKmaNowcast, kmaGrid } from '../../../providers/kmaNowcast';
+import { badRequest, envelope } from '../../../http.js';
+import { fetchKmaNowcast, kmaGrid } from '../../../providers/kmaNowcast.js';
 export async function GET(request: Request) {
   try {
     const url = new URL(request.url); const adminCode = url.searchParams.get('admin_code');

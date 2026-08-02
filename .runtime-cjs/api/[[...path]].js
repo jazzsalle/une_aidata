@@ -38,38 +38,38 @@ exports.POST = POST;
 exports.PUT = PUT;
 exports.PATCH = PATCH;
 exports.DELETE = DELETE;
-const http_1 = require("../server/http");
-const health = __importStar(require("../server/routes/health"));
-const agentMessages = __importStar(require("../server/routes/v1/agent/messages"));
-const contractsProviderConformance = __importStar(require("../server/routes/v1/contracts/provider-conformance"));
-const contractsProviders = __importStar(require("../server/routes/v1/contracts/providers"));
-const floodTraces = __importStar(require("../server/routes/v1/flood-traces"));
-const integrationsStatus = __importStar(require("../server/routes/v1/integrations/status"));
-const integrationsUneRagProbe = __importStar(require("../server/routes/v1/integrations/une-rag-probe"));
-const mapLayers = __importStar(require("../server/routes/v1/map/layers"));
-const mockCatalog = __importStar(require("../server/routes/v1/mock/catalog"));
-const mockScenarios = __importStar(require("../server/routes/v1/mock/scenarios"));
-const mockSpatial = __importStar(require("../server/routes/v1/mock/spatial"));
-const observationsHydrology = __importStar(require("../server/routes/v1/observations/hydrology"));
-const observationsKmaNowcast = __importStar(require("../server/routes/v1/observations/kma-nowcast"));
-const observationsQuery = __importStar(require("../server/routes/v1/observations/query"));
-const priorityAreasQuery = __importStar(require("../server/routes/v1/priority-areas/query"));
-const procedures = __importStar(require("../server/routes/v1/procedures"));
-const reportsDrafts = __importStar(require("../server/routes/v1/reports/drafts"));
-const riskKnowledgeSearch = __importStar(require("../server/routes/v1/risk-knowledge/search"));
-const satelliteAssets = __importStar(require("../server/routes/v1/satellite-assets"));
-const satelliteAssetsMetrics = __importStar(require("../server/routes/v1/satellite-assets/metrics"));
-const satelliteAssetsSelect = __importStar(require("../server/routes/v1/satellite-assets/select"));
-const satelliteEvidenceSets = __importStar(require("../server/routes/v1/satellite-evidence-sets"));
-const scenarios = __importStar(require("../server/routes/v1/scenarios"));
-const similarEventsDetail = __importStar(require("../server/routes/v1/similar-events/detail"));
-const similarEventsSearch = __importStar(require("../server/routes/v1/similar-events/search"));
-const similarityWeightProfiles = __importStar(require("../server/routes/v1/similarity/weight-profiles"));
-const situations = __importStar(require("../server/routes/v1/situations"));
-const t3qAlignment = __importStar(require("../server/routes/v1/t3q/alignment"));
-const t3qCqCoverage = __importStar(require("../server/routes/v1/t3q/cq-coverage"));
-const t3qReadiness = __importStar(require("../server/routes/v1/t3q/readiness"));
-const t3qSearchPreview = __importStar(require("../server/routes/v1/t3q/search-preview"));
+const http_js_1 = require("../server/http.js");
+const health = __importStar(require("../server/routes/health.js"));
+const agentMessages = __importStar(require("../server/routes/v1/agent/messages.js"));
+const contractsProviderConformance = __importStar(require("../server/routes/v1/contracts/provider-conformance.js"));
+const contractsProviders = __importStar(require("../server/routes/v1/contracts/providers.js"));
+const floodTraces = __importStar(require("../server/routes/v1/flood-traces.js"));
+const integrationsStatus = __importStar(require("../server/routes/v1/integrations/status.js"));
+const integrationsUneRagProbe = __importStar(require("../server/routes/v1/integrations/une-rag-probe.js"));
+const mapLayers = __importStar(require("../server/routes/v1/map/layers.js"));
+const mockCatalog = __importStar(require("../server/routes/v1/mock/catalog.js"));
+const mockScenarios = __importStar(require("../server/routes/v1/mock/scenarios.js"));
+const mockSpatial = __importStar(require("../server/routes/v1/mock/spatial.js"));
+const observationsHydrology = __importStar(require("../server/routes/v1/observations/hydrology.js"));
+const observationsKmaNowcast = __importStar(require("../server/routes/v1/observations/kma-nowcast.js"));
+const observationsQuery = __importStar(require("../server/routes/v1/observations/query.js"));
+const priorityAreasQuery = __importStar(require("../server/routes/v1/priority-areas/query.js"));
+const procedures = __importStar(require("../server/routes/v1/procedures.js"));
+const reportsDrafts = __importStar(require("../server/routes/v1/reports/drafts.js"));
+const riskKnowledgeSearch = __importStar(require("../server/routes/v1/risk-knowledge/search.js"));
+const satelliteAssets = __importStar(require("../server/routes/v1/satellite-assets.js"));
+const satelliteAssetsMetrics = __importStar(require("../server/routes/v1/satellite-assets/metrics.js"));
+const satelliteAssetsSelect = __importStar(require("../server/routes/v1/satellite-assets/select.js"));
+const satelliteEvidenceSets = __importStar(require("../server/routes/v1/satellite-evidence-sets.js"));
+const scenarios = __importStar(require("../server/routes/v1/scenarios.js"));
+const similarEventsDetail = __importStar(require("../server/routes/v1/similar-events/detail.js"));
+const similarEventsSearch = __importStar(require("../server/routes/v1/similar-events/search.js"));
+const similarityWeightProfiles = __importStar(require("../server/routes/v1/similarity/weight-profiles.js"));
+const situations = __importStar(require("../server/routes/v1/situations.js"));
+const t3qAlignment = __importStar(require("../server/routes/v1/t3q/alignment.js"));
+const t3qCqCoverage = __importStar(require("../server/routes/v1/t3q/cq-coverage.js"));
+const t3qReadiness = __importStar(require("../server/routes/v1/t3q/readiness.js"));
+const t3qSearchPreview = __importStar(require("../server/routes/v1/t3q/search-preview.js"));
 const routes = {
     'GET /api/health': health.GET,
     'POST /api/v1/agent/messages': agentMessages.POST,
@@ -112,9 +112,9 @@ function dispatch(method, request) {
         return handler(request);
     const pathExists = Object.keys(routes).some((key) => key.endsWith(` ${pathname}`));
     if (pathExists) {
-        return (0, http_1.envelope)(null, { status: 405, errors: [`${pathname} 경로는 ${method} 메서드를 지원하지 않습니다.`] });
+        return (0, http_js_1.envelope)(null, { status: 405, errors: [`${pathname} 경로는 ${method} 메서드를 지원하지 않습니다.`] });
     }
-    return (0, http_1.envelope)(null, { status: 404, errors: [`요청 경로를 찾을 수 없습니다: ${pathname}`] });
+    return (0, http_js_1.envelope)(null, { status: 404, errors: [`요청 경로를 찾을 수 없습니다: ${pathname}`] });
 }
 function GET(request) { return dispatch('GET', request); }
 function POST(request) { return dispatch('POST', request); }

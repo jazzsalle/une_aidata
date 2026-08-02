@@ -1,5 +1,5 @@
-import { envelope } from '../../http';
-import { seed } from '../../seeds';
+import { envelope } from '../../http.js';
+import { seed } from '../../seeds.js';
 export function GET(request: Request) {
   const url=new URL(request.url); const admin=url.searchParams.get('admin_code'); const area=url.searchParams.get('area_id');
   const rows=(seed.satellites.assets as Array<any>).filter((item)=>(!admin||item.admin_code===admin||item.shared_demo===true)&&(!area||item.area_id===area||item.shared_demo===true));

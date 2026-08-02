@@ -1,6 +1,6 @@
-import { badRequest, body, envelope } from '../../../http';
-import { seed } from '../../../seeds';
-import { selectFloodPhaseAssets, type FloodEventWindow, type SatelliteCandidate } from '../../../domain/satellitePhaseSelection';
+import { badRequest, body, envelope } from '../../../http.js';
+import { seed } from '../../../seeds.js';
+import { selectFloodPhaseAssets, type FloodEventWindow, type SatelliteCandidate } from '../../../domain/satellitePhaseSelection.js';
 
 export async function POST(request: Request) {
   try {

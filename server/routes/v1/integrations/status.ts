@@ -1,10 +1,10 @@
-import { envelope } from '../../../http';
-import { dataMode, env } from '../../../env';
-import { uneRagConfigured } from '../../../providers/uneRag';
-import { kmaConfigured } from '../../../providers/kmaNowcast';
-import { hrfcoConfigured } from '../../../providers/hrfcoHydrology';
-import { T3Q_RUNTIME_POLICY } from '../../../providers/t3qMetadata';
-import type { IntegrationStatus } from '../../../contracts';
+import { envelope } from '../../../http.js';
+import { dataMode, env } from '../../../env.js';
+import { uneRagConfigured } from '../../../providers/uneRag.js';
+import { kmaConfigured } from '../../../providers/kmaNowcast.js';
+import { hrfcoConfigured } from '../../../providers/hrfcoHydrology.js';
+import { T3Q_RUNTIME_POLICY } from '../../../providers/t3qMetadata.js';
+import type { IntegrationStatus } from '../../../contracts.js';
 
 function status(
   id:string,

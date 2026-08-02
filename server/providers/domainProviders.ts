@@ -1,6 +1,6 @@
-import { env } from '../env';
-import { seed } from '../seeds';
-import type { CurrentSituation, SimilarEvent, SimilarityWeightProfile } from '../contracts';
+import { env } from '../env.js';
+import { seed } from '../seeds.js';
+import type { CurrentSituation, SimilarEvent, SimilarityWeightProfile } from '../contracts.js';
 
 export type ProviderDomain='event'|'risk'|'observation'|'spatial';
 export type ProviderMode='mock'|'t3q'|'openapi'|'local';

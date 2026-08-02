@@ -1,5 +1,5 @@
-import { badRequest, envelope } from '../../../http';
-import { fetchHrfcoHydrology, hydrologyStationStatus } from '../../../providers/hrfcoHydrology';
+import { badRequest, envelope } from '../../../http.js';
+import { fetchHrfcoHydrology, hydrologyStationStatus } from '../../../providers/hrfcoHydrology.js';
 
 export async function GET(request: Request) {
   try {

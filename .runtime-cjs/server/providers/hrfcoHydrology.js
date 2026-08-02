@@ -3,13 +3,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.hrfcoConfigured = hrfcoConfigured;
 exports.hydrologyStationStatus = hydrologyStationStatus;
 exports.fetchHrfcoHydrology = fetchHrfcoHydrology;
-const env_1 = require("../env");
+const env_js_1 = require("../env.js");
 function timeoutMs() {
-    const value = Number((0, env_1.env)('HRFCO_TIMEOUT_MS') ?? '12000');
+    const value = Number((0, env_js_1.env)('HRFCO_TIMEOUT_MS') ?? '12000');
     return Number.isFinite(value) ? Math.max(1000, value) : 12000;
 }
 function parseStationMap() {
-    const raw = (0, env_1.env)('HRFCO_STATION_MAP_JSON');
+    const raw = (0, env_js_1.env)('HRFCO_STATION_MAP_JSON');
     if (!raw)
         return {};
     try {
@@ -74,9 +74,9 @@ function replaceTemplate(path, stationCode) {
     return path.replaceAll('{stationCode}', encodeURIComponent(stationCode)).replaceAll('{station_code}', encodeURIComponent(stationCode));
 }
 function hrfcoConfigured(adminCode) {
-    const base = (0, env_1.env)('HRFCO_API_BASE_URL');
-    const path = (0, env_1.env)('HRFCO_WATERLEVEL_PATH');
-    const key = (0, env_1.env)('HRFCO_SERVICE_KEY');
+    const base = (0, env_js_1.env)('HRFCO_API_BASE_URL');
+    const path = (0, env_js_1.env)('HRFCO_WATERLEVEL_PATH');
+    const key = (0, env_js_1.env)('HRFCO_SERVICE_KEY');
     if (!base || !path || !key)
         return false;
     if (!adminCode)
@@ -95,14 +95,14 @@ async function fetchHrfcoHydrology(adminCode, referenceTime = new Date()) {
     const status = hydrologyStationStatus(adminCode);
     if (!status.configured || !status.station?.official_station_code)
         return { observations: [], warning: status.warning, station: status.station };
-    const base = (0, env_1.env)('HRFCO_API_BASE_URL');
-    const template = (0, env_1.env)('HRFCO_WATERLEVEL_PATH');
+    const base = (0, env_js_1.env)('HRFCO_API_BASE_URL');
+    const template = (0, env_js_1.env)('HRFCO_WATERLEVEL_PATH');
     const endpoint = new URL(join(base, replaceTemplate(template, status.station.official_station_code)));
-    const keyName = (0, env_1.env)('HRFCO_SERVICE_KEY_PARAM') ?? 'serviceKey';
-    const stationName = (0, env_1.env)('HRFCO_STATION_PARAM') ?? 'stationCode';
+    const keyName = (0, env_js_1.env)('HRFCO_SERVICE_KEY_PARAM') ?? 'serviceKey';
+    const stationName = (0, env_js_1.env)('HRFCO_STATION_PARAM') ?? 'stationCode';
     if (!template.includes('{stationCode}') && !template.includes('{station_code}'))
         endpoint.searchParams.set(stationName, status.station.official_station_code);
-    endpoint.searchParams.set(keyName, (0, env_1.env)('HRFCO_SERVICE_KEY'));
+    endpoint.searchParams.set(keyName, (0, env_js_1.env)('HRFCO_SERVICE_KEY'));
     const response = await fetch(endpoint, { headers: { accept: 'application/json' }, signal: AbortSignal.timeout(timeoutMs()) });
     if (!response.ok)
         throw new Error(`홍수통제소 HTTP ${response.status}`);
@@ -120,8 +120,8 @@ async function fetchHrfcoHydrology(adminCode, referenceTime = new Date()) {
     const flow = numeric(latest, ['fw', 'flow', 'flowRate', 'flow_rate', 'q']);
     const observations = [];
     if (waterLevel !== undefined)
-        observations.push({ observation_id: `HRFCO-${stationCode}-WL-${observedAt}`, type: 'WATER_LEVEL', station_id: stationCode, name: status.station.official_station_name ?? `${status.station.river_name ?? '하천'} 수위`, value: waterLevel, unit: (0, env_1.env)('HRFCO_WATERLEVEL_UNIT') ?? 'm', observed_at: observedAt, source_provider: 'HRFCO_STANDARD_HYDROLOGY_DB', value_status: 'actual', official_data: true });
+        observations.push({ observation_id: `HRFCO-${stationCode}-WL-${observedAt}`, type: 'WATER_LEVEL', station_id: stationCode, name: status.station.official_station_name ?? `${status.station.river_name ?? '하천'} 수위`, value: waterLevel, unit: (0, env_js_1.env)('HRFCO_WATERLEVEL_UNIT') ?? 'm', observed_at: observedAt, source_provider: 'HRFCO_STANDARD_HYDROLOGY_DB', value_status: 'actual', official_data: true });
     if (flow !== undefined)
-        observations.push({ observation_id: `HRFCO-${stationCode}-FLOW-${observedAt}`, type: 'FLOW_RATE', station_id: stationCode, name: status.station.official_station_name ?? `${status.station.river_name ?? '하천'} 유량`, value: flow, unit: (0, env_1.env)('HRFCO_FLOW_UNIT') ?? '㎥/s', observed_at: observedAt, source_provider: 'HRFCO_STANDARD_HYDROLOGY_DB', value_status: 'actual', official_data: true });
+        observations.push({ observation_id: `HRFCO-${stationCode}-FLOW-${observedAt}`, type: 'FLOW_RATE', station_id: stationCode, name: status.station.official_station_name ?? `${status.station.river_name ?? '하천'} 유량`, value: flow, unit: (0, env_js_1.env)('HRFCO_FLOW_UNIT') ?? '㎥/s', observed_at: observedAt, source_provider: 'HRFCO_STANDARD_HYDROLOGY_DB', value_status: 'actual', official_data: true });
     return { observations, station: status.station };
 }

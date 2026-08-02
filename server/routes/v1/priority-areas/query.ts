@@ -1,7 +1,7 @@
-import { badRequest, body, envelope } from '../../../http';
-import type { CurrentSituation } from '../../../contracts';
-import { calculatePriorityAreas } from '../../../domain/priorityAreas';
-import { findSeedSituation } from '../../../domain/situations';
+import { badRequest, body, envelope } from '../../../http.js';
+import type { CurrentSituation } from '../../../contracts.js';
+import { calculatePriorityAreas } from '../../../domain/priorityAreas.js';
+import { findSeedSituation } from '../../../domain/situations.js';
 export async function POST(request: Request) {
   try {
     const input=await body<{situation?:CurrentSituation;situation_id?:string}>(request);

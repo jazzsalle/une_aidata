@@ -1,5 +1,5 @@
-import type { Observation } from '../contracts';
-import { env } from '../env';
+import type { Observation } from '../contracts.js';
+import { env } from '../env.js';
 
 interface GridPoint { adminCode: string; adminName: string; nx: number; ny: number; }
 interface KmaItem { baseDate?: string; baseTime?: string; category?: string; nx?: number; ny?: number; obsrValue?: string | number; }

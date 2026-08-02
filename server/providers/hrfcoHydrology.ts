@@ -1,5 +1,5 @@
-import type { Observation } from '../contracts';
-import { env } from '../env';
+import type { Observation } from '../contracts.js';
+import { env } from '../env.js';
 
 type Json = Record<string, unknown>;
 interface StationMapping {

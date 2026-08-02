@@ -1,5 +1,5 @@
-import type { SatelliteEvidenceSet } from '../contracts';
-import { seed } from '../seeds';
+import type { SatelliteEvidenceSet } from '../contracts.js';
+import { seed } from '../seeds.js';
 
 export interface SatelliteEvidenceSetProvider { list(): Promise<SatelliteEvidenceSet[]>; get(evidenceSetId:string): Promise<SatelliteEvidenceSet|null>; }
 

@@ -1,6 +1,6 @@
-import { badRequest, body, envelope } from '../../../http';
-import { fetchPublicObservations } from '../../../providers/publicObservation';
-import { seed } from '../../../seeds';
+import { badRequest, body, envelope } from '../../../http.js';
+import { fetchPublicObservations } from '../../../providers/publicObservation.js';
+import { seed } from '../../../seeds.js';
 export async function POST(request: Request) {
   try {
     const input=await body<{admin_code:string;reference_time?:string}>(request); if(!input.admin_code) return badRequest('admin_code는 필수입니다.');

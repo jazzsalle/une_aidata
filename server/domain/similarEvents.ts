@@ -1,6 +1,6 @@
-import type { CurrentSituation, EvidenceItem, ResponseComparisonItem, SimilarEvent, SimilarityFactorScore, SimilarityWeightProfile } from '../contracts';
-import { searchUneRag } from '../providers/uneRag';
-import { eventProvider, selectSimilarityProfile } from '../providers/domainProviders';
+import type { CurrentSituation, EvidenceItem, ResponseComparisonItem, SimilarEvent, SimilarityFactorScore, SimilarityWeightProfile } from '../contracts.js';
+import { searchUneRag } from '../providers/uneRag.js';
+import { eventProvider, selectSimilarityProfile } from '../providers/domainProviders.js';
 
 type SeedRecord=Record<string,unknown>;
 const FACTOR_NAMES:Record<string,string>={hazard_type:'재난유형',weather_hydrology:'기상·수문',spatial:'공간·유역',vulnerability:'취약요인',damage_pattern:'피해양상',response_pattern:'대응조치',temporal:'계절·시간'};

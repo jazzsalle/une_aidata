@@ -1,7 +1,7 @@
-import type { CurrentSituation } from '../contracts';
-import { calculatePriorityAreas } from './priorityAreas';
-import { searchSimilarEvents } from './similarEvents';
-import { seed } from '../seeds';
+import type { CurrentSituation } from '../contracts.js';
+import { calculatePriorityAreas } from './priorityAreas.js';
+import { searchSimilarEvents } from './similarEvents.js';
+import { seed } from '../seeds.js';
 
 export async function buildAgentResponse(situation: CurrentSituation, message: string) {
   const priority=calculatePriorityAreas(situation); const similar=await searchSimilarEvents(situation,3);

@@ -2,12 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.findSeedSituation = findSeedSituation;
 exports.createSituation = createSituation;
-const seeds_1 = require("../seeds");
+const seeds_js_1 = require("../seeds.js");
 function findSeedSituation(id) {
-    return seeds_1.seed.currentSituations.situations.find((item) => item.situation_id === id);
+    return seeds_js_1.seed.currentSituations.situations.find((item) => item.situation_id === id);
 }
 function createSituation(input) {
-    const base = seeds_1.seed.currentSituations.situations.find((item) => item.admin_code === input.admin_code);
+    const base = seeds_js_1.seed.currentSituations.situations.find((item) => item.admin_code === input.admin_code);
     if (!base)
         throw new Error('지원하지 않는 POC 지역입니다.');
     if (!Array.isArray(input.hazards) || input.hazards.length === 0)

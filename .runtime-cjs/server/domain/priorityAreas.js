@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.calculatePriorityAreas = calculatePriorityAreas;
-const seeds_1 = require("../seeds");
+const seeds_js_1 = require("../seeds.js");
 const HAZARD_CODES = {
     HEAVY_RAIN: ['T10107'], FLOOD: ['T10206'], INUNDATION: ['T10106', 'T10107'],
     TYPHOON: ['T10105'], LANDSLIDE: ['T10401'],
@@ -84,7 +84,7 @@ function requiredChecks(district) {
     return checks.slice(0, 4);
 }
 function calculatePriorityAreas(situation) {
-    const districtRows = seeds_1.seed.districts.districts.filter((item) => item.admin_code === situation.admin_code);
+    const districtRows = seeds_js_1.seed.districts.districts.filter((item) => item.admin_code === situation.admin_code);
     const current = currentConditionScore(situation);
     const targetCodes = new Set(situation.hazards.flatMap((code) => HAZARD_CODES[code] ?? [code]));
     const locationText = JSON.stringify(situation.user_input ?? {}).toLowerCase();
