@@ -271,9 +271,13 @@ h1은 상단 여백 축소를 위해 헤더 한 줄(`.header-row`) 안에 배치
 | `.notice-card.info` | 유사사례 탭 상단 카드 | **CSS 규칙 없음 → F-1 참조** |
 | `.priority-card` | 우선 확인지역 카드 (`32px + 1fr` 그리드) | — |
 | `.rank` | 순위 원형 배지 (28px, 브랜드색) | — |
-| `.priority-title` | 지역명 + 점수 (`span`이 `#c84b42` 굵게) | — |
+| `.priority-title` | 지역명 버튼 + 점수 (`span`이 `#c84b42` 굵게) | — |
+| `button.priority-name-button` | 지역명 버튼(지도 이동 키보드 진입점) | **H** → 배경 `--c-brand-soft`, 밑줄 |
+| `.priority-tags` / `.priority-tag` / `.priority-location` | 재해유형 태그 + 위치 요약(계획문서 판독값 매칭 시에만 표시) | — |
 | `.card-action-row` | 카드 하단 버튼 줄 | — |
-| `.priority-card button` | "지도에서 보기" | — |
+| `button.priority-detail-button` | "상세보기"(공용 상세 모달 열기, 44px) | **H** → 배경 `#dcecf9`, 테두리 `#7fb2dc` |
+| `.priority-card` (카드 전체) | 마우스 클릭 시 지도 이동 | **H** 배경 `#f5fafd` / **F** `:focus-within` 브랜드 테두리 |
+| `.detail-modal-overlay` / `.detail-modal` | 상세보기 모달(지도 팝업과 같은 `map-popup-*` 본문 재사용) | — |
 | `button.context-add-button` | "질의에 참조" (요소+클래스 선택자로 특이성 확보) | **H** → 배경 `#dcecf9`, 테두리 `#7fb2dc` |
 | `.event-list` / `.event-card-row` | 유사사례 목록 / 카드+참조버튼 한 쌍 | — |
 | `.event-card` | 유사사례 카드 버튼 | **S** `.selected`: 테두리 `#1769aa` + `0 0 0 2px rgba(23,105,170,.12)` |
@@ -476,7 +480,8 @@ h1은 상단 여백 축소를 위해 헤더 한 줄(`.header-row`) 안에 배치
 | `.context-select select` / `… option` | dashboard, evidence | 지역·상황 셀렉트, 옵션 수 = Seed 상황 수 |
 | `.priority-card` | dashboard | 우선 확인지역 카드 존재 |
 | `.priority-card .priority-title strong` | dashboard | 1위 지역명 텍스트 일치 |
-| `.priority-card button` (텍스트 `지도에서 보기`) | dashboard | 지도 하이라이트 실행 |
+| `.priority-card` 카드 클릭(순위 배지 좌표) | dashboard | 지도 하이라이트 실행 |
+| `.priority-card .priority-detail-button` / `.detail-modal[role="dialog"]` | dashboard S11 | 상세보기 모달 열기·Esc 닫기·초점 복귀 |
 | `.map-highlight-notice` | dashboard S7/S8 | 존재 ID면 **없어야**, 미존재 ID면 **있어야** 함 |
 | `.page-status` (+ `:has-text(…)`) | dashboard, evidence | 라우트 상태 알림 |
 | `#situation-panel-input` / `#situation-panel-agent` | dashboard | 좌측 탭 패널 id |
@@ -537,7 +542,7 @@ h1은 상단 여백 축소를 위해 헤더 한 줄(`.header-row`) 안에 배치
 | `3시간 강우` / `12시간 강우` / `수위` / `유량` / `현장징후` | 좌측 입력 라벨 (`label:has-text`) | dashboard S5 |
 | `현재 조건 적용·재산정` | 버튼 | dashboard S5 |
 | `현재 조건을 적용하고` | `.page-status` | dashboard S5 |
-| `지도에서 보기` | 버튼 | dashboard S7/S8 |
+| `상세보기` | 버튼 | dashboard S11 |
 | `Mock 검색` / `Event Master` | T3Q 패널 | dashboard S10 |
 | `선정편차 ±N일 · …` + (`가장 가까운 유효 후보` \| `EVENT 유효구간`) | `.phase-selection-note` (정규식) | evidence S3 |
 | `대상지역 외` / `공식자료 아님` / `실제 NDMS 자료 아님` | 배지 | evidence S4 |

@@ -2,6 +2,8 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProp
 import 'ol/ol.css';
 import { createVWorldMap, type BaseMapType, type MapConnectionState, type MapFeatureSelection, type VWorldMapHandle } from './VWorldMapAdapter';
 import { loadPlanReference } from '../../services/apiClient';
+// 위험지구 상세 렌더·표기 규칙은 '현재 판단' 상세보기 모달과 공용 컴포넌트를 재사용한다.
+import { DistrictDetailSections, FactList, MISSING, districtFactRows, evidenceText, orMissing, str, type Fact } from '../../components/DistrictDetail';
 import type { DistrictReference, PlanReference, ReferenceEvidence, RiverReference } from '../../types/planReference';
 import type { AgentContextItem } from '../../types/uiContext';
 
@@ -27,32 +29,11 @@ const LAYER_LABEL: Record<string, string> = {
   FLOOD_TRACE: '침수흔적', 'L-FLOOD-TRACE': '침수흔적',
   'L-FLOOD-RISK-AREA': '홍수위험지역 (Mock)', 'L-DANGEROUS-RESERVOIR': '위험저수지 (Mock)', 'L-STORM-FLOOD-IMPROVEMENT': '풍수해개선지구 (Mock)',
 };
-const MISSING = '미확보';
 const POPUP_GAP = 14;
 /** 말풍선 배치: 앵커 위(above)·아래(below)·옆(side, 꼬리 없음). */
 type PopupPlace = 'above' | 'below' | 'side';
 
-type Fact = { label: string; value: string };
-const str = (value: unknown): string | null => {
-  if (value === null || value === undefined) return null;
-  if (typeof value === 'number') return Number.isFinite(value) ? String(value) : null;
-  const text = String(value).trim();
-  return text ? text : null;
-};
-const orMissing = (value: unknown) => str(value) ?? MISSING;
 const list = (value: unknown): string[] => (Array.isArray(value) ? value.map((item) => str(item)).filter((item): item is string => Boolean(item)) : []);
-// 백만원 단위 계획 사업비를 억원 병기로 표기한다(문서 표기값 그대로이며 산정·예측값이 아니다).
-function money(value?: number | null) {
-  if (value === null || value === undefined || !Number.isFinite(value)) return MISSING;
-  return `${(value / 100).toLocaleString('ko-KR', { maximumFractionDigits: 1 })}억원 (${value.toLocaleString('ko-KR')}백만원)`;
-}
-function evidenceText(evidence?: ReferenceEvidence | null): string | null {
-  if (!evidence) return null;
-  const title = str(evidence.doc_title) ?? str(evidence.doc);
-  const page = str(evidence.page_label) ?? str(evidence.chapter_page) ?? (evidence.page ? `p.${evidence.page}` : null) ?? (typeof evidence.pdf_page === 'number' ? `p.${evidence.pdf_page}` : null);
-  const parts = [title, str(evidence.chapter), str(evidence.table), page].filter(Boolean);
-  return parts.length ? parts.join(' · ') : null;
-}
 function sourceEvidence(properties: Record<string, unknown>): ReferenceEvidence | null {
   const source = properties.source;
   if (source && typeof source === 'object') return source as ReferenceEvidence;
@@ -64,11 +45,7 @@ function facts(selection: MapFeatureSelection, district: DistrictReference | nul
   const properties = selection.properties;
   const rows: Fact[] = [{ label: '레이어', value: LAYER_LABEL[selection.layerId] ?? selection.layerId ?? MISSING }];
   if (selection.layerId === 'L1') {
-    rows.push({ label: '위치', value: orMissing(district?.location ?? properties.location) });
-    rows.push({ label: '재해유형', value: [str(district?.disaster_type ?? properties.disaster_type), str(district?.disaster_subtype)].filter(Boolean).join(' · ') || MISSING });
-    rows.push({ label: '계획서 위험도 표기', value: orMissing(district?.grade) });
-    rows.push({ label: '관련 하천', value: orMissing(district?.river_name ?? properties.river_name) });
-    rows.push({ label: '측점', value: orMissing(district?.station) });
+    rows.push(...districtFactRows(district, properties));
   } else if (selection.layerId === 'L2') {
     rows.push({ label: '하천등급', value: orMissing(river?.grade ?? properties.grade) });
     rows.push({ label: '유역면적', value: river?.basin_area_km2 ? `${river.basin_area_km2} km²` : MISSING });
@@ -104,14 +81,6 @@ function facts(selection: MapFeatureSelection, district: DistrictReference | nul
   rows.push({ label: '행정구역', value: orMissing(district?.admin_name ?? river?.admin_name ?? properties.admin_name ?? properties.admin_code) });
   rows.push({ label: '좌표(위도, 경도)', value: `${selection.lonLat[1].toFixed(5)}, ${selection.lonLat[0].toFixed(5)}` });
   return rows;
-}
-
-function FactList({ rows }: { rows: Fact[] }) {
-  return (
-    <dl className="map-popup-facts">
-      {rows.map((row) => <div key={row.label}><dt>{row.label}</dt><dd>{row.value}</dd></div>)}
-    </dl>
-  );
 }
 
 export function MapPanel({ adminCode, highlightedFeatureId, initialVisible, compact = false, onSelectFeature }: Props) {
@@ -268,7 +237,7 @@ export function MapPanel({ adminCode, highlightedFeatureId, initialVisible, comp
   return (
     <section className={`map-panel ${compact ? 'compact' : ''}`} aria-labelledby="map-title" aria-describedby="map-accessible-summary">
       <h2 id="map-title" className="sr-only">VWorld 지도와 공간정보</h2>
-      <p id="map-accessible-summary" className="sr-only">지도와 같은 우선 확인지역 정보는 오른쪽 현재 판단 목록에서도 확인하고 지도에서 보기 버튼으로 이동할 수 있습니다. 지도 위 표시를 클릭하면 요약 정보 창이 열립니다.</p>
+      <p id="map-accessible-summary" className="sr-only">지도와 같은 우선 확인지역 정보는 오른쪽 현재 판단 목록에서도 확인할 수 있고, 목록 카드의 지역명 버튼으로 해당 지점으로 이동하며 상세보기 버튼으로 같은 상세 정보를 창으로 열 수 있습니다. 지도 위 표시를 클릭해도 요약 정보 창이 열립니다.</p>
       <div ref={ref} className="map-canvas" aria-hidden="true" />
       {selection ? (
         <div
@@ -287,65 +256,7 @@ export function MapPanel({ adminCode, highlightedFeatureId, initialVisible, comp
           <div className="map-popup-body">
             {badges.length ? <p className="map-popup-flags">{badges.map((item) => <span key={item} className="map-popup-flag">{item}</span>)}</p> : null}
             <FactList rows={facts(selection, district, river)} />
-            {district?.risk_factors?.length ? (
-              <section className="map-popup-section">
-                <h4>위험요인</h4>
-                <ul className="map-popup-list">{district.risk_factors.map((item) => <li key={item}>{item}</li>)}</ul>
-              </section>
-            ) : null}
-            {district?.risk_thresholds?.length ? (
-              <section className="map-popup-section">
-                <h4>위험조건 임계값</h4>
-                <table className="map-popup-table">
-                  <thead><tr><th scope="col">대상</th><th scope="col">조건</th><th scope="col">값</th><th scope="col">단위</th><th scope="col">산정근거</th></tr></thead>
-                  <tbody>
-                    {district.risk_thresholds.map((row, index) => (
-                      <tr key={`${row.target}-${index}`}>
-                        <th scope="row">{orMissing(row.target)}</th>
-                        <td>{orMissing(row.operator)}</td>
-                        <td>{row.value === null || row.value === undefined ? MISSING : row.value}</td>
-                        <td>{orMissing(row.unit)}</td>
-                        <td>{[str(row.basis), evidenceText(row.evidence)].filter(Boolean).join(' · ') || MISSING}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </section>
-            ) : null}
-            {district?.mitigation?.length ? (
-              <section className="map-popup-section">
-                <h4>저감대책</h4>
-                <ul className="map-popup-list">{district.mitigation.map((item) => <li key={item}>{item}</li>)}</ul>
-              </section>
-            ) : null}
-            {district ? (
-              <section className="map-popup-section">
-                <h4>시행·사업</h4>
-                <FactList rows={[
-                  { label: '시행방법', value: orMissing(district.implementation_method) },
-                  { label: '시행시기', value: orMissing(district.implementation_period) },
-                  { label: '사업상태', value: orMissing(district.project_status) },
-                  { label: '사업비', value: money(district.cost_million_krw) },
-                  { label: '계획서 예상피해액', value: money(district.expected_damage_million_krw) },
-                  { label: '계획 우선순위', value: orMissing(district.priority) },
-                  { label: '시행주체', value: orMissing(district.implementer) },
-                ]} />
-              </section>
-            ) : null}
-            {district?.damage_events?.length ? (
-              <section className="map-popup-section">
-                <h4>피해이력(참고 사례)</h4>
-                <ul className="map-popup-list">
-                  {district.damage_events.map((item, index) => (
-                    <li key={`${item.occurred ?? 'unknown'}-${index}`}>
-                      <strong>{[str(item.occurred), str(item.event_name)].filter(Boolean).join(' ') || MISSING}</strong>
-                      {str(item.description) ? <span> — {item.description}</span> : null}
-                      {evidenceText(item.evidence) ? <small className="map-popup-source">근거 · {evidenceText(item.evidence)}</small> : null}
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            ) : null}
+            {district ? <DistrictDetailSections district={district} /> : null}
             {river?.warning_reference_station ? (
               <section className="map-popup-section">
                 <h4>계획서 기준지점</h4>

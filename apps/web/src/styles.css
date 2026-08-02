@@ -157,6 +157,42 @@ button { cursor: pointer; }
 .priority-title span { color: #c84b42; font-weight: 800; }
 .priority-card ul { margin: 8px 0; padding-left: 18px; color: #52677a; font-size: var(--fs-xs); line-height: 1.55; }
 .priority-card button { border: none; background: #edf5fb; color: var(--c-brand); border-radius: 5px; padding: 6px 8px; font-weight: 700; }
+/* v1.9 우선 확인지역 카드: 카드 전체가 지도 이동 클릭영역(마우스 편의)이고 키보드 진입점은 지역명 버튼이다.
+   `.priority-card button`(0,1,1) 을 이기도록 요소+클래스 선택자로 둔다. */
+.priority-card { cursor: pointer; background: var(--c-surface); transition: background-color .12s ease, border-color .12s ease; }
+.priority-card:hover { border-color: #9cc4e5; background: #f5fafd; }
+.priority-card:focus-within { border-color: var(--c-brand); box-shadow: 0 0 0 2px rgba(23, 105, 170, .18); }
+.priority-body { min-width: 0; }
+button.priority-name-button {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 32px;
+  margin: -4px 0 0 -6px;
+  padding: 4px 6px;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--c-text-strong);
+  font-size: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+button.priority-name-button strong { word-break: keep-all; overflow-wrap: break-word; }
+button.priority-name-button:hover { background: var(--c-brand-soft); color: var(--c-brand-ink); text-decoration: underline; }
+.priority-tags { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-1); margin: 4px 0 0; }
+.priority-tag {
+  border: 1px solid #9cc4e5;
+  border-radius: var(--r-pill);
+  padding: 2px 8px;
+  background: var(--c-brand-soft);
+  color: var(--c-brand-ink);
+  font-size: var(--fs-xs);
+  font-weight: 750;
+  line-height: 1.5;
+}
+.priority-location { color: var(--c-text-muted); font-size: var(--fs-xs); line-height: 1.5; word-break: keep-all; }
+button.priority-detail-button { min-height: 44px; border: 1px solid #b9cfe1; background: #edf5fb; color: var(--c-brand-ink); font-size: var(--fs-xs); font-weight: 750; }
+button.priority-detail-button:hover { background: #dcecf9; border-color: #7fb2dc; }
 .procedure-card { border-left: 4px solid #3b87bd; background: #f7fafc; padding: 10px; margin-bottom: 9px; }
 .procedure-card small { display: block; color: #5a6b7e; margin-bottom: 4px; font-size: var(--fs-xs); }
 .procedure-card strong { display: block; }
@@ -1024,6 +1060,44 @@ th { background: #f2f6f9; }
 .map-feature-popup.place-below .map-popup-head { padding-top: 19px; }
 .map-feature-popup.place-below .map-popup-tail { top: 4px; border-bottom: 10px solid var(--c-brand); }
 .map-feature-popup.place-side .map-popup-tail { display: none; }
+
+/* =========================================================================
+   v1.9 상세보기 모달 (`DetailModal`)
+   - '현재 판단' 카드의 상세보기가 지도 POI 팝업과 같은 위험지구 상세를 창으로 연다.
+   - 본문은 `map-popup-*` 클래스를 그대로 재사용하므로 여기서는 창 틀만 정의한다.
+   - z-index 는 skip-link(100) 아래, 헤더(20)·지도 팝업(5) 위인 90 으로 둔다.
+   ========================================================================= */
+.detail-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-4);
+  background: rgba(12, 30, 48, .48);
+}
+.detail-modal {
+  display: flex;
+  flex-direction: column;
+  width: min(560px, 100%);
+  max-height: min(82vh, 780px);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-lg);
+  background: var(--c-surface);
+  box-shadow: 0 18px 48px rgba(19, 43, 69, .32);
+  color: var(--c-text);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+  overflow: hidden;
+}
+.detail-modal-head { flex: 0 0 auto; }
+.detail-modal-body { flex: 1 1 auto; overflow-y: auto; overscroll-behavior: contain; padding-bottom: var(--sp-4); }
+.detail-modal-foot { position: static; flex: 0 0 auto; }
+@media (max-width: 720px) {
+  .detail-modal-overlay { padding: var(--sp-2); align-items: flex-end; }
+  .detail-modal { max-height: 88vh; }
+}
 
 /* =========================================================================
    v1.7 (b) 우측 패널 계획·근거 탭 + 유사사례 피해정보 (`InsightPanel`)

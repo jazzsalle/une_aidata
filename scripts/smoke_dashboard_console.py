@@ -189,26 +189,39 @@ def main() -> int:
 
             steps.run('S6 InsightPanel 탭 전환(유사사례·대응절차·계획근거·현재판단)', step_insight_tabs)
 
+            def click_priority_card() -> None:
+                """카드 전체 클릭으로 지도 이동을 실행한다.
+
+                '지도에서 보기' 버튼은 v1.9에서 제거되었고 카드 클릭이 지도 이동 진입점이다.
+                카드 내부 컨트롤(상세보기·질의에 참조)은 stopPropagation 하므로,
+                순위 배지 영역(비인터랙티브)을 눌러 카드 onClick 만 확실히 태운다.
+                """
+                card = page.locator('.priority-card').first
+                card.wait_for(state='visible')
+                if page.locator('.priority-card button', has_text='지도에서 보기').count():
+                    raise AssertionError("'지도에서 보기' 버튼이 남아 있습니다(카드 클릭 방식으로 대체되어야 함)")
+                card.click(position={'x': 14, 'y': 14})
+
             def step_map_highlight_existing() -> None:
                 page.locator('.context-select select').select_option('SIT-NW-POC-001')
                 wait_top_area('SIT-NW-POC-001')
-                page.locator('.priority-card button', has_text='지도에서 보기').first.click()
+                click_priority_card()
                 page.wait_for_timeout(2000)
                 if page.locator('.map-highlight-notice').count():
                     raise AssertionError(f'존재하는 ID(NW-A-02)인데 미존재 안내 표시: {page.locator(".map-highlight-notice").inner_text()}')
 
-            steps.run('S7 지도에서 보기 (45190 NW-A-02 · 존재 ID 하이라이트)', step_map_highlight_existing)
+            steps.run('S7 카드 클릭 지도 이동 (45190 NW-A-02 · 존재 ID 하이라이트)', step_map_highlight_existing)
 
             def step_map_highlight_missing() -> None:
                 page.locator('.context-select select').select_option('SIT-GM-POC-001')
                 wait_top_area('SIT-GM-POC-001')
-                page.locator('.priority-card button', has_text='지도에서 보기').first.click()
+                click_priority_card()
                 notice = page.wait_for_selector('.map-highlight-notice')
                 text = notice.inner_text() if notice else ''
                 if 'GM-A-01' not in text:
                     raise AssertionError(f'GM-A-01 미존재 안내 문구 불일치: {text}')
 
-            steps.run('S8 지도에서 보기 (47190 GM-A-01 · 미존재 ID 비차단 안내)', step_map_highlight_missing)
+            steps.run('S8 카드 클릭 지도 이동 (47190 GM-A-01 · 미존재 ID 비차단 안내)', step_map_highlight_missing)
 
             def step_select_similar_event() -> None:
                 page.get_by_role('tab', name='유사사례').click()
@@ -232,6 +245,27 @@ def main() -> int:
                     raise AssertionError(f'Mock 검색 오류 표시: {page.locator(".mock-search-panel .inline-error").inner_text()}')
 
             steps.run('S10 T3Q 구조 Mock 검색 실행·결과 표시', step_t3q_mock_search)
+
+            def step_priority_detail_modal() -> None:
+                page.get_by_role('tab', name='현재 판단').click()
+                page.wait_for_selector('#insight-panel-0 .priority-card')
+                page.locator('.context-select select').select_option('SIT-NW-POC-001')
+                wait_top_area('SIT-NW-POC-001')
+                trigger = page.locator('.priority-card .priority-detail-button').first
+                trigger.click()
+                dialog = page.locator('.detail-modal[role="dialog"]')
+                dialog.wait_for(state='visible')
+                if dialog.get_attribute('aria-modal') != 'true':
+                    raise AssertionError('상세 모달에 aria-modal="true" 가 없습니다')
+                text = dialog.inner_text()
+                for token in ['위험요인', '위험조건 임계값', '시행·사업', '공식 위험등급 판정이나 피해예측이 아닙니다']:
+                    if token not in text:
+                        raise AssertionError(f'상세 모달에 지도 팝업과 동일한 항목이 없습니다: {token}')
+                page.keyboard.press('Escape')
+                dialog.wait_for(state='detached')
+                page.wait_for_function('document.activeElement?.classList?.contains("priority-detail-button") === true')
+
+            steps.run('S11 상세보기 모달 열기·동일 상세 확인·Esc 닫기·초점 복귀', step_priority_detail_modal)
 
             page.wait_for_timeout(1000)  # 잔여 비동기 콘솔 메시지 수집 여유
             browser.close()

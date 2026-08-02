@@ -1,7 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { moveTabFocus } from '../hooks/useRovingTabs';
 import { loadPlanReference } from '../services/apiClient';
-import type { PriorityAreaResult, ProcedureStep, SimilarEvent } from '../types/contracts';
+import { DetailModal } from './DetailModal';
+// 위험지구 상세는 지도 POI 팝업과 같은 공용 컴포넌트를 재사용한다(중복 구현 금지).
+import { DistrictDetailSections, districtFactRows } from './DistrictDetail';
+import type { PriorityArea, PriorityAreaResult, ProcedureStep, SimilarEvent } from '../types/contracts';
 import type { DistrictReference, PlanReference, ReferenceEvidence, RiverReference, RiverStation } from '../types/planReference';
 import type { AgentContextItem } from '../types/uiContext';
 
@@ -102,6 +105,8 @@ export function InsightPanel({priorities,procedures,similarEvents,selectedEventI
   const [planState,setPlanState]=useState<'idle'|'loading'|'ready'|'error'>('idle');
   const [typeFilter,setTypeFilter]=useState<string>(ALL_TYPES);
   const [openDistrict,setOpenDistrict]=useState<string|null>(null);
+  /** '현재 판단' 카드 상세보기 모달 대상. 닫으면 열었던 버튼으로 초점이 복귀한다. */
+  const [detailArea,setDetailArea]=useState<PriorityArea|null>(null);
   const planCache=useRef<Map<string,Promise<PlanReference>>>(new Map());
   const selectedEvent=similarEvents.find((event)=>event.event_id===selectedEventId)??similarEvents[0]??null;
 
@@ -109,6 +114,7 @@ export function InsightPanel({priorities,procedures,similarEvents,selectedEventI
   useEffect(()=>{
     setTypeFilter(ALL_TYPES);
     setOpenDistrict(null);
+    setDetailArea(null);
     if(!adminCode){setPlan(null);setPlanState('idle');return;}
     let active=true;
     setPlanState('loading');
@@ -121,6 +127,11 @@ export function InsightPanel({priorities,procedures,similarEvents,selectedEventI
 
   const districts=plan?.districts??[];
   const rivers=plan?.rivers??[];
+  // 우선 확인지역(spatial_object_id)과 계획문서 판독 위험지구(district_code)를 코드로만 대응시킨다. 없으면 태그·상세를 만들지 않는다.
+  const districtByCode=useMemo(()=>new Map(districts.map(item=>[item.district_code,item])),[districts]);
+  const detailDistrict=detailArea?districtByCode.get(detailArea.spatial_object_id)??null:null;
+  // 닫기 시 초점 복귀는 DetailModal 이 열기 전 초점 요소(상세보기 버튼)로 되돌린다.
+  const closeDetail=useCallback(()=>setDetailArea(null),[]);
   const districtTypes=useMemo(()=>{
     const counts=new Map<string,number>();
     districts.forEach(item=>{const key=str(item.disaster_type)??MISSING;counts.set(key,(counts.get(key)??0)+1);});
@@ -146,7 +157,35 @@ export function InsightPanel({priorities,procedures,similarEvents,selectedEventI
     <div id={`insight-panel-${tabs.indexOf(tab)}`} role="tabpanel" aria-labelledby={`insight-tab-${tabs.indexOf(tab)}`} className="panel-scroll">
       {tab==='현재 판단'&&<>
         <div className="notice-card warning"><strong>우선 확인 상대순위</strong><p>공식 위험도·피해예측 결과가 아니며 담당자 확인이 필요합니다.</p></div>
-        {priorities?.areas.map(area=><article className="priority-card" key={area.spatial_object_id}><div className="rank">{area.rank}</div><div><div className="priority-title"><strong>{area.name}</strong><span>{area.score}점</span></div><ul>{area.reasons.slice(0,3).map(reason=><li key={reason}>{reason}</li>)}</ul><div className="card-action-row"><button type="button" onClick={()=>onHighlight(area.spatial_object_id)}>지도에서 보기</button>{onAddContext?<button type="button" className="context-add-button" onClick={()=>onAddContext({kind:'district',id:area.spatial_object_id,label:area.name,detail:area.reasons[0],admin_code:adminCode??undefined})}>질의에 참조</button>:null}</div></div></article>)}
+        <p className="sr-only">각 카드의 지역명 버튼은 지도의 해당 지점으로 이동하고, 상세보기 버튼은 지도 표시와 같은 위험지구 상세 정보를 창으로 엽니다.</p>
+        {priorities?.areas.map(area=>{
+          const district=districtByCode.get(area.spatial_object_id)??null;
+          const typeTag=str(district?.disaster_type);           // 계획문서 판독 재해유형. 매칭 실패 시 태그를 만들지 않는다.
+          const locationSummary=str(district?.location);
+          return <article
+            className="priority-card"
+            key={area.spatial_object_id}
+            /* 마우스 편의를 위한 카드 전체 클릭. 키보드 진입점은 아래 지역명 버튼이며 내부 컨트롤은 stopPropagation 한다. */
+            onClick={()=>onHighlight(area.spatial_object_id)}
+          >
+            <div className="rank">{area.rank}</div>
+            <div className="priority-body">
+              <div className="priority-title">
+                <button type="button" className="priority-name-button" aria-label={`${area.name} 지도에서 보기`} onClick={event=>{event.stopPropagation();onHighlight(area.spatial_object_id);}}><strong>{area.name}</strong></button>
+                <span>{area.score}점</span>
+              </div>
+              {typeTag||locationSummary?<p className="priority-tags">
+                {typeTag?<span className="priority-tag">{typeTag}</span>:null}
+                {locationSummary?<span className="priority-location">{locationSummary}</span>:null}
+              </p>:null}
+              <ul>{area.reasons.slice(0,3).map(reason=><li key={reason}>{reason}</li>)}</ul>
+              <div className="card-action-row">
+                <button type="button" className="priority-detail-button" onClick={event=>{event.stopPropagation();setDetailArea(area);}}>상세보기</button>
+                {onAddContext?<button type="button" className="context-add-button" onClick={event=>{event.stopPropagation();onAddContext({kind:'district',id:area.spatial_object_id,label:area.name,detail:area.reasons[0],admin_code:adminCode??undefined});}}>질의에 참조</button>:null}
+              </div>
+            </div>
+          </article>;
+        })}
       </>}
 
       {tab==='유사사례'&&<div className="event-list">
@@ -306,5 +345,31 @@ export function InsightPanel({priorities,procedures,similarEvents,selectedEventI
         <article className="plan-source-note"><strong>그 밖의 근거자료</strong><p>침수흔적도·위성영상은 피해·변화 근거 화면에서 확인합니다. 유니 RAG는 로그인·검색 경로 환경변수 설정 시 문서·페이지·Passage 근거를 결합합니다.</p></article>
       </div>}
     </div>
+
+    {detailArea?<DetailModal
+      title={detailArea.name}
+      badge={str(detailDistrict?.disaster_type)}
+      closeLabel="우선 확인지역 상세 정보 창 닫기"
+      footNote="본 요약은 관리대장·계획문서 판독 및 Mock/Seed 기반 참고 정보이며, 공식 위험등급 판정이나 피해예측이 아닙니다."
+      onClose={closeDetail}
+    >
+      <FactList className="map-popup-facts" rows={[
+        {label:'우선 확인 순위',value:`${detailArea.rank}위 · 상대점수 ${detailArea.score}점(공식 위험등급·피해확률 아님)`},
+        {label:'공간객체 ID',value:orMissing(detailArea.spatial_object_id)},
+        ...districtFactRows(detailDistrict),
+        {label:'행정구역',value:orMissing(detailDistrict?.admin_name??detailDistrict?.admin_code??adminCode)},
+      ]} />
+      <section className="map-popup-section">
+        <h4>우선 확인 사유</h4>
+        {detailArea.reasons.length?<ul className="map-popup-list">{detailArea.reasons.map(reason=><li key={reason}>{reason}</li>)}</ul>:<p>사유 기재 미확보</p>}
+      </section>
+      <section className="map-popup-section">
+        <h4>담당자 확인 필요 항목</h4>
+        {detailArea.required_checks.length?<ul className="map-popup-list">{detailArea.required_checks.map(check=><li key={check}>{check}</li>)}</ul>:<p>확인 항목 미확보</p>}
+      </section>
+      {detailDistrict
+        ?<DistrictDetailSections district={detailDistrict} evidence={evidenceText(detailDistrict.evidence)} />
+        :<section className="map-popup-section"><h4>계획문서 판독 상세</h4><p>이 지점과 코드가 일치하는 자연재해저감 종합계획 판독자료가 {MISSING} 상태입니다. 계획 PDF 수령 후 구조화 예정입니다.</p></section>}
+    </DetailModal>:null}
   </aside>;
 }
