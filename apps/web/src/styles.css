@@ -1,5 +1,33 @@
+/* --- UNE 디자인 시스템 본문 폰트 (Spoqa Han Sans Neo · SIL OFL 1.1 · self-host) ---
+   생성: `python scripts/build_web_fonts.py` → apps/web/public/fonts/*.subset.woff2
+   라이선스·출처: apps/web/public/fonts/LICENSE-SpoqaHanSansNeo.txt */
+@font-face {
+  font-family: "Spoqa Han Sans Neo";
+  src: url("/fonts/SpoqaHanSansNeo-Regular.subset.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Spoqa Han Sans Neo";
+  src: url("/fonts/SpoqaHanSansNeo-Medium.subset.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Spoqa Han Sans Neo";
+  src: url("/fonts/SpoqaHanSansNeo-Bold.subset.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
-  font-family: Pretendard, "Noto Sans KR", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  /* --- 타이포 토큰: 폰트 스택은 이 토큰 한 곳에서만 관리한다 --- */
+  --font-sans: "Spoqa Han Sans Neo", Pretendard, "Noto Sans KR", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  font-family: var(--font-sans);
   color: var(--c-text);
   background: var(--c-bg);
   font-synthesis: none;

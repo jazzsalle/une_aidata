@@ -1,0 +1,46 @@
+Spoqa Han Sans Neo — 웹폰트 서브셋 라이선스·출처 표기
+=====================================================
+
+폰트명       : Spoqa Han Sans Neo (스포카 한 산스 네오)
+버전         : Version 1.100 (hotconv 1.0.109 / makeotfexe 2.5.65596)
+저작권       : Copyright 2020 Spoqa (http://www.spoqa-han-sans.com)
+제작·배포처  : Spoqa (http://www.spoqa-han-sans.com)
+디자이너     : [Spoqa Han Sans Neo] Dong-huui Kim, Younghwa Kang, Yujin Lee /
+               [Noto Sans] Ryoko NISHIZUKA (kana & ideographs), Paul D. Hunt
+               (Latin, Greek & Cyrillic), Wenlong ZHANG (bopomofo),
+               Sandoll Communications, Soo-young JANG, Joo-yeon KANG (hangul elements)
+라이선스     : SIL Open Font License, Version 1.1 (OFL-1.1)
+라이선스 전문: http://scripts.sil.org/OFL
+
+폰트 파일의 name 테이블(nameID 13)에 명시된 라이선스 문구:
+  "This Font Software is licensed under the SIL Open Font License, Version 1.1.
+   This Font Software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+   CONDITIONS OF ANY KIND, either express or implied. See the SIL Open Font
+   License for the specific language, permissions and limitations governing your
+   use of this Font Software."
+
+
+이 폴더의 파일
+--------------
+  SpoqaHanSansNeo-Regular.subset.woff2  (font-weight: 400)
+  SpoqaHanSansNeo-Medium.subset.woff2   (font-weight: 500)
+  SpoqaHanSansNeo-Bold.subset.woff2     (font-weight: 700)
+
+원본 TTF(리포 루트 `SpoqaHanSansNeo-Regular/`)를 `scripts/build_web_fonts.py`로
+서브셋 변환(WOFF2)한 파생물이다. Thin/Light는 화면에서 사용하지 않아 생성하지 않는다.
+재생성: `pip install fonttools brotli && python scripts/build_web_fonts.py`
+
+
+OFL 1.1 준수 사항 확인
+----------------------
+1) 재배포 허용: OFL-1.1은 폰트의 무료 사용·수정·재배포(웹폰트 self-host 포함)를
+   허용한다. 본 서브셋은 판매 대상이 아니며 서비스 자산으로만 포함된다.
+2) 저작권·라이선스 고지 동봉: 이 파일(LICENSE-SpoqaHanSansNeo.txt)로 저작권·
+   라이선스 고지를 동봉하고, 추가로 서브셋 WOFF2 파일 내부 name 테이블의
+   nameID 0(Copyright), 13(License Description), 14(License URL) 레코드를
+   그대로 보존했다(`--name-IDs=*`, `--name-legacy`).
+3) 예약 글꼴 이름(Reserved Font Name): 이 폰트는 RFN을 선언하지 않으며(name 레코드에
+   "Reserved Font Name" 문구 없음), 파생물에 원 이름 사용 제한이 적용되지 않는다.
+   그럼에도 파일명에 `.subset`을 붙여 원본과 구분한다.
+4) 단독 판매 금지: 폰트 파일 자체를 판매하지 않는다.
+5) OFL 조항의 폰트 자체에 대한 조건은 이 파생물에도 동일하게 적용된다.
