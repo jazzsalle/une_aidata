@@ -6,7 +6,7 @@ import yaml
 
 ROOT=Path(__file__).resolve().parents[1]
 ROUTES_ROOT=ROOT/'server/routes'
-CATCH_ALL=ROOT/'api/[[...path]].ts'
+CATCH_ALL=ROOT/'api/[...path].ts'
 SPEC_PATH=ROOT/'contracts/openapi/poc-backend.yaml'
 METHODS={'GET','POST','PUT','PATCH','DELETE'}
 
@@ -22,7 +22,7 @@ def handler_routes():
     return out
 
 def table_routes():
-    """api/[[...path]].ts 라우팅 테이블('METHOD /api/path': handler)을 파싱한다."""
+    """api/[...path].ts 라우팅 테이블('METHOD /api/path': handler)을 파싱한다."""
     text=CATCH_ALL.read_text(encoding='utf-8')
     out=set()
     for method,route in re.findall(r"'(GET|POST|PUT|PATCH|DELETE)\s+(/api/[^']+)'\s*:",text):
@@ -58,11 +58,11 @@ def diff(label_a,a,label_b,b):
 def main():
     spec=yaml.safe_load(SPEC_PATH.read_text(encoding='utf-8'))
     assert spec.get('openapi')=='3.0.3', 'OpenAPI 3.0.3 required'
-    assert CATCH_ALL.exists(), 'api/[[...path]].ts catch-all missing'
+    assert CATCH_ALL.exists(), 'api/[...path].ts catch-all missing'
     handlers=handler_routes(); table=table_routes(); declared,incomplete=spec_routes(spec)
     issues=[]
-    issues+=diff('handler(server/routes)',handlers,'routing-table(api/[[...path]].ts)',table)
-    issues+=diff('routing-table(api/[[...path]].ts)',table,'openapi(poc-backend.yaml)',declared)
+    issues+=diff('handler(server/routes)',handlers,'routing-table(api/[...path].ts)',table)
+    issues+=diff('routing-table(api/[...path].ts)',table,'openapi(poc-backend.yaml)',declared)
     issues+=diff('handler(server/routes)',handlers,'openapi(poc-backend.yaml)',declared)
     if issues or incomplete:
         print('FAIL OpenAPI contract (3-way: handler / routing-table / spec)')
