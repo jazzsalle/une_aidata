@@ -53,15 +53,22 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 - 환경 참고: Python 의존성은 `python -m pip install -r requirements.txt` + `python -m playwright install chromium`으로 설치, Git Bash에는 pyenv-win shim으로 python3 사용 가능. **주의: PowerShell에서 `npm run test:runtime-gate` 실행 시 WSL bash로 해석돼 실패할 수 있음 — Git Bash에서 실행할 것**
 
 ## In progress
-- 없음 (Phase 2 완료 직후 상태)
+- **Phase 8 진행 중** — 인증정보 불필요 구간 완료 (2026-08-02):
+  - Shadow 하네스: tests/provider/provider_shadow_gate.cjs + scripts/run_provider_shadow_test.sh (`npm run test:provider-shadow -- --provider <id>`). 키 미설정 시 HELD·네트워크 0건, 설정 시 실호출 1회→actual 계약검증→fixture 구조 병행비교→redaction 자기검증
+  - 승격 절차: docs/29_provider_shadow_and_promotion_procedure.md (핵심: env 키 설정=즉시 실경로 전환이므로 Shadow는 로컬 셸 env만, Vercel env 설정=SELECTABLE 승격 행위. provider별 2단계 승인)
+  - 상태 기록: tests/provider/provider_promotion_status.json (6종 FIXTURE_VALIDATED, t3q 3종은 promotion_hold — 실 Endpoint 미확정)
+  - 회귀 번들 기준선 8종 전부 통과 (typecheck·contracts·fixture/runtime gate·콘솔 smoke 3종·observation·E2E 7/7)
+- **대기: provider별 Shadow 실행** — 사용자 인증정보 준비 시 provider별 독립 진행 (아래 Next steps)
 
 ## Pending approval (Seed 불일치 영향범위 보고)
 - `apps/web/public/seed/priority_areas_seed.json`의 `SIT-GM-POC-001`(47190 구미) rank 1이 `spatial_object_id: "GM-A-01"` 참조하나 `geo.json`에 해당 feature 없음(GM 계열은 GM-A-03/04/07, GM-B-10/13, GM-C-01만 존재). 현재 UI 가드로 비차단 안내 처리됨. 근본 수정은 seed 동결 해제 승인 필요 — 택1: (a) geo.json에 GM-A-01 feature 추가, (b) priority_areas_seed의 참조 ID를 기존 ID로 교체
 
-## Next steps
-1. `/phase-run 8` 실행 — 실제 Provider Shadow Test 및 단계별 승격. **사용자 준비물 필요**: 실 API 인증정보(공공데이터포털 서비스키, HRFCO Endpoint·키·공식 관측소 코드, UNE RAG URL·계정)를 환경변수로. SHADOW_TESTED→SELECTABLE 승격은 매 단계 사용자 승인 기반 — 자동 진행 불가
-2. 주의: 승격마다 승인 대기, 실제 연계값은 official_data=true·value_status=actual·관측시각·Provider 보유, 연계 실패는 연계별 Fallback, DEFAULT 전환 금지
-3. 참고: 로컬 dev(`npx vercel dev`)는 api/index.ts + rewrite 구조에서 재검증 필요할 수 있음 (Phase 6는 배포 기준으로 검증됨)
+## Next steps (Phase 8 잔여 — provider별 독립 진행)
+1. **kma_nowcast (가장 간단, 권장 1순위)**: 공공데이터포털에서 기상청 초단기실황 활용신청 → 서비스키 확보 → 로컬 셸에서 `DATA_GO_KR_SERVICE_KEY=<키>` 설정 후 `npm run test:provider-shadow -- --provider kma_nowcast` → 결과 검토 후 승인1(SHADOW_TESTED) → Vercel Preview env 설정(승인2)·회귀 재통과 → SELECTABLE
+2. **hrfco_hydrology**: HRFCO Endpoint·키 + **공식 관측소 코드 확정 필수** (v0.7 규칙 4 — official_station_code 없으면 하네스가 HELD 처리)
+3. **une_rag**: UNE RAG URL·계정 준비 → Swagger probe 먼저 (`/api/v1/integrations/une-rag-probe`) → 실제 경로 확인 후 UNE_RAG_SEARCH_PATH 설정 (경로 추정 금지, v0.7 규칙 5)
+4. t3q 3종은 실 Endpoint 미확정으로 promotion_hold — Phase 8 승인 대상 아님
+5. 주의: 키는 로컬 셸 env로만 (Vercel env 설정은 SELECTABLE 승격 승인 후에만), 키를 채팅·코드·문서에 남기지 말 것, DEFAULT 전환 금지. 상세 절차: docs/29
 
 ## Blockers
 - 없음. (@playwright/test 404는 재발하지 않음 — 1.62.1 설치 완료)

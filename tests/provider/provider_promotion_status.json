@@ -1,0 +1,74 @@
+{
+  "generated_at": "2026-08-02T00:00:00.000Z",
+  "record": "provider-promotion-status",
+  "source_version": "1.5.1-provider-fixture-gate",
+  "ladder": "DRAFT -> FIXTURE_VALIDATED -> SHADOW_TESTED -> SELECTABLE -> DEFAULT",
+  "note": "현재 6개 Provider 모두 FIXTURE_VALIDATED. Phase 8은 승인 기반 단계 승격만 허용하며 DEFAULT 전환은 범위 밖이다. provider_contracts_seed.json의 current=mock은 불변. 이 파일에 API 키·비밀값을 기록하지 않는다. 절차는 docs/29_provider_shadow_and_promotion_procedure.md 참조.",
+  "providers": [
+    {
+      "provider_id": "kma_nowcast",
+      "lifecycle": "FIXTURE_VALIDATED",
+      "promotion_hold": false,
+      "hold_reason": null,
+      "prerequisites": [
+        "DATA_GO_KR_SERVICE_KEY(로컬 셸 env)"
+      ],
+      "approvals": []
+    },
+    {
+      "provider_id": "hrfco_hydrology",
+      "lifecycle": "FIXTURE_VALIDATED",
+      "promotion_hold": false,
+      "hold_reason": null,
+      "prerequisites": [
+        "HRFCO_API_BASE_URL 등 env",
+        "HRFCO_STATION_MAP_JSON에 official_station_code (v0.7 규칙 4 — 없으면 호출 금지)"
+      ],
+      "approvals": []
+    },
+    {
+      "provider_id": "une_rag",
+      "lifecycle": "FIXTURE_VALIDATED",
+      "promotion_hold": false,
+      "hold_reason": null,
+      "prerequisites": [
+        "UNE_RAG_BASE_URL·인증",
+        "Swagger(probeUneRagOpenApi) 접근 확인 후 UNE_RAG_SEARCH_PATH 설정 (v0.7 규칙 5 — 경로 추정 금지)"
+      ],
+      "approvals": []
+    },
+    {
+      "provider_id": "t3q_event",
+      "lifecycle": "FIXTURE_VALIDATED",
+      "promotion_hold": true,
+      "hold_reason": "실 Endpoint 미확정 — mock_only 정책 유지 (CLAUDE.md v1.0)",
+      "prerequisites": [
+        "T3Q 실 Endpoint·인증 계약 확정",
+        "Event Master·RefDisasterEventID·taxonomyCodes·Passage lineage 대표응답 검증"
+      ],
+      "approvals": []
+    },
+    {
+      "provider_id": "t3q_risk",
+      "lifecycle": "FIXTURE_VALIDATED",
+      "promotion_hold": true,
+      "hold_reason": "실 Endpoint 미확정 — mock_only 정책 유지 (CLAUDE.md v1.0)",
+      "prerequisites": [
+        "T3Q 실 Endpoint·인증 계약 확정",
+        "위험지구 임계값 값·단위·산정근거 대표응답 검증"
+      ],
+      "approvals": []
+    },
+    {
+      "provider_id": "t3q_spatial",
+      "lifecycle": "FIXTURE_VALIDATED",
+      "promotion_hold": true,
+      "hold_reason": "실 Endpoint 미확정 — mock_only 정책 유지 (CLAUDE.md v1.0)",
+      "prerequisites": [
+        "T3Q 실 Endpoint·인증 계약 확정",
+        "홍수위험지역·위험저수지·풍수해개선지구 좌표계·Geometry·속성·공개등급 검증 (v1.1 규칙 — 검증 전 활성화 금지)"
+      ],
+      "approvals": []
+    }
+  ]
+}

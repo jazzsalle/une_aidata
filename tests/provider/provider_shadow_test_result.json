@@ -1,0 +1,37 @@
+{
+  "gate": "provider-shadow-gate",
+  "note": "Phase 8 Shadow Test 결과. SHADOW_PASSED는 SELECTABLE/DEFAULT 전환이 아니며 승격은 승인 기반으로만 진행한다. HELD는 env·선행조건 미충족으로 실호출을 보류한 상태(네트워크 0건)이다.",
+  "results": [
+    {
+      "provider_id": "hrfco_hydrology",
+      "executed": false,
+      "status": "HELD",
+      "held_reason": "HRFCO_STATION_MAP_JSON 미설정 또는 official_station_code 부재 — 수위·유량 API를 호출하지 않고 사용자 입력·Scenario 값을 유지합니다(v0.7 규칙 4).",
+      "checks": [],
+      "compared_with_fixture": null,
+      "network_calls": 0,
+      "executed_at": "2026-08-02T05:02:45.952Z"
+    },
+    {
+      "provider_id": "kma_nowcast",
+      "executed": false,
+      "status": "HELD",
+      "held_reason": "DATA_GO_KR_SERVICE_KEY 미설정 — 기상청 초단기실황을 호출하지 않고 사용자 입력·Scenario 값을 유지합니다.",
+      "checks": [],
+      "compared_with_fixture": null,
+      "network_calls": 0,
+      "executed_at": "2026-08-02T05:04:15.798Z"
+    },
+    {
+      "provider_id": "une_rag",
+      "executed": false,
+      "status": "HELD",
+      "held_reason": "UNE_RAG_BASE_URL 미설정 — 실호출 없이 Seed 근거를 유지합니다.",
+      "checks": [],
+      "compared_with_fixture": null,
+      "network_calls": 0,
+      "executed_at": "2026-08-02T05:02:48.004Z"
+    }
+  ],
+  "updated_at": "2026-08-02T05:04:15.798Z"
+}
