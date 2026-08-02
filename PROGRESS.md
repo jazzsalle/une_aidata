@@ -4,7 +4,7 @@
 2026-08-02
 
 ## Current goal
-Phase 6 — Vercel Preview 배포 + VWorld 허용 도메인 확인 (합격 기준: evaluation_criteria.md Phase 6)
+Phase 7 — 외부 Provider별 Fixture 연계 (FIXTURE_VALIDATED) (합격 기준: evaluation_criteria.md Phase 7)
 
 ## Done
 - 기준선 정리: vercel-source-v1.5.1을 리포 루트로 승격, gate bundle은 archive/ 보관
@@ -13,6 +13,11 @@ Phase 6 — Vercel Preview 배포 + VWorld 허용 도메인 확인 (합격 기�
 - **Phase 1 완료 (2026-08-02, evaluator PASS)**: npm install 성공(package-lock.json 생성, playwright 1.62.1 정상 — 404 재발 없음), validate·contracts(OpenAPI 31/31, JSON Schema 260/18)·typecheck:functions·typecheck:web·runtime-gate·provider-conformance 전부 PASS, `npm run build` 성공(apps/web/dist 산출). 계약 파일 변경 0건.
 
 ## Done this session
+- **Phase 6 완료 (2026-08-02, evaluator PASS)**: Vercel 배포 + VWorld 도메인 확인
+  - 배포 URL: **https://une-aidata-web.vercel.app** (프로젝트 une-aidata-web, GitHub main 자동 배포)
+  - Hobby 12함수 제한 대응(사용자 승인): api/ 31라우트 → server/routes/** + api/index.ts catch-all 1함수 + vercel.json rewrite `/api/(.*)→/api`. 외부 HTTP 경로·OpenAPI 계약 불변, 검증은 3자 대조(핸들러↔라우팅테이블↔OpenAPI)로 강화
+  - 배포 이슈 해결 여정: build:web workspace 스코프(별칭 추가) → outputDirectory(Root Directory 설정) → 12함수 제한(통합) → ESM ERR_MODULE_NOT_FOUND(.js 확장자 + seeds fs 로딩 + includeFiles data/**) → 대괄호 catch-all 다중 세그먼트 미매칭(index.ts + rewrite)
+  - 검증: /·/evidence·/report 직접 URL·새로고침 200, /api/health·map/layers 200 envelope, 미등록 404 envelope, VWorld 타일 실로드 확인("연결 정상" 배지 — tileloadend 기반), 키 하드코딩 0건
 - **Phase 5 완료 (2026-08-02, evaluator PASS)**: Playwright E2E 7/7 통과
   - @playwright/test 1.62.1 + chromium-1234 준비, playwright.config.ts webServer에 VITE_USE_SEED_DIRECTLY·VWorld 키 공백 주입
   - SatelliteComparison에 좌우/스와이프 비교 UI 신설(설계 정본 docs/04 SCR-EVD-001·docs/14 §14.5 — 기존 E2E 테스트 3이 요구하던 미구현 기능. radio 좌우비교/스와이프, range "비교 경계 위치", 25/50/75% 버튼)
@@ -46,8 +51,9 @@ Phase 6 — Vercel Preview 배포 + VWorld 허용 도메인 확인 (합격 기�
 - `apps/web/public/seed/priority_areas_seed.json`의 `SIT-GM-POC-001`(47190 구미) rank 1이 `spatial_object_id: "GM-A-01"` 참조하나 `geo.json`에 해당 feature 없음(GM 계열은 GM-A-03/04/07, GM-B-10/13, GM-C-01만 존재). 현재 UI 가드로 비차단 안내 처리됨. 근본 수정은 seed 동결 해제 승인 필요 — 택1: (a) geo.json에 GM-A-01 feature 추가, (b) priority_areas_seed의 참조 ID를 기존 ID로 교체
 
 ## Next steps
-1. `/phase-run 6` 실행 — Vercel Preview 배포 + VWorld 허용 도메인 확인. **사용자 준비물 필요**: Vercel 계정·프로젝트 연결, VWorld 브라우저 키(도메인 제한)를 Vercel 환경변수(VITE_VWORLD_MAP_KEY)로 주입, VWorld 콘솔에 Preview 도메인 등록. 배포는 사용자 승인·계정 권한 필요하므로 자동 진행 불가 구간 있음
-2. 주의: VWorld 키 verified 표기는 브라우저 타일 성공 확인 후에만. API·Schema·Seed 계약 변경 금지
+1. `/phase-run 7` 실행 — 외부 Provider별 Fixture 연계: server/providers 격리 구조로 도메인별 Fixture 연계(실제 API 호출 없음), Provider 상태 FIXTURE_VALIDATED 기록, provider-conformance 재통과
+2. 주의: 실제 T3Q·공공 API 호출 금지, DEFAULT 전환 금지, API·Schema·Seed 계약 변경 금지
+3. 참고: 로컬 dev(`npx vercel dev`)는 api/index.ts + rewrite 구조에서 재검증 필요할 수 있음 (Phase 6는 배포 기준으로 검증됨)
 
 ## Blockers
 - 없음. (@playwright/test 404는 재발하지 않음 — 1.62.1 설치 완료)
