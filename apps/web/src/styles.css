@@ -91,7 +91,8 @@
 }
 
 * { box-sizing: border-box; }
-body { margin: 0; min-width: 1180px; min-height: 100vh; background: var(--c-canvas); }
+/* min-width 는 아래 v0.4 절의 `body { min-width: 320px }`(WCAG 1.4.10 Reflow)만 사용한다. */
+body { margin: 0; min-height: 100vh; background: var(--c-canvas); }
 button, input, select, textarea { font: inherit; }
 button { cursor: pointer; }
 
@@ -136,11 +137,15 @@ button { cursor: pointer; }
 .map-key-notice { background: rgba(255, 247, 220, .93); color: #725200; border: 1px solid #e4c56f; }
 .map-error { background: rgba(255, 233, 232, .95); color: #8b2420; }
 .map-highlight-notice { position: absolute; top: 52px; left: 12px; z-index: 4; border-radius: 6px; padding: 8px 10px; font-size: 12px; max-width: 320px; background: rgba(255, 247, 220, .93); color: #725200; border: 1px solid #e4c56f; }
+/* 레이어 칩도 z-index 3 을 유지한다. 6 으로 올리면 팝업 하단 sticky 푸터(‘질의에 참조 추가’
+   버튼·고지문)를 통째로 덮어(실측 33,840px² 중첩) 초점 받은 버튼이 완전히 가려진다. */
 .map-layer-chips { position: absolute; left: 12px; bottom: 12px; display: flex; gap: 6px; flex-wrap: wrap; z-index: 3; }
 .chip { border: 1px solid rgba(37, 78, 111, .22); border-radius: 18px; padding: 6px 9px; background: rgba(255,255,255,.92); color: #34536c; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
 
 .notice-card { border-radius: 8px; padding: 10px; margin-bottom: 10px; }
 .notice-card.warning { background: #fff5dc; border: 1px solid #edd28d; color: #5f4a14; }
+/* 정보(info) 톤: 경고와 구분되는 브랜드 계열. 본문 대비 8.79:1 (AA 이상). */
+.notice-card.info { background: var(--c-brand-soft); border: 1px solid #9cc8e8; color: var(--c-brand-ink); }
 .notice-card p { margin: 5px 0 0; font-size: var(--fs-sm); line-height: 1.5; }
 .priority-card { display: grid; grid-template-columns: 32px 1fr; gap: 9px; padding: 10px; border: 1px solid #d9e3ec; border-radius: 8px; margin-bottom: 9px; }
 .rank { width: 28px; height: 28px; border-radius: 50%; background: #1769aa; color: #fff; display: grid; place-items: center; font-weight: 800; }
@@ -367,7 +372,18 @@ th { background: #f2f6f9; }
 /* v0.5 integration/evidence-to-report */
 .integration-status{margin:16px 0;border:1px solid var(--line,#d7dde5);border-radius:12px;background:#fff}.integration-status-toggle{width:100%;display:flex;justify-content:space-between;align-items:center;min-height:44px;padding:10px 14px;background:transparent;border:0;text-align:left}.integration-status ul{list-style:none;margin:0;padding:0 14px 12px}.integration-status li{display:flex;gap:10px;padding:10px 0;border-top:1px solid #edf0f4}.integration-status li p{margin:4px 0 0}.status-badge{display:inline-flex;align-items:center;justify-content:center;min-width:68px;height:28px;border-radius:999px;font-weight:700}.status-badge.actual{background:#e4f6e9;color:#195f2f}.status-badge.provisional{background:#fff2d6;color:#7a4a00}.evidence-action-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:14px 0}.selection-status{font-weight:700;color:#195f2f}.evidence-map-grid{display:grid;grid-template-columns:minmax(0,2fr) minmax(260px,1fr);gap:16px}.map-panel.compact{min-height:360px}.map-panel.compact .map-canvas{min-height:360px}.damage-event-card footer button{margin-left:auto;min-height:44px}.report-selected-evidence{padding:14px;border:1px solid #d7dde5;border-radius:10px;background:#f8fafc}.report-selected-evidence h3{margin-top:0}
 @media(max-width:900px){.evidence-map-grid{grid-template-columns:1fr}}
+/* `.status-badge` 상태색 보완 — actual(초록)·provisional(주황)과 함께 4단으로 쓴다.
+   derived: 설정됨·부분구현 등 중립 상태(대비 7.04:1) / error: 오류(대비 7.75:1). */
+.status-badge.derived { background: var(--c-neutral-bg); color: var(--c-neutral-text); }
+.status-badge.error { background: #ffe9e7; color: #8b211b; }
 
+
+/* z-index 4 유지(팝업 인라인 z-index:5 아래).
+   팝업 위(6)로 올리는 안을 실측 검증한 결과, 팝업이 지도 우측에 배치되는 배치조합에서
+   이 스위치가 팝업 머리말의 닫기버튼을 97.7% 덮어 클릭가능 면적 0%가 된다
+   (1366x768 · 36개 배치표본 중 6건). 대화상자의 닫기수단을 막는 쪽이 더 큰 결함이므로
+   z-index 역전은 적용하지 않는다. 근본해결은 팝업 배치계산이 컨트롤 영역을 피하도록 하는
+   MapPanel 레이아웃 변경(디자인 판단 영역)이다. */
 .map-basemap-switch { position: absolute; top: 48px; right: 12px; z-index: 4; display: inline-flex; border: 1px solid #8faabd; border-radius: 8px; overflow: hidden; background: rgba(255,255,255,.96); }
 .map-basemap-switch button { min-height: 44px; border: 0; border-right: 1px solid #b8c8d4; padding: 7px 11px; background: #fff; color: #234c68; font-weight: 750; }
 .map-basemap-switch button:last-child { border-right: 0; }
@@ -751,11 +767,15 @@ th { background: #f2f6f9; }
   line-height: 1.6;
 }
 
-/* 세로 여유가 적은 노트북(예: 1366x768)에서는 입력창·추천질문을 줄여 대화 스레드를 확보한다. */
+/* 세로 여유가 적은 노트북(예: 1366x768)에서는 입력창·추천질문을 줄여 대화 스레드를 확보한다.
+   입력창은 textarea rows=6 의 고유높이(약 157px)가 min-height 보다 커서 min-height 만으로는
+   줄지 않는다. 실제로 줄이려면 height 를 함께 지정해야 한다(resize:vertical 로 사용자가 다시 늘릴 수 있다). */
 @media (max-height: 860px) {
   .agent-composer { padding: var(--sp-3) var(--sp-4); }
-  .agent-composer .agent-input { min-height: 92px; }
-  .agent-suggestions { max-height: 32%; padding: var(--sp-2) var(--sp-4) var(--sp-3); }
+  .agent-composer .agent-input { min-height: 88px; height: 88px; }
+  .agent-suggestions { max-height: 22%; padding: var(--sp-2) var(--sp-4) var(--sp-3); }
+  .agent-chat .agent-thread { padding: var(--sp-3) var(--sp-4) var(--sp-4); }
+  .agent-thread-intro { padding: var(--sp-2) var(--sp-3); line-height: 1.5; }
 }
 
 /* 3열 상황판 구간에서는 행 높이를 확정해 각 패널이 자체 스크롤을 갖게 한다.
