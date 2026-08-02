@@ -27,7 +27,8 @@ async function login(baseUrl) {
     const username = (0, env_js_1.env)('UNE_RAG_USERNAME'), password = (0, env_js_1.env)('UNE_RAG_PASSWORD'), path = (0, env_js_1.env)('UNE_RAG_LOGIN_PATH');
     if (!username || !password || !path)
         return undefined;
-    const response = await fetch(join(baseUrl, path), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ username, password }), signal: AbortSignal.timeout(timeoutMs()) });
+    const accountField = (0, env_js_1.env)('UNE_RAG_LOGIN_ACCOUNT_FIELD') ?? 'username';
+    const response = await fetch(join(baseUrl, path), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ [accountField]: username, password }), signal: AbortSignal.timeout(timeoutMs()) });
     if (!response.ok)
         throw new Error(`UNE RAG 로그인 실패: HTTP ${response.status}`);
     const payload = await response.json();
@@ -81,7 +82,7 @@ function normalize(item, index) {
     const content = text(row, ['content', 'text', 'chunk', 'passage', 'answer', 'body']) ?? text(metadata, ['content', 'text']) ?? '';
     const score = number(row, ['score', 'similarity', 'distance', 'rag_score', 'relevance_score']) ?? number(metadata, ['score', 'similarity']);
     const page = number(row, ['page', 'page_no', 'page_number']) ?? number(metadata, ['page', 'page_no', 'page_number']);
-    const passage = text(row, ['passage_id', 'chunk_id', 'id']) ?? text(metadata, ['passage_id', 'chunk_id']);
+    const passage = text(row, ['passage_id', 'chunk_id', 'id', 'doc_id']) ?? text(metadata, ['passage_id', 'chunk_id', 'doc_id']);
     const title = text(row, ['title', 'document_title', 'source_title', 'filename']) ?? text(metadata, ['title', 'document_title', 'source_title', 'filename']) ?? `UNE RAG 검색결과 ${index + 1}`;
     return { evidence_id: `UNE-RAG-${passage ?? index + 1}`, source_type: 'UNE_RAG_PASSAGE', title, content, excerpt: content.slice(0, 360), page, passage_id: passage, score, rag_score: score, data_status: 'actual', metadata };
 }

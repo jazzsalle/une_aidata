@@ -2,37 +2,23 @@
   "_fixture_meta": {
     "fixture": true,
     "official_data": false,
-    "source_description": "UNE RAG 검색 API 응답 형식 POC 표본, 실호출 아님",
+    "source_description": "UNI RAG System v1.1.0 POST /search/ 실응답 스키마 기반 POC 표본, 실호출 아님",
     "created_for": "phase7-fixture-validation",
-    "parser_target": "server/providers/uneRag.ts arrayFromPayload()/normalize() — 기본 키 'results' 또는 UNE_RAG_RESPONSE_ARRAY_PATH 설정 경로",
-    "note": "실제 Endpoint 응답형식이 확정되지 않았으므로 경로·필드는 UNE_RAG_RESPONSE_ARRAY_PATH·UNE_RAG_*_FIELD 설정으로 조정한다(v0.7 규칙 5). 본 표본은 기본 키 규약(results[].content/score/page/passage_id/title)을 검증한다. Passage 내용은 POC 표본 문장이다."
+    "parser_target": "server/providers/uneRag.ts arrayFromPayload()/normalize() — 기본 키 'results'",
+    "note": "2026-08-02 Shadow Test에서 확인한 실제 응답 스키마 {results:[{filename, score, text, doc_id}]}를 반영한다 (OpenAPI: search_knowledge_search__post). page·metadata 필드는 실응답에 없음. Passage 내용은 POC 표본 문장이다."
   },
   "results": [
     {
-      "passage_id": "SAMPLE-PSG-0001",
-      "title": "표본 지자체 자연재해저감 종합계획 (POC 표본 문서)",
-      "content": "본 문단은 UNE RAG 응답 매핑 검증용 POC 표본이다. 표본 하천 주변 저지대는 과거 호우 시 침수가 기록된 것으로 가정한 검증용 서술이다.",
+      "filename": "표본_지자체_자연재해저감_종합계획.pdf",
       "score": 0.87,
-      "page": 12,
-      "metadata": {
-        "document_title": "표본 지자체 자연재해저감 종합계획 (POC 표본 문서)",
-        "dataset": "sample-poc-dataset",
-        "chunk_index": 3
-      }
+      "text": "본 문단은 UNE RAG 응답 매핑 검증용 POC 표본이다. 표본 하천 주변 저지대는 과거 호우 시 침수가 기록된 것으로 가정한 검증용 서술이다.",
+      "doc_id": "SAMPLE-DOC-0001"
     },
     {
-      "passage_id": "SAMPLE-PSG-0002",
-      "title": "표본 풍수해 대응 매뉴얼 (POC 표본 문서)",
-      "content": "두 번째 표본 문단으로, evidence 부착과 excerpt 절단(360자) 로직을 검증하기 위한 검증용 서술이다.",
+      "filename": "표본_풍수해_대응_매뉴얼.pdf",
       "score": 0.74,
-      "page": 45,
-      "metadata": {
-        "document_title": "표본 풍수해 대응 매뉴얼 (POC 표본 문서)",
-        "dataset": "sample-poc-dataset",
-        "chunk_index": 11
-      }
+      "text": "두 번째 표본 문단으로, evidence 부착과 excerpt 절단(360자) 로직을 검증하기 위한 검증용 서술이다.",
+      "doc_id": "SAMPLE-DOC-0002"
     }
-  ],
-  "total": 2,
-  "query_echo": "표본 질의 (POC)"
+  ]
 }

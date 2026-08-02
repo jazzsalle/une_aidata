@@ -3,7 +3,7 @@
   "record": "provider-promotion-status",
   "source_version": "1.5.1-provider-fixture-gate",
   "ladder": "DRAFT -> FIXTURE_VALIDATED -> SHADOW_TESTED -> SELECTABLE -> DEFAULT",
-  "note": "현재 6개 Provider 모두 FIXTURE_VALIDATED. Phase 8은 승인 기반 단계 승격만 허용하며 DEFAULT 전환은 범위 밖이다. provider_contracts_seed.json의 current=mock은 불변. 이 파일에 API 키·비밀값을 기록하지 않는다. 절차는 docs/29_provider_shadow_and_promotion_procedure.md 참조.",
+  "note": "Phase 8은 승인 기반 단계 승격만 허용하며 DEFAULT 전환은 범위 밖이다. provider_contracts_seed.json의 current=mock은 불변. 이 파일에 API 키·비밀값을 기록하지 않는다. 절차는 docs/29_provider_shadow_and_promotion_procedure.md 참조. 현황: une_rag=SHADOW_TESTED(SELECTABLE 보류), 나머지 FIXTURE_VALIDATED.",
   "providers": [
     {
       "provider_id": "kma_nowcast",
@@ -28,14 +28,22 @@
     },
     {
       "provider_id": "une_rag",
-      "lifecycle": "FIXTURE_VALIDATED",
-      "promotion_hold": false,
-      "hold_reason": null,
+      "lifecycle": "SHADOW_TESTED",
+      "promotion_hold": true,
+      "hold_reason": "SELECTABLE 보류 (사용자 결정 2026-08-02): 외부 시연 시 내부망 UNI RAG(사내 IP) 접근 불가로 당분간 Seed 기반 검색 유지. 추후 외부 접근 가능 시점에 승인 2(SELECTABLE) 재검토.",
       "prerequisites": [
-        "UNE_RAG_BASE_URL·인증",
-        "Swagger(probeUneRagOpenApi) 접근 확인 후 UNE_RAG_SEARCH_PATH 설정 (v0.7 규칙 5 — 경로 추정 금지)"
+        "완료: Swagger 접근 확인 (UNI RAG System v1.1.0, /auth/login·/search/ — 2026-08-02)",
+        "완료: Shadow Test SHADOW_PASSED (Passage 5건, data_status=actual, fixture 구조 일치, network 2건, 비밀정보 0건)",
+        "SELECTABLE 재개 조건: 외부 접근 가능한 UNE RAG Endpoint 확보 후 Vercel env 설정(승인 2)"
       ],
-      "approvals": []
+      "approvals": [
+        {
+          "step": "SHADOW_TESTED",
+          "approved_by": "user",
+          "approved_at": "2026-08-02",
+          "evidence": "tests/provider/provider_shadow_test_result.json (une_rag, executed_at 2026-08-02T06:45:23.952Z)"
+        }
+      ]
     },
     {
       "provider_id": "t3q_event",

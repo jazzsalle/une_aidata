@@ -58,7 +58,10 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
   - 승격 절차: docs/29_provider_shadow_and_promotion_procedure.md (핵심: env 키 설정=즉시 실경로 전환이므로 Shadow는 로컬 셸 env만, Vercel env 설정=SELECTABLE 승격 행위. provider별 2단계 승인)
   - 상태 기록: tests/provider/provider_promotion_status.json (6종 FIXTURE_VALIDATED, t3q 3종은 promotion_hold — 실 Endpoint 미확정)
   - 회귀 번들 기준선 8종 전부 통과 (typecheck·contracts·fixture/runtime gate·콘솔 smoke 3종·observation·E2E 7/7)
-- **대기: provider별 Shadow 실행** — 사용자 인증정보 준비 시 provider별 독립 진행 (아래 Next steps)
+- **une_rag Shadow 완료 (2026-08-02)**: 실제 UNI RAG v1.1.0 대상 SHADOW_PASSED (로그인 JWT→/search/ 검색, Passage 5건 actual 정규화, fixture 구조 일치, 비밀정보 0건). 사용자 승인 1 완료 → **SHADOW_TESTED 기록**. 과정에서 uneRag.ts 실스키마 반영: 로그인 필드 설정화(UNE_RAG_LOGIN_ACCOUNT_FIELD=account), doc_id 후보키 추가, fixture 표본을 실응답 스키마({filename,score,text,doc_id})로 갱신
+- **une_rag SELECTABLE 보류 (사용자 결정)**: 외부 시연 시 내부망 UNI RAG 접근 불가 → 당분간 Seed 기반 검색 유지, 외부 접근 가능해지면 승인 2 재검토. Vercel env에 UNE_RAG_* 설정 금지 상태 유지
+- **대기: kma_nowcast** (공공데이터포털 18시까지 점검 — 키 발급 후 Shadow 가능), **hrfco_hydrology** (공식 관측소 코드 미확정)
+- 환경 주의: PowerShell에서 npm run test:provider-shadow 실행 시 bash가 WSL로 잡혀 .runtime-cjs가 깨질 수 있음 — `node tests/provider/provider_shadow_gate.cjs --provider <id>` 직접 실행 권장 (.runtime-cjs 재컴파일: Git Bash에서 `tsc -p tsconfig.runtime.json` + `.runtime-cjs/package.json`({"type":"commonjs"}) 존재 확인)
 
 ## Pending approval (Seed 불일치 영향범위 보고)
 - `apps/web/public/seed/priority_areas_seed.json`의 `SIT-GM-POC-001`(47190 구미) rank 1이 `spatial_object_id: "GM-A-01"` 참조하나 `geo.json`에 해당 feature 없음(GM 계열은 GM-A-03/04/07, GM-B-10/13, GM-C-01만 존재). 현재 UI 가드로 비차단 안내 처리됨. 근본 수정은 seed 동결 해제 승인 필요 — 택1: (a) geo.json에 GM-A-01 feature 추가, (b) priority_areas_seed의 참조 ID를 기존 ID로 교체

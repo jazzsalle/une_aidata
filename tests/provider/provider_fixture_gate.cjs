@@ -114,7 +114,7 @@ const PROVIDERS=[
       {case_id:'UNERAG-REP-01',kind:'representative',run(){
         const result=uneRag.mapUneRagFixturePayload(loadFixture('une_rag','representative_response.json'));
         assert(result.results.length===2,`UNE RAG 대표응답 2건 아님 (${result.results.length})`);
-        assert(result.results[0].evidence_id==='UNE-RAG-SAMPLE-PSG-0001',`UNE RAG evidence_id 형식 불일치: ${result.results[0].evidence_id}`);
+        assert(result.results[0].evidence_id==='UNE-RAG-SAMPLE-DOC-0001',`UNE RAG evidence_id 형식 불일치: ${result.results[0].evidence_id}`);
         result.results.forEach((item,i)=>{
           for(const field of['evidence_id','source_type','title','content','excerpt','data_status'])assert(item[field]!==undefined&&item[field]!=='',`une_rag[${i}]: 계약 필드 결손 ${field}`);
           assert(item.source_type==='UNE_RAG_PASSAGE',`une_rag[${i}]: source_type 불일치`);

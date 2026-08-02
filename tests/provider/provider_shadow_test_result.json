@@ -24,14 +24,76 @@
     },
     {
       "provider_id": "une_rag",
-      "executed": false,
-      "status": "HELD",
-      "held_reason": "UNE_RAG_BASE_URL 미설정 — 실호출 없이 Seed 근거를 유지합니다.",
-      "checks": [],
-      "compared_with_fixture": null,
-      "network_calls": 0,
-      "executed_at": "2026-08-02T05:02:48.004Z"
+      "executed": true,
+      "status": "SHADOW_PASSED",
+      "checks": [
+        {
+          "check": "records_present",
+          "pass": true,
+          "detail": "정규화 Passage 5건"
+        },
+        {
+          "check": "data_status_actual",
+          "pass": true
+        },
+        {
+          "check": "source_type_une_rag_passage",
+          "pass": true,
+          "detail": "source_provider 대응: source_type=UNE_RAG_PASSAGE"
+        },
+        {
+          "check": "evidence_id_present",
+          "pass": true
+        },
+        {
+          "check": "observed_at_present",
+          "pass": "not_applicable",
+          "detail": "Passage 검색결과 계약에는 관측시각 필드가 없음 — Observation 계약이 아닌 EvidenceItem 계약"
+        },
+        {
+          "check": "error_timeout_warning_fallback",
+          "pass": "not_triggered",
+          "detail": "성공 응답 — 오류·Timeout 경로 미발생(fixture 게이트 UNERAG-ERR/TMO 케이스로 검증됨)"
+        }
+      ],
+      "compared_with_fixture": {
+        "mode": "key-set-and-type-only",
+        "note": "값 비교 아님 — fixture 대표응답 매핑 결과와 실호출 정규화 결과의 필드 구조(키 집합·타입)만 병행비교한다.",
+        "live_keys": [
+          "content",
+          "data_status",
+          "evidence_id",
+          "excerpt",
+          "metadata",
+          "page",
+          "passage_id",
+          "rag_score",
+          "score",
+          "source_type",
+          "title"
+        ],
+        "fixture_keys": [
+          "content",
+          "data_status",
+          "evidence_id",
+          "excerpt",
+          "metadata",
+          "page",
+          "passage_id",
+          "rag_score",
+          "score",
+          "source_type",
+          "title"
+        ],
+        "missing_in_live": [],
+        "extra_in_live": [],
+        "type_mismatches": [],
+        "structurally_compatible": true
+      },
+      "network_calls": 2,
+      "executed_at": "2026-08-02T06:45:23.952Z",
+      "note": "SHADOW_PASSED는 SELECTABLE/DEFAULT 전환이 아님 — 승격은 승인 기반으로만 진행(docs/27 §3)."
     }
   ],
-  "updated_at": "2026-08-02T05:04:15.798Z"
+  "updated_at": "2026-08-02T06:45:23.952Z"
 }
