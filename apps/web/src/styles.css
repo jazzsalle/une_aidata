@@ -794,3 +794,528 @@ th { background: #f2f6f9; }
   .compare-swipe-quick { flex-wrap: wrap; }
   .badge-row { flex-wrap: wrap; }
 }
+
+/* =========================================================================
+   v1.7 (a) 지도 POI 말풍선 팝업 (`MapPanel`)
+   - position/left/top/z-index/max-width/max-height/overflow-y/visibility 는
+     MapPanel 이 배치계산 결과로 인라인 지정하므로 여기서 덮어쓰지 않는다.
+   - 꼬리 위치는 인라인 커스텀 속성 `--map-popup-tail-x`(px)로 전달된다.
+   ========================================================================= */
+.map-feature-popup {
+  /* 인라인 max-width(맵폭-16)보다 항상 작은 고정 폭. 상황실 대형 모니터에서 rem 과 함께 커진다. */
+  width: clamp(320px, 21rem, 360px);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-lg);
+  background: var(--c-surface);
+  box-shadow: 0 8px 26px rgba(19, 43, 69, .24);
+  color: var(--c-text);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+  overscroll-behavior: contain;
+}
+/* 위험지구는 임계값 표·피해이력까지 붙어 내용이 길다. 폭만 미세 조정한다. */
+.map-feature-popup.district { width: clamp(336px, 22rem, 360px); }
+
+.map-popup-head {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-2) var(--sp-2) var(--sp-4);
+  border-bottom: 1px solid var(--c-line-soft);
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
+  background: #fff;
+}
+.map-popup-head h3 {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  padding-top: 5px;
+  color: var(--c-text-strong);
+  font-size: var(--fs-md);
+  font-weight: 800;
+  line-height: 1.35;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+.map-popup-badge {
+  flex: 0 0 auto;
+  max-width: 10em;
+  margin-top: 6px;
+  border-radius: var(--r-pill);
+  padding: 3px 9px;
+  background: var(--c-brand);
+  color: #fff;
+  font-size: var(--fs-xs);
+  font-weight: 750;
+  line-height: 1.5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.map-popup-close {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: #3d566e;
+  font-size: 15px;
+  line-height: 1;
+}
+.map-popup-close:hover { background: var(--c-surface-alt); color: #12395c; }
+
+.map-popup-body { padding: var(--sp-3) var(--sp-4) var(--sp-2); }
+
+.map-popup-flags { display: flex; flex-wrap: wrap; gap: var(--sp-1); margin: 0 0 var(--sp-3); }
+.map-popup-flag {
+  border: 1px solid var(--c-warn-line);
+  border-radius: var(--r-pill);
+  padding: 2px 8px;
+  background: #fff2d6;
+  color: #7a4a00;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.map-popup-facts { margin: 0; }
+.map-popup-facts > div {
+  display: grid;
+  grid-template-columns: 100px minmax(0, 1fr);
+  gap: 0 var(--sp-3);
+  padding: 5px 0;
+  border-top: 1px solid #eef2f6;
+}
+.map-popup-facts > div:first-child { border-top: 0; padding-top: 0; }
+.map-popup-facts dt { color: var(--c-text-muted); font-size: var(--fs-sm); font-weight: 700; line-height: 1.5; word-break: keep-all; }
+.map-popup-facts dd { margin: 0; color: var(--c-text); font-size: var(--fs-sm); line-height: 1.5; overflow-wrap: anywhere; }
+
+.map-popup-section { margin-top: var(--sp-4); }
+.map-popup-section h4 { margin: 0 0 var(--sp-2); color: var(--c-text-strong); font-size: var(--fs-sm); font-weight: 800; line-height: 1.4; }
+.map-popup-section p { margin: 0; font-size: var(--fs-sm); line-height: 1.55; word-break: keep-all; overflow-wrap: break-word; }
+
+.map-popup-list { margin: 0; padding-left: 17px; font-size: var(--fs-sm); line-height: 1.55; }
+.map-popup-list li { margin: 0 0 var(--sp-2); word-break: keep-all; overflow-wrap: break-word; }
+.map-popup-list li:last-child { margin-bottom: 0; }
+.map-popup-list li::marker { color: #6f93ae; }
+.map-popup-list strong { color: var(--c-text-strong); }
+.map-popup-list .map-popup-source { margin-top: 2px; }
+
+/* 좁은 폭에서 5열 임계값 표가 팝업을 밀지 않도록 표 자체를 가로 스크롤 상자로 둔다. */
+.map-popup-table {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-size: var(--fs-xs);
+  background: var(--c-surface);
+}
+.map-popup-table th, .map-popup-table td {
+  border: 1px solid var(--c-line-soft);
+  padding: 5px 6px;
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.45;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+/* `.map-connection` 상태 표시는 열려 있는 팝업(dialog, inline z-index:5)을 덮지 않도록
+   `.map-key-notice`·`.map-error` 와 같은 3단으로 내린다. */
+.map-connection { z-index: 3; }
+.map-popup-table thead th { background: var(--c-surface-alt); color: var(--c-text-strong); white-space: nowrap; }
+.map-popup-table tbody th { color: var(--c-text-strong); font-weight: 700; }
+
+.map-popup-source { display: block; color: var(--c-text-muted); font-size: var(--fs-xs); line-height: 1.5; word-break: keep-all; overflow-wrap: break-word; }
+
+.map-popup-foot {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-4);
+  border-top: 1px solid var(--c-line-soft);
+  border-radius: 0 0 var(--r-lg) var(--r-lg);
+  background: var(--c-surface-alt);
+}
+.map-popup-action {
+  width: 100%;
+  min-height: 44px;
+  border: 0;
+  border-radius: var(--r-md);
+  background: var(--c-brand);
+  color: #fff;
+  font-size: var(--fs-sm);
+  font-weight: 800;
+}
+.map-popup-action:hover { background: var(--c-brand-deep); }
+.map-popup-disclaimer { margin: 0; color: #4d6274; font-size: var(--fs-xs); line-height: 1.5; word-break: keep-all; }
+
+/* 꼬리: 인라인 overflow-y:auto 로 상자 밖으로 나갈 수 없으므로 머리말·꼬리말의
+   여백 안쪽에 두어 본문 글자를 가리지 않게 한다. */
+.map-popup-tail {
+  position: absolute;
+  left: var(--map-popup-tail-x, 20px);
+  z-index: 3;
+  width: 0;
+  height: 0;
+  margin-left: -9px;
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+}
+.map-feature-popup.place-above .map-popup-foot { padding-bottom: 19px; }
+.map-feature-popup.place-above .map-popup-tail { bottom: 4px; border-top: 10px solid var(--c-brand); }
+.map-feature-popup.place-below .map-popup-head { padding-top: 19px; }
+.map-feature-popup.place-below .map-popup-tail { top: 4px; border-bottom: 10px solid var(--c-brand); }
+.map-feature-popup.place-side .map-popup-tail { display: none; }
+
+/* =========================================================================
+   v1.7 (b) 우측 패널 계획·근거 탭 + 유사사례 피해정보 (`InsightPanel`)
+   ========================================================================= */
+.evidence-list.plan-reference { display: flex; flex-direction: column; gap: var(--sp-4); min-width: 0; }
+.plan-reference > * { min-width: 0; }
+
+.plan-reference .plan-status { margin: 0; color: var(--c-text-muted); font-size: var(--fs-sm); line-height: 1.5; }
+.plan-reference .plan-empty {
+  border: 1px dashed var(--c-line);
+  border-radius: var(--r-md);
+  padding: var(--sp-4);
+  background: var(--c-surface-alt);
+}
+.plan-reference .plan-empty strong { display: block; margin-bottom: var(--sp-2); color: var(--c-text-strong); font-size: var(--fs-sm); }
+.plan-reference .plan-empty p { margin: 0; color: var(--c-text-muted); font-size: var(--fs-sm); line-height: 1.55; word-break: keep-all; }
+
+.plan-district-section, .plan-river-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  min-width: 0;
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--c-line-soft);
+}
+.plan-district-section > h3, .plan-river-section > h3 { margin: 0; color: var(--c-text-strong); font-size: var(--fs-md); font-weight: 800; }
+
+.plan-summary { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-2); margin: 0; }
+.plan-summary > div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  border: 1px solid var(--c-line-soft);
+  border-radius: var(--r-md);
+  padding: var(--sp-3);
+  background: var(--c-surface-alt);
+}
+.plan-summary dt { color: var(--c-text-muted); font-size: var(--fs-xs); font-weight: 700; line-height: 1.4; word-break: keep-all; }
+.plan-summary dd { margin: 0; color: var(--c-text-strong); font-size: var(--fs-sm); font-weight: 800; line-height: 1.4; overflow-wrap: anywhere; }
+
+.plan-fact-list { display: flex; flex-direction: column; margin: 0; min-width: 0; }
+.plan-fact-list > div {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr);
+  gap: 0 var(--sp-3);
+  padding: 4px 0;
+  border-top: 1px solid #eef2f6;
+}
+.plan-fact-list > div:first-child { border-top: 0; padding-top: 0; }
+.plan-fact-list dt { color: var(--c-text-muted); font-size: var(--fs-xs); font-weight: 700; line-height: 1.5; word-break: keep-all; }
+.plan-fact-list dd { margin: 0; color: var(--c-text); font-size: var(--fs-sm); line-height: 1.5; overflow-wrap: anywhere; }
+
+.plan-filter-chips { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+.plan-filter-chips .chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  background: var(--c-surface);
+  font-size: var(--fs-xs);
+  line-height: 1.3;
+}
+.plan-reference .plan-filter-status { margin: 0; color: var(--c-text-muted); font-size: var(--fs-xs); line-height: 1.4; }
+
+.plan-reference .plan-district-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--c-line-soft);
+  border-radius: var(--r-md);
+  background: var(--c-surface);
+}
+.plan-reference .plan-district-card.open { border-color: #9cc4e5; box-shadow: 0 0 0 2px rgba(23, 105, 170, .10); }
+.plan-district-toggle {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 100%;
+  min-height: 44px;
+  padding: var(--sp-3) var(--sp-4);
+  border: 0;
+  border-radius: var(--r-md) var(--r-md) 0 0;
+  background: transparent;
+  color: var(--c-text);
+  text-align: left;
+}
+/* 부제들이 한 줄로 이어붙지 않도록 직계 span 을 블록으로 둔다(.plan-district-head 는 아래에서 flex). */
+.plan-district-toggle > span { display: block; }
+.plan-district-toggle:hover { background: var(--c-brand-soft); }
+.plan-district-head { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); }
+.plan-district-head strong { color: var(--c-text-strong); font-size: var(--fs-sm); font-weight: 800; line-height: 1.4; overflow-wrap: anywhere; }
+.plan-district-sub { color: var(--c-text-muted); font-size: var(--fs-xs); font-weight: 400; line-height: 1.5; overflow-wrap: anywhere; }
+
+.plan-badge { display: inline-block; border-radius: var(--r-pill); padding: 2px 8px; font-size: var(--fs-xs); font-weight: 750; line-height: 1.5; white-space: nowrap; }
+.plan-badge.type { background: var(--c-brand); color: #fff; }
+.plan-badge.grade { border: 1px solid var(--c-neutral-line); background: var(--c-neutral-bg); color: var(--c-neutral-text); }
+
+.plan-district-detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  min-width: 0;
+  padding: var(--sp-3) var(--sp-4) var(--sp-4);
+  border-top: 1px solid var(--c-line-soft);
+  background: #fbfdff;
+}
+/* aria-expanded=false 일 때 [hidden] 을 반드시 존중한다. */
+.plan-district-detail[hidden] { display: none; }
+.plan-district-detail h4 { margin: var(--sp-2) 0 0; color: var(--c-text-strong); font-size: var(--fs-sm); font-weight: 800; line-height: 1.4; }
+.plan-district-detail > h4:first-child { margin-top: 0; }
+.plan-district-detail ul { margin: 0; padding-left: 17px; color: var(--c-text); font-size: var(--fs-sm); line-height: 1.55; }
+.plan-district-detail li { margin: 2px 0; word-break: keep-all; overflow-wrap: break-word; }
+.plan-reference .plan-district-detail > p { margin: 0; color: var(--c-text-muted); font-size: var(--fs-sm); line-height: 1.5; word-break: keep-all; }
+.plan-district-detail .table-scroll { margin: 0; }
+/* 좁은 열에서 '미확보' 같은 한글 낱말이 음절 단위로 끊기지 않게 한다(가로 스크롤은 .table-scroll 이 담당). */
+.plan-district-detail .comparison-table th, .plan-district-detail .comparison-table td { word-break: keep-all; overflow-wrap: break-word; }
+
+.plan-district-detail .plan-damage-list { display: flex; flex-direction: column; gap: var(--sp-2); margin: 0; padding: 0; list-style: none; }
+.plan-district-detail .plan-damage-list li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  border-left: 3px solid var(--c-brand-line);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--c-surface-alt);
+}
+.plan-damage-list strong { color: var(--c-text-strong); font-size: var(--fs-sm); line-height: 1.4; }
+.plan-damage-list span { color: var(--c-text); font-size: var(--fs-xs); line-height: 1.55; word-break: keep-all; }
+.plan-damage-list small { color: var(--c-text-muted); font-size: var(--fs-xs); line-height: 1.45; }
+
+.plan-reference .plan-evidence {
+  margin: var(--sp-2) 0 0;
+  padding-top: var(--sp-2);
+  border-top: 1px dashed var(--c-line);
+  color: var(--c-text-muted);
+  font-size: var(--fs-xs);
+  line-height: 1.5;
+  word-break: keep-all;
+}
+.plan-reference .plan-source-note {
+  border: 1px solid var(--c-line-soft);
+  border-radius: var(--r-md);
+  padding: var(--sp-4);
+  background: var(--c-surface-alt);
+}
+.plan-source-note strong { display: block; margin-bottom: var(--sp-2); color: var(--c-text-strong); font-size: var(--fs-sm); }
+.plan-reference .plan-source-note p { margin: 0; color: var(--c-text-muted); font-size: var(--fs-xs); line-height: 1.6; word-break: keep-all; }
+
+.plan-reference .plan-river-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  min-width: 0;
+  border: 1px solid var(--c-line-soft);
+  border-radius: var(--r-md);
+  padding: var(--sp-4);
+  background: var(--c-surface);
+}
+.plan-river-head { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); }
+.plan-river-head strong { color: var(--c-text-strong); font-size: var(--fs-sm); font-weight: 800; line-height: 1.4; }
+.plan-river-card .table-scroll { margin: 0; }
+
+.plan-station-table { font-size: var(--fs-xs); }
+.plan-station-table caption { padding: 0 0 5px; color: var(--c-text-muted); font-size: var(--fs-xs); font-weight: 700; line-height: 1.45; text-align: left; word-break: keep-all; }
+.plan-station-table thead th { text-align: center; white-space: normal; }
+.plan-station-table tbody th { text-align: left; white-space: nowrap; }
+.plan-station-table tbody td { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.plan-station-table tbody td:first-of-type { text-align: left; }
+.plan-station-version { display: block; color: var(--c-text-muted); font-size: var(--fs-xs); font-weight: 400; white-space: nowrap; }
+
+.card-action-row { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-top: var(--sp-2); }
+/* `.priority-card button`(0,1,1) 을 이기도록 요소+클래스 선택자로 둔다. */
+button.context-add-button {
+  min-height: 44px;
+  border: 1px solid #9cc4e5;
+  border-radius: var(--r-sm);
+  padding: 6px 10px;
+  background: var(--c-brand-soft);
+  color: var(--c-brand-ink);
+  font-size: var(--fs-xs);
+  font-weight: 750;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+button.context-add-button:hover { background: #dcecf9; border-color: #7fb2dc; }
+.plan-district-card > .context-add-button, .plan-river-card > .context-add-button { align-self: flex-start; }
+.plan-district-card > .context-add-button { margin: 0 var(--sp-4) var(--sp-3); }
+
+.event-card-row { display: flex; flex-direction: column; gap: var(--sp-2); min-width: 0; }
+.event-card-row .context-add-button { align-self: flex-start; }
+.event-damage-line { margin-top: 2px; color: #4a6076; font-size: var(--fs-xs); line-height: 1.45; }
+
+.event-damage-block {
+  margin: var(--sp-3) 0;
+  border-left: 4px solid #4a86b5;
+  border-radius: 0 var(--r-md) var(--r-md) 0;
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--c-surface);
+}
+.event-damage-block h4 { margin: 0 0 var(--sp-2); color: var(--c-text-strong); font-size: var(--fs-sm); font-weight: 800; line-height: 1.4; }
+.event-damage-block h5 { margin: 0 0 var(--sp-1); color: #2b5273; font-size: var(--fs-xs); font-weight: 800; line-height: 1.4; }
+.similar-event-detail .event-damage-block > p { margin: 0 0 var(--sp-2); color: var(--c-text); font-size: var(--fs-sm); line-height: 1.55; word-break: keep-all; }
+.similar-event-detail .event-damage-columns p { margin: 0 0 var(--sp-2); color: var(--c-text-muted); font-size: var(--fs-xs); line-height: 1.5; }
+
+.event-damage-columns { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: var(--sp-3); margin-top: var(--sp-2); }
+.event-damage-columns > div { min-width: 0; }
+
+.damage-fact-list > div, .condition-fact-list > div { grid-template-columns: 76px minmax(0, 1fr); }
+.damage-fact-list dd, .condition-fact-list dd { font-size: var(--fs-xs); }
+
+.event-history-list { margin: 0 0 var(--sp-3); padding-left: 18px; color: var(--c-text); font-size: var(--fs-xs); line-height: 1.55; }
+.event-history-list li { margin: 2px 0; word-break: keep-all; overflow-wrap: break-word; }
+
+.similar-event-detail .damage-quantity-note {
+  margin: var(--sp-2) 0;
+  border: 1px solid var(--c-warn-line);
+  border-radius: var(--r-sm);
+  padding: 5px 8px;
+  background: #fffaeb;
+  color: var(--c-warn-text);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  line-height: 1.5;
+  word-break: keep-all;
+}
+
+/* =========================================================================
+   v1.7 (c) AI Agent 질의 컨텍스트 칩 (`SituationAgentPanel`)
+   ========================================================================= */
+.agent-tab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  margin-left: 6px;
+  border-radius: var(--r-pill);
+  padding: 0 6px;
+  background: var(--c-brand);
+  color: #fff;
+  font-size: var(--fs-xs);
+  font-weight: 800;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+/* 컴포저 상단 구획. `.agent-composer` 의 border-top 이 곧 이 구획의 상단 구분선이 되도록
+   음수 여백으로 컴포저 상단에 밀착시킨다(가로줄 이중 표시 방지). */
+.agent-context-bar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin: calc(var(--sp-4) * -1) calc(var(--sp-4) * -1) var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  border-bottom: 1px solid var(--c-line-soft);
+  background: var(--c-surface-alt);
+}
+.agent-context-hint { margin: 0; color: #4d6274; font-size: var(--fs-xs); line-height: 1.45; word-break: keep-all; }
+
+.agent-context-chips { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; padding: 0; margin: 0; }
+.agent-context-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  max-width: 100%;
+  min-width: 0;
+  border: 1px solid var(--c-brand-line);
+  border-radius: var(--r-pill);
+  padding: 0 3px 0 11px;
+  background: var(--c-brand-soft);
+  color: var(--c-brand-ink);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  line-height: 1.35;
+}
+.agent-context-chip.kind-district { border-color: #9cc4e5; background: #e8f2fb; color: #134a72; }
+.agent-context-chip.kind-similar_event { border-color: #ddc48b; background: #fdf4e2; color: #6b4c07; }
+.agent-context-chip.kind-river { border-color: #8fc2b6; background: #e6f5f0; color: #145244; }
+.agent-context-chip-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* 터치타깃 44px 확보. 칩 높이도 이 버튼이 결정한다. */
+.agent-context-remove {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  font-size: 15px;
+  line-height: 1;
+}
+.agent-context-remove:hover { background: rgba(19, 74, 114, .14); }
+
+.agent-turn-context {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  margin: var(--sp-3) 0 0;
+  padding-top: var(--sp-2);
+  border-top: 1px solid var(--c-brand-line);
+  font-size: var(--fs-xs);
+  line-height: 1.4;
+}
+.agent-turn-context-label { font-weight: 800; color: #2c587a; }
+.agent-turn-context-item {
+  max-width: 100%;
+  border: 1px solid var(--c-brand-line);
+  border-radius: var(--r-pill);
+  padding: 2px 8px;
+  background: var(--c-surface);
+  color: #22405c;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+.agent-turn.user .agent-turn-context { border-top-color: rgba(255, 255, 255, .35); }
+.agent-turn.user .agent-turn-context-label { color: #d5e6f4; }
+.agent-turn.user .agent-turn-context-item { border-color: rgba(255, 255, 255, .45); background: rgba(255, 255, 255, .15); color: #fff; }
+
+/* v1.7 축소 방향 보정 — 좁은 패널·320px Reflow */
+@media (max-width: 560px) {
+  .plan-summary { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 400px) {
+  .map-popup-facts > div, .plan-fact-list > div,
+  .damage-fact-list > div, .condition-fact-list > div { grid-template-columns: 1fr; gap: 0; }
+  .map-popup-head { padding-left: var(--sp-3); }
+  .map-popup-body, .map-popup-foot { padding-left: var(--sp-3); padding-right: var(--sp-3); }
+  .plan-district-toggle, .plan-district-detail, .plan-river-card { padding-left: var(--sp-3); padding-right: var(--sp-3); }
+  .plan-district-card > .context-add-button { margin-left: var(--sp-3); margin-right: var(--sp-3); }
+}

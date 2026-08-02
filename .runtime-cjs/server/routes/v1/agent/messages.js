@@ -11,7 +11,7 @@ async function POST(request) { try {
     const situation = input.situation ?? (input.situation_id ? (0, situations_js_1.findSeedSituation)(input.situation_id) : undefined);
     if (!situation)
         return (0, http_js_1.badRequest)('situation이 필요합니다.');
-    return (0, http_js_1.envelope)(await (0, agent_js_1.buildAgentResponse)(situation, input.message.trim()), { provider: 'AgentToolRouterFunction', dataStatus: 'provisional' });
+    return (0, http_js_1.envelope)(await (0, agent_js_1.buildAgentResponse)(situation, input.message.trim(), (0, agent_js_1.normalizeAgentContext)(input.context)), { provider: 'AgentToolRouterFunction', dataStatus: 'provisional' });
 }
 catch (error) {
     return (0, http_js_1.badRequest)(error instanceof Error ? error.message : 'Agent 처리 실패');

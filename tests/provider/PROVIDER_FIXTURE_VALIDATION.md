@@ -1,6 +1,6 @@
 # Provider Fixture Validation 결과
 
-- 생성시각: 2026-08-02T07:41:07.467Z
+- 생성시각: 2026-08-02T09:48:51.253Z
 - 대상: provider 6종 × 케이스 3종(대표응답·오류·Timeout) = 18건 (통과 18건)
 - 실행 방식: `.runtime-cjs` CJS 컴파일 산출물의 fixture 매퍼 함수만 실행 (fetch 호출 함수는 require만, 실행 0건 — 네트워크 호출 0건)
 

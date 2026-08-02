@@ -1,6 +1,8 @@
 import type{AgentResponse,ApiEnvelope,ApiMeta,CreateSituationInput,CurrentSituation,IntegrationStatus,LayerCatalogItem,Observation,PriorityAreaResult,ProcedureStep,ReportDraft,ReportEvidenceSelection,SatelliteAsset,SimilarEvent,FloodMaskMetrics,PhaseSelectionResult,SatelliteEvidenceSet,T3qIntegrationReadiness,T3qCqCoverage,T3qSearchPreview,T3qMockSearchScenarioDataset,T3qEventMaster,T3qPassage}from'../types/contracts';
 import{selectFloodPhaseAssets as runSeedPhaseSelection,type SatelliteCandidate}from'../../../../server/domain/satellitePhaseSelection';
 import{buildSeedResponseComparison,seedRecordEvidence}from'../domain/similarEventSeedFallback';
+import type{AgentContextItem}from'../types/uiContext';
+import type{DistrictReference,RiverReference,PlanReference}from'../types/planReference';
 const API_BASE=import.meta.env.VITE_API_BASE_URL??'/api/v1';const FORCE_SEED=import.meta.env.VITE_USE_SEED_DIRECTLY==='true';
 async function parseJson<T>(r:Response):Promise<T>{if(!r.ok)throw new Error(`HTTP ${r.status}: ${r.statusText}`);return r.json() as Promise<T>;}async function seed<T>(f:string):Promise<T>{return parseJson<T>(await fetch(`/seed/${f}`,{cache:'no-store'}));}async function apiEnvelope<T>(p:string,i?:RequestInit):Promise<ApiEnvelope<T>>{const e=await parseJson<ApiEnvelope<T>>(await fetch(`${API_BASE}${p}`,i));if(e.errors.length)throw new Error(e.errors.join(', '));return e;}async function apiData<T>(p:string,i?:RequestInit):Promise<T>{return (await apiEnvelope<T>(p,i)).data;}async function withFallback<T>(a:()=>Promise<T>,f:()=>Promise<T>):Promise<T>{if(FORCE_SEED)return f();try{return await a();}catch{return f();}}
 export const loadSituations=():Promise<CurrentSituation[]>=>withFallback(()=>apiData('/scenarios'),async()=>(await seed<{situations:CurrentSituation[]}>('current_situations_seed.json')).situations);
@@ -16,7 +18,31 @@ export const loadT3qCqCoverage=(adminCode?:string):Promise<T3qCqCoverage>=>(with
 
 export const loadObservations=async(s:CurrentSituation):Promise<{observations:Observation[];meta:ApiMeta;warnings:string[]}>=>{if(FORCE_SEED)return{observations:s.observations,meta:{request_id:crypto.randomUUID(),provider:'seed_local',data_status:'scenario',fallback_used:true,generated_at:new Date().toISOString()},warnings:['Seed 모드: 상황에 저장된 사용자 입력·Scenario 관측값을 그대로 표시합니다.']};const e=await apiEnvelope<Observation[]>('/observations/query',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({admin_code:s.admin_code,reference_time:s.reference_time})});return{observations:e.data,meta:e.meta,warnings:e.warnings};};
 export const loadReport=(s:CurrentSituation,selectedEvidence?:ReportEvidenceSelection):Promise<ReportDraft|null>=>withFallback(()=>apiData('/reports/drafts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({situation:s,selected_evidence:selectedEvidence})}),async()=>{const p=await seed<{reports:ReportDraft[]}>('report_draft_seed.json');return p.reports.find(i=>i.situation_id===s.situation_id)??p.reports[0]??null;});
-export const sendAgentMessage=async(s:CurrentSituation,m:string):Promise<AgentResponse>=>{if(FORCE_SEED){const[priority,similarEvents,procedures]=await Promise.all([loadPriorityAreas(s),loadSimilarEvents(s),loadProcedures(s.admin_code)]);return{message_id:crypto.randomUUID(),answer:`Seed 모드 Mock 응답입니다. "${m}" 질의에 대해 서버 Agent 로직 없이 Seed 기반 우선 확인지역·유사사례·대응절차 참고정보를 표시합니다.`,priority_areas:priority?.areas??[],similar_events:similarEvents,procedures,map_actions:[],evidence:[],warnings:['Seed 모드 Mock 응답이며 서버 Agent 로직을 거치지 않았습니다.'],limitations:['Scenario/Mock Seed 자료 기반이며 공식 위험도·피해예측·자동 조치결정이 아닙니다.'],operator_confirmation_required:true};}return apiData('/agent/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({situation:s,message:m})});};
+export const sendAgentMessage=async(s:CurrentSituation,m:string,context:AgentContextItem[]=[]):Promise<AgentResponse>=>{
+ if(FORCE_SEED){
+  const[priority,similarEvents,procedures]=await Promise.all([loadPriorityAreas(s),loadSimilarEvents(s),loadProcedures(s.admin_code)]);
+  const districtIds=context.filter(i=>i.kind==='district').map(i=>i.id);
+  const eventIds=context.filter(i=>i.kind==='similar_event').map(i=>i.id);
+  const areas=priority?.areas??[];
+  // 선택 컨텍스트가 있으면 해당 대상을 앞으로 올려 질의와 함께 해석한 결과로 제시한다.
+  const orderedAreas=districtIds.length?[...areas].sort((a,b)=>Number(districtIds.includes(b.spatial_object_id))-Number(districtIds.includes(a.spatial_object_id))):areas;
+  const orderedEvents=eventIds.length?[...similarEvents].sort((a,b)=>Number(eventIds.includes(b.event_id))-Number(eventIds.includes(a.event_id))):similarEvents;
+  const labels=context.map(i=>i.label).join(', ');
+  const answer=context.length
+   ?`선택한 대상(${labels})을 질의와 함께 해석했습니다. "${m}" — Seed 기반 우선 확인지역·유사사례·대응절차 참고정보를 표시합니다.`
+   :`Seed 모드 Mock 응답입니다. "${m}" 질의에 대해 서버 Agent 로직 없이 Seed 기반 우선 확인지역·유사사례·대응절차 참고정보를 표시합니다.`;
+  const mapActions=districtIds[0]?[{action:'highlight' as const,target_layer:'L-RISK',target_id:districtIds[0]}]:[];
+  return{message_id:crypto.randomUUID(),answer,priority_areas:orderedAreas,similar_events:orderedEvents,procedures,map_actions:mapActions,evidence:[],warnings:['Seed 모드 Mock 응답이며 서버 Agent 로직을 거치지 않았습니다.'],limitations:['Scenario/Mock Seed 자료 기반이며 공식 위험도·피해예측·자동 조치결정이 아닙니다.'],operator_confirmation_required:true};
+ }
+ return apiData('/agent/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({situation:s,message:m,context})});
+};
+// 자연재해저감 종합계획·하천기본계획 판독 산출물. 정적 참고자료이므로 API 라우트 없이 public/seed 에서 직접 읽는다.
+export const loadPlanReference=async(adminCode?:string|null):Promise<PlanReference>=>{
+ const[districtSeed,riverSeed]=await Promise.all([seed<{districts:DistrictReference[]}>('districts.json'),seed<{rivers:RiverReference[]}>('rivers.json')]);
+ const districts=adminCode?districtSeed.districts.filter(i=>i.admin_code===adminCode):districtSeed.districts;
+ const rivers=adminCode?riverSeed.rivers.filter(i=>i.admin_code===adminCode):riverSeed.rivers;
+ return{districts,rivers};
+};
 export function saveSituationView(s:CurrentSituation|null,selected:string|null){if(!s)return;const v={view_id:crypto.randomUUID(),saved_at:new Date().toISOString(),situation:s,selectedFeatureId:selected};localStorage.setItem(`une-disaster-view:${v.view_id}`,JSON.stringify(v));return v.view_id;}
 
 export function loadReportEvidenceSelection(situationId:string):ReportEvidenceSelection{const raw=localStorage.getItem(`une-disaster-report-evidence:${situationId}`);if(raw){try{return JSON.parse(raw) as ReportEvidenceSelection;}catch{}}return{similar_event_ids:[],include_flood_trace:false,updated_at:new Date().toISOString()};}

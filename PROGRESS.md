@@ -53,6 +53,13 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 - 환경 참고: Python 의존성은 `python -m pip install -r requirements.txt` + `python -m playwright install chromium`으로 설치, Git Bash에는 pyenv-win shim으로 python3 사용 가능. **주의: PowerShell에서 `npm run test:runtime-gate` 실행 시 WSL bash로 해석돼 실패할 수 있음 — Git Bash에서 실행할 것**
 
 ## In progress
+- **AI Agent 상호작용 강화 완료 (2026-08-02)** — POC1(`ref/` 화면캡쳐 3종) 재현:
+  - 지도 모든 POI 클릭 → 요약 팝업(위험요인·임계값표·저감대책·사업비·우선순위·근거 문서/페이지). L1 위험지구는 `loadPlanReference()`로 상세 전개
+  - 선택 대상 → AI Agent 컨텍스트 칩(최대 5건) → 질의와 함께 전송. **주어 없는 질문("여긴 왜 위험해?")도 성립**. 서버 agent는 컨텍스트·키워드(하천/기준유량/위험지구/피해사례/절차/관측소) 규칙 해석 + evidence에 근거 문서·페이지 부착
+  - 우측 `계획·근거` 탭 하드코딩 제거 → 실데이터(위험지구 요약·필터·카드 상세 / 하천 제원 + **지점별 계획홍수량·주의보/경보 기준유량 표**). 그동안 미노출이던 `rivers.json` 최초 활용
+  - 유사사례 탭에 피해·대응·복구 정보 렌더(`SimilarEvent.damage` 등 계약에 있으나 미표시였음)
+  - 영상지도에서 벡터 라인 고대비 색 + casing 2겹으로 분기
+  - 계약·OpenAPI·Seed 무변경. 신규 API 라우트 없음(정적 참고자료는 public/seed 직접 로드)
 - **Phase 8 진행 중** — 인증정보 불필요 구간 완료 (2026-08-02):
   - Shadow 하네스: tests/provider/provider_shadow_gate.cjs + scripts/run_provider_shadow_test.sh (`npm run test:provider-shadow -- --provider <id>`). 키 미설정 시 HELD·네트워크 0건, 설정 시 실호출 1회→actual 계약검증→fixture 구조 병행비교→redaction 자기검증
   - 승격 절차: docs/29_provider_shadow_and_promotion_procedure.md (핵심: env 키 설정=즉시 실경로 전환이므로 Shadow는 로컬 셸 env만, Vercel env 설정=SELECTABLE 승격 행위. provider별 2단계 승인)
@@ -62,6 +69,10 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 - **une_rag SELECTABLE 보류 (사용자 결정)**: 외부 시연 시 내부망 UNI RAG 접근 불가 → 당분간 Seed 기반 검색 유지, 외부 접근 가능해지면 승인 2 재검토. Vercel env에 UNE_RAG_* 설정 금지 상태 유지
 - **대기: kma_nowcast** (공공데이터포털 18시까지 점검 — 키 발급 후 Shadow 가능), **hrfco_hydrology** (공식 관측소 코드 미확정)
 - 환경 주의: PowerShell에서 npm run test:provider-shadow 실행 시 bash가 WSL로 잡혀 .runtime-cjs가 깨질 수 있음 — `node tests/provider/provider_shadow_gate.cjs --provider <id>` 직접 실행 권장 (.runtime-cjs 재컴파일: Git Bash에서 `tsc -p tsconfig.runtime.json` + `.runtime-cjs/package.json`({"type":"commonjs"}) 존재 확인)
+
+## Pending — 데이터 수령 대기
+- **부산·인제·영천 계획자료 구조화**: 사용자가 자연재해저감 종합계획·하천기본계획 **PDF를 추후 제공** 예정. 수령 후 `data/reference/districts.json`·`rivers.json`·`geo.json`과 동일 스키마로 전사하면 지도 POI 팝업·계획·근거 패널이 그대로 동작한다(코드 변경 불필요). 현재는 의왕 41430(17지구)·구미 47190(6지구)·남원 45190(6지구) + 하천 3개(안양천·구미천·요천)만 커버.
+- 참고: 원시 xlsx(`메타데이터 참고자료(T3Q)/`)에는 전국 재해대장 115,563행·위험지구 약 6,300지구가 있으나 **위험요인 서술·임계값·근거 문서페이지·좌표가 없어** 팝업 수준의 정보를 만들 수 없다(그 정보는 저감계획 PDF 판독에서 나옴). 재해대장은 피해금액·복구비 보강용으로 조인 가능.
 
 ## Pending approval (Seed 불일치 영향범위 보고)
 - `apps/web/public/seed/priority_areas_seed.json`의 `SIT-GM-POC-001`(47190 구미) rank 1이 `spatial_object_id: "GM-A-01"` 참조하나 `geo.json`에 해당 feature 없음(GM 계열은 GM-A-03/04/07, GM-B-10/13, GM-C-01만 존재). 현재 UI 가드로 비차단 안내 처리됨. 근본 수정은 seed 동결 해제 승인 필요 — 택1: (a) geo.json에 GM-A-01 feature 추가, (b) priority_areas_seed의 참조 ID를 기존 ID로 교체
