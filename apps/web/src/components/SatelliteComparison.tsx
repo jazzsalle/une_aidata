@@ -58,7 +58,6 @@ export function SatelliteComparison({ satellites, selectionResults, evidenceSet,
       <p className="compare-note">비교 경계값은 256×256 픽셀 표본을 눈으로 비교하기 위한 참고용 화면값이며 지리면적·침수심·피해 정도를 의미하지 않습니다.</p>
     </section>
     <div className="evidence-action-row"><button type="button" className="primary" disabled={assetIds.length !== 6} onClick={() => evidenceSet&&onAddToReport?.(assetIds, eventId, evidenceSet)}>6개 타일 근거를 보고서에 반영</button>{selected ? <span className="selection-status" role="status">현재 보고서 근거로 선택됨</span> : null}</div>
-    <div className="accessible-data-table-wrap"><table><caption>PRE·EVENT·POST 영상자료 메타데이터</caption><thead><tr><th scope="col">단계</th><th scope="col">선정기준</th><th scope="col">촬영·생성시각</th><th scope="col">목표일 편차</th><th scope="col">자료성격</th><th scope="col">지도 중첩</th></tr></thead><tbody>{phaseAssets.map((item) => <tr key={item.code}><th scope="row">{item.title}</th><td>{item.rule}</td><td>{localDate(item.satellite?.acquired_at)}</td><td>{signed(item.selection?.offset_days_from_target,'일')}</td><td>{item.satellite?.source_type === 'derived_seed_from_pre_post' ? '생성 Seed' : '첨부 참고자료'}</td><td>미적용</td></tr>)}</tbody></table></div>
     <p className="safety-note">본 표본은 부산·인제·영천 자료가 아니며 위치정합·면적계산·피해판정·공식 침수범위 산정에 사용하지 않습니다. 향후 쓰리디랩스 정식 영상과 마스크로 교체합니다.</p>
   </section>;
 }

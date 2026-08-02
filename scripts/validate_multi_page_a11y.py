@@ -26,7 +26,10 @@ for token in ['document.title', 'tabIndex={-1}', '.focus()']:
     assert token in heading, f'missing route focus/title token: {token}'
 
 satellite = (ROOT / 'apps/web/src/components/SatelliteComparison.tsx').read_text(encoding='utf-8')
-for token in ['width="256"', 'alt={`', '<table>', '<caption>', 'scope="col"', 'scope="row"', 'role="status"']:
+# 영상만으로 정보를 전달하지 않도록 이미지 대체텍스트와 텍스트 대안이 남아 있는지 확인한다.
+# 중복이던 메타데이터 표는 제거했고(타일 카드가 단계·선정기준·선정편차·촬영시각·자료성격을 모두 표기),
+# 표 대신 그 텍스트 대안이 실제로 존재하는지를 검사한다.
+for token in ['width="256"', 'alt={`', 'figcaption', 'phase-selection-note', 'phase-rule-summary', 'role="status"']:
     assert token in satellite, f'missing satellite alternative: {token}'
 
 report = (ROOT / 'apps/web/src/components/ReportEditor.tsx').read_text(encoding='utf-8')
