@@ -1,7 +1,7 @@
 from pathlib import Path
 import json, sys
 root=Path(__file__).resolve().parents[1]
-required=['vercel.json','tsconfig.functions.json','api/[...path].ts','server/routes/health.ts','server/routes/v1/situations.ts','server/routes/v1/priority-areas/query.ts','server/domain/priorityAreas.ts','apps/web/src/App.tsx','decisions/ADR-006-vercel-typescript-bff.md','server/routes/v1/t3q/readiness.ts','server/routes/v1/t3q/cq-coverage.ts','server/routes/v1/t3q/search-preview.ts','server/providers/t3qGateway.ts','apps/web/src/components/T3qReadinessPanel.tsx']
+required=['vercel.json','tsconfig.functions.json','api/index.ts','server/routes/health.ts','server/routes/v1/situations.ts','server/routes/v1/priority-areas/query.ts','server/domain/priorityAreas.ts','apps/web/src/App.tsx','decisions/ADR-006-vercel-typescript-bff.md','server/routes/v1/t3q/readiness.ts','server/routes/v1/t3q/cq-coverage.ts','server/routes/v1/t3q/search-preview.ts','server/providers/t3qGateway.ts','apps/web/src/components/T3qReadinessPanel.tsx']
 missing=[p for p in required if not (root/p).exists()]
 for old in ['apps/api','global.json','compose.yaml']:
     if (root/old).exists(): missing.append(f'제거되지 않은 .NET 항목: {old}')

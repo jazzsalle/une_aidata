@@ -3,7 +3,7 @@ const path=require('path');
 const {searchSimilarEvents}=require('../../.runtime-cjs/server/domain/similarEvents.js');
 const {searchT3qPreview}=require('../../.runtime-cjs/server/providers/t3qGateway.js');
 const {POST:reportPost}=require('../../.runtime-cjs/server/routes/v1/reports/drafts.js');
-const catchAll=require('../../.runtime-cjs/api/[...path].js');
+const catchAll=require('../../.runtime-cjs/api/index.js');
 const seed=require('../../.runtime-cjs/server/seeds.js').seed;
 
 function fail(message){throw new Error(message);}
@@ -117,7 +117,7 @@ async function main(){
     result.cq_results.push({cq_id:scenario.cq_id,title:scenario.title,query:scenario.query,event_ids:eventIds,passage_ids:passageIds,schemas:[...new Set(preview.passages.map(p=>p.schema_type))],warnings:preview.warnings});
   }
 
-  // Catch-all(api/[...path]) 디스패치 검증: 정상 200 envelope / 미등록 404 / 메서드 불일치 405
+  // Catch-all(api/index.ts) 디스패치 검증: 정상 200 envelope / 미등록 404 / 메서드 불일치 405
   assert(typeof catchAll.GET==='function'&&typeof catchAll.POST==='function','catch-all: GET/POST 핸들러 미노출');
   const healthResponse=await catchAll.GET(new Request('http://runtime.local/api/health'));
   assert(healthResponse.status===200,`catch-all: /api/health 상태 ${healthResponse.status} != 200`);
