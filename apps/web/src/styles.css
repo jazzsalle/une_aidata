@@ -241,7 +241,9 @@ button:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-
 .site-footer { display: flex; justify-content: space-between; gap: 12px; padding: 10px var(--page-pad); border-top: 1px solid var(--c-line); background: var(--c-surface); color: #5c7084; font-size: var(--fs-xs); }
 
 /* 1열은 사용자가 조절한 폭(--left-panel-w)을 쓰고, 값이 없으면 기본 clamp를 유지한다. */
-.dashboard-grid { min-height: var(--panel-min-h); display: grid; grid-template-columns: var(--left-panel-w, clamp(300px, 19vw, 460px)) 26px minmax(420px, 1fr) clamp(350px, 23.5vw, 560px); gap: var(--sp-gap); }
+/* 사이드 폭은 뷰포트 비례(clamp+vw)를 유지하되 상한을 낮춰, 와이드 모니터에서 늘어나는 여유 폭이
+   중앙 지도 컬럼으로 가게 한다. 좁은 화면(≤1366px)에서는 두 패널 모두 이미 하한이라 변화가 없다. */
+.dashboard-grid { min-height: var(--panel-min-h); display: grid; grid-template-columns: var(--left-panel-w, clamp(300px, 19vw, 340px)) 26px minmax(420px, 1fr) clamp(350px, 23.5vw, 400px); gap: var(--sp-gap); }
 .dashboard-grid > .left-panel, .dashboard-grid > .right-panel, .dashboard-grid > .map-panel { min-height: var(--panel-min-h); }
 
 /* 좌측 패널 폭 조절 구분자: 드래그 외에 버튼·키보드 대체조작을 함께 제공한다. */
