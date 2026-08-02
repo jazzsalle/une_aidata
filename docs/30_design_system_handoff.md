@@ -3,10 +3,27 @@
 | 항목 | 값 |
 |---|---|
 | 대상 코드 | `apps/web` (React 19 + TypeScript + Vite, OpenLayers/VWorld 2D) |
-| 스타일 단일 파일 | `apps/web/src/styles.css` (1,350행 · 전역 CSS 1개, CSS-in-JS·Tailwind 없음) |
+| 스타일 단일 파일 | `apps/web/src/styles.css` (1,464행 · 전역 CSS 1개, CSS-in-JS·Tailwind 없음) |
 | 페이지 | `/` 대시보드 · `/evidence` 근거 · `/report` 보고서 (SPA, `apps/web/src/hooks/useRoute.ts`) |
 | 본문 폰트 | Spoqa Han Sans Neo (self-host, SIL OFL 1.1, `apps/web/public/fonts/*.subset.woff2`) |
 | 작성 기준 | Design v1.8.1 / Source vercel-source-v1.5.1 · 본 문서는 코드를 직접 읽어 전사했다 |
+| 최신화 기준 | 커밋 `4eb2a5f`(2026-08-02) 시점 코드·화면. 아래 "0. 변경 이력" 참조 |
+
+---
+
+## 0. 변경 이력 (문서 최초 작성 이후)
+
+| 커밋 | 변경 | 문서 반영 위치 |
+|---|---|---|
+| `731858c` | 수계마스크 픽셀 분석(면적비·변화율) 제거 — 표출만 유지. 관련 클래스(`.mask-metrics-*`)·OpenAPI 경로(31→30) 삭제 | C-7(마스크 지표 항목 없음), D-4(검증 셀렉터 없음) |
+| `a47b98a` | 사이드 패널 상한 축소 — 좌 `clamp(300px,19vw,460px)`→`…,340px)`, 우 `clamp(350px,23.5vw,560px)`→`…,400px)` | B-6, C-2, D-5 |
+| `83f8e65` | 본문 폭 상한 제거 — `--page-max: 2200px`→`none`, `.page-main`이 `width:100% + max-width:var(--page-max)` | B-3, C-1, D-5(초와이드 실측표) |
+| `41ef80d` | 헤더 1줄 통합 — `.brand-nav-row`+`.context-bar` 2줄 → `.header-row` 1줄, h1이 헤더로 이동(`.app-page-title`), `.page-heading*` 규칙 삭제, `--sticky-offset` 148→78px, `.page-status`가 `<main>` 최상단, E2E 셀렉터 `main h1`→`h1` | B-6, C-1, D-4, D-5 |
+| `72f68ac` | 현재 판단 카드 개편 — `지도에서 보기` 버튼 제거·카드 전체 클릭으로 지도 이동, 지역명 버튼 승격, 재해유형 태그·위치 요약, `상세보기`→모달. 신규 `DistrictDetail.tsx`(지도 팝업 공용), `DetailModal.tsx` | C-5, D-4 |
+| `1a27881` | 피해·대응·복구 근거 재구성 — 원시 JSON `<pre>` 제거, 섹션 제목 `과거 피해·대응·복구 사례`, 금액 억원 환산 병기, 집계 출처 블록, 시설구분별 `<details>` 표, `응답 구조 보기`→공용 `DetailModal` | C-7, D-2, E |
+| `4eb2a5f` | PRE·EVENT·POST 영상자료 메타데이터 표 삭제(타일 카드와 중복) · `validate_multi_page_a11y.py` 위성 검사 토큰을 `figcaption`/`phase-selection-note`/`phase-rule-summary`로 교체 | C-7, D-4-4 |
+
+화면 캡처(`docs/design-handoff/screens/`)는 위 변경을 모두 반영해 **2026-08-02 전량 재촬영**했다(E-2).
 
 ---
 
@@ -25,21 +42,22 @@
 
 ### A-2. 산출물을 받으면 코드에 이렇게 반영된다
 
-1. **토큰표** → `apps/web/src/styles.css`의 `:root` 블록(26–91행) 값만 교체. 토큰명은 유지.
+1. **토큰표** → `apps/web/src/styles.css`의 `:root` 블록(26–95행) 값만 교체. 토큰명은 유지.
 2. **컴포넌트 스펙** → 해당 클래스 규칙의 색·여백·반경·그림자만 조정. 선택자 자체는 유지.
 3. **레이아웃 변경** → C절 인벤토리의 그리드 정의(`.dashboard-grid`, `.report-layout`, `.evidence-page` 등) 값만 조정. D-5의 브레이크포인트 동작을 함께 제시할 것.
 4. 반영 후 `python scripts/smoke_dashboard_console.py` / `smoke_evidence_console.py` / `smoke_report_console.py` / `validate_multi_page_a11y.py` / `npm run test:e2e`를 재실행해 회귀를 확인한다.
 
 ### A-3. 우선순위 (POC1 대비 개선 요청 순)
 
-1. 좌측 AI Agent 대화 영역의 세로 배분 (F-3, F-4)
+1. 좌측 AI Agent 대화 영역의 세로 배분 (F-4)
 2. 지도 팝업 `.map-feature-popup`과 지도 오버레이 요소(연결상태·레이어 칩·베이스맵 스위치)의 층위·회피 규칙 (F-5)
-3. 우측 패널 `계획·근거` 탭의 정보밀도(표·팩트리스트) 가독성 (F-9)
-4. 데이터 상태 배지(`.seed-badge` / `.status-badge` / `.chip`) 체계 통일 및 미정의 변형 보강 (F-1, F-2)
+3. 우측 패널 `계획·근거` 탭과 피해·복구 카드의 정보밀도·열 배분 (F-9, F-15)
+4. 데이터 상태 배지(`.seed-badge` / `.status-badge` / `.chip`) 5종 체계 통일 (F-2 잔여)
+5. 초와이드(2560px 초과) 구간의 지도·패널 밀도 지침 (F-16)
 
 ---
 
-## B. 현재 디자인 토큰 (`apps/web/src/styles.css` `:root`, 26–91행 전사)
+## B. 현재 디자인 토큰 (`apps/web/src/styles.css` `:root`, 26–95행 전사)
 
 > 값은 **실제 파일에서 그대로** 옮겼다. 임의 보정·환산 없음.
 
@@ -56,7 +74,7 @@
 | 토큰 | 현재 값 | 용도 | 주 사용처 |
 |---|---|---|---|
 | `--c-text` | `#142033` | 본문 기본 글자 | `:root color`, `.map-popup-facts dd`, `.plan-fact-list dd`, `.plan-district-detail ul` |
-| `--c-text-strong` | `#123e63` | 제목·강조 글자 | `.app-page-title`(헤더 h1), `.map-popup-head h3`, `.report-doc-title`, `.plan-*-head strong`, `.event-damage-block h4` |
+| `--c-text-strong` | `#123e63` | 제목·강조 글자 | `.app-page-title`(헤더 h1), `.map-popup-head h3`, `.report-doc-title`, `.plan-district-head strong`, `.plan-river-head strong`, `.event-damage-block h4` |
 | `--c-text-muted` | `#5b6f82` | 보조설명·정의어(dt) | `.map-popup-facts dt`, `.plan-summary dt`, `.plan-evidence`, `.plan-station-table caption` |
 | `--c-text-soft` | `#66798b` | 섹션 부연 문구 | `.section-heading-row p`, `.section-heading-row span` |
 | `--c-brand` | `#1769aa` | 주 브랜드·주요 액션 | `.map-popup-badge`, `.map-popup-action`, `.agent-tab-badge`, `.plan-badge.type`, `.report-doc-ranked-item::marker`, `.panel-resizer-handle:hover::before` |
@@ -64,12 +82,12 @@
 | `--c-brand-ink` | `#14486f` | 진한 브랜드 면/글자 | `.agent-turn.user` 배경, `.agent-context-chip` 글자, `button.context-add-button` 글자 |
 | `--c-brand-soft` | `#eef6fc` | 옅은 브랜드 면 | `.agent-turn.assistant` 배경, `.agent-context-chip` 배경, `button.context-add-button` 배경, `.plan-district-toggle:hover` |
 | `--c-brand-line` | `#cfe1ef` | 옅은 브랜드 테두리·구분선 | `.agent-turn.assistant` 테두리, `.agent-turn-summary` 상단선, `.agent-turn-context` 상단선, `.plan-damage-list li` 좌측선 |
-| `--c-surface` | `#fff` | 카드·패널 표면 | `.evidence-section`, `.report-outline/.report-form/.report-preview`, `.map-feature-popup`, `.plan-*-card`, `.suggestion` |
+| `--c-surface` | `#fff` | 카드·패널 표면 | `.evidence-section`, `.report-outline/.report-form/.report-preview`, `.map-feature-popup`, `.plan-district-card`, `.plan-river-card`, `.suggestion` |
 | `--c-surface-alt` | `#f6f8fb` | 보조 표면(푸터바·요약칩) | `.agent-suggestions`, `.agent-context-bar`, `.map-popup-foot`, `.plan-summary > div`, `.plan-source-note` |
 | `--c-bg` | `#eef2f6` | 루트 배경 | `:root background` |
 | `--c-canvas` | `#e8eef4` | 문서(body) 배경 | `body background` |
-| `--c-line` | `#cbd6e2` | 기본 테두리 | `.evidence-section`, `.report-*` 카드, `.map-feature-popup`, `.site-footer` 상단선, `.panel-resizer-handle::before` |
-| `--c-line-soft` | `#d8e2ec` | 내부 구분선 | `.map-popup-head/foot` 경계, `.agent-composer` 상단선, `.plan-*-card` 테두리, `.map-popup-table` 셀선 |
+| `--c-line` | `#cbd6e2` | 기본 테두리 | `.evidence-section`, `.report-outline`·`.report-form`·`.report-preview` 카드, `.map-feature-popup`, `.site-footer` 상단선, `.panel-resizer-handle::before` |
+| `--c-line-soft` | `#d8e2ec` | 내부 구분선 | `.map-popup-head/foot` 경계, `.agent-composer` 상단선, `.plan-district-card`·`.plan-river-card` 테두리, `.map-popup-table` 셀선 |
 | `--c-warn-bg` | `#fff6df` | 경고 면 | `.report-warning`, `.draft-validation` |
 | `--c-warn-line` | `#ebcf82` | 경고 테두리 | `.report-warning`, `.draft-validation`, `.map-popup-flag`, `.damage-quantity-note` |
 | `--c-warn-text` | `#6b4c07` | 경고 글자 | `.agent-turn-confirm`, `.damage-quantity-note` |
@@ -93,7 +111,7 @@
 | `--sp-7` | `30px` | (정의만, 사용처 없음) |
 | `--sp-gap` | `clamp(10px, .78vw, 20px)` | 최상위 그리드 간격 — `.dashboard-grid`, `.evidence-page`, `.report-layout` |
 | `--page-pad` | `clamp(12px, 1.15vw, 32px)` | 페이지 좌우 패딩 — `.page-main`, `.header-row`, `.site-footer` |
-| `--page-max` | `2200px` | 본문 최대폭 — `.page-main { width: min(var(--page-max), 100%) }` |
+| `--page-max` | `none` | 본문 최대폭 **상한 없음**(`83f8e65`) — `.page-main { width:100%; max-width: var(--page-max) }`. 상한을 두면 초와이드에서 좌우 빈 여백만 생기고 지도가 늘어나지 않는다. 사이드 패널은 clamp 상한(340/400px)에서 멈추므로 넓어지는 폭은 전부 중앙 지도로 간다(D-5 실측표) |
 
 ### B-4. 반경·그림자
 
@@ -107,7 +125,7 @@
 | `--sh-1` | `0 1px 4px rgba(27, 54, 86, .08)` | 얕은 그림자 (`.panel-resizer-buttons button`) |
 | `--sh-2` | `0 2px 9px rgba(24, 49, 77, .08)` | 패널 그림자 |
 
-> 실제로는 `.evidence-section`·`.report-*`가 `box-shadow: 0 2px 9px rgba(24,49,77,.06)`을 하드코딩하고, `.map-feature-popup`은 `0 8px 26px rgba(19,43,69,.24)`를 쓴다. **그림자 단계를 3–4단계로 정리한 제안을 권장한다.**
+> 실제로는 `.evidence-section`·`.report-outline`·`.report-form`·`.report-preview`가 `box-shadow: 0 2px 9px rgba(24,49,77,.06)`을 하드코딩하고, `.map-feature-popup`은 `0 8px 26px rgba(19,43,69,.24)`를 쓴다. **그림자 단계를 3–4단계로 정리한 제안을 권장한다.**
 
 ### B-5. 유동 타이포 스케일
 
@@ -118,7 +136,7 @@
 | `--fs-xs` | `clamp(.6875rem, .26vw + .521rem, .9375rem)` | 11.0px | 11.9px | 13.8px | 16.6px | 배지·캡션·표 본문(`.comparison-table`, `.plan-station-table`), `.agent-turn-role/-time`, `.map-popup-flag` |
 | `--fs-sm` | `clamp(.75rem, .26vw + .583rem, 1rem)` | 12.0px | 12.9px | 14.9px | 17.7px | 카드 본문, `.map-popup-facts`, `.seed-badge`, `.panel-tabs button` |
 | `--fs-md` | `clamp(.875rem, .33vw + .667rem, 1.1875rem)` | 14.0px | 15.2px | 17.7px | 21.1px | 대화 본문 `.agent-turn`, `.agent-input`, `.report-preview-doc`, `.global-nav a`, `.map-popup-head h3` |
-| `--fs-lg` | `clamp(1rem, .39vw + .75rem, 1.375rem)` | 16.0px | 17.3px | 20.1px | 24.2px | h2 (`.section-heading-row h2`, `.report-*  h2`, `.report-doc-heading`) |
+| `--fs-lg` | `clamp(1rem, .39vw + .75rem, 1.375rem)` | 16.0px | 17.3px | 20.1px | 24.2px | h2 (`.section-heading-row h2`, `.report-outline h2`·`.report-form h2`·`.report-preview h2`, `.report-doc-heading`) |
 | `--fs-xl` | `clamp(1.1875rem, .59vw + .8125rem, 1.75rem)` | 19.0px | 20.8px | 24.2px | 30.5px | `.report-doc-title` |
 
 h1은 상단 여백 축소를 위해 헤더 한 줄(`.header-row`) 안에 배치되며 `.app-page-title { font-size: var(--fs-sm); font-weight:750 }`을 쓴다(별도 축소 분기 없음).
@@ -130,8 +148,8 @@ h1은 상단 여백 축소를 위해 헤더 한 줄(`.header-row`) 안에 배치
 | 토큰 | 현재 값 | 용도 |
 |---|---|---|
 | `--panel-min-h` | `clamp(620px, 70vh, 1040px)` | 대시보드 3패널 높이 (≥1600px: `clamp(660px,72vh,1080px)`, ≥2000px: `clamp(700px,74vh,1160px)`) |
-| `--sticky-offset` | `148px` | sticky 요소 상단 오프셋 — `.report-outline`, `.report-preview`, `.page-subnav`(−16px) (≥1600px: 160 / ≥2000px: 172 / ≥2400px: 184) |
-| `--left-panel-w` | (기본값 없음) | **런타임 주입** — `PanelResizer.tsx`가 인라인으로 넣는다. 없으면 `.dashboard-grid`가 `clamp(300px, 19vw, 460px)` 사용 |
+| `--sticky-offset` | `78px` | sticky 요소 상단 오프셋 — `.report-outline`, `.report-preview`, `.page-subnav`(−16px) (≥1600px: 160 / ≥2000px: 172 / ≥2400px: 184). 헤더 1줄 통합(`41ef80d`)으로 148→78px. **확대 브레이크포인트 값(160/172/184)은 실측 헤더 높이 59–69px과 크게 어긋난다 → F-14** |
+| `--left-panel-w` | (기본값 없음) | **런타임 주입** — `PanelResizer.tsx`가 인라인으로 넣는다. 없으면 `.dashboard-grid`가 `clamp(300px, 19vw, 340px)` 사용 |
 | `--map-popup-tail-x` | 기본 `20px` | **런타임 주입** — `MapPanel.tsx`가 말풍선 꼬리 x좌표를 px로 넣는다 |
 
 ### B-7. 타이포 스케일 — **디자인 확정 대기 (결정 지점)**
@@ -148,7 +166,7 @@ h1은 상단 여백 축소를 위해 헤더 한 줄(`.header-row`) 안에 배치
 
 | 교체 지점 | 위치 | 내용 |
 |---|---|---|
-| 유동 타이포 5개 | `apps/web/src/styles.css` `:root` (B-5 표) | `--fs-xs|sm|md|lg|xl` 의 `clamp(최소, vw기울기 + rem기준, 최대)` |
+| 유동 타이포 5개 | `apps/web/src/styles.css` `:root` (B-5 표) | `--fs-xs` `--fs-sm` `--fs-md` `--fs-lg` `--fs-xl` 의 `clamp(최소, vw기울기 + rem기준, 최대)` |
 | 루트 배율 3개 | `apps/web/src/styles.css` 확대 브레이크포인트 | `:root { font-size: 106.25% / 112.5% / 118.75% }` (≥1600 / ≥2000 / ≥2400px) |
 
 **요청 형식**: 완성 CSS가 아니라 **type scale**(크기·행간·자간·굵기)과 **뷰포트별 기준값**
@@ -156,6 +174,8 @@ h1은 상단 여백 축소를 위해 헤더 한 줄(`.header-row`) 안에 배치
 
 **축소하더라도 지켜야 할 것**: rem 기반 유지(1.4.4), 대비 AA, 320px reflow 가로 스크롤 0,
 터치타깃 44px. 작은 글씨에 연회색 조합 금지(D-1 참조).
+
+**참고**: 본문 폭 상한(`--page-max`)이 `none`이 되면서(`83f8e65`) 초와이드에서 늘어나는 폭은 전부 중앙 지도로 간다. 루트 배율만 커지고 글자가 함께 커지므로, 3840px에서도 좌우 패널 폭은 340/400px로 고정된 채 글자만 19px 기준으로 커진다는 점을 배율 제안 시 함께 고려한다.
 
 ---
 
@@ -165,6 +185,8 @@ h1은 상단 여백 축소를 위해 헤더 한 줄(`.header-row`) 안에 배치
 
 ### C-1. 공통 셸 (`App.tsx`, `AppHeader.tsx`, `PageHeading.tsx`)
 
+> 헤더는 `41ef80d`에서 2줄(`.brand-nav-row` + `.context-bar`)에서 **1줄(`.header-row`)**로 합쳤고, `.page-heading*` 규칙과 큰 제목 블록은 삭제했다. h1은 헤더 안 `.app-page-title`이며 `.page-status`는 `<main>` 최상단에 있다. 실측 헤더 높이 59px(1366·1920px) / 65–69px(2560px 이상), 1920px 기준 콘텐츠 시작 y좌표 81px.
+
 | 클래스 | 역할 | 상태 변형 |
 |---|---|---|
 | `.app-shell.multi-page-shell` | 최상위 셸. `min-height:100vh`, `grid-template-rows: auto 1fr auto` | — |
@@ -172,12 +194,13 @@ h1은 상단 여백 축소를 위해 헤더 한 줄(`.header-row`) 안에 배치
 | `.skip-link` | 본문 바로가기. 평소 `translateY(-180%)`로 숨김 | `:focus` → `translateY(0)` |
 | `.header-row` | 브랜드+페이지명(h1) · 현재상황 컨텍스트 · 전역 내비를 한 줄로 배치(`flex-wrap`) | 폭이 부족하면 자동 줄바꿈, ≤900px 세로 스택 |
 | `.brand-block` | 서비스명(`strong`) + 페이지명 h1(`.app-page-title`) | ≤900px 전체폭 |
+| `.app-page-title` | 페이지 h1 (`PageHeading.tsx`, `tabIndex={-1}`, 라우트 변경 시 초점 이동). `--fs-sm`, `font-weight:750`, `--c-text-strong` | **F** 라우트 이동 후 포커스 링 |
 | `.global-nav` | `<nav aria-label="주요 메뉴">` | `a:hover` 배경 `#eef5fa` / `a[aria-current="page"]` **C**: 글자 `#0d5e97`, 배경 `#e9f3fa`, 테두리 `#8cbadb` |
 | `.context-bar` | 지역·기준시각·모드·재난유형 + 상황뷰 저장. `.header-row` 안의 flex 묶음 | 폭이 부족하면 wrap, ≤900px 전체폭 (D-5) |
 | `.context-select` / `.context-item` | 셀렉트 / 읽기전용 값 (`span` 라벨 + `strong` 값, 가로 배치) | 모든 폭에서 표시 유지, ≤560px 항목별 전체폭 |
 | `.secondary-action` | 헤더 보조 버튼(상황뷰 저장) | — |
-| `.page-main` | `width: min(--page-max, 100%)`, `padding: --page-pad` | ≤560px `padding:12px` |
-| `.page-status` | 라우트 상태 알림 (`role="status"`), `<main>` 최상단, 녹색 계열 | `color:#245b35 !important` 하드 지정 |
+| `.page-main` | `width:100%; max-width: var(--page-max)`(현재 `none` = 상한 없음), `margin:0 auto`, `padding: --page-pad` | ≤560px `padding:12px` |
+| `.page-status` | 라우트 상태 알림 (`role="status"`), `<main>` 최상단(h1 아님), `max-width: min(760px,100%)`, 녹색 계열 | `color:#245b35 !important` 하드 지정 · 알림이 있을 때만 렌더 |
 | `.site-footer` | 하단 상태문구 2개 | ≤900px 세로 스택 |
 | `.global-error` | 전역 오류 배너 (`position:fixed; top:75px; 중앙`) | — |
 
@@ -185,7 +208,7 @@ h1은 상단 여백 축소를 위해 헤더 한 줄(`.header-row`) 안에 배치
 
 | 클래스 | 역할 | 상태 변형 |
 |---|---|---|
-| `.dashboard-grid` | 4열: `var(--left-panel-w, clamp(300px,19vw,460px))` / `26px`(구분자) / `minmax(420px,1fr)`(지도) / `clamp(350px,23.5vw,560px)`(우측) | ≥1281px: `height: var(--panel-min-h)` 고정, 각 패널 자체 스크롤 / ≤1280px: 2열 / ≤900px: 1열 |
+| `.dashboard-grid` | 4열: `var(--left-panel-w, clamp(300px,19vw,340px))` / `26px`(구분자) / `minmax(420px,1fr)`(지도) / `clamp(350px,23.5vw,400px)`(우측). 사이드 상한을 낮춰(`a47b98a`) 넓어지는 폭이 중앙 지도로 간다 | ≥1281px: `height: var(--panel-min-h)` 고정, 각 패널 자체 스크롤 / ≤1280px: 2열 / ≤900px: 1열 |
 | `.panel-resizer` | 좌측 패널 폭 조절 구분자 컬럼 | `.dragging` → 핸들 색 `--c-brand` / ≤1280px `display:none` |
 | `.panel-resizer-handle` | `role="separator"`, `tabIndex=0`, `cursor:col-resize`. 4px 세로 바(`::before`) | **H**/`.dragging` → `::before` 배경 `--c-brand` |
 | `.panel-resizer-buttons` | 좁히기·넓히기·기본값 버튼 3개 (각 26×44px) | **H** → 배경 `--c-brand-soft` |
@@ -221,10 +244,10 @@ h1은 상단 여백 축소를 위해 헤더 한 줄(`.header-row`) 안에 배치
 | `.agent-context-chips` / `.agent-context-chip` | 선택 대상 칩 목록 | 종류별: `.kind-district`(파랑) / `.kind-similar_event`(노랑) / `.kind-river`(청록) |
 | `.agent-context-chip-text` | 칩 텍스트 (`nowrap` + `ellipsis`) | — |
 | `.agent-context-remove` | 칩 제거 버튼 44×44 원형 | **H** → 배경 `rgba(19,74,114,.14)` |
-| `.agent-input` | 질의 textarea, `min-height:120px` | ≤860px(높이) 92px / ≥1600px 132px / ≥2000px 150px |
+| `.agent-input` | 질의 textarea, `min-height:120px` | ≤860px(높이) `min-height:88px` + `height:88px`(rows=6 고유높이를 이기려면 height 병기 필요) / ≥1600px 132px / ≥2000px 150px |
 | `.agent-composer-hint` | "Ctrl(⌘)+Enter로 전송합니다." | — |
 | `.agent-send` | 질의 실행 버튼 (`.primary.full.agent-send`) | **D** 전송 중·상황 미선택 |
-| `.agent-suggestions` | 추천질문 `<details>`. `max-height:40%` | 첫 질문 후 자동 접힘(`open=false`) / ≤860px(높이) `max-height:32%` |
+| `.agent-suggestions` | 추천질문 `<details>`. `max-height:40%` | 첫 질문 후 자동 접힘(`open=false`) / ≤860px(높이) `max-height:22%` |
 | `.agent-suggestion-list` | `repeat(auto-fit, minmax(150px,1fr))` 자동 2열 | — |
 | `.suggestion` | 추천질문 버튼 (`min-height:44px`) | **H** → 테두리 `#9cc4e5`, 배경 `#f5faff` |
 | `.status-banner.scenario` / `.hybrid` | 입력 탭 상단 모드 배너 (노랑 / 파랑) | — |
@@ -262,22 +285,26 @@ h1은 상단 여백 축소를 위해 헤더 한 줄(`.header-row`) 안에 배치
 | `.map-popup-disclaimer` | **"본 요약은 … 공식 위험등급 판정이나 피해예측이 아닙니다."** | 삭제·축약 금지 (D-2) |
 | `.map-popup-tail` | 말풍선 꼬리. `left: var(--map-popup-tail-x, 20px)` | above=아래꼬리 / below=위꼬리 / side=`display:none` |
 
-### C-5. 대시보드 우측 — 판단 패널 (`InsightPanel.tsx`)
+### C-5. 대시보드 우측 — 판단 패널 (`InsightPanel.tsx`, `DetailModal.tsx`, `DistrictDetail.tsx`)
+
+> `72f68ac`에서 위험지구 상세 마크업을 `DistrictDetail.tsx`(`districtFactRows`, `DistrictDetailSections`, `FactList`)로 분리해 **지도 POI 팝업과 상세보기 모달이 한 파일을 공용**한다. 상세 표현을 바꾸면 두 화면에 동시에 반영된다.
 
 | 클래스 | 역할 | 상태 변형 |
 |---|---|---|
 | `.panel-tabs.compact` | 4열 탭바 (`현재 판단`/`유사사례`/`대응절차`/`계획·근거`) | `button.active` **A** |
 | `.notice-card.warning` | 노란 경고 카드 (현재 판단·계획근거 탭 상단) | — |
 | `.notice-card.info` | 유사사례 탭 상단 카드 | **CSS 규칙 없음 → F-1 참조** |
-| `.priority-card` | 우선 확인지역 카드 (`32px + 1fr` 그리드) | — |
-| `.rank` | 순위 원형 배지 (28px, 브랜드색) | — |
-| `.priority-title` | 지역명 버튼 + 점수 (`span`이 `#c84b42` 굵게) | — |
-| `button.priority-name-button` | 지역명 버튼(지도 이동 키보드 진입점) | **H** → 배경 `--c-brand-soft`, 밑줄 |
-| `.priority-tags` / `.priority-tag` / `.priority-location` | 재해유형 태그 + 위치 요약(계획문서 판독값 매칭 시에만 표시) | — |
-| `.card-action-row` | 카드 하단 버튼 줄 | — |
-| `button.priority-detail-button` | "상세보기"(공용 상세 모달 열기, 44px) | **H** → 배경 `#dcecf9`, 테두리 `#7fb2dc` |
-| `.priority-card` (카드 전체) | 마우스 클릭 시 지도 이동 | **H** 배경 `#f5fafd` / **F** `:focus-within` 브랜드 테두리 |
-| `.detail-modal-overlay` / `.detail-modal` | 상세보기 모달(지도 팝업과 같은 `map-popup-*` 본문 재사용) | — |
+| `.priority-card` | 우선 확인지역 카드 (`32px + 1fr` 그리드, `cursor:pointer`). **카드 전체가 지도 이동 클릭영역**(`72f68ac`, `지도에서 보기` 버튼은 삭제됨) | **H** 테두리 `#9cc4e5` + 배경 `#f5fafd` / **F** `:focus-within` 테두리 `--c-brand` + `0 0 0 2px rgba(23,105,170,.18)` |
+| `.rank` | 순위 원형 배지 (28px, 브랜드색). 비인터랙티브 영역 → 스모크가 이 좌표를 눌러 카드 클릭을 검증 | — |
+| `.priority-body` | 카드 본문 열 (`min-width:0`) | — |
+| `.priority-title` | 지역명 버튼 + 점수 (`span`이 `#c84b42` 굵게, `justify-content:space-between`) | — |
+| `button.priority-name-button` | 지역명 버튼 = **키보드 지도 이동 진입점**(`aria-label="{지역명} 지도에서 보기"`, `min-height:32px`, 배경 투명). `.priority-card button`(0,1,1)을 이기려고 요소+클래스 선택자 | **H** → 배경 `--c-brand-soft`, 글자 `--c-brand-ink`, 밑줄 |
+| `.priority-tags` / `.priority-tag` / `.priority-location` | 재해유형 태그(알약, `--c-brand-soft`/`#9cc4e5`) + 위치 요약(`--c-text-muted`). **계획문서 판독값이 코드로 매칭될 때만** 렌더 | 매칭 실패 시 태그·위치 미표시 |
+| `.card-action-row` | 카드 하단 버튼 줄 (`flex-wrap`, `gap: --sp-2`) | — |
+| `button.priority-detail-button` | "상세보기" — 공용 상세 모달 열기 (44px, `--fs-xs`, 배경 `#edf5fb`). 카드 클릭과 겹치지 않도록 `stopPropagation` | **H** → 배경 `#dcecf9`, 테두리 `#7fb2dc` |
+| `.detail-modal-overlay` | 모달 배경 (`position:fixed; inset:0; z-index:90`, `rgba(12,30,48,.48)`, 중앙 정렬). 배경 클릭 시 닫힘 | ≤720px 하단 정렬 + 패딩 축소 |
+| `.detail-modal` | 상세보기 창 (`role="dialog" aria-modal="true" tabIndex=-1`, `width:min(560px,100%)`, `max-height:min(82vh,780px)`). 열 때 초점 이동·Tab 가둠·Esc 닫기·트리거 초점 복귀(`DetailModal.tsx`) | ≤720px `max-height:88vh` |
+| `.detail-modal-head` / `-body` / `-foot` | 창 틀만 정의하고 **본문은 지도 팝업의 `map-popup-head/body/badge/close/facts/section/list/table/foot/disclaimer`를 그대로 재사용**한다(같은 시각언어 유지) | `-body`만 스크롤, `-foot`은 `position:static` |
 | `button.context-add-button` | "질의에 참조" (요소+클래스 선택자로 특이성 확보) | **H** → 배경 `#dcecf9`, 테두리 `#7fb2dc` |
 | `.event-list` / `.event-card-row` | 유사사례 목록 / 카드+참조버튼 한 쌍 | — |
 | `.event-card` | 유사사례 카드 버튼 | **S** `.selected`: 테두리 `#1769aa` + `0 0 0 2px rgba(23,105,170,.12)` |
@@ -341,13 +368,14 @@ h1은 상단 여백 축소를 위해 헤더 한 줄(`.header-row`) 안에 배치
 | `.evidence-set-alert` | **대상지역 일치 여부 안내**(`role="note"`, 노랑) | 삭제 금지 (D-2) |
 | `.evidence-set-summary` | 사건·기간·자산·Provider 요약 3열 | ≤900px 1열 |
 | `.summary-definition-list` | 정의 목록 4열 | ≤900px 1열 |
-| `.accessible-data-table-wrap` | 표 가로 스크롤 래퍼 | — |
-| `.phase-rule-summary` | PRE/EVENT/POST 선정 규칙 안내(`role="note"`) | — |
+| `.accessible-data-table-wrap` | 표 가로 스크롤 래퍼. 현재 사용처는 **증거세트 자산 무결성 표(`EvidenceSetSelector`의 `<details>` 안)** 한 곳뿐이다(`4eb2a5f`로 위성 메타데이터 표가 삭제됨) | — |
+| `.phase-rule-summary` | PRE/EVENT/POST 선정 규칙 안내(`role="note"`). 메타데이터 표 삭제 후 **규칙 설명의 유일한 텍스트 대안**이며 `validate_multi_page_a11y.py`가 존재를 검사한다 | 삭제 금지 (D-4-4) |
 | `.flood-phase-grid` | 3단계 카드 3열 | ≤1100px 1열 |
 | `.flood-phase-card` | 단계 카드 | — |
 | `.phase-selection-note` | **선정편차 ±N일 · 선정사유**(연파랑 소형 박스) | 삭제 금지 (D-4 검증 대상) |
 | `.phase-tile-pair` | 위성영상 + 수계마스크 세로 2장 | ≤1100px 2열 / ≤620px 1열 |
 | `.phase-tile-pair img` | **256×256 고정** (`width:256px; height:256px`, 검은 배경, 회색 테두리) | ≤620px `width:min(256px,100%); aspect-ratio:1/1` |
+| `.phase-tile-pair figcaption` | 자료종류·촬영시각·자료성격(‘PRE·POST 기반 생성 Seed’ 등). **메타데이터 표를 삭제(`4eb2a5f`)한 뒤 이 캡션이 타일별 텍스트 대안**이다 | 삭제 금지 (D-4-4) |
 | `.satellite-compare-tool` | PRE·EVENT 비교 도구 섹션 | — |
 | `.compare-mode-fieldset` | 좌우 비교 / 스와이프 라디오 (`label min-height:44px`) | ≤560px wrap |
 | `.compare-side-pair` | 좌우 비교 2열 (`minmax(0,256px)` 고정) | ≤620px 1열 |
@@ -360,12 +388,22 @@ h1은 상단 여백 축소를 위해 헤더 한 줄(`.header-row`) 안에 배치
 | `.evidence-action-row` | 근거 반영 버튼 줄 | — |
 | `.selection-status` | "보고서 근거로 선택됨" (`role="status"`, 녹색 굵게) | 선택 시에만 렌더 |
 | `.seed-badge` | **Seed·비공식 상태 배지** (노랑 알약, `min-height:32px`) | 삭제·축약 금지 (D-2) |
-| `.damage-event-grid` / `.damage-event-card` | 과거 피해·대응·복구 사례 카드 | — |
-| `.damage-event-card > header` | 사건명·일자·행정명 + 유사도 점수 | ≤560px 세로 스택 |
-| `.damage-columns` | 피해참고/대응이력/복구이력 3열 (`1.25fr 1fr 1fr`) | ≤900px 1열 |
-| `.damage-event-card > footer` | **"현재 피해예측 아님" / "담당자 검토 필요" / "향후 T3Q Provider 교체"** 배지 + 반영 토글 | 배지 삭제 금지 (D-2) |
+| `.damage-event-grid` / `.damage-event-card` | 과거 피해·대응·복구 사례 카드 (`DamageRecoveryEvidence.tsx`). 섹션 제목은 **"과거 피해·대응·복구 사례"**(`1a27881`) | — |
+| `.damage-event-card > header` | 사건명·일자·행정명 + 유사도 점수 (연파랑 머리말) | ≤560px 세로 스택 |
+| `.damage-columns` | 피해 규모 / 대응 이력 / 복구 이력 3열 (`minmax(0,1.7fr) minmax(0,1fr) minmax(0,1fr)`) | ≤900px 1열 |
+| `.damage-summary` | 첫 열 본문(`h3` 피해 규모 · 집계 출처) | `h3 + h3` 간격 14px |
+| `.damage-amount-list` / `-label` / `-value` | 피해금액·복구비 카드 목록 (`auto-fit minmax(210px,1fr)`, 좌측 4px `#2b6796`). 값은 **억원 환산 + 재해대장 원값(천원) 병기** | 지자체 보고=중앙 확정이면 2줄로 합쳐 표기 |
+| `.damage-scope-note` | "공공시설 재해대장(피해시설 단위) 집계 — 인명피해·사유재산 피해는 포함하지 않음" 등 집계 범위 문구 | 삭제 금지 (D-2) |
+| `.damage-no-quantity` | "정량 피해수치 미확보 — 기록 서술만 확인됨" 점선 상자 | 재해대장 집계가 없을 때 |
+| `.damage-quantity-facts` / `.damage-source-facts` | `map-popup-facts` 재사용 정의목록 — 정량 항목 / **집계 출처**(출처 문서·매칭 재난·대상 시군구·집계 건수·확정 단계·집계 범위) | 집계가 있을 때만 출처 블록 |
+| `.damage-description` | 사건 서술 문단 | — |
+| `.damage-facility-details` | 시설구분별 피해·복구 내역 `<details>` (`summary` 44px) + 내부 `.table-scroll .comparison-table` | 열림/닫힘 |
+| `.damage-history` / `.damage-history-empty` | 대응·복구 이력 `ol` / "기록 미확보" 문구 | 기록 없으면 문구만 |
+| `.damage-card-tools` / `.damage-structure-button` / `.damage-structure-hint` | **"응답 구조 보기"** 버튼 줄(44px) + 안내문. 원시 JSON `<pre>`를 카드 본문에서 걷어내고 모달로 옮겼다 | — |
+| `.structure-json` | 모달 안 원시 응답 `<pre>` (`max-height:260px`, 가로 넘침 방지) | `DetailModal` 안에서만 |
+| `.damage-event-card > footer` | **"현재 피해예측 아님" / "과거 확정 집계"\|"시연 Seed 기록" / "담당자 검토 필요"** 배지 + 반영 토글 | 배지 삭제 금지 (D-2) |
 | `.damage-event-card footer button` | 보고서 참고사례 반영 토글 (`aria-pressed`) | **P** 라벨이 "보고서 근거에서 제외"로 변경 |
-| `.safety-note` | 위성 섹션 하단 대상지역·용도 제한 문구 | 삭제·축약 금지 (D-2) |
+| `.safety-note` | 위성 섹션 / 피해·복구 섹션 하단 사용제한 문구 | 삭제·축약 금지 (D-2) |
 
 ### C-8. 보고서 페이지 `/report` (`ReportEditor.tsx`)
 
@@ -449,7 +487,10 @@ h1은 상단 여백 축소를 위해 헤더 한 줄(`.header-row`) 안에 배치
 | `.safety-note` (보고서) | "과거 참고정보이며 권고 조치나 자동 결정이 아닙니다. 담당자 확인이 필요합니다." |
 | `.compare-note` | "…지리면적·침수심·피해 정도를 의미하지 않습니다." |
 | `.damage-quantity-note` | "정량 피해수치 미확보 …" / "기록값 표시(과거 실적이며 현재 피해예측이 아닙니다)." |
-| `.damage-event-card > footer` | "현재 피해예측 아님" / "담당자 검토 필요" / "향후 T3Q Provider 교체" |
+| `.damage-event-card > footer` | "현재 피해예측 아님" / "과거 확정 집계"\|"시연 Seed 기록" / "담당자 검토 필요" |
+| `.damage-scope-note` (피해·복구) | "공공시설 재해대장(피해시설 단위) 집계 — 인명피해·사유재산 피해는 포함하지 않음" 등 Seed 원문 집계범위 |
+| `.safety-note` (피해·복구) | "표시 금액은 과거 재해대장 확정 집계이며 현재 사건의 피해예측이 아닙니다. 시군구 전체 합계라서 위험지구 단위 금액이 아니고, 담당자 검토 후 사용해야 합니다." |
+| `DetailModal` footNote (응답 구조) | "이 창은 화면 표시용 정리 이전의 원시 응답 구조를 그대로 보여주는 개발·연계계약 검증용 보기입니다. 현재는 Mock/Seed 응답이며 향후 T3Q NDMS Provider 응답으로 교체됩니다." |
 | `.badge-row` (대응절차) | "대상지 공식 아님" / "담당자 확인 필요" |
 | `.report-warning` | "NDMS 자동등록과 공식 보고 승인은 수행하지 않습니다." |
 | `.report-doc-note` | "본 문서는 담당자 검토용 초안이며 NDMS 자동 제출 또는 공식 피해예측 결과가 아닙니다." |
@@ -473,6 +514,17 @@ h1은 상단 여백 축소를 위해 헤더 한 줄(`.header-row`) 안에 배치
 
 > 아래 목록은 `scripts/smoke_dashboard_console.py`, `scripts/smoke_evidence_console.py`, `scripts/smoke_report_console.py`, `scripts/validate_multi_page_a11y.py`, `tests/e2e/*.spec.ts`에서 직접 뽑았다. **이 문서의 핵심이다.**
 
+#### D-4-0. 스모크 시나리오 구성 (스텝 번호 = 아래 표의 참조 열)
+
+| 스크립트 | 스텝 |
+|---|---|
+| `smoke_dashboard_console.py` (S1–S11) | S1 진입·title / S2–S4 지역 전환 3회 / S5 조건 입력·재산정 / S6 우측 4탭 전환 / **S7 카드 클릭 지도 이동(존재 ID)** / **S8 카드 클릭(미존재 ID 비차단 안내)** / S9 유사사례 선택·상세 / S10 T3Q Mock 검색 / **S11 상세보기 모달 열기·동일 상세 확인·Esc·초점 복귀** |
+| `smoke_evidence_console.py` (S1–S9) | S1 진입·title·h1 / S2 타일 6개 256×256 / S3 `phase-selection-note` 3건 / S4 mock 배지·안전문구 / S5 6개 타일 반영 / S6 침수흔적 토글 / S7 사례 반영 토글 / S8 `/report` 이동·근거 반영 / S9 reload 복원 |
+| `smoke_report_console.py` (S1–S8) | S1 근거 준비 / S2 이동·근거 요약 / S3 유사도 요약·Seed 배지 / S4 대응비교 표 / S5 Passage / S6 초안 검증 / S7 저장·다운로드 버튼 / S8 reload 복원 |
+| `tests/e2e/*.spec.ts` | `multi-page-navigation`(3라우트 title·**단일 `h1`**·내비 이동) · `accessibility-navigation`(내비 링크, 키보드 도달, 비교 대체조작) |
+
+모든 스모크의 공통 PASS 조건: **console error 0 · pageerror 0 · `/api` 요청 0**(FORCE_SEED).
+
 #### D-4-1. 클래스·ID 셀렉터
 
 | 셀렉터 | 참조하는 검증 | 용도 |
@@ -480,8 +532,9 @@ h1은 상단 여백 축소를 위해 헤더 한 줄(`.header-row`) 안에 배치
 | `.context-select select` / `… option` | dashboard, evidence | 지역·상황 셀렉트, 옵션 수 = Seed 상황 수 |
 | `.priority-card` | dashboard | 우선 확인지역 카드 존재 |
 | `.priority-card .priority-title strong` | dashboard | 1위 지역명 텍스트 일치 |
-| `.priority-card` 카드 클릭(순위 배지 좌표) | dashboard | 지도 하이라이트 실행 |
-| `.priority-card .priority-detail-button` / `.detail-modal[role="dialog"]` | dashboard S11 | 상세보기 모달 열기·Esc 닫기·초점 복귀 |
+| `.priority-card` 카드 클릭 — 좌표 `(x:14, y:14)` = `.rank` 배지 영역 | dashboard S7/S8 | 카드 onClick으로 지도 하이라이트 실행. **비인터랙티브 좌표를 눌러야 하므로 카드 좌상단 32px 영역에 새 컨트롤을 넣지 말 것** |
+| `.priority-card button` (텍스트 `지도에서 보기`) | dashboard S7/S8 | **0건이어야 PASS** — 버튼 방식으로 되돌리면 실패 |
+| `.priority-card .priority-detail-button` / `.detail-modal[role="dialog"]`(+`aria-modal="true"`) | dashboard S11 | 상세보기 모달 열기 · 본문에 `위험요인`·`위험조건 임계값`·`시행·사업`·`공식 위험등급 판정이나 피해예측이 아닙니다` 포함 · Esc 닫기 · `document.activeElement`가 `.priority-detail-button`으로 복귀 |
 | `.map-highlight-notice` | dashboard S7/S8 | 존재 ID면 **없어야**, 미존재 ID면 **있어야** 함 |
 | `.page-status` (+ `:has-text(…)`) | dashboard, evidence | 라우트 상태 알림 |
 | `#situation-panel-input` / `#situation-panel-agent` | dashboard | 좌측 탭 패널 id |
@@ -515,7 +568,7 @@ h1은 상단 여백 축소를 위해 헤더 한 줄(`.header-row`) 안에 배치
 | `.draft-validation-list li` / `.draft-validation-ok` | report S6 | 경고 목록 / 누락 없음 |
 | `.report-actions button` (`브라우저에 저장`) / `.report-actions button.primary` (`Markdown 다운로드`) | report S7 | 액션 버튼 |
 | `.sr-only[aria-live="polite"]` | report S7 | 저장 상태 알림 |
-| `h1` (**정확히 1개**, 헤더 안) | e2e | 페이지별 단일 h1 |
+| `h1` (**정확히 1개**, `.header-row` 안의 `.app-page-title`) | evidence S1, e2e | 문서 단일 h1 · 텍스트 일치. `41ef80d`에서 셀렉터가 `main h1` → `h1`로 바뀌었으므로 **h1을 다시 본문으로 내리거나 2개로 늘리면 실패** |
 
 #### D-4-2. ARIA·role 셀렉터
 
@@ -523,7 +576,7 @@ h1은 상단 여백 축소를 위해 헤더 한 줄(`.header-row`) 안에 배치
 |---|---|
 | `role="tab"` name `현재 판단` / `유사사례` / `대응절차` / `계획·근거` | dashboard S6/S9 |
 | `role="button"` name `현재 조건 적용·재산정` | dashboard S5 |
-| `role="navigation"` name `주요 메뉴` (또는 `/주요|전역/`) | e2e |
+| `role="navigation"` name `주요 메뉴` (또는 정규식 `주요` 또는 `전역`) | e2e |
 | `role="link"` name `피해·변화 근거` / `상황보고서 초안` (`/피해.*변화/`) | e2e |
 | `role="radio"` name `좌우 비교` / `스와이프` | e2e a11y |
 | `role="slider"` name `/비교 경계 위치/` | e2e a11y |
@@ -542,7 +595,9 @@ h1은 상단 여백 축소를 위해 헤더 한 줄(`.header-row`) 안에 배치
 | `3시간 강우` / `12시간 강우` / `수위` / `유량` / `현장징후` | 좌측 입력 라벨 (`label:has-text`) | dashboard S5 |
 | `현재 조건 적용·재산정` | 버튼 | dashboard S5 |
 | `현재 조건을 적용하고` | `.page-status` | dashboard S5 |
-| `상세보기` | 버튼 | dashboard S11 |
+| `상세보기` | `.priority-detail-button` 라벨 (검증은 클래스 기준, 라벨은 화면 문구) | dashboard S11 |
+| `위험요인` / `위험조건 임계값` / `시행·사업` / `공식 위험등급 판정이나 피해예측이 아닙니다` | 상세보기 모달 본문에 **모두 포함되어야 함**(지도 팝업과 동일 상세) | dashboard S11 |
+| `응답 구조 보기` / `데이터 연계 점검용 원시 응답 구조를 창으로 확인합니다.` | 피해·복구 카드 도구줄 | (마크업) |
 | `Mock 검색` / `Event Master` | T3Q 패널 | dashboard S10 |
 | `선정편차 ±N일 · …` + (`가장 가까운 유효 후보` \| `EVENT 유효구간`) | `.phase-selection-note` (정규식) | evidence S3 |
 | `대상지역 외` / `공식자료 아님` / `실제 NDMS 자료 아님` | 배지 | evidence S4 |
@@ -574,7 +629,7 @@ h1은 상단 여백 축소를 위해 헤더 한 줄(`.header-row`) 안에 배치
 | `hooks/useRoute.ts` | `path: '/'`, `path: '/evidence'`, `path: '/report'` |
 | `components/AppHeader.tsx` | `skip-link`, `aria-label="주요 메뉴"`, `aria-current` |
 | `components/PageHeading.tsx` | `document.title`, `tabIndex={-1}`, `.focus()` |
-| `components/SatelliteComparison.tsx` | `width="256"`, `alt={\``, `<table>`, `<caption>`, `scope="col"`, `scope="row"`, `role="status"` |
+| `components/SatelliteComparison.tsx` | `width="256"`, `alt={\``, `figcaption`, `phase-selection-note`, `phase-rule-summary`, `role="status"` — **`4eb2a5f`에서 표 검사(`<table>`/`<caption>`/`scope`) 대신 타일 캡션·선정규칙 텍스트 대안을 검사하도록 교체** |
 | `components/ReportEditor.tsx` | `<label`, `aria-live="polite"`, `Markdown 다운로드`, `ndms`(대소문자 무시) |
 
 ### D-5. 반응형 브레이크포인트 (`styles.css` 실제 미디어쿼리 전수)
@@ -591,7 +646,7 @@ h1은 상단 여백 축소를 위해 헤더 한 줄(`.header-row`) 안에 배치
 | `≤620px` | `.phase-tile-pair` 1열 + 이미지 `aspect-ratio:1/1` · `.compare-side-pair` 1열 |
 | `≤560px` | `.page-main` `padding:12px` · `.context-item` 전체폭 · `.field-grid` 1열 · `.report-preview-doc` `max-height:none` · `.plan-summary` 1열 · `.compare-mode-fieldset`·`.quick-position`·`.integration-status li`·`.t3q-readiness-toggle`·`.mock-search-header` wrap · `.damage-event-card > header` 세로 · 각종 `min-width:0` 해제 |
 | `≤400px` | `.agent-turn` 100% · `.global-nav a` `flex:1 1 100%`(1줄 1항목) · `.compare-swipe-quick`·`.badge-row` wrap · `.map-popup-facts`·`.plan-fact-list`·`.damage-fact-list`·`.condition-fact-list` 1열 · `.map-popup-*`·`.plan-district-*`·`.plan-river-card` 좌우 패딩 축소 |
-| `높이 ≤860px` | `.agent-composer` 패딩 축소 · `.agent-input` `min-height:92px` · `.agent-suggestions` `max-height:32%` |
+| `높이 ≤860px` | `.agent-composer` 패딩 축소 · `.agent-input` `min-height:88px` + `height:88px` · `.agent-suggestions` `max-height:22%` · `.agent-thread` 패딩 축소 · `.agent-thread-intro` 패딩·행간 축소 |
 | `높이 ≤850px` | (legacy `.app-shell` 행 높이) · `.map-canvas` `min-height:350px` |
 
 #### 확대 방향
@@ -604,7 +659,20 @@ h1은 상단 여백 축소를 위해 헤더 한 줄(`.header-row`) 안에 배치
 | `≥2400px` | 루트 `118.75%` · `--sticky-offset:184px` · `.map-canvas` 680px · `.readiness-dimensions` 6열 |
 | `prefers-reduced-motion: reduce` | `scroll-behavior:auto` · 모든 애니메이션·트랜지션 `.01ms` |
 
-**설계 폭 범위: 320px ~ 2560px(상황실 대형 모니터).** 주 사용 환경은 1366×768 노트북과 1920×1080 상황실 모니터다.
+#### 폭에 따른 실제 배분 (2026-08-02 Playwright 실측, `/` 대시보드)
+
+`--page-max: none`(`83f8e65`) + 사이드 clamp 상한(`a47b98a`) 조합의 결과다. **넓어지는 폭은 전부 중앙 지도로 간다.**
+
+| 뷰포트 | 루트 폰트 | 헤더 높이 | 본문 시작 y | 좌 패널 | **지도** | 우 패널 | 가로 스크롤 |
+|---|---|---|---|---|---|---|---|
+| 320×900 | 16px | 362px(세로 스택) | 374px | 296 | 296(1열) | 296 | 없음 |
+| 1366×768 | 16px | 59px | 75px | 300 | **627** | 350 | 없음 |
+| 1920×1080 | 17px | 59px | 81px | 340 | **1,065** | 400 | 없음 |
+| 2560×1440 | 19px | 65px | 95px | 340 | **1,675** | 400 | 없음 |
+| 3388×1440 | 19px | 69px | 101px | 340 | **2,498** | 400 | 없음 |
+| 3840×2160 | 19px | 69px | 101px | 340 | **2,950** | 400 | 없음 |
+
+**설계 폭 범위: 320px ~ 3840px(초와이드 포함, 기준 검증은 2560px까지).** 주 사용 환경은 1366×768 노트북과 1920×1080 상황실 모니터다.
 
 ---
 
@@ -622,41 +690,48 @@ h1은 상단 여백 축소를 위해 헤더 한 줄(`.header-row`) 안에 배치
 
 FORCE_SEED(`VITE_USE_SEED_DIRECTLY=true`, VWorld 키 미설정) dev 서버 + Playwright(Chromium)로 촬영. **지도 배경타일이 없는 seed-only 상태**이므로 실제 운영에서는 VWorld 2D 타일이 깔린다.
 
+**전량 2026-08-02 재촬영**(헤더 1줄 통합·카드 개편·피해카드 재구성·위성 메타표 삭제 반영). 이전 캡처(헤더 2줄·큰 제목·JSON 덤프·마스크 픽셀표)는 남아 있지 않다.
+
 | 파일 | 뷰포트/대상 | 보여주는 상태 | 용량 |
 |---|---|---|---|
-| `01-dashboard-1920.jpg` | 1920×1080 뷰포트 | 대시보드 기본. 4열 그리드(좌측 입력탭 / 리사이저 / 지도 / 우측 현재 판단), 우선 확인지역 2건, 레이어 칩 10개 | 135 KB |
-| `02-dashboard-1366.jpg` | 1366×768 뷰포트 | 노트북 기준. **지도 하단 레이어 칩과 좌측 패널 하단(적용 버튼)이 첫 화면에서 잘림** | 86 KB |
-| `03-dashboard-320.jpg` | 320×900 뷰포트 | 320px reflow. 내비 세로 스택, `.context-bar` 세로, `.dashboard-grid` 1열. 가로 스크롤 없음 | 36 KB |
-| `04-agent-chat.jpg` | `.left-panel` 요소 (1600×1500 창) | AI Agent 탭. **질문 2턴 + 답변 2턴**, 탭 배지 `2`, `함께 전달한 선택 대상` 2건, 컴포저 상단 컨텍스트 칩 2개(district/similar_event), 추천질문 자동 접힘 | 59 KB |
-| `05-map-popup-district.jpg` | `.map-panel` 요소 (1920×1080 창) | 위험지구 팝업 열림(`.map-feature-popup.district.place-above`). 팩트리스트·위험요인·임계값표·CTA·면책문구. **팝업이 좌상단 연결상태 배지와 좌하단 레이어 칩을 덮는다** | 60 KB |
-| `06-insight-plan-tab.jpg` | `.right-panel` 요소 (1600×1500 창) | 계획·근거 탭. 유형 필터로 1개소로 좁힌 뒤 **지구 카드 펼침 상태의 하단부**(시행·사업 팩트리스트·피해이력·근거·질의에 참조) + 하천기본계획 카드 + **지점별 계획홍수량 표** | 74 KB |
-| `07-evidence-1920.jpg` | 1920×5994 전체 페이지 | 근거 페이지 전체. 증거세트 선택 → PRE/EVENT/POST 3카드(각 256×256 위성+마스크) → 좌우·스와이프 비교 → 침수흔적 지도 → 피해·대응·복구 카드 5건. **주의: 이 캡처는 2026-08-02 개정 이전 화면이라 비교 도구 아래에 지금은 삭제된 "마스크 픽셀표"가 남아 있다. 재촬영 필요** | 377 KB |
-| `08-report-1920.jpg` | 1920×1582 전체 페이지 | 보고서 페이지 3열. 목차/편집 폼(선택근거 요약·초안 검증 경고 2건)/문서형 미리보기 | 163 KB |
-| `09-map-satellite.jpg` | `.map-panel` 요소 | 영상지도 모드의 **벡터 배색 변화**(청록 하천·노랑 POI·흑백 외곽선). 어두운 위성타일 전제 배색 | 49 KB |
+| `01-dashboard-1920.jpg` | 1920×1080 뷰포트 | 대시보드 기본. **헤더 1줄**(브랜드+h1 / 지역·기준시각·모드·재난유형 / 내비), 4열 그리드(좌 340 / 리사이저 / 지도 1,065 / 우 400), 우선 확인지역 2건(재해유형 태그·위치 요약·`상세보기`·`질의에 참조`), 레이어 칩 10개가 **잘리지 않고 모두 보인다** | 140 KB |
+| `02-dashboard-1366.jpg` | 1366×768 뷰포트 | 노트북 기준. 헤더 59px, 지도·레이어 칩·우선 확인지역 2건이 첫 화면에 들어온다. 남는 잘림은 **좌측 패널 내부 스크롤 하단(적용 중인 조건·재산정 버튼)** | 97 KB |
+| `03-dashboard-320.jpg` | 320×900 뷰포트 | 320px reflow. 헤더 세로 스택(362px), `.dashboard-grid` 1열, 가로 스크롤 없음 | 33 KB |
+| `04-agent-chat.jpg` | `.left-panel` 요소 (1600×1150 창) | AI Agent 탭 · 2턴 대화 후 스레드를 두 번째 질문 위치로 스크롤한 상태. 사용자 말풍선의 `함께 전달한 선택 대상` 2건, 탭 배지 `2`, 컴포저 컨텍스트 칩 2개(district/similar_event), 추천질문 접힘. **스레드 가시높이가 답변 1건도 못 담는다(F-4)** | 40 KB |
+| `05-map-popup-district.jpg` | `.map-panel` 요소 (1920×1080 창) | 위험지구 팝업 열림(`.map-feature-popup.district.place-above`). 팩트리스트·위험요인·임계값표·저감대책·CTA·면책문구. **팝업이 좌상단 연결상태 배지와 좌하단 레이어 칩을 덮는다(F-5)** | 60 KB |
+| `06-insight-plan-tab.jpg` | `.right-panel` 요소 (1600×1150 창) | 계획·근거 탭 상단. 요약 2칸(위험지구 수·총사업비) + 재해유형 필터 칩 4개 + **지구 카드 펼침**(위험요인·임계값표·저감대책·사업/시행). 하천 카드·지점별 계획홍수량 표는 같은 탭 아래쪽에 있다 | 50 KB |
+| `07-evidence-1920.jpg` | 1920×6208 전체 페이지 | 근거 페이지 전체. 증거세트 → PRE/EVENT/POST 3카드(각 256×256 위성+마스크) → 좌우·스와이프 비교 → 침수흔적 지도 → 과거 피해·대응·복구 사례 5건. **메타데이터 표·마스크 픽셀표는 없다** | 365 KB |
+| `08-report-1920.jpg` | 1920×1288 전체 페이지 | 보고서 페이지 3열. 목차/편집 폼(선택근거 요약·초안 검증 경고 2건)/문서형 미리보기. 미리보기 본문이 중간에서 끊긴다(F-8) | 150 KB |
+| `09-map-satellite.jpg` | `.map-panel` 요소 (1920×1080 창) | 영상지도 모드의 **벡터 배색 변화**(청록 하천·노랑 POI·흑백 외곽선). 어두운 위성타일 전제 배색 | 49 KB |
+| `10-priority-detail-modal.jpg` | `.detail-modal` 요소 (1600×1150 창) | **신규.** 현재 판단 카드 `상세보기` 모달. 순위·상대점수·공간객체 ID·위치/재해유형 등 팩트 → 우선 확인 사유 → 담당자 확인 필요 항목 → 계획문서 판독 상세(지도 팝업과 동일 컴포넌트) → 하단 면책문구 | 46 KB |
+| `11-damage-recovery-card.jpg` | `.damage-event-card` 첫 카드 clip (1920×1400 창) | **신규.** 재구성된 피해·복구 카드. 금액 카드 4장(억원+천원 병기), 집계 범위·서술, 집계 출처 6행, `시설구분별 …보기` details, `응답 구조 보기` 버튼, 하단 배지 3종+반영 토글. **대응·복구 열이 "기록 미확보"뿐이라 우측 2/3가 비어 보인다(F-15)** | 90 KB |
 
-합계 **1,040 KB / 9개 파일** (파일당 400KB 이하, 총 4MB 이하 충족). 07은 전체 페이지 높이가 5,994px이라 용량 제한을 맞추기 위해 JPEG 품질을 낮췄다(레이아웃 참조용).
+합계 **1,126 KB / 11개 파일** (파일당 400KB 이하, 총 4.5MB 이하 충족). 07은 전체 페이지 높이가 6,208px이라 용량 제한을 맞추려고 JPEG 품질을 낮췄다(레이아웃 참조용).
 
 ---
 
 ## F. 미해결 · 디자인 판단이 필요한 지점
 
-> 문서 작성 중 **코드와 캡처에서 실제로 확인한 것만** 적었다.
+> 문서 작성 중 **코드와 캡처에서 실제로 확인한 것만** 적었다. 해결된 항목은 지우지 않고 **해결 표시**로 남겨 이력을 유지한다.
 
-| # | 사안 | 확인 근거 | 요청 |
+| # | 사안 | 확인 근거 | 요청 / 상태 |
 |---|---|---|---|
-| F-1 | **`.notice-card.info` 스타일 부재.** `InsightPanel.tsx` 유사사례 탭이 `<div className="notice-card info">`를 쓰는데 `styles.css`에는 `.notice-card.warning`만 있다 → 배경·테두리 없이 padding만 적용 | `styles.css` 142–144행 / `InsightPanel.tsx` 153행 | info 계열(정보) 알림 스타일 정의 |
-| F-2 | **`.status-badge.derived` / `.status-badge.error` 스타일 부재.** `T3qReadinessPanel.tsx`의 `badgeClass()`가 `derived`/`error`를 반환하고 `IntegrationStatusPanel.tsx`도 `derived`를 쓰지만 CSS는 `.actual`/`.provisional`만 정의 | `styles.css` 368행 / `T3qReadinessPanel.tsx` 278행 | 상태 배지 5종(actual/derived/provisional/pending/error) 색 체계 정의 |
-| F-3 | **1366×768에서 첫 화면 정보 손실.** 헤더(브랜드행+컨텍스트바) + `.page-heading`이 약 260px를 쓰고 `--panel-min-h`가 `70vh≈538px`로 잡혀, 지도 하단 레이어 칩과 좌측 패널 하단 버튼이 접힌다 | `02-dashboard-1366.jpg` | **해결됨**: 헤더를 한 줄(`.header-row`)로 합치고 `.page-heading` 블록을 제거해 1920px 기준 콘텐츠 시작 y좌표 267px→81px |
-| F-4 | **좌측 대화 영역 협소.** `.agent-suggestions max-height:40%`(≤860px 높이는 32%) + `.agent-input min-height:120px`(92px) + `.agent-context-bar`가 컴포저에 붙어, 1100px 창에서 `.agent-thread`에 남는 높이가 답변 1건도 못 담는다 | `styles.css` 589–639행, 754–759행 / 초기 04 캡처 | 스레드 우선 세로 배분안(컴포저 접기/자동 높이 등) |
-| F-5 | **지도 팝업이 지도 오버레이 요소를 가린다.** 팝업 `z-index:5`(인라인) > `.map-connection`·`.map-layer-chips` `z-index:3`, `.map-basemap-switch` `z-index:4`. 좌상단 연결상태·좌하단 레이어 칩이 실제로 덮인다 | `styles.css` 959–961행 / `05-map-popup-district.jpg` | 팝업 회피 규칙 또는 오버레이 재배치안 |
+| F-1 | ~~`.notice-card.info` 스타일 부재~~ | `styles.css` 151–152행 | **해결됨**: `.notice-card.info { background: var(--c-brand-soft); border:1px solid #9cc8e8; color: var(--c-brand-ink) }`(본문 대비 8.79:1). 팔레트 제안 시 warning/info 두 톤을 함께 정의해 주면 된다 |
+| F-2 | ~~`.status-badge.derived` / `.error` 스타일 부재~~ | `styles.css` 436–439행 | **해결됨**: `.derived`=중립 토큰(대비 7.04:1), `.error`=`#ffe9e7/#8b211b`(7.75:1). 남은 요청은 **actual/derived/provisional/pending/error 5종을 하나의 체계로 재정의**하는 것 |
+| F-3 | **1366×768 첫 화면 정보 손실** | `41ef80d` / `02-dashboard-1366.jpg` / 실측(D-5) | **해결됨**: 헤더 1줄 통합 + 큰 제목 블록 제거로 1920px 기준 콘텐츠 시작 y좌표 **267px→81px**, 헤더 높이 59px. 잔여는 좌측 패널 내부 스크롤 하단(재산정 버튼)뿐이며 이는 F-4 배분 문제 |
+| F-4 | **좌측 대화 영역 협소.** `.agent-suggestions max-height:40%`(높이 ≤860px는 22%) + `.agent-input min-height:120px`(≤860px는 88px 고정) + `.agent-context-bar`가 컴포저에 붙어, 1150px 창에서도 `.agent-thread` 가시영역이 답변 1건을 못 담는다 | `styles.css` 680–687행, 831–837행 / `04-agent-chat.jpg` | 스레드 우선 세로 배분안(컴포저 접기/자동 높이 등) |
+| F-5 | **지도 팝업이 지도 오버레이 요소를 가린다.** 팝업 `z-index:5`(인라인) > `.map-connection`·`.map-layer-chips` `z-index:3`, `.map-basemap-switch` `z-index:4`. 좌상단 연결상태·좌하단 레이어 칩이 실제로 덮인다(z-index 역전은 닫기버튼이 가려져 불가 — `styles.css` 442–447행 주석) | `styles.css` 1036–1038행 / `05-map-popup-district.jpg` | 팝업 회피 규칙 또는 오버레이 재배치안 |
 | F-6 | **영상지도 벡터 배색의 대비.** 영상지도 전환 시 하천 청록·POI 노랑·경계 흑백으로 바뀌는데, 이는 어두운 위성타일 전제다. VWorld 키 미설정(seed-only)이나 밝은 타일 위에서는 대비가 낮다 | `VWorldMapAdapter.ts` `StyleContext.satellite` / `09-map-satellite.jpg` | 두 베이스맵 모두에서 AA를 만족하는 벡터 배색 |
 | F-7 | **256px 고정 타일 주변 여백.** `.phase-tile-pair img`·`.compare-side-pair img`가 256px 고정이라 1920px에서 카드 오른쪽에 넓은 빈 공간이 남는다. **타일 크기는 규칙상 변경 불가(D-3)**이므로 카드·그리드 폭 쪽에서 풀어야 한다 | `07-evidence-1920.jpg` | 타일 카드의 폭·정렬·부가정보 배치안 |
-| F-8 | **보고서 미리보기 잘림.** `.report-preview-doc { max-height: calc(100vh - 245px) }`로 문서가 중간에서 끊기고 우측 컬럼 아래에 빈 공간이 생긴다 | `styles.css` 648–649행 / `08-report-1920.jpg` | sticky 유지 여부 포함한 미리보기 높이 전략 |
-| F-9 | **좁은 패널에서 표·칩 가독성.** `.comparison-table`·`.plan-station-table`이 `--fs-xs`(11–15px)에 `.table-scroll` 가로 스크롤 의존. `.agent-context-chip-text`는 `nowrap+ellipsis`라 "요천지구 · 3시간 강우 시나리오가 호…"처럼 잘린다 | `styles.css` 439, 1175, 1291행 / `04`, `06` 캡처 | 좁은 컬럼 전용 표·칩 표현(2줄 허용, 카드형 전환 등) |
+| F-8 | **보고서 미리보기 잘림.** `.report-preview-doc { max-height: calc(100vh - 245px) }`로 문서가 중간에서 끊기고 우측 컬럼 아래에 빈 공간이 생긴다. 헤더가 59px로 줄어든 뒤에도 상수 `245px`는 그대로다 | `styles.css` 722–723행 / `08-report-1920.jpg` | sticky 유지 여부 포함한 미리보기 높이 전략(상수 재산정 포함) |
+| F-9 | **좁은 패널에서 표·칩 가독성.** `.comparison-table`·`.plan-station-table`이 `--fs-xs`(11–15px)에 `.table-scroll` 가로 스크롤 의존. 우측 패널 상한이 400px로 낮아져(`a47b98a`) 폭 여유가 더 줄었다. `.agent-context-chip-text`는 `nowrap+ellipsis`라 "요천지구 · 3시간 강우 시나리오가 호…"처럼 잘린다 | `styles.css` 513, 1290–1296, 1406행 / `04`, `06` 캡처 | 좁은 컬럼 전용 표·칩 표현(2줄 허용, 카드형 전환 등) |
 | F-10 | **미사용 legacy CSS.** `.topbar`/`.top-field`, `.app-shell` 행 정의, `.bottom-workspace`/`.bottom-tabs`, `.satellite-grid`, `.timeline`, `.swipe-wrap`/`.swipe-image`/`.swipe-divider`, `.change-workspace`/`.change-toolbar`/`.segmented`, `.comparison-grid`/`.trace-grid`, `.map-key-notice`, `.global-notice`, `.empty-state`, `.quick-position`, `.chip.pending`이 현재 3페이지 마크업에 없다(`TopBar.tsx`는 `App.tsx`에서 import되지 않음) | `apps/web/src` 전수 grep | 새 시스템에서 제외할지 확인 (정리는 별도 태스크) |
-| F-11 | **`body { min-width }` 중복 정의.** 94행 `1180px` → 199행 `320px`로 재정의. 후자가 유효하지만 상충 규칙이 남아 있다 | `styles.css` 94, 199행 | 320px 단일 기준으로 정리 |
-| F-12 | **h1 포커스 링이 초기 화면에 보인다.** 캡처의 h1 주위 주황 외곽선은 dev의 React StrictMode 이중 effect로 `PageHeading`의 `isInitialLoadRef` 가드가 무력화된 것이다. 운영 빌드에서는 재현되지 않을 가능성이 높다 | `main.tsx` StrictMode / `PageHeading.tsx` 70–79행 / `01`,`02`,`03`,`08` 캡처 | 캡처 판독 시 참고 (디자인 결함 아님) |
-| F-13 | **토큰화되지 않은 색이 많다.** `.priority-title span`(#c84b42), `.rank`, `.procedure-card`(#3b87bd), `.seed-badge`(#fff3d5/#664b06/#e6ca78), `.status-badge`, `.map-connection` 상태점 4색, `.agent-turn-notes.warnings`(#fff4d9/#e2c274) 등 | `styles.css` 전반 | B-2 표에 이 값들을 흡수하는 팔레트 제안 |
+| F-11 | ~~`body { min-width }` 중복 정의~~ | `styles.css` 98–99행(주석), 244행 | **해결됨**: 99행에서 `min-width` 선언을 제거하고 244행 `body { min-width: 320px }` 하나만 남겼다 |
+| F-12 | **h1 포커스 링이 초기 화면에 보인다.** 캡처의 h1(`.app-page-title`) 주위 주황 외곽선은 dev의 React StrictMode 이중 effect로 `PageHeading`의 `isInitialLoadRef` 가드가 무력화된 것이다. 운영 빌드에서는 재현되지 않을 가능성이 높다 | `main.tsx` StrictMode / `PageHeading.tsx` 13–22행 / `01`,`02`,`08` 캡처 | 캡처 판독 시 참고 (디자인 결함 아님) |
+| F-13 | **토큰화되지 않은 색이 많다.** `.priority-title span`(#c84b42), `.rank`, `.priority-tag`·`.priority-detail-button`(#9cc4e5/#edf5fb/#dcecf9/#7fb2dc), `.procedure-card`(#3b87bd), `.seed-badge`(#fff3d5/#664b06/#e6ca78), `.map-connection` 상태점 4색, `.agent-turn-notes.warnings`(#fff4d9/#e2c274), `.damage-amount-list`(#2b6796/#f5f9fc/#14405f) 등 | `styles.css` 전반 | B-2 표에 이 값들을 흡수하는 팔레트 제안 |
+| F-14 | **`--sticky-offset` 확대값이 실제 헤더 높이와 어긋난다.** 헤더 1줄화로 실측 높이가 59–69px인데 `≥1600px`부터 160/172/184px를 쓴다(기본값만 78px로 조정됨). `/report` 목차·미리보기와 `/evidence` `.page-subnav`가 필요 이상으로 아래에서 고정된다 | `styles.css` 94, 851/859/869행 / 실측(D-5) | 헤더 높이에 맞춘 sticky offset 재정의(또는 헤더 높이를 CSS 변수로 노출) |
+| F-15 | **피해·복구 카드의 3열 배분 불균형.** `.damage-columns`가 `1.7fr 1fr 1fr`인데 Seed 사례 다수가 대응·복구 이력 `미확보`라 1920px에서 우측 2/3이 거의 빈 채로 남는다 | `styles.css` 337행 / `11-damage-recovery-card.jpg` | 이력 유무에 따른 열 배분·빈 상태 표현안(빈 열 축약, 2열 전환 등) |
+| F-16 | **초와이드에서 지도만 커진다.** `--page-max: none`(`83f8e65`) 이후 3840px에서 지도 폭 2,950px, 좌우 패널은 340/400px 고정이다. 지도 정보밀도(POI 크기·라벨·칩)와 좌우 패널 여백 정책이 정해져 있지 않다 | 실측(D-5) / `01-dashboard-1920.jpg` | 2560px 초과 구간의 지도 오버레이·패널 밀도 지침 |
 
 ---
 
