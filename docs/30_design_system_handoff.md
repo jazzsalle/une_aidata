@@ -56,8 +56,8 @@
 | 토큰 | 현재 값 | 용도 | 주 사용처 |
 |---|---|---|---|
 | `--c-text` | `#142033` | 본문 기본 글자 | `:root color`, `.map-popup-facts dd`, `.plan-fact-list dd`, `.plan-district-detail ul` |
-| `--c-text-strong` | `#123e63` | 제목·강조 글자 | `.page-heading h1`, `.map-popup-head h3`, `.report-doc-title`, `.plan-*-head strong`, `.event-damage-block h4` |
-| `--c-text-muted` | `#5b6f82` | 보조설명·정의어(dt) | `.page-heading p`, `.map-popup-facts dt`, `.plan-summary dt`, `.plan-evidence`, `.plan-station-table caption` |
+| `--c-text-strong` | `#123e63` | 제목·강조 글자 | `.app-page-title`(헤더 h1), `.map-popup-head h3`, `.report-doc-title`, `.plan-*-head strong`, `.event-damage-block h4` |
+| `--c-text-muted` | `#5b6f82` | 보조설명·정의어(dt) | `.map-popup-facts dt`, `.plan-summary dt`, `.plan-evidence`, `.plan-station-table caption` |
 | `--c-text-soft` | `#66798b` | 섹션 부연 문구 | `.section-heading-row p`, `.section-heading-row span` |
 | `--c-brand` | `#1769aa` | 주 브랜드·주요 액션 | `.map-popup-badge`, `.map-popup-action`, `.agent-tab-badge`, `.plan-badge.type`, `.report-doc-ranked-item::marker`, `.panel-resizer-handle:hover::before` |
 | `--c-brand-deep` | `#154b7a` | 주요 액션 hover | `.map-popup-action:hover` |
@@ -65,7 +65,7 @@
 | `--c-brand-soft` | `#eef6fc` | 옅은 브랜드 면 | `.agent-turn.assistant` 배경, `.agent-context-chip` 배경, `button.context-add-button` 배경, `.plan-district-toggle:hover` |
 | `--c-brand-line` | `#cfe1ef` | 옅은 브랜드 테두리·구분선 | `.agent-turn.assistant` 테두리, `.agent-turn-summary` 상단선, `.agent-turn-context` 상단선, `.plan-damage-list li` 좌측선 |
 | `--c-surface` | `#fff` | 카드·패널 표면 | `.evidence-section`, `.report-outline/.report-form/.report-preview`, `.map-feature-popup`, `.plan-*-card`, `.suggestion` |
-| `--c-surface-alt` | `#f6f8fb` | 보조 표면(헤더바·푸터바·요약칩) | `.context-bar`, `.agent-suggestions`, `.agent-context-bar`, `.map-popup-foot`, `.plan-summary > div`, `.plan-source-note` |
+| `--c-surface-alt` | `#f6f8fb` | 보조 표면(푸터바·요약칩) | `.agent-suggestions`, `.agent-context-bar`, `.map-popup-foot`, `.plan-summary > div`, `.plan-source-note` |
 | `--c-bg` | `#eef2f6` | 루트 배경 | `:root background` |
 | `--c-canvas` | `#e8eef4` | 문서(body) 배경 | `body background` |
 | `--c-line` | `#cbd6e2` | 기본 테두리 | `.evidence-section`, `.report-*` 카드, `.map-feature-popup`, `.site-footer` 상단선, `.panel-resizer-handle::before` |
@@ -92,7 +92,7 @@
 | `--sp-6` | `22px` | (정의만, 사용처 없음) |
 | `--sp-7` | `30px` | (정의만, 사용처 없음) |
 | `--sp-gap` | `clamp(10px, .78vw, 20px)` | 최상위 그리드 간격 — `.dashboard-grid`, `.evidence-page`, `.report-layout` |
-| `--page-pad` | `clamp(12px, 1.15vw, 32px)` | 페이지 좌우 패딩 — `.page-main`, `.brand-nav-row`, `.context-bar`, `.site-footer` |
+| `--page-pad` | `clamp(12px, 1.15vw, 32px)` | 페이지 좌우 패딩 — `.page-main`, `.header-row`, `.site-footer` |
 | `--page-max` | `2200px` | 본문 최대폭 — `.page-main { width: min(var(--page-max), 100%) }` |
 
 ### B-4. 반경·그림자
@@ -121,7 +121,7 @@
 | `--fs-lg` | `clamp(1rem, .39vw + .75rem, 1.375rem)` | 16.0px | 17.3px | 20.1px | 24.2px | h2 (`.section-heading-row h2`, `.report-*  h2`, `.report-doc-heading`) |
 | `--fs-xl` | `clamp(1.1875rem, .59vw + .8125rem, 1.75rem)` | 19.0px | 20.8px | 24.2px | 30.5px | `.report-doc-title` |
 
-h1은 토큰이 아니라 `.page-heading h1 { font-size: clamp(22px, 2.2vw, 38px) }`이며, 560px 이하에서 `clamp(20px, 6vw, 26px)`로 축소된다.
+h1은 상단 여백 축소를 위해 헤더 한 줄(`.header-row`) 안에 배치되며 `.app-page-title { font-size: var(--fs-sm); font-weight:750 }`을 쓴다(별도 축소 분기 없음).
 
 **루트 폰트 배율**(rem 기반 토큰이 함께 커진다): `≥1600px` → `106.25%`, `≥2000px` → `112.5%`, `≥2400px` → `118.75%`. clamp의 `vw` 성분과 이 배율이 **곱해져** 넓은 화면에서 증가폭이 커진다 — B-7 참조.
 
@@ -170,15 +170,14 @@ h1은 토큰이 아니라 `.page-heading h1 { font-size: clamp(22px, 2.2vw, 38px
 | `.app-shell.multi-page-shell` | 최상위 셸. `min-height:100vh`, `grid-template-rows: auto 1fr auto` | — |
 | `.site-header` | sticky 상단 헤더 (`top:0`, `z-index:20`) | ≤900px에서 `position:static` |
 | `.skip-link` | 본문 바로가기. 평소 `translateY(-180%)`로 숨김 | `:focus` → `translateY(0)` |
-| `.brand-nav-row` | 로고 + 전역 내비 한 줄 | ≤900px 세로 스택 |
-| `.brand-block` | 서비스명 + 부제 (`strong` + `span`) | — |
+| `.header-row` | 브랜드+페이지명(h1) · 현재상황 컨텍스트 · 전역 내비를 한 줄로 배치(`flex-wrap`) | 폭이 부족하면 자동 줄바꿈, ≤900px 세로 스택 |
+| `.brand-block` | 서비스명(`strong`) + 페이지명 h1(`.app-page-title`) | ≤900px 전체폭 |
 | `.global-nav` | `<nav aria-label="주요 메뉴">` | `a:hover` 배경 `#eef5fa` / `a[aria-current="page"]` **C**: 글자 `#0d5e97`, 배경 `#e9f3fa`, 테두리 `#8cbadb` |
-| `.context-bar` | 지역·기준시각·모드·재난유형 + 상황뷰 저장. 5열 그리드 | 1280/900/560px에서 열 수 축소 (D-5) |
-| `.context-select` / `.context-item` | 셀렉트 / 읽기전용 값 (`span` 라벨 + `strong` 값) | `.context-item:nth-of-type(4)`는 ≤1280px에서 `display:none`, ≤560px에서 다시 `display:flex !important` |
+| `.context-bar` | 지역·기준시각·모드·재난유형 + 상황뷰 저장. `.header-row` 안의 flex 묶음 | 폭이 부족하면 wrap, ≤900px 전체폭 (D-5) |
+| `.context-select` / `.context-item` | 셀렉트 / 읽기전용 값 (`span` 라벨 + `strong` 값, 가로 배치) | 모든 폭에서 표시 유지, ≤560px 항목별 전체폭 |
 | `.secondary-action` | 헤더 보조 버튼(상황뷰 저장) | — |
 | `.page-main` | `width: min(--page-max, 100%)`, `padding: --page-pad` | ≤560px `padding:12px` |
-| `.page-heading` | h1 + 설명 + 상태문구 좌우 배치 | ≤900px 세로 스택 |
-| `.page-status` | 라우트 상태 알림 (`role="status"`), 녹색 계열 | `color:#245b35 !important` 하드 지정 |
+| `.page-status` | 라우트 상태 알림 (`role="status"`), `<main>` 최상단, 녹색 계열 | `color:#245b35 !important` 하드 지정 |
 | `.site-footer` | 하단 상태문구 2개 | ≤900px 세로 스택 |
 | `.global-error` | 전역 오류 배너 (`position:fixed; top:75px; 중앙`) | — |
 
@@ -511,7 +510,7 @@ h1은 토큰이 아니라 `.page-heading h1 { font-size: clamp(22px, 2.2vw, 38px
 | `.draft-validation-list li` / `.draft-validation-ok` | report S6 | 경고 목록 / 누락 없음 |
 | `.report-actions button` (`브라우저에 저장`) / `.report-actions button.primary` (`Markdown 다운로드`) | report S7 | 액션 버튼 |
 | `.sr-only[aria-live="polite"]` | report S7 | 저장 상태 알림 |
-| `main h1` (**정확히 1개**) | e2e | 페이지별 단일 h1 |
+| `h1` (**정확히 1개**, 헤더 안) | e2e | 페이지별 단일 h1 |
 
 #### D-4-2. ARIA·role 셀렉터
 
@@ -579,13 +578,13 @@ h1은 토큰이 아니라 `.page-heading h1 { font-size: clamp(22px, 2.2vw, 38px
 
 | 조건 | 동작 |
 |---|---|
-| `≤1280px` | `.panel-resizer` 숨김 · `.dashboard-grid` → `290px minmax(430px,1fr)` 2열, `.right-panel` 전체폭(`min-height:420px`) · `.report-layout` → `200px 1fr`, `.report-preview` 전체폭·`static` · `.context-bar` 4열 · `.context-item:nth-of-type(4)`(재난유형) 숨김 |
+| `≤1280px` | `.panel-resizer` 숨김 · `.dashboard-grid` → `290px minmax(430px,1fr)` 2열, `.right-panel` 전체폭(`min-height:420px`) · `.report-layout` → `200px 1fr`, `.report-preview` 전체폭·`static` |
 | `≤1100px` | `.flood-phase-grid` 1열 + `.phase-tile-pair` 2열 · `.readiness-dimensions` 2열 · `.cq-coverage ol` 1열 |
 | `≤1000px` | (legacy) `.satellite-compare.split`·`.comparison-grid.detailed` 1열 |
-| `≤900px` | `.site-header` `static` · `.brand-nav-row`·`.page-heading` 세로 스택 · `.global-nav` 전체폭(링크 `flex:1 1 180px`) · `.context-bar` 2열(셀렉트 전체폭) · `.dashboard-grid` 1열(각 패널 `min-height:520px`) · `.comparison-controls`·`.damage-columns`·`.summary-definition-list`·`.report-layout` 1열 · `.report-outline`·`.report-preview`·`.page-subnav` `static` · `.site-footer` 세로 · `.evidence-map-grid` 1열 · `.mock-search-controls`·`.mock-result-grid` 1열 · `.evidence-set-summary` 1열, `.evidence-set-select` 세로 · `.panel-scroll.agent-chat` `min-height:520px` · `.agent-turn` 94% |
+| `≤900px` | `.site-header` `static` · `.header-row` 세로 스택(`.brand-block`·`.context-bar` 전체폭) · `.global-nav` 전체폭(링크 `flex:1 1 180px`) · `.context-select` 전체폭 · `.dashboard-grid` 1열(각 패널 `min-height:520px`) · `.comparison-controls`·`.damage-columns`·`.summary-definition-list`·`.report-layout` 1열 · `.report-outline`·`.report-preview`·`.page-subnav` `static` · `.site-footer` 세로 · `.evidence-map-grid` 1열 · `.mock-search-controls`·`.mock-result-grid` 1열 · `.evidence-set-summary` 1열, `.evidence-set-select` 세로 · `.panel-scroll.agent-chat` `min-height:520px` · `.agent-turn` 94% |
 | `≤700px` | `.readiness-dimensions` 1열 · `.consultation-items ul` 1단 · `.t3q-readiness-toggle`·`.readiness-summary` 좌측정렬 |
 | `≤620px` | `.phase-tile-pair` 1열 + 이미지 `aspect-ratio:1/1` · `.compare-side-pair` 1열 |
-| `≤560px` | `.page-main` `padding:12px` · `.context-bar` 1열, `.context-item` 강제 표시 · `.field-grid` 1열 · `.page-heading h1` `clamp(20px,6vw,26px)` · `.report-preview-doc` `max-height:none` · `.plan-summary` 1열 · `.compare-mode-fieldset`·`.quick-position`·`.integration-status li`·`.t3q-readiness-toggle`·`.mock-search-header` wrap · `.damage-event-card > header` 세로 · 각종 `min-width:0` 해제 |
+| `≤560px` | `.page-main` `padding:12px` · `.context-item` 전체폭 · `.field-grid` 1열 · `.report-preview-doc` `max-height:none` · `.plan-summary` 1열 · `.compare-mode-fieldset`·`.quick-position`·`.integration-status li`·`.t3q-readiness-toggle`·`.mock-search-header` wrap · `.damage-event-card > header` 세로 · 각종 `min-width:0` 해제 |
 | `≤400px` | `.agent-turn` 100% · `.global-nav a` `flex:1 1 100%`(1줄 1항목) · `.compare-swipe-quick`·`.badge-row` wrap · `.map-popup-facts`·`.plan-fact-list`·`.damage-fact-list`·`.condition-fact-list` 1열 · `.map-popup-*`·`.plan-district-*`·`.plan-river-card` 좌우 패딩 축소 |
 | `높이 ≤860px` | `.agent-composer` 패딩 축소 · `.agent-input` `min-height:92px` · `.agent-suggestions` `max-height:32%` |
 | `높이 ≤850px` | (legacy `.app-shell` 행 높이) · `.map-canvas` `min-height:350px` |
@@ -622,7 +621,7 @@ FORCE_SEED(`VITE_USE_SEED_DIRECTLY=true`, VWorld 키 미설정) dev 서버 + Pla
 |---|---|---|---|
 | `01-dashboard-1920.jpg` | 1920×1080 뷰포트 | 대시보드 기본. 4열 그리드(좌측 입력탭 / 리사이저 / 지도 / 우측 현재 판단), 우선 확인지역 2건, 레이어 칩 10개 | 135 KB |
 | `02-dashboard-1366.jpg` | 1366×768 뷰포트 | 노트북 기준. **지도 하단 레이어 칩과 좌측 패널 하단(적용 버튼)이 첫 화면에서 잘림** | 86 KB |
-| `03-dashboard-320.jpg` | 320×900 뷰포트 | 320px reflow. 내비 세로 스택, `.context-bar` 1열, `.dashboard-grid` 1열. 가로 스크롤 없음 | 36 KB |
+| `03-dashboard-320.jpg` | 320×900 뷰포트 | 320px reflow. 내비 세로 스택, `.context-bar` 세로, `.dashboard-grid` 1열. 가로 스크롤 없음 | 36 KB |
 | `04-agent-chat.jpg` | `.left-panel` 요소 (1600×1500 창) | AI Agent 탭. **질문 2턴 + 답변 2턴**, 탭 배지 `2`, `함께 전달한 선택 대상` 2건, 컴포저 상단 컨텍스트 칩 2개(district/similar_event), 추천질문 자동 접힘 | 59 KB |
 | `05-map-popup-district.jpg` | `.map-panel` 요소 (1920×1080 창) | 위험지구 팝업 열림(`.map-feature-popup.district.place-above`). 팩트리스트·위험요인·임계값표·CTA·면책문구. **팝업이 좌상단 연결상태 배지와 좌하단 레이어 칩을 덮는다** | 60 KB |
 | `06-insight-plan-tab.jpg` | `.right-panel` 요소 (1600×1500 창) | 계획·근거 탭. 유형 필터로 1개소로 좁힌 뒤 **지구 카드 펼침 상태의 하단부**(시행·사업 팩트리스트·피해이력·근거·질의에 참조) + 하천기본계획 카드 + **지점별 계획홍수량 표** | 74 KB |
@@ -642,7 +641,7 @@ FORCE_SEED(`VITE_USE_SEED_DIRECTLY=true`, VWorld 키 미설정) dev 서버 + Pla
 |---|---|---|---|
 | F-1 | **`.notice-card.info` 스타일 부재.** `InsightPanel.tsx` 유사사례 탭이 `<div className="notice-card info">`를 쓰는데 `styles.css`에는 `.notice-card.warning`만 있다 → 배경·테두리 없이 padding만 적용 | `styles.css` 142–144행 / `InsightPanel.tsx` 153행 | info 계열(정보) 알림 스타일 정의 |
 | F-2 | **`.status-badge.derived` / `.status-badge.error` 스타일 부재.** `T3qReadinessPanel.tsx`의 `badgeClass()`가 `derived`/`error`를 반환하고 `IntegrationStatusPanel.tsx`도 `derived`를 쓰지만 CSS는 `.actual`/`.provisional`만 정의 | `styles.css` 368행 / `T3qReadinessPanel.tsx` 278행 | 상태 배지 5종(actual/derived/provisional/pending/error) 색 체계 정의 |
-| F-3 | **1366×768에서 첫 화면 정보 손실.** 헤더(브랜드행+컨텍스트바) + `.page-heading`이 약 260px를 쓰고 `--panel-min-h`가 `70vh≈538px`로 잡혀, 지도 하단 레이어 칩과 좌측 패널 하단 버튼이 접힌다 | `02-dashboard-1366.jpg` | 세로가 짧은 화면에서 헤더/제목 영역 압축안 |
+| F-3 | **1366×768에서 첫 화면 정보 손실.** 헤더(브랜드행+컨텍스트바) + `.page-heading`이 약 260px를 쓰고 `--panel-min-h`가 `70vh≈538px`로 잡혀, 지도 하단 레이어 칩과 좌측 패널 하단 버튼이 접힌다 | `02-dashboard-1366.jpg` | **해결됨**: 헤더를 한 줄(`.header-row`)로 합치고 `.page-heading` 블록을 제거해 1920px 기준 콘텐츠 시작 y좌표 267px→81px |
 | F-4 | **좌측 대화 영역 협소.** `.agent-suggestions max-height:40%`(≤860px 높이는 32%) + `.agent-input min-height:120px`(92px) + `.agent-context-bar`가 컴포저에 붙어, 1100px 창에서 `.agent-thread`에 남는 높이가 답변 1건도 못 담는다 | `styles.css` 589–639행, 754–759행 / 초기 04 캡처 | 스레드 우선 세로 배분안(컴포저 접기/자동 높이 등) |
 | F-5 | **지도 팝업이 지도 오버레이 요소를 가린다.** 팝업 `z-index:5`(인라인) > `.map-connection`·`.map-layer-chips` `z-index:3`, `.map-basemap-switch` `z-index:4`. 좌상단 연결상태·좌하단 레이어 칩이 실제로 덮인다 | `styles.css` 959–961행 / `05-map-popup-district.jpg` | 팝업 회피 규칙 또는 오버레이 재배치안 |
 | F-6 | **영상지도 벡터 배색의 대비.** 영상지도 전환 시 하천 청록·POI 노랑·경계 흑백으로 바뀌는데, 이는 어두운 위성타일 전제다. VWorld 키 미설정(seed-only)이나 밝은 타일 위에서는 대비가 낮다 | `VWorldMapAdapter.ts` `StyleContext.satellite` / `09-map-satellite.jpg` | 두 베이스맵 모두에서 AA를 만족하는 벡터 배색 |

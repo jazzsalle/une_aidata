@@ -2,11 +2,11 @@ import { useEffect, useRef } from 'react';
 
 interface Props {
   title: string;
-  description: string;
-  status?: string | null;
 }
 
-export function PageHeading({ title, description, status }: Props) {
+/** 페이지 제목(h1). 상단 여백을 줄이기 위해 헤더 한 줄 안에 작은 글씨로 배치하지만,
+ *  라우트별 document.title 갱신과 h1 초점 이동(v0.5 UI 규칙)은 그대로 유지한다. */
+export function PageHeading({ title }: Props) {
   const headingRef = useRef<HTMLHeadingElement | null>(null);
   const isInitialLoadRef = useRef(true);
 
@@ -21,13 +21,5 @@ export function PageHeading({ title, description, status }: Props) {
     headingRef.current?.focus();
   }, [title]);
 
-  return (
-    <div className="page-heading">
-      <div>
-        <h1 ref={headingRef} tabIndex={-1}>{title}</h1>
-        <p>{description}</p>
-      </div>
-      {status ? <p className="page-status" role="status">{status}</p> : null}
-    </div>
-  );
+  return <h1 className="app-page-title" ref={headingRef} tabIndex={-1}>{title}</h1>;
 }

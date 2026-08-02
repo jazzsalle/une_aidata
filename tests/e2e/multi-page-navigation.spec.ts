@@ -17,8 +17,9 @@ function trackApiRequests(page: Page): string[] {
 
 async function expectPage(page: Page, target: (typeof pages)[number]) {
   await expect(page).toHaveTitle(target.title);
-  await expect(page.locator('main h1')).toHaveCount(1);
-  await expect(page.locator('main h1')).toHaveText(target.h1);
+  // h1은 상단 여백 축소를 위해 헤더 한 줄 안으로 이동했으므로 `main h1`이 아닌 문서 단일 h1을 검사한다.
+  await expect(page.locator('h1')).toHaveCount(1);
+  await expect(page.locator('h1')).toHaveText(target.h1);
 }
 
 for (const target of pages) {

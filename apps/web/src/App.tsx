@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
 import { AppHeader } from './components/AppHeader';
-import { PageHeading } from './components/PageHeading';
 import { DashboardPage } from './pages/DashboardPage';
 import { EvidencePage } from './pages/EvidencePage';
 import { ReportPage } from './pages/ReportPage';
@@ -50,7 +49,7 @@ export default function App() {
   return <div className="app-shell multi-page-shell">
     <AppHeader route={route} situations={situations} selected={activeSituation??selected} onNavigate={navigate} onSelect={setSelectedId} onSave={()=>{const id=saveSituationView(activeSituation??selected,highlightedFeature);setNotice(id?'상황뷰를 브라우저에 저장했습니다.':'저장할 상황이 없습니다.');}} />
     {error?<div className="global-error" role="alert">{error}</div>:null}
-    <main id="main-content" className={`page-main page-${route.id}`}><PageHeading title={route.title} description={route.description} status={notice}/>
+    <main id="main-content" className={`page-main page-${route.id}`}>{notice?<p className="page-status" role="status">{notice}</p>:null}
       {route.id==='dashboard'?<DashboardPage situation={activeSituation??selected} priorities={priorities} procedures={procedures} events={similarEvents} selectedEventId={selectedEventId} highlightedFeature={highlightedFeature} onSituationCreated={onSituationCreated} onAgentResponse={onAgentResponse} onHighlight={setHighlightedFeature} onSelectEvent={setSelectedEventId} agentContext={agentContext} onAddContext={addContext} onRemoveContext={removeContext}/>:null}
       {route.id==='evidence'?<EvidencePage situation={activeSituation??selected} satellites={satellites} selectionResults={phaseSelections} evidenceSets={evidenceSets} selectedEvidenceSetId={selectedEvidenceSetId} onSelectEvidenceSet={setSelectedEvidenceSetId} events={similarEvents} selection={reportEvidence} onSelectSatelliteEventSet={(assetIds,eventId,evidenceSet)=>updateEvidence({...reportEvidence,satellite_event_set:{asset_ids:assetIds,event_id:eventId,evidence_set_id:evidenceSet.evidence_set_id,provenance_version:evidenceSet.version,target_region_match:evidenceSet.area.is_target_region,added_at:new Date().toISOString()},satellite_pair:null,updated_at:new Date().toISOString()},'PRE·EVENT·POST 증거세트와 출처·무결성 정보를 보고서 근거에 반영했습니다.')} onToggleFloodTrace={()=>updateEvidence({...reportEvidence,include_flood_trace:!reportEvidence.include_flood_trace,updated_at:new Date().toISOString()},reportEvidence.include_flood_trace?'침수흔적도 근거를 보고서에서 제외했습니다.':'침수흔적도 근거를 보고서에 반영했습니다.')} onToggleEvent={(eventId)=>{const ids=reportEvidence.similar_event_ids.includes(eventId)?reportEvidence.similar_event_ids.filter(id=>id!==eventId):[...reportEvidence.similar_event_ids,eventId];updateEvidence({...reportEvidence,similar_event_ids:ids,updated_at:new Date().toISOString()},'과거 피해·대응·복구 사례 선택을 보고서에 반영했습니다.');}}/>:null}
       {route.id==='report'?<ReportPage situation={activeSituation??selected} priorities={priorities} events={similarEvents} report={report} selection={reportEvidence}/>:null}
