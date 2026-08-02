@@ -15,7 +15,6 @@ import type districtsRef from '../data/reference/districts.json';
 import type riversRef from '../data/reference/rivers.json';
 import type geoRef from '../data/reference/geo.json';
 import type floodTracesSeed from '../data/seed/flood_traces_seed.json';
-import type floodMaskMetricsSeed from '../data/seed/flood_mask_metrics_seed.json';
 import type satelliteEvidenceSetsSeed from '../data/seed/satellite_evidence_sets_seed.json';
 import type t3qAlignmentSeed from '../data/seed/t3q_alignment_seed.json';
 import type t3qReadinessSeed from '../data/seed/t3q_integration_readiness_seed.json';
@@ -55,7 +54,6 @@ const districts = readJson('reference', 'districts.json') as typeof districtsRef
 const rivers = readJson('reference', 'rivers.json') as typeof riversRef;
 const geo = readJson('reference', 'geo.json') as typeof geoRef;
 const floodTraces = readJson('seed', 'flood_traces_seed.json') as typeof floodTracesSeed;
-const floodMaskMetrics = readJson('seed', 'flood_mask_metrics_seed.json') as typeof floodMaskMetricsSeed;
 const satelliteEvidenceSets = readJson('seed', 'satellite_evidence_sets_seed.json') as typeof satelliteEvidenceSetsSeed;
 const t3qAlignment = readJson('seed', 't3q_alignment_seed.json') as typeof t3qAlignmentSeed;
 const t3qReadiness = readJson('seed', 't3q_integration_readiness_seed.json') as typeof t3qReadinessSeed;
@@ -73,4 +71,4 @@ const mockContractCatalog = readJson('seed', 'mock_contract_catalog_seed.json') 
 const mockFloodRiskAreas = readJson('seed', 'mock_flood_risk_areas_seed.json') as typeof mockFloodRiskAreasSeed;
 const mockDangerousReservoirs = readJson('seed', 'mock_dangerous_reservoirs_seed.json') as typeof mockDangerousReservoirsSeed;
 const mockStormFloodImprovementDistricts = readJson('seed', 'mock_storm_flood_improvement_districts_seed.json') as typeof mockStormFloodImprovementDistrictsSeed;
-export const seed={currentSituations,priorities,procedures,satellites,reports,damageRecovery,layers,publicApiCatalog,scenarioTimelines,criteria,districts,rivers,geo,floodTraces,floodMaskMetrics,satelliteEvidenceSets,t3qAlignment,t3qReadiness,t3qCqCoverage,t3qFieldContract,t3qMockEvents,t3qMockPassages,t3qMockRelations,t3qMockSearchScenarios,mockContractCatalog,mockFloodRiskAreas,mockDangerousReservoirs,mockStormFloodImprovementDistricts,providerContracts,similarityWeightProfiles,providerConformanceCases} as const;
+export const seed={currentSituations,priorities,procedures,satellites,reports,damageRecovery,layers,publicApiCatalog,scenarioTimelines,criteria,districts,rivers,geo,floodTraces,satelliteEvidenceSets,t3qAlignment,t3qReadiness,t3qCqCoverage,t3qFieldContract,t3qMockEvents,t3qMockPassages,t3qMockRelations,t3qMockSearchScenarios,mockContractCatalog,mockFloodRiskAreas,mockDangerousReservoirs,mockStormFloodImprovementDistricts,providerContracts,similarityWeightProfiles,providerConformanceCases} as const;

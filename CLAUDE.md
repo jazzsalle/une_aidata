@@ -83,12 +83,13 @@
 - EVENT 자료는 PRE/POST 첨부자료에서 생성한 Seed이므로 실제 관측자료로 설명하지 않는다.
 
 
-## v0.8 Phase Selection·수계마스크 상대변화 규칙
+## v0.8 Phase Selection 규칙
 - PRE 후보는 사건 시작 이전 자료 중 `event_start_at - 12 days` 목표시각과 가장 가까운 자료를 선택한다.
 - EVENT 후보는 `event_start_at <= acquired_at <= event_end_at + 2 days` 구간 안에서 품질과 이벤트 중간시각 근접성을 기준으로 선택한다.
 - POST 후보는 EVENT 구간 이후 자료 중 `event_end_at + 12 days` 목표시각과 가장 가까운 자료를 선택한다.
 - `offset_days_from_target`과 `selection_reason`을 화면과 API에 제공한다.
-- 수계마스크 변화는 256×256 픽셀의 상대비율이며 지리면적·침수심·피해예측 값으로 설명하지 않는다.
+- 수계마스크는 256×256 타일로 표출만 하고 픽셀 상대변화 같은 영상분석 지표를 자체 산출하지 않는다. (2026-08-02 개정. 영상분석은 영상 공급 벤더의 산출물 범위이며 본 서비스의 분석 범위가 아니다. ADR-011 참고)
+- 면적·침수심 등 정량지표가 필요하면 좌표계·GSD·산출근거를 포함한 벤더 산출물로 수령하고, 자체 픽셀 계산으로 대체하지 않는다.
 
 ## v0.9 추가 규칙
 - 위성자료는 개별 asset만 다루지 말고 `SatelliteEvidenceSet`을 통해 선택·보고서 반영한다.

@@ -50,8 +50,6 @@ async function POST(request) {
                         official_data: item.official_data
                     }))
                 },
-                flood_mask_pixel_metrics: selection?.satellite_event_set ? seeds_js_1.seed.floodMaskMetrics : null,
-                flood_mask_metric_note: '256×256 Seed 수계마스크의 픽셀 상대변화이며 면적·침수심·피해예측이 아닙니다.',
                 damage_recovery_note: '과거 유사사례 피해·복구 참고정보이며 현재 피해예측 또는 현재 피해현황이 아닙니다.',
                 similarity_note: '사건 유사도·요인별 기여도·대응비교는 Mock 정책 검증 결과이며 실제 T3Q RAG 성능 또는 공식 판단 결과가 아닙니다.',
                 operator_actions: [],

@@ -429,11 +429,8 @@ th { background: #f2f6f9; }
 .compare-note{margin:12px 0 0;font-size:.88rem;color:#43566a;}
 @media(max-width:620px){.compare-side-pair{grid-template-columns:1fr}.compare-side-pair img{width:min(256px,100%);height:auto;aspect-ratio:1/1;}}
 
-/* v0.8 phase selection and mask-relative metrics */
+/* v0.8 phase selection */
 .phase-selection-note{font-size:.78rem;color:#43566a;background:#eef4f8;border-radius:6px;padding:6px 8px;margin:0 0 10px;}
-.mask-metrics-panel{margin:18px 0;padding:14px;border:1px solid #c8d3de;border-radius:10px;background:#f8fbfd;}
-.mask-metrics-panel h3{margin-top:0;}
-.mask-metrics-panel p{margin-bottom:10px;}
 
 .evidence-set-registry{border-left:4px solid #395f86}.evidence-set-select{display:flex;gap:.75rem;align-items:center;font-weight:700;margin:1rem 0}.evidence-set-select select{min-height:44px;min-width:min(100%,28rem);padding:.5rem}.evidence-set-alert{display:flex;gap:.75rem;flex-wrap:wrap;background:#fff6dc;border:1px solid #d39b2c;border-radius:.5rem;padding:.75rem 1rem;margin-bottom:1rem}.evidence-set-summary{grid-template-columns:repeat(3,minmax(0,1fr))}.evidence-set-registry details{margin-top:1rem}.evidence-set-registry summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:700}@media(max-width:900px){.evidence-set-summary{grid-template-columns:1fr}.evidence-set-select{align-items:flex-start;flex-direction:column}.evidence-set-select select{width:100%}}
 

@@ -204,9 +204,9 @@ def main() -> int:
             steps.run('S4 mock 배지(대상지역 외·공식자료 아님·실제 NDMS 자료 아님) 표시', step_mock_badges)
 
             def step_select_satellite_set() -> None:
-                button = page.locator('section[aria-labelledby="satellite-title"] button', has_text='6개 타일·상대변화 근거를 보고서에 반영')
+                button = page.locator('section[aria-labelledby="satellite-title"] button', has_text='6개 타일 근거를 보고서에 반영')
                 page.wait_for_function(
-                    'Array.from(document.querySelectorAll("button")).some(b => b.textContent.includes("6개 타일·상대변화 근거를 보고서에 반영") && !b.disabled)'
+                    'Array.from(document.querySelectorAll("button")).some(b => b.textContent.includes("6개 타일 근거를 보고서에 반영") && !b.disabled)'
                 )
                 button.click()
                 page.wait_for_selector('section[aria-labelledby="satellite-title"] .selection-status:has-text("현재 보고서 근거로 선택됨")')

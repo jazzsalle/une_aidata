@@ -28,7 +28,6 @@
     "test:integration-adapters": "python3 scripts/smoke_integration_adapters.py",
     "test:flood-imagery": "python3 scripts/smoke_flood_imagery_tiles.py",
     "test:flood-phase-selection": "python3 scripts/smoke_flood_phase_selection.py",
-    "test:flood-mask-metrics": "python3 scripts/smoke_flood_mask_metrics.py",
     "test:evidence-sets": "python3 scripts/smoke_satellite_evidence_sets.py",
     "test:t3q-alignment": "python3 scripts/smoke_t3q_alignment.py",
     "test:t3q-readiness": "python3 scripts/smoke_t3q_readiness.py",

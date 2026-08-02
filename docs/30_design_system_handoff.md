@@ -352,7 +352,6 @@ h1은 토큰이 아니라 `.page-heading h1 { font-size: clamp(22px, 2.2vw, 38px
 | `.compare-swipe-controls` / `-value` | range + 현재값 문구 | — |
 | `.compare-swipe-quick button` | 25/50/75% 빠른 이동 (`min-width:56px; min-height:44px`) | **P** `aria-pressed="true"`: 배경 `#dcebf7`, 테두리 `#5b7898` |
 | `.compare-note` | **"…지리면적·침수심·피해 정도를 의미하지 않습니다."** | 삭제·축약 금지 (D-2) |
-| `.mask-metrics-panel` | 수계마스크 픽셀 상대변화 패널 | — |
 | `.evidence-map-section` | 침수흔적도·지도 근거 섹션 | — |
 | `.evidence-map-grid` | 지도 + 요약 정의목록 (`2fr / minmax(260px,1fr)`) | ≤900px 1열 |
 | `.evidence-action-row` | 근거 반영 버튼 줄 | — |
@@ -544,7 +543,7 @@ h1은 토큰이 아니라 `.page-heading h1 { font-size: clamp(22px, 2.2vw, 38px
 | `선정편차 ±N일 · …` + (`가장 가까운 유효 후보` \| `EVENT 유효구간`) | `.phase-selection-note` (정규식) | evidence S3 |
 | `대상지역 외` / `공식자료 아님` / `실제 NDMS 자료 아님` | 배지 | evidence S4 |
 | `부산·인제·영천 자료가 아니며` | `.safety-note` | evidence S4 |
-| `6개 타일·상대변화 근거를 보고서에 반영` | 버튼 | evidence S5, report S1 |
+| `6개 타일 근거를 보고서에 반영` | 버튼 | evidence S5, report S1 |
 | `현재 보고서 근거로 선택됨` / `보고서 근거로 선택됨` | `.selection-status` | evidence S5/S6 |
 | `보고서 근거에 반영했습니다` | `.page-status` | evidence S5 |
 | `침수흔적도 근거를 보고서에 반영` ↔ `침수흔적도 근거 제외` | 토글 라벨 | evidence S6 |
@@ -627,7 +626,7 @@ FORCE_SEED(`VITE_USE_SEED_DIRECTLY=true`, VWorld 키 미설정) dev 서버 + Pla
 | `04-agent-chat.jpg` | `.left-panel` 요소 (1600×1500 창) | AI Agent 탭. **질문 2턴 + 답변 2턴**, 탭 배지 `2`, `함께 전달한 선택 대상` 2건, 컴포저 상단 컨텍스트 칩 2개(district/similar_event), 추천질문 자동 접힘 | 59 KB |
 | `05-map-popup-district.jpg` | `.map-panel` 요소 (1920×1080 창) | 위험지구 팝업 열림(`.map-feature-popup.district.place-above`). 팩트리스트·위험요인·임계값표·CTA·면책문구. **팝업이 좌상단 연결상태 배지와 좌하단 레이어 칩을 덮는다** | 60 KB |
 | `06-insight-plan-tab.jpg` | `.right-panel` 요소 (1600×1500 창) | 계획·근거 탭. 유형 필터로 1개소로 좁힌 뒤 **지구 카드 펼침 상태의 하단부**(시행·사업 팩트리스트·피해이력·근거·질의에 참조) + 하천기본계획 카드 + **지점별 계획홍수량 표** | 74 KB |
-| `07-evidence-1920.jpg` | 1920×5994 전체 페이지 | 근거 페이지 전체. 증거세트 선택 → PRE/EVENT/POST 3카드(각 256×256 위성+마스크) → 좌우·스와이프 비교 → 마스크 픽셀표 → 침수흔적 지도 → 피해·대응·복구 카드 5건 | 377 KB |
+| `07-evidence-1920.jpg` | 1920×5994 전체 페이지 | 근거 페이지 전체. 증거세트 선택 → PRE/EVENT/POST 3카드(각 256×256 위성+마스크) → 좌우·스와이프 비교 → 침수흔적 지도 → 피해·대응·복구 카드 5건. **주의: 이 캡처는 2026-08-02 개정 이전 화면이라 비교 도구 아래에 지금은 삭제된 "마스크 픽셀표"가 남아 있다. 재촬영 필요** | 377 KB |
 | `08-report-1920.jpg` | 1920×1582 전체 페이지 | 보고서 페이지 3열. 목차/편집 폼(선택근거 요약·초안 검증 경고 2건)/문서형 미리보기 | 163 KB |
 | `09-map-satellite.jpg` | `.map-panel` 요소 | 영상지도 모드의 **벡터 배색 변화**(청록 하천·노랑 POI·흑백 외곽선). 어두운 위성타일 전제 배색 | 49 KB |
 

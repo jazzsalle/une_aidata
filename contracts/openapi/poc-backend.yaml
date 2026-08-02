@@ -388,29 +388,6 @@ paths:
         required: false
         schema:
           type: string
-  /api/v1/satellite-assets/metrics:
-    get:
-      operationId: getSatelliteAssetMetrics
-      summary: 수계마스크 픽셀 상대변화 지표
-      responses:
-        '200':
-          description: ApiEnvelope
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiEnvelope'
-        '400':
-          description: 입력값 오류
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiEnvelope'
-      parameters:
-      - in: query
-        name: event_id
-        required: false
-        schema:
-          type: string
   /api/v1/satellite-assets/select:
     post:
       operationId: selectSatelliteAssets

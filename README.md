@@ -105,9 +105,9 @@ npm run typecheck:functions
 ## v0.9 추가 구현
 - DisasterEvent의 `event_start_at`·`event_end_at`을 기준으로 PRE/EVENT/POST 후보 영상을 자동 선정하는 Phase Selection Engine
 - PRE/POST 목표일과 실제 촬영일 차이를 `offset_days_from_target`으로 계산
-- 256×256 수계마스크의 흰색 픽셀 비율과 PRE 대비 상대변화를 계산·표시
-- 상대변화는 픽셀 기반 비교이며 면적·침수심·피해예측으로 사용하지 않음
-- 선택한 6개 타일과 상대변화 메타를 보고서 초안의 참고근거로 자동 반영
+- 수계마스크는 256×256 타일로 표출만 하며 픽셀 지표를 자체 산출하지 않음 (2026-08-02 개정 — 영상분석은 영상 공급 벤더의 산출물 범위. ADR-011 참고)
+- 면적·침수심 등 정량지표가 필요하면 좌표계·GSD·산출근거를 포함한 벤더 산출물로 수령
+- 선택한 6개 타일을 보고서 초안의 참고근거로 자동 반영
 
 ## v0.9 위성 증거세트
 `SatelliteEvidenceSet`으로 PRE/EVENT/POST 6개 타일, Event 기간, 출처, 대상지역 여부, SHA-256, 교체 Provider를 관리합니다. `/api/v1/satellite-evidence-sets`와 `/evidence` Manifest 다운로드를 제공합니다.

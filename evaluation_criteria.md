@@ -7,7 +7,7 @@ evaluator는 각 항목을 실제 실행/확인으로 검증한다. 전 항목 �
 ## Phase 1 — 기준선 재현·빌드 정상화
 - [ ] `npm install` 성공, `package-lock.json` 생성·커밋 대상에 존재
 - [ ] `npm run validate` PASS (validate_vercel_repo.py)
-- [ ] `npm run test:contracts` PASS (OpenAPI 31 Operation + JSON Schema 검증)
+- [ ] `npm run test:contracts` PASS (OpenAPI 30 Operation + JSON Schema 검증)
 - [ ] `npm run typecheck:functions` 에러 0
 - [ ] `npm run test:runtime-gate` PASS
 - [ ] `npm run test:provider-conformance` PASS

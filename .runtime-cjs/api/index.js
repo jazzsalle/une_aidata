@@ -58,7 +58,6 @@ const procedures = __importStar(require("../server/routes/v1/procedures.js"));
 const reportsDrafts = __importStar(require("../server/routes/v1/reports/drafts.js"));
 const riskKnowledgeSearch = __importStar(require("../server/routes/v1/risk-knowledge/search.js"));
 const satelliteAssets = __importStar(require("../server/routes/v1/satellite-assets.js"));
-const satelliteAssetsMetrics = __importStar(require("../server/routes/v1/satellite-assets/metrics.js"));
 const satelliteAssetsSelect = __importStar(require("../server/routes/v1/satellite-assets/select.js"));
 const satelliteEvidenceSets = __importStar(require("../server/routes/v1/satellite-evidence-sets.js"));
 const scenarios = __importStar(require("../server/routes/v1/scenarios.js"));
@@ -90,7 +89,6 @@ const routes = {
     'POST /api/v1/reports/drafts': reportsDrafts.POST,
     'POST /api/v1/risk-knowledge/search': riskKnowledgeSearch.POST,
     'GET /api/v1/satellite-assets': satelliteAssets.GET,
-    'GET /api/v1/satellite-assets/metrics': satelliteAssetsMetrics.GET,
     'POST /api/v1/satellite-assets/select': satelliteAssetsSelect.POST,
     'GET /api/v1/satellite-evidence-sets': satelliteEvidenceSets.GET,
     'GET /api/v1/scenarios': scenarios.GET,

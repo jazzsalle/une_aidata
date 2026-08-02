@@ -18,7 +18,6 @@ import * as procedures from '../server/routes/v1/procedures.js';
 import * as reportsDrafts from '../server/routes/v1/reports/drafts.js';
 import * as riskKnowledgeSearch from '../server/routes/v1/risk-knowledge/search.js';
 import * as satelliteAssets from '../server/routes/v1/satellite-assets.js';
-import * as satelliteAssetsMetrics from '../server/routes/v1/satellite-assets/metrics.js';
 import * as satelliteAssetsSelect from '../server/routes/v1/satellite-assets/select.js';
 import * as satelliteEvidenceSets from '../server/routes/v1/satellite-evidence-sets.js';
 import * as scenarios from '../server/routes/v1/scenarios.js';
@@ -53,7 +52,6 @@ const routes: Record<string, RouteHandler> = {
   'POST /api/v1/reports/drafts': reportsDrafts.POST,
   'POST /api/v1/risk-knowledge/search': riskKnowledgeSearch.POST,
   'GET /api/v1/satellite-assets': satelliteAssets.GET,
-  'GET /api/v1/satellite-assets/metrics': satelliteAssetsMetrics.GET,
   'POST /api/v1/satellite-assets/select': satelliteAssetsSelect.POST,
   'GET /api/v1/satellite-evidence-sets': satelliteEvidenceSets.GET,
   'GET /api/v1/scenarios': scenarios.GET,

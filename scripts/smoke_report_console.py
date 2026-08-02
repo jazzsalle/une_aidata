@@ -204,9 +204,9 @@ def main() -> int:
                 page.wait_for_selector('.evidence-page')
                 # 증거세트 반영
                 page.wait_for_function(
-                    'Array.from(document.querySelectorAll("button")).some(b => b.textContent.includes("6개 타일·상대변화 근거를 보고서에 반영") && !b.disabled)'
+                    'Array.from(document.querySelectorAll("button")).some(b => b.textContent.includes("6개 타일 근거를 보고서에 반영") && !b.disabled)'
                 )
-                page.locator('section[aria-labelledby="satellite-title"] button', has_text='6개 타일·상대변화 근거를 보고서에 반영').click()
+                page.locator('section[aria-labelledby="satellite-title"] button', has_text='6개 타일 근거를 보고서에 반영').click()
                 page.wait_for_selector('section[aria-labelledby="satellite-title"] .selection-status:has-text("현재 보고서 근거로 선택됨")')
                 # 침수흔적도 포함 유지
                 toggle = page.locator('.evidence-map-section .evidence-action-row button')
