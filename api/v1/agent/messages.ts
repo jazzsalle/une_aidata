@@ -1,5 +1,0 @@
-import { badRequest, body, envelope } from '../../../server/http';
-import type { CurrentSituation } from '../../../server/contracts';
-import { buildAgentResponse } from '../../../server/domain/agent';
-import { findSeedSituation } from '../../../server/domain/situations';
-export async function POST(request:Request){try{const input=await body<{situation?:CurrentSituation;situation_id?:string;message:string}>(request);if(!input.message?.trim())return badRequest('message는 필수입니다.');const situation=input.situation??(input.situation_id?findSeedSituation(input.situation_id):undefined);if(!situation)return badRequest('situation이 필요합니다.');return envelope(await buildAgentResponse(situation,input.message.trim()),{provider:'AgentToolRouterFunction',dataStatus:'provisional'});}catch(error){return badRequest(error instanceof Error?error.message:'Agent 처리 실패');}}

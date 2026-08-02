@@ -15,7 +15,7 @@ field_names={row['field'] for row in fields['items']}
 for required in {'event_id','ref_disaster_event_id','schema_type','taxonomy_codes','passage_id','lineage.document_page'}: assert required in field_names
 for file in ['t3q-integration-readiness.schema.json','t3q-cq-coverage.schema.json','t3q-search-preview.schema.json']:
     json.loads((root/'contracts/schemas'/file).read_text(encoding='utf-8'))
-assert (root/'api/v1/t3q/readiness.ts').exists()
-assert (root/'api/v1/t3q/cq-coverage.ts').exists()
+assert (root/'server/routes/v1/t3q/readiness.ts').exists()
+assert (root/'server/routes/v1/t3q/cq-coverage.ts').exists()
 assert (root/'apps/web/src/components/T3qReadinessPanel.tsx').exists()
 print('PASS: T3Q readiness/CQ coverage seed and contract validation')

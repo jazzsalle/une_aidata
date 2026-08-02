@@ -2,7 +2,8 @@ const fs=require('fs');
 const path=require('path');
 const {searchSimilarEvents}=require('../../.runtime-cjs/server/domain/similarEvents.js');
 const {searchT3qPreview}=require('../../.runtime-cjs/server/providers/t3qGateway.js');
-const {POST:reportPost}=require('../../.runtime-cjs/api/v1/reports/drafts.js');
+const {POST:reportPost}=require('../../.runtime-cjs/server/routes/v1/reports/drafts.js');
+const catchAll=require('../../.runtime-cjs/api/[[...path]].js');
 const seed=require('../../.runtime-cjs/server/seeds.js').seed;
 
 function fail(message){throw new Error(message);}
@@ -45,7 +46,7 @@ async function main(){
     runtime_mode:'MOCK_PROVIDER_NEUTRAL',
     npm_install:{status:'BLOCKED',reason:'내부 npm registry에서 React/Vite/@playwright/test 패키지 조회 404. 전체 React production build는 외부 개발환경에서 재실행 필요.'},
     counts:{events:eventRecords.length,situations:situations.length,cq:cqScenarios.length},
-    rankings:[],cq_results:[],report_results:[],checks:[]
+    rankings:[],cq_results:[],report_results:[],catch_all_results:[],checks:[]
   };
 
   for(const situation of situations){
@@ -115,6 +116,29 @@ async function main(){
     assert(preview.passages.every(p=>p.lineage&&Object.keys(p.lineage).length>0),`${scenario.cq_id}: lineage 누락`);
     result.cq_results.push({cq_id:scenario.cq_id,title:scenario.title,query:scenario.query,event_ids:eventIds,passage_ids:passageIds,schemas:[...new Set(preview.passages.map(p=>p.schema_type))],warnings:preview.warnings});
   }
+
+  // Catch-all(api/[[...path]]) 디스패치 검증: 정상 200 envelope / 미등록 404 / 메서드 불일치 405
+  assert(typeof catchAll.GET==='function'&&typeof catchAll.POST==='function','catch-all: GET/POST 핸들러 미노출');
+  const healthResponse=await catchAll.GET(new Request('http://runtime.local/api/health'));
+  assert(healthResponse.status===200,`catch-all: /api/health 상태 ${healthResponse.status} != 200`);
+  const healthEnvelope=await healthResponse.json();
+  assert(healthEnvelope&&typeof healthEnvelope==='object'&&'data'in healthEnvelope,'catch-all: envelope data 누락');
+  assert(healthEnvelope.meta&&typeof healthEnvelope.meta.request_id==='string'&&typeof healthEnvelope.meta.provider==='string'&&typeof healthEnvelope.meta.data_status==='string'&&typeof healthEnvelope.meta.generated_at==='string','catch-all: envelope meta 형식 오류');
+  assert(Array.isArray(healthEnvelope.warnings)&&Array.isArray(healthEnvelope.errors),'catch-all: envelope warnings/errors 배열 아님');
+  assert(healthEnvelope.errors.length===0,'catch-all: /api/health 정상응답에 errors 존재');
+  const notFoundResponse=await catchAll.GET(new Request('http://runtime.local/api/no-such-route'));
+  assert(notFoundResponse.status===404,`catch-all: 미등록 경로 상태 ${notFoundResponse.status} != 404`);
+  const notFoundEnvelope=await notFoundResponse.json();
+  assert(Array.isArray(notFoundEnvelope.errors)&&notFoundEnvelope.errors.length>0,'catch-all: 404 envelope errors 누락');
+  const methodMismatchResponse=await catchAll.POST(new Request('http://runtime.local/api/health',{method:'POST'}));
+  assert(methodMismatchResponse.status===405,`catch-all: 메서드 불일치 상태 ${methodMismatchResponse.status} != 405`);
+  const methodMismatchEnvelope=await methodMismatchResponse.json();
+  assert(Array.isArray(methodMismatchEnvelope.errors)&&methodMismatchEnvelope.errors.length>0,'catch-all: 405 envelope errors 누락');
+  result.catch_all_results=[
+    {case:'GET /api/health',status:healthResponse.status,expected:200,envelope:true},
+    {case:'GET /api/no-such-route',status:notFoundResponse.status,expected:404,envelope:true},
+    {case:'POST /api/health',status:methodMismatchResponse.status,expected:405,envelope:true}
+  ];
 
   result.checks=[
     {id:'RG-01',name:'15 Event 전체 순위·결정성',status:'PASS'},
