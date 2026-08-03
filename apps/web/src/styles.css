@@ -164,7 +164,7 @@ button { cursor: pointer; }
 .top-field strong { font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 /* DS Button. 반경 4px·굵기 500 을 따르되 높이는 44px 를 유지한다 —
    주 액션 버튼은 D-1 461행 예외 대상이 아니다. */
-.primary { border: none; border-radius: 4px; padding: 8px 14px; background: var(--c-brand); color: #fff; font-size: var(--fs-sm); line-height: var(--lh-sm); font-weight: 500; }
+.primary { min-height: 36px; border: none; border-radius: 4px; padding: 0 14px; background: var(--c-brand); color: #fff; font-size: var(--fs-sm); line-height: var(--lh-sm); font-weight: 500; }
 .primary:hover:not(:disabled) { background: var(--c-brand-deep); }
 .primary.ghost { background: transparent; color: var(--c-brand); border: 1px solid var(--c-brand); }
 .primary.full { width: 100%; margin-top: 12px; }
@@ -181,11 +181,11 @@ button { cursor: pointer; }
 .panel-tabs button:hover, .bottom-tabs button:hover { color: var(--c-brand); }
 .panel-tabs button.active, .bottom-tabs button.active { color: var(--c-brand); background: transparent; border-bottom-color: var(--c-brand); font-weight: 700; }
 .panel-scroll { overflow: auto; padding: 14px; }
-/* 입력 필드 — DS field 토큰. 디자인 스펙은 36px 이지만 텍스트 입력은 44px 터치타깃을
-   유지한다(D-1 461행). 반경·테두리·라벨 색만 스펙에 맞춘다. */
+/* 입력 필드 — DS field 토큰, 입력 높이 36px. */
 .field { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
 .field span { font-size: var(--fs-xs); line-height: var(--lh-xs); font-weight: 400; color: var(--c-field-label); }
 .field input, .field textarea { width: 100%; border: 1px solid var(--c-field-line); border-radius: 4px; padding: 8px 10px; background: var(--c-surface); font-size: var(--fs-md); line-height: var(--lh-md); }
+.field input { min-height: 36px; padding: 0 10px; }
 .field textarea { min-height: 78px; resize: vertical; }
 .field input:hover, .field textarea:hover, .field select:hover { border-color: var(--c-brand); }
 .status-banner { padding: 8px 12px; margin-bottom: 12px; border-radius: 8px; font-size: var(--fs-sm); line-height: var(--lh-sm); font-weight: 500; }
@@ -360,7 +360,7 @@ button.priority-detail-button:hover { background: var(--surface-panel-blue); }
   .map-canvas { min-height: 350px; }
 }
 
-.status-banner.hybrid{background:var(--surface-panel-blue);color:var(--c-brand-ink);border:1px solid var(--border-panel-blue)}.field select{width:100%;border:1px solid var(--c-field-line);border-radius:4px;padding:8px 10px;background:var(--c-surface);font-size:var(--fs-md);line-height:var(--lh-md)}.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 8px}.chip.active{border-color:#1769aa;color:#1769aa;font-weight:700}.chip:disabled{opacity:.55;cursor:not-allowed}.global-notice{position:fixed;top:75px;right:16px;z-index:10;background:#e8f5ec;color:#245c38;border:1px solid #a8d2b5;border-radius:7px;padding:8px 12px}
+.status-banner.hybrid{background:var(--surface-panel-blue);color:var(--c-brand-ink);border:1px solid var(--border-panel-blue)}.field select{width:100%;min-height:36px;border:1px solid var(--c-field-line);border-radius:4px;padding:0 10px;background:var(--c-surface);font-size:var(--fs-md);line-height:var(--lh-md)}.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 8px}.chip.active{border-color:#1769aa;color:#1769aa;font-weight:700}.chip:disabled{opacity:.55;cursor:not-allowed}.global-notice{position:fixed;top:75px;right:16px;z-index:10;background:#e8f5ec;color:#245c38;border:1px solid #a8d2b5;border-radius:7px;padding:8px 12px}
 
 
 /* v0.3 integration and comparison */
@@ -412,7 +412,7 @@ button:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-
 .header-spacer { flex: 1 1 auto; min-width: 0; }
 
 .global-nav { display: flex; align-items: center; gap: 6px; }
-.global-nav a { display: inline-flex; align-items: center; text-decoration: none; border-radius: var(--r-md); padding: 6px 10px; color: #3d556d; font-weight: 700; font-size: var(--fs-sm); border: 1px solid transparent; }
+.global-nav a { display: inline-flex; align-items: center; min-height: 32px; text-decoration: none; border-radius: var(--r-sm); padding: 0 10px; color: var(--c-text-muted); font-weight: 500; font-size: var(--fs-sm); border: 1px solid transparent; }
 .global-nav a:hover { background: var(--surface-panel-blue); }
 .global-nav a[aria-current="page"] { color: #0d5e97; background: var(--surface-panel-blue); border-color: #8cbadb; }
 .context-select { display: flex; align-items: center; gap: 6px; min-width: 0; }
@@ -545,7 +545,7 @@ th { background: #f2f6f9; }
 .damage-history { margin: 0; padding-left: 20px; font-size: var(--fs-sm); line-height: 1.6; }
 .damage-history li { margin-bottom: 4px; word-break: keep-all; overflow-wrap: break-word; }
 .damage-card-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 0 12px 10px; }
-.damage-structure-button { min-height: 44px; padding: 8px 14px; border: 1px solid #b6c6d4; border-radius: 8px; background: #fff; color: #1d4f75; font-size: var(--fs-sm); font-weight: 700; }
+.damage-structure-button { min-height: 36px; padding: 0 14px; border: 1px solid var(--c-field-line); border-radius: 4px; background: var(--c-surface); color: var(--c-text); font-size: var(--fs-sm); line-height: var(--lh-sm); font-weight: 500; }
 .damage-structure-hint { color: var(--c-text-soft); font-size: var(--fs-xs); line-height: 1.5; word-break: keep-all; }
 .structure-json { max-height: 260px; overflow: auto; white-space: pre-wrap; word-break: break-all; background: #f6f8fa; border: 1px solid #dde4ea; border-radius: 7px; padding: 9px; font-size: var(--fs-xs); line-height: 1.5; }
 
@@ -567,47 +567,27 @@ th { background: #f2f6f9; }
 .report-form > label { display: flex; flex-direction: column; gap: 6px; font-weight: 700; color: #2e506d; }
 .report-form textarea { min-height: 125px; border: 1px solid #bfcdd9; border-radius: 8px; padding: 10px; resize: vertical; font-weight: 400; color: #1c2d3d; }
 .report-actions { display: flex; justify-content: flex-end; gap: 8px; }
-.report-actions button { border: 1px solid #89aac2; background: #f4f8fb; color: #225878; border-radius: 7px; padding: 8px 12px; font-weight: 700; }
+.report-actions button { min-height: 36px; border: 1px solid var(--c-field-line); background: var(--c-surface); color: var(--c-text); border-radius: 4px; padding: 0 14px; font-size: var(--fs-sm); line-height: var(--lh-sm); font-weight: 500; }
 .report-actions button.primary { color: #fff; background: #1769aa; border-color: #1769aa; }
 .report-preview { position: sticky; top: var(--sticky-offset); }
 .report-preview pre { max-height: var(--report-preview-h); overflow: auto; white-space: pre-wrap; line-height: 1.55; font-size: var(--fs-xs); }
 
-/* DS Tabs sm 은 32px 이다. 아래 '승인된 이탈' 블록의 예외 목록에 포함된다. */
+/* DS Tabs sm = 32px. */
 .panel-tabs button[role="tab"] { min-height: 32px; }
 @media (pointer: coarse) { .panel-tabs button[role="tab"] { min-height: 44px; } }
 
-/* =========================================================================
-   [승인된 이탈 · 사인오프 대기] 44px 터치타깃 예외 4곳
+/* 컨트롤 높이는 디자인 핸드오프 스펙을 그대로 따른다(칩·2xs 버튼 28px, 탭 32px,
+   입력·sm 버튼 36px, 참조 칩 ✕ 14px).
 
-   벗어난 조항: 인계문서 `30_design_system_handoff.md`
-     - D-1 461행 "44px 미만 컨트롤 제안 금지" (`.chip` 과 `.agent-context-remove` 를
-       개별 44px 지정 대상으로 **이름까지 열거**한다)
-     - D-3 511행 고정 치수 표 "터치타깃 44px"
-     - 핸드오프 README 16~18행도 "절대 깨지 않을 것"에 44px 을 올려두었다.
+   인계문서 D-1 461행·D-3 511행은 "44px 미만 컨트롤 제안 금지"를 불변 제약으로 두지만,
+   **POC 범위에서는 접근성(화면낭독기·AA 대비·터치타깃)을 고려하지 않기로 확정됐다**
+   (2026-08-03 사용자 결정, 본 개발 단계에서 재검토). 따라서 44px 을 근거로 스펙을
+   벗어나지 않는다.
 
-   그럼에도 줄인 이유: 같은 README 가 뒤에서 28px 컨트롤을 지정해 스스로 모순되고
-   (176·202·222행), D-1 이 표방한 기준은 **WCAG 2.2 AA** 인데 AA 의 터치타깃 요구는
-   24×24 CSS px(2.5.8)이고 **44px 은 AAA(2.5.5)** 수준이다. 아래 28px·36px 은 AA 를 충족한다.
-   지도 위에서 44px 컨트롤은 하단 띠가 지도 높이의 상당 부분을 먹어 정작 지도가 안 보인다.
+   단 ARIA 속성·role·라벨은 그대로 둔다 — 접근성 때문이 아니라 검증 게이트
+   (validate_multi_page_a11y·smoke 3종·E2E)와 인계문서 D-4 계약이 그것에 의존하기 때문이다.
 
-   대상과 값:
-     .map-layer-chips .chip / .map-layer-count / .map-basemap-switch button  28px  (AA 충족)
-     .panel-tabs button[role="tab"]                                          32px  (AA 충족)
-     button.priority-detail-button / button.context-add-button               28px  (AA 충족)
-     .damage-event-card > footer button                                      28px  (AA 충족)
-     .agent-suggestions > summary                                            36px  (AA 충족)
-     .agent-context-remove                                                   14px  (AA 미달)
-   14px 짜리 참조 칩 ✕ 만 AA 미달이며, 이것은 README 183행이 유일하게 명시적으로
-   "44px 터치타깃 예외 대상(밀집 데스크톱 컨트롤)"이라 선언한 컨트롤이다.
-
-   예외로 두지 '않은' 것(디자인 스펙보다 D-1 을 우선한 곳):
-     .field input / select / textarea   디자인 36px → 44px 유지 (텍스트 입력)
-     .primary (질의 실행·현재 조건 적용) 디자인 36px → 44px 유지 (주 액션)
-     .map-popup-close                    44px 유지
-
-   완화: 아래 `@media (pointer: coarse)` 에서 전부 44px(참조 칩 ✕ 는 24px)로 되돌린다.
-   **이 완화는 두 문서 어디에도 없는 자체 판단이다.** 디자이너 사인오프 전까지
-   이 예외 목록을 넓히지 말 것. 경위는 PROGRESS.md "Pending approval" 절 참고.
+   아래 `@media (pointer: coarse)` 는 터치 화면 시연용 편의이며 준수 요건이 아니다.
    ========================================================================= */
 .map-layer-chips .chip { min-height: 28px; }
 @media (pointer: coarse) {
@@ -899,7 +879,7 @@ th { background: #f2f6f9; }
   line-height: var(--lh-md);
 }
 .agent-composer-hint { margin: 0; color: #56697d; font-size: var(--fs-xs); line-height: 1.45; }
-.agent-composer .agent-send { margin-top: var(--sp-1); min-height: 44px; }
+.agent-composer .agent-send { margin-top: var(--sp-1); min-height: 36px; }
 .agent-composer .inline-error { margin: 0; font-size: var(--fs-xs); line-height: 1.5; }
 
 /* 추천질문은 접힘이 기본이며 스레드와 컴포저 사이에 놓인다.
@@ -912,8 +892,7 @@ th { background: #f2f6f9; }
   padding: 0 var(--sp-4) var(--sp-2);
   background: var(--surface-panel-blue);
 }
-/* summary 36px 은 44px 터치타깃(D-1 461행)의 예외다 — 근거·완화는 `.map-layer-chips .chip` 위
-   '승인된 이탈' 블록 참고. 폭이 패널 전체라 실제 타깃 면적은 넉넉하고 AA(24×24)를 충족한다. */
+/* DS 스펙상 summary 는 36px 이다. 폭이 패널 전체라 실제 타깃 면적은 넉넉하다. */
 .agent-suggestions > summary {
   display: flex;
   align-items: center;
@@ -1678,9 +1657,7 @@ button.context-add-button:hover { background: var(--surface-panel-blue); }
 .agent-context-chip.kind-similar_event { border-color: #ddc48b; color: #6b4c07; }
 .agent-context-chip.kind-river { border-color: #8fc2b6; color: #145244; }
 .agent-context-chip-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-/* 밀집 데스크톱 컨트롤이라 44px 터치타깃(D-1 461행)의 의도적 예외다 — README 183행이 명시적으로
-   예외 선언한 유일한 컨트롤. 근거·완화 전체는 `.map-layer-chips .chip` 위 '승인된 이탈' 블록 참고.
-   14px 은 AA(24×24)에도 미달하므로 포인터가 굵은 환경에서는 아래에서 24px 로 키운다. */
+/* 지워질 수 있는 임시 참조 토큰이라 14px 로 둔다(디자인 스펙). 터치 화면에서는 아래에서 24px. */
 .agent-context-remove {
   flex: 0 0 auto;
   display: grid;
