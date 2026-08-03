@@ -44,11 +44,23 @@
   --c-brand-soft: #eef6fc;
   --c-brand-line: #cfe1ef;
   --c-surface: #fff;
-  --c-surface-alt: #f6f8fb;
-  --c-bg: #eef2f6;
-  --c-canvas: #e8eef4;
-  --c-line: #cbd6e2;
-  --c-line-soft: #d8e2ec;
+
+  /* --- v2.0 블루 계통 크롬 (디자인 핸드오프 §5) ---
+     UNE 디자인 시스템에 '파랑 틴트 면·선' 시맨틱 토큰이 없어 브랜드 프리미티브(light-blue 램프)를
+     여기서 4개 시맨틱으로 승격한다. 값은 `UNE Design System/_ds/.../tokens/fig-tokens.css` 원본.
+     패널 표면은 흰색(--c-surface)을 유지한다 — 페이지 배경 1개 + 패널 표면 1개 원칙.
+     상태색(경고·오류·성공)은 파랑으로 바꾸지 않는다. */
+  --surface-page-blue: #f5f8ff;    /* light-blue-20 */
+  --surface-panel-blue: #f0f4ff;   /* light-blue-25 */
+  --border-panel-blue: #d2deff;    /* light-blue-75 */
+  --border-inner-blue: #e1e9ff;    /* light-blue-50 */
+  --accent-line-blue: #84a8ff;     /* light-blue-200 · 강조 좌측선 */
+
+  --c-surface-alt: var(--surface-panel-blue);
+  --c-bg: var(--surface-page-blue);
+  --c-canvas: var(--surface-page-blue);
+  --c-line: var(--border-panel-blue);
+  --c-line-soft: var(--border-inner-blue);
   --c-warn-bg: #fff6df;
   --c-warn-line: #ebcf82;
   --c-warn-text: #6b4c07;
@@ -81,18 +93,46 @@
   --sh-1: 0 1px 4px rgba(27, 54, 86, .08);
   --sh-2: 0 2px 9px rgba(24, 49, 77, .08);
 
-  /* --- 유동 타이포 스케일 (320px 소형 ~ 2560px 상황실 대형 모니터) --- */
-  --fs-xs: clamp(.6875rem, .26vw + .521rem, .9375rem);
-  --fs-sm: clamp(.75rem, .26vw + .583rem, 1rem);
-  --fs-md: clamp(.875rem, .33vw + .667rem, 1.1875rem);
-  --fs-lg: clamp(1rem, .39vw + .75rem, 1.375rem);
-  --fs-xl: clamp(1.1875rem, .59vw + .8125rem, 1.75rem);
+  /* --- 타이포 스케일 · UNE 디자인 시스템 타입 토큰 고정값 (디자인 핸드오프 §1) ---
+     유동 clamp는 폐기한다. 뷰포트 비례로 글자가 커지면 사용자 글꼴 확대와 이중으로 겹쳐
+     실측 크기를 예측할 수 없었다. rem 기반이므로 브라우저 글꼴 확대에는 그대로 반응한다(WCAG 1.4.4).
+     괄호 안은 100% 기준 렌더 px / 행간 px. */
+  --fs-xs: .6875rem;    /* 11 / 17 · 배지·캡션·표 본문·단위 */
+  --lh-xs: 1.0625rem;
+  --fs-sm: .75rem;      /* 12 / 18 · 카드 본문·칩·탭·보조설명 */
+  --lh-sm: 1.125rem;
+  --fs-md: .875rem;     /* 14 / 20 · 대화 본문·입력·기본 본문 */
+  --lh-md: 1.25rem;
+  --fs-lg: 1rem;        /* 16 / 24 · 패널 h2·팝업 제목·금액 값 */
+  --lh-lg: 1.5rem;
+  --fs-title: 1.25rem;  /* 20 / 32 · 페이지 섹션 h2 */
+  --lh-title: 2rem;
+  --fs-xl: 1.5rem;      /* 24 / 36 · 보고서 문서 제목 */
+  --lh-xl: 2.25rem;
 
   /* --- 레이아웃 변수 --- */
   --panel-min-h: clamp(620px, 70vh, 1040px);
-  /* 헤더를 한 줄로 합친 뒤의 실측 높이(1920/1366px 기준 약 66px)에 여유를 둔 값 */
-  --sticky-offset: 78px;
+  /* F-14: sticky 기준값은 전부 헤더 실측 높이 하나에서 파생한다.
+     헤더 높이를 상수로 여러 번 적었더니 실측 50px과 160/172/184px 오버라이드가 어긋났다.
+     런타임 실측이 필요하면 AppHeader 가 ResizeObserver 로 --header-h 만 갱신한다. */
+  --header-h: 3.125rem;                                          /* 50px */
+  --sticky-gap: .5rem;
+  --sticky-offset: calc(var(--header-h) + var(--sticky-gap));    /* 58px */
+  --subnav-offset: calc(var(--header-h) + .25rem);               /* 54px */
+  --report-preview-h: calc(100vh - var(--header-h) - 5.5rem);
+  /* 지도 오버레이 공통 여백·POI 치수 (F-16 tier B 에서만 커진다).
+     핀은 기본 20×25.7 / 선택 28×36 — 높이는 viewBox 비율이 만든다. */
+  --overlay-inset: 12px;
+  --map-poi-size: 20px;
 }
+
+/* 루트 배율은 100%로 되돌린다. ≥1600/2000px 단계 확대(106.25%·112.5%)는 고정 타입 스케일과
+   중복되어 상황실 모니터에서 본문이 과대해졌다. 한 단계(≥2400px)만 남긴다. */
+:root { font-size: 100%; }
+@media (min-width: 2400px) { :root { font-size: 106.25%; } }
+
+/* 자간은 전 텍스트 -0.03em 로 통일한다(디자인 핸드오프 §1). */
+body, button, input, select, textarea { letter-spacing: -.03em; }
 
 * { box-sizing: border-box; }
 /* min-width 는 아래 v0.4 절의 `body { min-width: 320px }`(WCAG 1.4.10 Reflow)만 사용한다. */
@@ -135,16 +175,71 @@ button { cursor: pointer; }
 .observation-list article small { grid-column: 1 / -1; font-size: var(--fs-xs); color: #5f6f80; }
 .suggestion { width: 100%; text-align: left; margin: 4px 0; border: 1px solid #d1dce7; background: var(--c-surface); border-radius: 7px; padding: 8px 9px; color: #405870; min-height: 44px; }
 
+/* =========================================================================
+   지도 오버레이 배치.
+
+   출처 구분(혼동 주의):
+   - 인계문서 `30_design_system_handoff.md` 723행 **F-5** 는 "지도 팝업이 지도 오버레이 요소를
+     가린다"는 *문제 제기* 이고, 요청 내용은 "팝업 회피 규칙 **또는** 오버레이 재배치안" 중
+     택일이다. 해결안이 확정된 항목이 아니다.
+   - 아래 '가로띠' 배치는 그 중 후자를 택한 **핸드오프 README 6-2절(151~163행)의 제안**이다.
+     인계문서 D절(불변 제약)에는 오버레이 겹침에 관한 조항이 없다.
+
+   지도 트랙을 넓히는 방법은 우측 판단 패널 잘림을 다시 부르므로 쓰지 않는다.
+
+     띠            요소                    기하
+     상단 좌측     연결상태 필              left/top: inset · 고정 폭, 말줄임 금지
+     상단 우측     베이스맵 전환 버튼 1개    right/top: inset
+     상단 우측     상세 팝업(클릭 시)       right: inset · top: 56px
+     중단          POI 핀                  팝업 띠 아래
+     좌하단        호버 요약 카드           left: inset · bottom: 52px
+     하단          레이어 칩 행             left/right: inset · bottom: inset
+
+   팝업과 칩을 둘 다 하단에 걸면 좁은 지도에서 칩이 팝업 밑으로 깔린다.
+   ========================================================================= */
 .map-panel { position: relative; min-width: 0; }
-.map-canvas { width: 100%; height: 100%; min-height: 420px; background: linear-gradient(145deg, #dce8e7, #f4f7f1); }
-.map-key-notice, .map-error { position: absolute; top: 12px; left: 12px; z-index: 3; border-radius: 6px; padding: 8px 10px; font-size: 12px; }
-.map-key-notice { background: rgba(255, 247, 220, .93); color: #725200; border: 1px solid #e4c56f; }
+.map-canvas { width: 100%; height: 100%; min-height: 420px; background: var(--border-inner-blue); }
+.map-key-notice, .map-error { position: absolute; top: calc(var(--overlay-inset) + 36px); left: var(--overlay-inset); z-index: 5; max-width: min(320px, 55%); border-radius: 6px; padding: 8px 10px; font-size: var(--fs-xs); line-height: var(--lh-xs); }
+.map-key-notice { background: rgba(255, 247, 220, .93); color: #8a5600; border: 1px solid #e4c56f; }
 .map-error { background: rgba(255, 233, 232, .95); color: #8b2420; }
-.map-highlight-notice { position: absolute; top: 52px; left: 12px; z-index: 4; border-radius: 6px; padding: 8px 10px; font-size: 12px; max-width: 320px; background: rgba(255, 247, 220, .93); color: #725200; border: 1px solid #e4c56f; }
-/* 레이어 칩도 z-index 3 을 유지한다. 6 으로 올리면 팝업 하단 sticky 푸터(‘질의에 참조 추가’
-   버튼·고지문)를 통째로 덮어(실측 33,840px² 중첩) 초점 받은 버튼이 완전히 가려진다. */
-.map-layer-chips { position: absolute; left: 12px; bottom: 12px; display: flex; gap: 6px; flex-wrap: wrap; z-index: 3; }
-.chip { border: 1px solid rgba(37, 78, 111, .22); border-radius: 18px; padding: 6px 9px; background: rgba(255,255,255,.92); color: #34536c; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+.map-highlight-notice { position: absolute; top: calc(var(--overlay-inset) + 36px); left: var(--overlay-inset); z-index: 5; border-radius: 6px; padding: 8px 10px; font-size: var(--fs-xs); line-height: var(--lh-xs); max-width: min(320px, 55%); background: rgba(255, 247, 220, .93); color: #8a5600; border: 1px solid #e4c56f; }
+
+/* 하단 띠는 '하나의 flex 행'이다. 오버레이 둘을 각각 띄우고 max-width 에서 고정 px 를 뺀 것이
+   칩이 1개만 남게 된 원인이었다(고정 px 빼기는 컨테이너 폭을 따라가지 않는다). */
+.map-layer-bar { position: absolute; left: var(--overlay-inset); right: var(--overlay-inset); bottom: var(--overlay-inset); z-index: 3; display: flex; align-items: center; gap: 6px; }
+/* 칩은 한 줄을 유지한다(줄바꿈 금지). 넘치는 분은 잘리고, 개수 버튼이 그 단서가 된다. */
+.map-layer-chips { flex: 1 1 auto; min-width: 0; display: flex; flex-wrap: nowrap; gap: 6px; overflow: hidden; }
+/* 개수 버튼은 클리핑 영역 밖에 둔다 — 숨겨진 칩을 대변하는 컨트롤이 자기도 숨으면 단서가 없다. */
+.map-layer-count { flex: 0 0 auto; min-height: 28px; border: 1px solid var(--border-panel-blue); border-radius: var(--r-pill); padding: 0 10px; background: var(--c-surface); color: var(--c-text-muted); font-size: var(--fs-xs); line-height: var(--lh-xs); white-space: nowrap; box-shadow: var(--sh-1); }
+.map-layer-count:hover { border-color: var(--c-brand); color: var(--c-brand); }
+.chip { flex: 0 0 auto; border: 1px solid var(--border-panel-blue); border-radius: var(--r-pill); padding: 6px 9px; background: rgba(255,255,255,.92); color: #34536c; font-size: var(--fs-xs); line-height: var(--lh-xs); white-space: nowrap; box-shadow: var(--sh-1); }
+
+/* 클리핑으로 가려진 레이어에도 마우스·키보드 경로를 남기는 목록. */
+.map-layer-menu { position: absolute; right: var(--overlay-inset); bottom: calc(var(--overlay-inset) + 36px); z-index: 6; width: clamp(200px, 60%, 280px); max-height: calc(100% - 120px); overflow-y: auto; border: 1px solid var(--border-panel-blue); border-radius: var(--r-lg); padding: var(--sp-2); background: var(--c-surface); box-shadow: 0 8px 26px rgba(19, 43, 69, .24); }
+.map-layer-menu-title { margin: 0 0 var(--sp-2); padding: 0 var(--sp-2); color: var(--c-text-muted); font-size: var(--fs-xs); line-height: var(--lh-xs); }
+.map-layer-menu ul { list-style: none; margin: 0; padding: 0; }
+.map-layer-menu button { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); width: 100%; min-height: 44px; border: 0; border-radius: var(--r-sm); padding: 0 var(--sp-2); background: transparent; color: var(--c-text); font-size: var(--fs-sm); line-height: var(--lh-sm); text-align: left; }
+.map-layer-menu button:hover:not(:disabled) { background: var(--surface-panel-blue); }
+.map-layer-menu button[aria-pressed="true"] { color: var(--c-brand); font-weight: 700; }
+.map-layer-menu button:disabled { color: var(--c-text-muted); cursor: not-allowed; }
+.map-layer-menu-state { flex: 0 0 auto; color: var(--c-text-muted); font-size: var(--fs-xs); line-height: var(--lh-xs); font-weight: 400; }
+
+/* 중단 띠 · POI 핀. 핀의 끝이 좌표에 오도록 translate(-50%,-100%) 한다.
+   히트영역은 28×34 로 두어 WCAG 2.5.8 최소 24×24 를 지키고, 그림 자체는 스펙 치수를 유지한다. */
+.map-poi { position: absolute; z-index: 2; display: flex; align-items: flex-end; justify-content: center; width: 28px; height: 34px; min-height: 0; padding: 0; border: 0; background: transparent; transform: translate(-50%, -100%); }
+.map-poi.selected { z-index: 3; width: 34px; height: 40px; }
+.map-poi-icon { display: block; width: var(--map-poi-size); height: auto; filter: drop-shadow(0 1px 2px rgba(12, 30, 48, .45)); }
+.map-poi.selected .map-poi-icon { width: calc(var(--map-poi-size) + 8px); }
+
+/* 좌하단 띠 · POI 호버 요약 카드.
+   이 다크 네이비는 UNE 토큰이 아니라 지도 오버레이 전용 예외다 — 패널 UI 로 확산시키지 않는다. */
+.map-poi-summary { position: absolute; left: var(--overlay-inset); bottom: 52px; z-index: 6; width: 220px; max-width: calc(100% - var(--overlay-inset) * 2); border-radius: 4px; overflow: hidden; background: rgb(18, 15, 74); box-shadow: inset 0 0 0 1px rgb(8, 6, 40), 0 8px 26px rgba(8, 6, 40, .35); pointer-events: none; }
+.map-poi-summary-body { display: grid; gap: 5px; padding: 14px 12px 12px; }
+.map-poi-summary-name { font-size: 14px; line-height: 20px; font-weight: 700; color: #fff; word-break: keep-all; }
+.map-poi-summary-address { font-size: 13px; line-height: 19px; color: rgb(150, 147, 193); word-break: keep-all; }
+.map-poi-summary-metric { display: flex; align-items: center; justify-content: space-between; gap: 8px; height: 40px; padding: 0 12px; background: rgb(22, 20, 63); box-shadow: inset 0 0 0 1px rgb(8, 6, 40); }
+.map-poi-summary-metric span { font-size: 13px; line-height: 19px; color: rgb(150, 147, 193); }
+.map-poi-summary-metric strong { font-size: 13px; line-height: 19px; font-weight: 700; color: #fff; font-variant-numeric: tabular-nums; }
 
 .notice-card { border-radius: 8px; padding: 10px; margin-bottom: 10px; }
 .notice-card.warning { background: #fff5dc; border: 1px solid #edd28d; color: #5f4a14; }
@@ -152,9 +247,9 @@ button { cursor: pointer; }
 .notice-card.info { background: var(--c-brand-soft); border: 1px solid #9cc8e8; color: var(--c-brand-ink); }
 .notice-card p { margin: 5px 0 0; font-size: var(--fs-sm); line-height: 1.5; }
 .priority-card { display: grid; grid-template-columns: 32px 1fr; gap: 9px; padding: 10px; border: 1px solid #d9e3ec; border-radius: 8px; margin-bottom: 9px; }
-.rank { width: 28px; height: 28px; border-radius: 50%; background: #1769aa; color: #fff; display: grid; place-items: center; font-weight: 800; }
+.rank { width: 28px; height: 28px; border-radius: 50%; background: #1769aa; color: #fff; display: grid; place-items: center; font-weight: 700; }
 .priority-title { display: flex; justify-content: space-between; gap: 10px; }
-.priority-title span { color: #c84b42; font-weight: 800; }
+.priority-title span { color: #c84b42; font-weight: 700; }
 .priority-card ul { margin: 8px 0; padding-left: 18px; color: #52677a; font-size: var(--fs-xs); line-height: 1.55; }
 .priority-card button { border: none; background: #edf5fb; color: var(--c-brand); border-radius: 5px; padding: 6px 8px; font-weight: 700; }
 /* v1.9 우선 확인지역 카드: 카드 전체가 지도 이동 클릭영역(마우스 편의)이고 키보드 진입점은 지역명 버튼이다.
@@ -187,11 +282,11 @@ button.priority-name-button:hover { background: var(--c-brand-soft); color: var(
   background: var(--c-brand-soft);
   color: var(--c-brand-ink);
   font-size: var(--fs-xs);
-  font-weight: 750;
+  font-weight: 700;
   line-height: 1.5;
 }
 .priority-location { color: var(--c-text-muted); font-size: var(--fs-xs); line-height: 1.5; word-break: keep-all; }
-button.priority-detail-button { min-height: 44px; border: 1px solid #b9cfe1; background: #edf5fb; color: var(--c-brand-ink); font-size: var(--fs-xs); font-weight: 750; }
+button.priority-detail-button { min-height: 44px; border: 1px solid #b9cfe1; background: #edf5fb; color: var(--c-brand-ink); font-size: var(--fs-xs); font-weight: 700; }
 button.priority-detail-button:hover { background: #dcecf9; border-color: #7fb2dc; }
 .procedure-card { border-left: 4px solid #3b87bd; background: #f7fafc; padding: 10px; margin-bottom: 9px; }
 .procedure-card small { display: block; color: #5a6b7e; margin-bottom: 4px; font-size: var(--fs-xs); }
@@ -229,11 +324,20 @@ button.priority-detail-button:hover { background: #dcecf9; border-color: #7fb2dc
   .map-canvas { min-height: 350px; }
 }
 
-.status-banner.hybrid{background:#e7f4ff;color:#245b83;border:1px solid #9cc8e8}.field select{width:100%;border:1px solid #c8d3df;border-radius:7px;padding:9px;background:#fbfcfe}.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 8px}.chip.active{border-color:#1769aa;color:#1769aa;font-weight:800}.chip:disabled{opacity:.55;cursor:not-allowed}.global-notice{position:fixed;top:75px;right:16px;z-index:10;background:#e8f5ec;color:#245c38;border:1px solid #a8d2b5;border-radius:7px;padding:8px 12px}
+.status-banner.hybrid{background:#e7f4ff;color:#245b83;border:1px solid #9cc8e8}.field select{width:100%;border:1px solid #c8d3df;border-radius:7px;padding:9px;background:#fbfcfe}.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 8px}.chip.active{border-color:#1769aa;color:#1769aa;font-weight:700}.chip:disabled{opacity:.55;cursor:not-allowed}.global-notice{position:fixed;top:75px;right:16px;z-index:10;background:#e8f5ec;color:#245c38;border:1px solid #a8d2b5;border-radius:7px;padding:8px 12px}
 
 
 /* v0.3 integration and comparison */
-.map-connection{position:absolute;left:12px;top:12px;z-index:5;display:flex;align-items:center;gap:7px;padding:7px 10px;border-radius:8px;background:rgba(255,255,255,.92);font-size:12px;box-shadow:0 2px 10px rgba(0,0,0,.12)}
+/* 상단 좌측 띠 · 연결상태 필. 말줄임하지 않는다 — 문구가 줄면
+   'Seed 연결 · 실데이터 아님' 같은 자료성격 표기가 먼저 사라진다(인계문서 D-2).
+   대신 지도가 좁아지면(뷰포트 900px 에서 지도 282px) 어절 단위로 접는다.
+   max-width 는 우측 전환 버튼(약 96px)과 양쪽 inset 을 뺀 값이다.
+
+   핸드오프 README 156행은 이 필을 "고정 폭"으로 지정하지만 따르지 않았다. 이 이탈은 임의
+   판단이 아니라 인계문서 **D-1 463행 "고정폭(px) 요소 추가 금지"**(Reflow · 320px 가로 스크롤 0)가
+   뒷받침한다. 참고로 README 200행이 근거로 든 "필 152px / 버튼 135px"은 인계문서에도
+   프로토타입에도 없는 서술 전용 수치이며, 이 서비스의 실제 문구 길이와도 맞지 않는다. */
+.map-connection{position:absolute;left:var(--overlay-inset);top:var(--overlay-inset);z-index:4;display:flex;align-items:center;gap:6px;max-width:calc(100% - var(--overlay-inset) * 2 - 104px);padding:5px 10px;border-radius:var(--r-pill);background:var(--c-surface);border:1px solid var(--border-panel-blue);font-size:var(--fs-xs);line-height:var(--lh-xs);font-weight:500;word-break:keep-all;box-shadow:var(--sh-1)}
 .status-dot{width:8px;height:8px;border-radius:50%;background:#999}.map-connection.connected .status-dot{background:#16845b}.map-connection.connecting .status-dot{background:#e8a519}.map-connection.error .status-dot{background:#c73f3a}.map-connection.seed-only .status-dot{background:#777}
 .event-list{display:flex;flex-direction:column;gap:9px}.event-card{position:relative;text-align:left;border:1px solid #d9e1e8;background:#fff;border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:4px;color:#25313b}.event-card.selected{border-color:#1769aa;box-shadow:0 0 0 2px rgba(23,105,170,.12)}.event-card ul{margin:5px 0 0 17px;padding:0;font-size:12px}.event-score{position:absolute;right:10px;top:10px;background:#eef6fc;color:#155a8a;border-radius:999px;padding:3px 8px;font-weight:700}.evidence-count{font-size:11px;color:#567}
 .change-workspace{display:flex;flex-direction:column;gap:10px}.change-toolbar{display:flex;gap:10px;align-items:end;flex-wrap:wrap}.change-toolbar label{display:flex;flex-direction:column;gap:4px;font-size:12px}.change-toolbar select{min-width:220px;padding:7px;border:1px solid #cfd9e2;border-radius:7px}.segmented{display:flex;border:1px solid #cfd9e2;border-radius:8px;overflow:hidden}.segmented button{border:0;background:#fff;padding:8px 11px}.segmented button.active{background:#1769aa;color:#fff}.satellite-compare.split{display:grid;grid-template-columns:1fr 1fr;gap:10px}.satellite-compare figure{margin:0;border:1px solid #d6dee6;border-radius:10px;overflow:hidden;background:#fff}.satellite-compare img{width:100%;height:250px;object-fit:cover;display:block}.satellite-compare figcaption{display:flex;justify-content:space-between;padding:9px 12px;font-size:12px}.swipe-wrap{height:300px;position:relative;overflow:hidden;border-radius:10px;border:1px solid #d5dde5;background:#25313b}.swipe-image{position:absolute;inset:0;background-size:cover;background-position:center}.swipe-image.overlay{right:auto;overflow:hidden}.swipe-divider{position:absolute;top:0;bottom:0;width:3px;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.35);transform:translateX(-1px)}.swipe-wrap input{position:absolute;left:4%;bottom:12px;width:92%;z-index:3}.change-note{font-size:12px;padding:8px 10px;background:#fff7e4;border:1px solid #f0d897;border-radius:8px}.comparison-grid.detailed{grid-template-columns:1fr 1fr 1fr}.comparison-grid.detailed article{display:flex;flex-direction:column;gap:5px}.comparison-grid.detailed small{margin-top:auto;color:#8a5a16}
@@ -253,23 +357,44 @@ button:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-
 .skip-link:focus { transform: translateY(0); }
 
 .multi-page-shell { min-height: 100vh; height: auto; display: grid; grid-template-rows: auto 1fr auto; overflow: visible; }
-.site-header { position: sticky; top: 0; z-index: 20; background: #fff; border-bottom: 1px solid #cbd6e2; box-shadow: 0 1px 7px rgba(27,54,86,.08); }
-/* 브랜드+페이지명(h1) · 현재상황 컨텍스트 · 전역 내비를 한 줄에 배치한다.
-   항목이 많으므로 flex-wrap으로 좁은 화면에서 자연스럽게 접히게 한다. */
-.header-row { display: flex; align-items: center; flex-wrap: wrap; gap: 6px clamp(9px, .9vw, 22px); padding: 7px var(--page-pad); }
-.header-row .brand-block { border-right: 0; min-width: 0; justify-content: center; }
-.header-row .brand-block strong { font-size: var(--fs-md); color: var(--c-brand-deep); line-height: 1.25; }
-.app-page-title { margin: 1px 0 0; font-size: var(--fs-sm); font-weight: 750; line-height: 1.3; color: var(--c-text-strong); }
-.global-nav { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-left: auto; }
-.global-nav a { display: inline-flex; align-items: center; text-decoration: none; border-radius: var(--r-md); padding: 8px clamp(8px, .68vw, 13px); color: #3d556d; font-weight: 750; font-size: var(--fs-md); border: 1px solid transparent; }
-.global-nav a:hover { background: #eef5fa; }
-.global-nav a[aria-current="page"] { color: #0d5e97; background: #e9f3fa; border-color: #8cbadb; }
-.context-bar { display: flex; align-items: center; flex-wrap: wrap; gap: 6px clamp(8px, .7vw, 18px); min-width: 0; }
-.context-select, .context-item { display: flex; align-items: center; gap: 6px; min-width: 0; }
-.context-select > span, .context-item > span { font-size: var(--fs-xs); color: #5c6d80; font-weight: 700; white-space: nowrap; }
-.context-select select { width: clamp(140px, 12.5vw, 240px); min-width: 0; border: 1px solid #bccbd8; border-radius: 7px; padding: 6px 8px; background: var(--c-surface); font-size: var(--fs-sm); }
-.context-item strong { font-size: var(--fs-sm); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.secondary-action { border: 1px solid #72a8cf; border-radius: 7px; background: #edf6fc; color: #145f96; font-weight: 750; padding: 8px 13px; }
+.site-header { position: sticky; top: 0; z-index: 20; background: var(--c-surface); border-bottom: 1px solid var(--border-panel-blue); box-shadow: 0 1px 7px rgba(27,54,86,.08); }
+
+/* 헤더는 4개 항목만 담는다: 브랜드(+h1) · 지역 Select · 전역 내비 · 상황뷰 저장.
+   1280px 에서 헤더가 넘치는 회귀가 두 번 있었다. 확정 규칙(디자인 핸드오프 §7):
+   수축 경로는 브랜드 블록의 h1 말줄임 하나뿐이고 나머지는 전부 flex:0 0 auto 다.
+   컨텍스트 묶음을 flex:1 1 auto 로 두면 그 묶음이 부족분을 흡수해 배지가 잘리고,
+   반대로 브랜드 블록을 0 0 auto 로 고정하면 내비를 침범한다. */
+/* 높이는 리터럴로 둔다. `height: var(--header-h)` 로 두면 AppHeader 의 ResizeObserver 가
+   실측 높이를 --header-h 에 다시 써서 높이→변수→높이 되먹임이 생기고, 반올림 오차만으로도
+   프레임마다 1px 씩 진동해 레이아웃이 영원히 안정되지 않는다. */
+.header-row { display: flex; align-items: center; flex-wrap: nowrap; gap: 12px; min-height: 3.125rem; padding: 0 16px; white-space: nowrap; }
+.header-row > * { flex: 0 0 auto; }
+.header-row .brand-block { flex: 1 1 auto; min-width: 120px; flex-direction: row; align-items: center; gap: 8px; border-right: 0; }
+.header-row .brand-block strong { flex: 0 0 auto; font-size: var(--fs-lg); line-height: var(--lh-lg); font-weight: 700; color: var(--c-brand-deep); }
+.brand-block .brand-divider { flex: 0 0 auto; width: 1px; height: 16px; margin: 0; background: var(--border-panel-blue); }
+.app-page-title { flex: 0 1 auto; min-width: 0; margin: 0; font-size: var(--fs-md); line-height: var(--lh-md); font-weight: 700; color: var(--c-brand); overflow: hidden; text-overflow: ellipsis; }
+.header-spacer { flex: 1 1 auto; min-width: 0; }
+
+.global-nav { display: flex; align-items: center; gap: 6px; }
+.global-nav a { display: inline-flex; align-items: center; text-decoration: none; border-radius: var(--r-md); padding: 6px 10px; color: #3d556d; font-weight: 700; font-size: var(--fs-sm); border: 1px solid transparent; }
+.global-nav a:hover { background: var(--surface-panel-blue); }
+.global-nav a[aria-current="page"] { color: #0d5e97; background: var(--surface-panel-blue); border-color: #8cbadb; }
+.context-select { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.context-select > span { font-size: var(--fs-xs); color: #5c6d80; font-weight: 700; white-space: nowrap; }
+.context-select select { width: 132px; min-width: 0; border: 1px solid #bccbd8; border-radius: 7px; padding: 4px 8px; background: var(--c-surface); font-size: var(--fs-sm); }
+.secondary-action { border: 1px solid #72a8cf; border-radius: 7px; background: #edf6fc; color: #145f96; font-weight: 700; font-size: var(--fs-sm); padding: 4px 12px; }
+
+/* 헤더에서 내린 기준시각·모드·재난유형. 값 문자열은 절대 중간에서 자르지 않고,
+   폭이 부족하면 항목 단위로 줄바꿈해 내린다. */
+.page-context-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; margin: 0 0 12px; }
+.page-context-item { display: flex; align-items: center; gap: 6px; }
+.page-context-item > span { font-size: var(--fs-xs); line-height: var(--lh-xs); color: var(--c-text-muted); }
+.page-context-time { font-size: var(--fs-sm); line-height: var(--lh-sm); font-weight: 500; font-variant-numeric: tabular-nums; }
+.page-context-badge { display: inline-flex; align-items: center; min-height: 20px; border-radius: var(--r-sm); padding: 0 8px; font-size: var(--fs-xs); line-height: var(--lh-xs); font-weight: 500; }
+.page-context-badge.hazard { background: var(--surface-panel-blue); border: 1px solid var(--border-panel-blue); color: var(--c-brand-ink); }
+/* 시나리오는 '공식 관측 아님'을 알리는 경고 상태이므로 warning solid 로 둔다(파랑으로 바꾸지 않는다). */
+.page-context-badge.mode-scenario { background: #8a5600; color: #fff; }
+.page-context-badge.mode-hybrid, .page-context-badge.mode-live, .page-context-badge.mode-unknown { background: var(--c-neutral-bg); border: 1px solid var(--c-neutral-line); color: var(--c-neutral-text); }
 
 /* grid item의 자동 최소 크기(min-width:auto)가 내부 최소폭(예: .timeline-list 트랙 합계)까지
    부풀어 문서 전체에 가로 스크롤을 만들지 않도록 0으로 고정한다. (WCAG 1.4.10 Reflow) */
@@ -282,7 +407,9 @@ button:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-
 /* 1열은 사용자가 조절한 폭(--left-panel-w)을 쓰고, 값이 없으면 기본 clamp를 유지한다. */
 /* 사이드 폭은 뷰포트 비례(clamp+vw)를 유지하되 상한을 낮춰, 와이드 모니터에서 늘어나는 여유 폭이
    중앙 지도 컬럼으로 가게 한다. 좁은 화면(≤1366px)에서는 두 패널 모두 이미 하한이라 변화가 없다. */
-.dashboard-grid { min-height: var(--panel-min-h); display: grid; grid-template-columns: var(--left-panel-w, clamp(300px, 19vw, 340px)) 26px minmax(420px, 1fr) clamp(350px, 23.5vw, 400px); gap: var(--sp-gap); }
+/* 지도 트랙을 넓혀 오버레이 충돌을 해결하지 않는다 — 그 방법은 우측 판단 패널 잘림을 다시 부른다.
+   오버레이 겹침은 서로 다른 가로띠를 점유하게 해서 푼다(F-5, `.map-panel` 절 참고). */
+.dashboard-grid { min-height: var(--panel-min-h); display: grid; grid-template-columns: var(--left-panel-w, clamp(240px, 21vw, 340px)) 26px minmax(240px, 1fr) var(--right-panel-w, clamp(292px, 25vw, 400px)); gap: 12px; }
 .dashboard-grid > .left-panel, .dashboard-grid > .right-panel, .dashboard-grid > .map-panel { min-height: var(--panel-min-h); }
 
 /* 좌측 패널 폭 조절 구분자: 드래그 외에 버튼·키보드 대체조작을 함께 제공한다. */
@@ -296,22 +423,22 @@ button:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-
 body.panel-resizing { cursor: col-resize; user-select: none; -webkit-user-select: none; }
 .dashboard-timeline { margin-top: 12px; background: var(--c-surface); border: 1px solid var(--c-line); border-radius: var(--r-lg); padding: var(--sp-5); box-shadow: 0 2px 9px rgba(24,49,77,.06); }
 .section-heading-row { display: flex; justify-content: space-between; align-items: start; gap: 18px; margin-bottom: 12px; }
-.section-heading-row h2 { margin: 0 0 4px; font-size: var(--fs-lg); color: #183e5d; }
+.section-heading-row h2 { margin: 0 0 4px; font-size: var(--fs-title); line-height: var(--lh-title); font-weight: 700; color: #183e5d; }
 .section-heading-row p, .section-heading-row span { margin: 0; color: var(--c-text-soft); font-size: var(--fs-sm); line-height: 1.55; }
 .timeline-list { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(170px, 1fr); gap: 10px; overflow-x: auto; padding: 2px 2px 7px; }
 .timeline-list article { border-top: 4px solid #2d7db5; background: #f7fafc; border-radius: 6px; padding: 10px; display: flex; flex-direction: column; gap: 4px; }
 .timeline-list time, .timeline-list small { color: #566a7e; font-size: var(--fs-xs); }
 
-.page-subnav { position: sticky; top: calc(var(--sticky-offset) - 16px); z-index: 8; display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; padding: 8px; border: 1px solid #cbd6e2; background: rgba(255,255,255,.96); border-radius: 9px; }
+.page-subnav { position: sticky; top: var(--subnav-offset); z-index: 8; display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; padding: 8px; border: 1px solid var(--border-panel-blue); background: rgba(255,255,255,.96); border-radius: 9px; }
 .page-subnav a { display: inline-flex; align-items: center; border-radius: 7px; padding: 7px 10px; text-decoration: none; font-weight: 700; background: #eff5f9; }
 .evidence-page { display: grid; gap: var(--sp-gap); }
-.evidence-section { background: var(--c-surface); border: 1px solid var(--c-line); border-radius: var(--r-lg); padding: clamp(14px, 1.1vw, 28px); box-shadow: 0 2px 9px rgba(24,49,77,.06); }
-.seed-badge { display: inline-flex; align-items: center; min-height: 32px; border-radius: var(--r-pill); padding: 5px 10px; background: #fff3d5; color: #664b06 !important; border: 1px solid #e6ca78; font-weight: 750; font-size: var(--fs-sm); }
+.evidence-section { background: var(--c-surface); border: 1px solid var(--border-panel-blue); border-radius: 12px; padding: clamp(14px, 1.1vw, 28px); box-shadow: 0 2px 9px rgba(24,49,77,.06); }
+.seed-badge { display: inline-flex; align-items: center; min-height: 32px; border-radius: var(--r-pill); padding: 5px 10px; background: #fff3d5; color: #664b06 !important; border: 1px solid #e6ca78; font-weight: 700; font-size: var(--fs-sm); }
 .comparison-controls { display: grid; grid-template-columns: minmax(220px, 1fr) minmax(220px, 1fr) auto; gap: 12px; align-items: end; margin-bottom: 12px; }
 .comparison-controls > label { display: flex; flex-direction: column; gap: 5px; font-weight: 700; color: #405b73; }
 .comparison-controls select { border: 1px solid #bdcad6; border-radius: 7px; padding: 8px; background: #fff; }
 .comparison-mode { min-width: 245px; border: 1px solid #c6d2dd; border-radius: 8px; padding: 7px 10px; }
-.comparison-mode legend { padding: 0 5px; font-size: 12px; font-weight: 750; color: #4d657b; }
+.comparison-mode legend { padding: 0 5px; font-size: 12px; font-weight: 700; color: #4d657b; }
 .comparison-mode label { display: inline-flex; align-items: center; gap: 5px; margin-right: 9px; }
 .comparison-mode input { min-height: auto; width: 20px; height: 20px; }
 .satellite-compare img { height: 330px; }
@@ -321,7 +448,7 @@ body.panel-resizing { cursor: col-resize; user-select: none; -webkit-user-select
 .quick-position button { border: 1px solid #9eb7ca; border-radius: 7px; background: #f6f9fb; color: #255c83; min-width: 64px; }
 .accessible-data-table-wrap { overflow-x: auto; margin-top: 12px; }
 table { width: 100%; border-collapse: collapse; }
-caption { text-align: left; font-weight: 800; color: #1e496b; padding: 8px 0; }
+caption { text-align: left; font-weight: 700; color: #1e496b; padding: 8px 0; }
 th, td { border: 1px solid #cdd8e2; padding: 10px; text-align: left; vertical-align: top; }
 th { background: #f2f6f9; }
 .summary-definition-list { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; margin: 0; }
@@ -329,12 +456,19 @@ th { background: #f2f6f9; }
 .summary-definition-list dt { color: #5c7184; font-size: 12px; font-weight: 700; }
 .summary-definition-list dd { margin: 5px 0 0; line-height: 1.5; }
 .damage-event-grid { display: grid; gap: 12px; }
-.damage-event-card { border: 1px solid #d2dde7; border-radius: 10px; overflow: hidden; }
-.damage-event-card > header { display: flex; justify-content: space-between; gap: 12px; padding: 12px; background: #f1f7fb; }
+.damage-event-card { border: 1px solid var(--border-panel-blue); border-radius: 12px; overflow: hidden; }
+.damage-event-card > header { display: flex; justify-content: space-between; gap: 12px; padding: 10px 14px; background: var(--surface-panel-blue); border-bottom: 1px solid var(--border-inner-blue); }
 .damage-event-card > header div { display: flex; flex-direction: column; gap: 4px; }
 .damage-event-card > header small { color: #667c90; }
-.damage-event-card > header > span { align-self: start; border-radius: 999px; padding: 5px 9px; background: #dcecf7; color: #155b88; font-weight: 800; }
-.damage-columns { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr) minmax(0, 1fr); gap: 12px; padding: 12px; }
+.damage-event-card > header > span { align-self: start; border-radius: 999px; padding: 5px 9px; background: #dcecf7; color: #155b88; font-weight: 700; }
+/* F-15: 열 수는 데이터가 결정한다. 고정 3열은 이력이 없는 사례에서 빈 열 두 개를 남기고
+   그만큼 금액 카드를 좁혔다. `none` 일 때는 금액 카드 그리드(auto-fit minmax(200px,1fr))가
+   남는 폭을 그대로 흡수한다. */
+.damage-columns { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 12px; }
+.damage-columns[data-history="both"] { grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr) minmax(0, 1fr); }
+.damage-columns[data-history="response"],
+.damage-columns[data-history="recovery"] { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); }
+.damage-columns[data-history="none"] { grid-template-columns: minmax(0, 1fr); }
 .damage-columns section { min-width: 0; }
 .damage-columns h3 { margin: 0 0 7px; font-size: 15px; color: #183e5d; }
 .damage-columns ol { margin: 0; padding-left: 20px; line-height: 1.6; }
@@ -347,11 +481,19 @@ th { background: #f2f6f9; }
    - 금액은 재해대장 원값(천원)과 억원 환산을 항상 함께 보여준다(임의 환산·보정 아님).
    ========================================================================= */
 .damage-summary h3 + h3 { margin-top: 14px; }
-.damage-amount-list { list-style: none; margin: 0 0 8px; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 8px; }
-.damage-amount-list li { display: flex; flex-direction: column; gap: 2px; padding: 9px 11px; border: 1px solid #cfdce7; border-left: 4px solid #2b6796; border-radius: 8px; background: #f5f9fc; }
-.damage-amount-label { color: #4a5f72; font-size: var(--fs-xs); font-weight: 700; line-height: 1.45; word-break: keep-all; }
-.damage-amount-value { color: #14405f; font-size: var(--fs-md); font-weight: 800; line-height: 1.4; overflow-wrap: anywhere; }
-.damage-scope-note, .damage-no-quantity, .damage-description, .damage-history-empty { margin: 0 0 8px; color: var(--c-text-soft); font-size: var(--fs-sm); line-height: 1.55; word-break: keep-all; overflow-wrap: break-word; }
+/* 금액 카드: 좌측 4px 브랜드선 · 라벨 11px · 값 16/700 tabular-nums.
+   `none` 상태의 피해 카드에서는 이 auto-fit 그리드가 비워진 이력 열의 폭을 그대로 흡수한다. */
+.damage-amount-list { list-style: none; margin: 0 0 8px; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; }
+.damage-amount-list li { display: flex; flex-direction: column; gap: 2px; padding: 8px 10px; border-left: 4px solid var(--c-brand); border-radius: 4px; background: var(--surface-panel-blue); }
+.damage-amount-label { color: var(--c-text-muted); font-size: var(--fs-xs); font-weight: 400; line-height: var(--lh-xs); word-break: keep-all; }
+.damage-amount-value { color: #14405f; font-size: var(--fs-lg); font-weight: 700; line-height: var(--lh-lg); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.damage-scope-note, .damage-no-quantity, .damage-description { margin: 0 0 8px; color: var(--c-text-soft); font-size: var(--fs-sm); line-height: 1.55; word-break: keep-all; overflow-wrap: break-word; }
+
+/* F-15 데이터 상태 줄 — '미확보' 표기는 D-2 요건이라 지우지 않고 여기로 옮겼다. */
+.damage-history-empty { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 12px 12px; padding: 8px 10px; border: 1px dashed #c2d3ff; border-radius: 4px; background: var(--surface-panel-blue); }
+.damage-history-empty-label { color: var(--c-text-muted); font-size: var(--fs-xs); line-height: var(--lh-xs); font-weight: 500; }
+.damage-history-empty-badge { border: 1px solid var(--c-neutral-line); border-radius: 4px; padding: 1px 8px; color: var(--c-neutral-text); font-size: var(--fs-xs); line-height: var(--lh-xs); white-space: nowrap; }
+.damage-history-empty-note { color: var(--c-text-muted); font-size: var(--fs-xs); line-height: var(--lh-xs); word-break: keep-all; }
 .damage-no-quantity { padding: 9px 11px; border: 1px dashed #b9c6d2; border-radius: 8px; background: #f7f9fb; color: #4a5f72; }
 .damage-description { color: var(--c-text); }
 .damage-quantity-facts, .damage-source-facts { margin-bottom: 8px; }
@@ -365,8 +507,8 @@ th { background: #f2f6f9; }
 .damage-structure-hint { color: var(--c-text-soft); font-size: var(--fs-xs); line-height: 1.5; word-break: keep-all; }
 .structure-json { max-height: 260px; overflow: auto; white-space: pre-wrap; word-break: break-all; background: #f6f8fa; border: 1px solid #dde4ea; border-radius: 7px; padding: 9px; font-size: var(--fs-xs); line-height: 1.5; }
 
-.report-layout { display: grid; grid-template-columns: clamp(215px, 13.5vw, 320px) minmax(380px, 1.15fr) minmax(340px, .95fr); gap: var(--sp-gap); align-items: start; }
-.report-outline, .report-form, .report-preview { background: var(--c-surface); border: 1px solid var(--c-line); border-radius: var(--r-lg); padding: clamp(14px, 1.05vw, 26px); box-shadow: 0 2px 9px rgba(24,49,77,.06); }
+.report-layout { display: grid; grid-template-columns: clamp(196px, 13.5vw, 300px) minmax(260px, 1.15fr) minmax(260px, .95fr); gap: 12px; align-items: start; }
+.report-outline, .report-form, .report-preview { background: var(--c-surface); border: 1px solid var(--border-panel-blue); border-radius: 12px; padding: clamp(14px, 1.05vw, 26px); box-shadow: 0 2px 9px rgba(24,49,77,.06); }
 .report-outline { position: sticky; top: var(--sticky-offset); }
 .report-outline h2, .report-form h2, .report-preview h2 { margin: 0 0 12px; font-size: var(--fs-lg); color: #183f5e; }
 .report-outline ol { padding-left: 22px; line-height: 2; font-size: var(--fs-sm); }
@@ -379,30 +521,60 @@ th { background: #f2f6f9; }
 .draft-validation-ok { margin: 0; font-size: var(--fs-sm); line-height: 1.55; color: #245b35; font-weight: 700; }
 .draft-validation-note { margin: 6px 0 0; font-size: var(--fs-xs); line-height: 1.55; color: #5d6672; font-weight: 400; }
 .report-form { display: flex; flex-direction: column; gap: 13px; }
-.report-form > label { display: flex; flex-direction: column; gap: 6px; font-weight: 800; color: #2e506d; }
+.report-form > label { display: flex; flex-direction: column; gap: 6px; font-weight: 700; color: #2e506d; }
 .report-form textarea { min-height: 125px; border: 1px solid #bfcdd9; border-radius: 8px; padding: 10px; resize: vertical; font-weight: 400; color: #1c2d3d; }
 .report-actions { display: flex; justify-content: flex-end; gap: 8px; }
-.report-actions button { border: 1px solid #89aac2; background: #f4f8fb; color: #225878; border-radius: 7px; padding: 8px 12px; font-weight: 750; }
+.report-actions button { border: 1px solid #89aac2; background: #f4f8fb; color: #225878; border-radius: 7px; padding: 8px 12px; font-weight: 700; }
 .report-actions button.primary { color: #fff; background: #1769aa; border-color: #1769aa; }
 .report-preview { position: sticky; top: var(--sticky-offset); }
-.report-preview pre { max-height: calc(100vh - 245px); overflow: auto; white-space: pre-wrap; line-height: 1.55; font-size: var(--fs-xs); }
+.report-preview pre { max-height: var(--report-preview-h); overflow: auto; white-space: pre-wrap; line-height: 1.55; font-size: var(--fs-xs); }
 
 .panel-tabs button[role="tab"] { min-height: 44px; }
-.map-layer-chips .chip { min-height: 44px; }
 
-@media (max-width: 1280px) {
-  /* 3열이 아닌 구간에서는 구분자를 숨기고 --left-panel-w도 사용하지 않는다. */
-  .panel-resizer { display: none; }
-  .dashboard-grid { grid-template-columns: 290px minmax(430px,1fr); }
-  .dashboard-grid > .right-panel { grid-column: 1 / -1; min-height: 420px; }
-  .report-layout { grid-template-columns: 200px 1fr; }
-  .report-preview { grid-column: 1 / -1; position: static; }
+/* =========================================================================
+   [승인된 이탈 · 사인오프 대기] 44px 터치타깃 예외 4곳
+
+   벗어난 조항: 인계문서 `30_design_system_handoff.md`
+     - D-1 461행 "44px 미만 컨트롤 제안 금지" (`.chip` 과 `.agent-context-remove` 를
+       개별 44px 지정 대상으로 **이름까지 열거**한다)
+     - D-3 511행 고정 치수 표 "터치타깃 44px"
+     - 핸드오프 README 16~18행도 "절대 깨지 않을 것"에 44px 을 올려두었다.
+
+   그럼에도 줄인 이유: 같은 README 가 뒤에서 28px 컨트롤을 지정해 스스로 모순되고
+   (176·202·222행), D-1 이 표방한 기준은 **WCAG 2.2 AA** 인데 AA 의 터치타깃 요구는
+   24×24 CSS px(2.5.8)이고 **44px 은 AAA(2.5.5)** 수준이다. 아래 28px·36px 은 AA 를 충족한다.
+   지도 위에서 44px 컨트롤은 하단 띠가 지도 높이의 상당 부분을 먹어 정작 지도가 안 보인다.
+
+   대상과 값:
+     .map-layer-chips .chip / .map-layer-count / .map-basemap-switch button  28px  (AA 충족)
+     .agent-suggestions > summary                                            36px  (AA 충족)
+     .agent-context-remove                                                   14px  (AA 미달)
+   14px 짜리 참조 칩 ✕ 만 AA 미달이며, 이것은 README 183행이 유일하게 명시적으로
+   "44px 터치타깃 예외 대상(밀집 데스크톱 컨트롤)"이라 선언한 컨트롤이다.
+
+   완화: 아래 `@media (pointer: coarse)` 에서 전부 44px(참조 칩 ✕ 는 24px)로 되돌린다.
+   **이 완화는 두 문서 어디에도 없는 자체 판단이다.** 디자이너 사인오프 전까지
+   이 예외 목록을 넓히지 말 것. 경위는 PROGRESS.md "Pending approval" 절 참고.
+   ========================================================================= */
+.map-layer-chips .chip { min-height: 28px; }
+@media (pointer: coarse) {
+  .map-layer-chips .chip, .map-layer-count, .map-basemap-switch button { min-height: 44px; }
 }
 
-@media (max-width: 900px) {
+/* 4열 상황판의 하한을 1280px → 900px 로 내린다. 900px 기준 실측:
+   좌 240 + 구분자 26 + 우 292 + gap 36 = 594, 본문폭 876 → 지도 282px 로 하한(240px) 위다.
+   1280px 에서 미리 2열로 접으면 노트북 폭에서 우측 판단 패널이 화면 밖으로 밀린다. */
+@media (max-width: 899px) {
+  /* 4열이 아닌 구간에서는 구분자를 숨기고 --left-panel-w도 사용하지 않는다. */
+  .panel-resizer { display: none; }
+  /* 헤더가 static 이 되므로 sticky 기준값의 출발점도 0 이어야 한다(F-14). */
+  :root { --header-h: 0px; }
   .site-header { position: static; }
-  .header-row { align-items: stretch; }
-  .brand-block, .context-bar { flex: 1 1 100%; }
+  /* 한 줄 nowrap 예산은 데스크톱 폭에서만 성립한다. 여기서는 항목 단위로 접어
+     320px Reflow 에서 가로 스크롤이 생기지 않게 한다(WCAG 1.4.10). */
+  .header-row { flex-wrap: wrap; white-space: normal; align-items: stretch; min-height: 0; padding: 8px var(--page-pad); }
+  .header-spacer { display: none; }
+  .brand-block { flex: 1 1 100%; }
   .global-nav { width: 100%; margin-left: 0; }
   .global-nav a { flex: 1 1 180px; justify-content: center; }
   .context-select { flex: 1 1 100%; }
@@ -418,7 +590,6 @@ th { background: #f2f6f9; }
 
 @media (max-width: 560px) {
   .page-main { padding: 12px; }
-  .context-item { flex: 1 1 100%; }
   .satellite-compare.split { grid-template-columns: 1fr; }
   .satellite-compare img { height: 230px; }
   .field-grid { grid-template-columns: 1fr; }
@@ -439,16 +610,15 @@ th { background: #f2f6f9; }
 .status-badge.error { background: #ffe9e7; color: #8b211b; }
 
 
-/* z-index 4 유지(팝업 인라인 z-index:5 아래).
-   팝업 위(6)로 올리는 안을 실측 검증한 결과, 팝업이 지도 우측에 배치되는 배치조합에서
-   이 스위치가 팝업 머리말의 닫기버튼을 97.7% 덮어 클릭가능 면적 0%가 된다
-   (1366x768 · 36개 배치표본 중 6건). 대화상자의 닫기수단을 막는 쪽이 더 큰 결함이므로
-   z-index 역전은 적용하지 않는다. 근본해결은 팝업 배치계산이 컨트롤 영역을 피하도록 하는
-   MapPanel 레이아웃 변경(디자인 판단 영역)이다. */
-.map-basemap-switch { position: absolute; top: 48px; right: 12px; z-index: 4; display: inline-flex; border: 1px solid #8faabd; border-radius: 8px; overflow: hidden; background: rgba(255,255,255,.96); }
-.map-basemap-switch button { min-height: 44px; border: 0; border-right: 1px solid #b8c8d4; padding: 7px 11px; background: #fff; color: #234c68; font-weight: 750; }
-.map-basemap-switch button:last-child { border-right: 0; }
-.map-basemap-switch button[aria-pressed="true"] { background: #1769aa; color: #fff; }
+/* 상단 우측 띠 · 베이스맵 전환. 버튼은 하나뿐이고 팝업은 그 아래에서 시작하므로
+   예전처럼 스위치가 팝업 닫기버튼을 덮는 배치조합이 생기지 않는다.
+   토글 버튼이므로 눌림 상태를 눈으로도 알 수 있어야 한다 — 레이어 칩(.chip.active)과
+   같은 시각언어(브랜드 면 채움)를 쓴다. 라벨 텍스트가 항상 있으므로 색 단독 전달이 아니다(D-1). */
+.map-basemap-switch { position: absolute; top: var(--overlay-inset); right: var(--overlay-inset); z-index: 4; display: inline-flex; }
+.map-basemap-switch button { min-height: 28px; border: 1px solid var(--border-panel-blue); border-radius: var(--r-pill); padding: 4px 12px; background: var(--c-surface); color: var(--c-text-muted); font-size: var(--fs-xs); line-height: var(--lh-xs); white-space: nowrap; box-shadow: var(--sh-1); }
+.map-basemap-switch button:hover { border-color: var(--c-brand); color: var(--c-brand); }
+.map-basemap-switch button[aria-pressed="true"] { background: var(--c-brand); border-color: var(--c-brand); color: #fff; font-weight: 700; }
+.map-basemap-switch button[aria-pressed="true"]:hover { background: var(--c-brand-deep); color: #fff; }
 .integration-status li small { display: block; margin-top: 5px; line-height: 1.45; color: #4d657b; }
 
 /* v0.7 flood PRE/EVENT/POST standalone 256px tiles */
@@ -462,7 +632,7 @@ th { background: #f2f6f9; }
 .phase-tile-pair figure{margin:0;}
 .phase-tile-pair img{display:block;width:256px;height:256px;max-width:100%;object-fit:cover;border:1px solid #5f6b76;background:#000;}
 .phase-tile-pair figcaption{display:grid;gap:2px;margin-top:7px;font-size:.88rem;}
-.safety-note{margin-top:14px;padding:10px 12px;border-left:4px solid #6a7480;background:#f5f6f7;}
+.safety-note{margin-top:14px;padding:10px 12px;border-left:4px solid var(--accent-line-blue);background:var(--surface-panel-blue);font-size:var(--fs-xs);line-height:var(--lh-xs);}
 @media(max-width:1100px){.flood-phase-grid{grid-template-columns:1fr}.phase-tile-pair{grid-template-columns:repeat(2,minmax(0,256px));}}
 @media(max-width:620px){.phase-tile-pair{grid-template-columns:1fr}.phase-tile-pair img{width:min(256px,100%);height:auto;aspect-ratio:1/1;}}
 
@@ -505,12 +675,12 @@ th { background: #f2f6f9; }
 @media(max-width:700px){.readiness-dimensions{grid-template-columns:1fr}.consultation-items ul{columns:1}.t3q-readiness-toggle{align-items:flex-start}.readiness-summary{align-items:flex-start}}
 
 
-.mock-search-panel{margin:16px 0;border:1px solid #b9c9d6;border-radius:14px;background:#fff;padding:18px}.mock-search-header{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}.mock-search-header h2{margin:0 0 4px;font-size:1.05rem}.mock-search-header p{margin:0;color:#5c6873}.mock-search-controls{display:grid;grid-template-columns:minmax(220px,1fr) minmax(280px,2fr) auto;gap:12px;align-items:end;margin-top:16px}.mock-search-controls label{display:grid;gap:6px;font-weight:700}.mock-search-controls input,.mock-search-controls select{min-height:44px;border:1px solid #9fb3c4;border-radius:8px;padding:8px 10px;background:#fff}.mock-search-controls button{min-height:44px;border:0;border-radius:8px;padding:0 18px;background:#145c8f;color:#fff;font-weight:800}.mock-result-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.mock-result-grid>div{border:1px solid #d9e2e9;border-radius:10px;padding:12px}.mock-result-grid h3{margin:0 0 8px}.mock-result-grid ul{margin:0;padding-left:20px}.mock-result-grid li{margin:8px 0}.mock-result-grid li span,.mock-result-grid li small{display:block;color:#596773;margin-top:3px}.chip.pending{opacity:1}.map-layer-chips .chip:not(.active){background:#fff}.map-layer-chips .chip.active{box-shadow:inset 0 0 0 2px #145c8f}@media(max-width:900px){.mock-search-controls,.mock-result-grid{grid-template-columns:1fr}}
+.mock-search-panel{margin:16px 0;border:1px solid #b9c9d6;border-radius:14px;background:#fff;padding:18px}.mock-search-header{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}.mock-search-header h2{margin:0 0 4px;font-size:1.05rem}.mock-search-header p{margin:0;color:#5c6873}.mock-search-controls{display:grid;grid-template-columns:minmax(220px,1fr) minmax(280px,2fr) auto;gap:12px;align-items:end;margin-top:16px}.mock-search-controls label{display:grid;gap:6px;font-weight:700}.mock-search-controls input,.mock-search-controls select{min-height:44px;border:1px solid #9fb3c4;border-radius:8px;padding:8px 10px;background:#fff}.mock-search-controls button{min-height:44px;border:0;border-radius:8px;padding:0 18px;background:#145c8f;color:#fff;font-weight:700}.mock-result-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.mock-result-grid>div{border:1px solid #d9e2e9;border-radius:10px;padding:12px}.mock-result-grid h3{margin:0 0 8px}.mock-result-grid ul{margin:0;padding-left:20px}.mock-result-grid li{margin:8px 0}.mock-result-grid li span,.mock-result-grid li small{display:block;color:#596773;margin-top:3px}.chip.pending{opacity:1}.map-layer-chips .chip:not(.active){background:#fff}.map-layer-chips .chip.active{box-shadow:inset 0 0 0 2px #145c8f}@media(max-width:900px){.mock-search-controls,.mock-result-grid{grid-template-columns:1fr}}
 
 .similarity-meta{display:flex;flex-wrap:wrap;gap:.35rem;margin:.35rem 0;font-size:.72rem}.similarity-meta span{padding:.15rem .35rem;border-radius:.35rem;background:#eef4f8;color:#234}
 
 /* Runtime regression v1.4: similar-event factor and response comparison */
-.similar-event-detail{margin-top:.75rem;padding:.75rem;border:1px solid #c8d7e2;border-radius:.55rem;background:#f8fbfd}.similar-event-detail h3{margin:0 0 .5rem;color:#173f5f}.similar-event-detail p{font-size:.78rem;line-height:1.45}.table-scroll{overflow:auto;max-width:100%;margin:.55rem 0}.comparison-table{width:100%;border-collapse:collapse;font-size:.72rem;background:#fff}.comparison-table caption{text-align:left;font-weight:800;padding:.35rem 0;color:#294f69}.comparison-table th,.comparison-table td{border:1px solid #d6e0e8;padding:.38rem;text-align:left;vertical-align:top}.comparison-table thead th{background:#eef4f8;white-space:nowrap}.similar-event-detail .safety-note{margin:.55rem 0 0;padding:.45rem;background:#fff6df;border:1px solid #ecd58e;border-radius:.35rem}
+.similar-event-detail{margin-top:.75rem;padding:.75rem;border:1px solid #c8d7e2;border-radius:.55rem;background:#f8fbfd}.similar-event-detail h3{margin:0 0 .5rem;color:#173f5f}.similar-event-detail p{font-size:.78rem;line-height:1.45}.table-scroll{overflow:auto;max-width:100%;margin:.55rem 0}.comparison-table{width:100%;border-collapse:collapse;font-size:.72rem;background:#fff}.comparison-table caption{text-align:left;font-weight:700;padding:.35rem 0;color:#294f69}.comparison-table th,.comparison-table td{border:1px solid #d6e0e8;padding:.38rem;text-align:left;vertical-align:top}.comparison-table thead th{background:#eef4f8;white-space:nowrap}.similar-event-detail .safety-note{margin:.55rem 0 0;padding:.45rem;background:#fff6df;border:1px solid #ecd58e;border-radius:.35rem}
 
 /* Report editor v1.5: selected similar-event detail (similarity summary, response comparison, passage evidence) */
 .report-event-detail{margin-top:10px;padding:10px;border:1px solid #d6e0e8;border-radius:8px;background:#fff}.report-event-detail h4{margin:0 0 6px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:.85rem}.report-event-detail .event-meta{font-weight:600;color:#3d5568;font-size:.78rem}.report-event-detail .seed-badge{font-size:.72rem;min-height:26px;padding:3px 8px}.report-event-empty{margin:.35rem 0;color:#5a6672;font-size:.8rem}.report-passage-list{margin:.45rem 0 0;padding-left:1.1rem;font-size:.78rem}.report-passage-list li{margin:.25rem 0}.report-passage-list .passage-excerpt{color:#41505d}.report-passage-list .passage-status{margin-left:6px;color:#5a6672}
@@ -559,17 +729,18 @@ th { background: #f2f6f9; }
 .agent-turn {
   max-width: 88%;
   min-width: 0;
-  border-radius: var(--r-xl);
-  padding: 11px var(--sp-4);
+  border-radius: 12px;
+  padding: 8px var(--sp-4);
   font-size: var(--fs-md);
-  line-height: 1.6;
+  line-height: var(--lh-md);
   box-shadow: 0 1px 3px rgba(24, 49, 77, .07);
 }
+/* 꼬리쪽 모서리만 4px 로 접어 발화 방향을 표시한다. */
 .agent-turn.user {
   margin-left: auto;
   background: var(--c-brand-ink);
   color: #fff;
-  border-bottom-right-radius: var(--r-sm);
+  border-bottom-right-radius: 4px;
 }
 /* 답변은 좌측 패널 폭을 넓혔을 때 실제로 더 넓게 읽히도록 스레드 폭을 더 사용한다.
    (질문·답변 좌우 정렬 구분은 유지) */
@@ -579,7 +750,7 @@ th { background: #f2f6f9; }
   background: var(--c-brand-soft);
   color: #22405c;
   border: 1px solid var(--c-brand-line);
-  border-bottom-left-radius: var(--r-sm);
+  border-bottom-left-radius: 4px;
 }
 
 .agent-turn-head {
@@ -589,7 +760,7 @@ th { background: #f2f6f9; }
   gap: var(--sp-3);
   margin: 0 0 var(--sp-2);
 }
-.agent-turn-role { font-size: var(--fs-xs); font-weight: 800; letter-spacing: .01em; }
+.agent-turn-role { font-size: var(--fs-xs); font-weight: 700; letter-spacing: .01em; }
 .agent-turn-time { font-size: var(--fs-xs); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .agent-turn.assistant .agent-turn-time { color: #4d6a85; }
 .agent-turn.user .agent-turn-time { color: #cfe2f2; }
@@ -617,12 +788,14 @@ th { background: #f2f6f9; }
   font-size: var(--fs-xs);
   line-height: 1.55;
 }
-.agent-turn-notes h4 { margin: 0 0 var(--sp-1); font-size: var(--fs-xs); font-weight: 800; }
+.agent-turn-notes h4 { margin: 0 0 var(--sp-1); font-size: var(--fs-xs); font-weight: 700; }
 .agent-turn-notes ul { margin: 0; padding-left: 17px; }
 .agent-turn-notes li { margin: 2px 0; word-break: keep-all; }
 .agent-turn-notes.warnings { background: #fff4d9; border: 1px solid #e2c274; color: #6b4c07; }
 .agent-turn-notes.limitations { background: var(--c-neutral-bg); border: 1px solid var(--c-neutral-line); color: var(--c-neutral-text); }
 
+/* 노랑 면 위 11px 텍스트는 yellow-700(#8a5600)로 둔다 — light-warning(#cc8400)은
+   yellow-25 위에서 2.86:1 로 AA 미달이다. 이 조합은 6.5:1. */
 .agent-turn-confirm {
   display: inline-flex;
   align-items: center;
@@ -630,11 +803,11 @@ th { background: #f2f6f9; }
   border: 1px solid #e2c47c;
   border-radius: var(--r-pill);
   padding: 4px 11px;
-  background: #fff2d4;
-  color: var(--c-warn-text);
+  background: #fff7e0;
+  color: #8a5600;
   font-size: var(--fs-xs);
-  font-weight: 750;
-  line-height: 1.45;
+  font-weight: 500;
+  line-height: var(--lh-xs);
   word-break: keep-all;
 }
 
@@ -662,56 +835,74 @@ th { background: #f2f6f9; }
 }
 .agent-composer .agent-input {
   width: 100%;
-  min-height: 120px;
+  min-height: 76px;
   resize: vertical;
   border: 1px solid #bfcdd9;
-  border-radius: var(--r-lg);
-  padding: var(--sp-3) 11px;
+  border-radius: 4px;
+  padding: 8px 10px;
   background: var(--c-surface);
   color: #1c2d3d;
   font-size: var(--fs-md);
-  line-height: 1.5;
+  line-height: var(--lh-md);
 }
 .agent-composer-hint { margin: 0; color: #56697d; font-size: var(--fs-xs); line-height: 1.45; }
 .agent-composer .agent-send { margin-top: var(--sp-1); min-height: 44px; }
 .agent-composer .inline-error { margin: 0; font-size: var(--fs-xs); line-height: 1.5; }
 
-/* 추천질문은 대화 시작 전에는 펼쳐두고, 첫 질문 후에는 접어 스레드 높이를 돌려준다. */
+/* 추천질문은 접힘이 기본이며 스레드와 컴포저 사이에 놓인다.
+   패널 세로 배분(F-4): 탭바 → 스레드(flex:1 1 auto) → 추천질문 → 컴포저(flex:0 0 auto). */
 .agent-suggestions {
   flex: 0 0 auto;
   max-height: 40%;
   overflow-y: auto;
-  border-top: 1px solid #e2e9f0;
-  padding: var(--sp-2) var(--sp-4) var(--sp-3);
-  background: var(--c-surface-alt);
+  border-top: 1px solid var(--border-inner-blue);
+  padding: 0 var(--sp-4) var(--sp-2);
+  background: var(--surface-panel-blue);
 }
+/* summary 36px 은 44px 터치타깃(D-1 461행)의 예외다 — 근거·완화는 `.map-layer-chips .chip` 위
+   '승인된 이탈' 블록 참고. 폭이 패널 전체라 실제 타깃 면적은 넉넉하고 AA(24×24)를 충족한다. */
 .agent-suggestions > summary {
   display: flex;
   align-items: center;
-  min-height: 44px;
+  min-height: 36px;
   cursor: pointer;
-  font-size: var(--fs-xs);
-  font-weight: 800;
-  color: #4d657b;
+  font-size: var(--fs-sm);
+  line-height: var(--lh-sm);
+  font-weight: 500;
+  color: var(--c-text-muted);
 }
-/* 폭이 허용되면 2열로 접힌다. */
+@media (pointer: coarse) { .agent-suggestions > summary { min-height: 44px; } }
+/* 추천질문은 사각 버튼이 아니라 알약 칩이다. 그리드가 아니라 flex-wrap 으로 흘려야
+   질문 길이에 맞춰 칩이 붙고, 짧은 질문 옆에 빈 칸이 생기지 않는다. */
 .agent-suggestion-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: var(--sp-2);
-  align-content: start;
   padding-bottom: var(--sp-1);
 }
 .agent-suggestions .suggestion {
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  width: auto;
   margin: 0;
-  min-height: 44px;
+  min-height: 28px;
+  border: 1px solid var(--border-panel-blue);
+  border-radius: var(--r-pill);
+  padding: 5px 12px;
+  background: var(--c-surface);
+  color: var(--c-text-muted);
   font-size: var(--fs-xs);
-  line-height: 1.4;
+  line-height: var(--lh-xs);
+  /* 디자인 스펙은 nowrap 이지만 실제 추천질문은 한 문장이고 좌측 패널은 240px 까지 좁아진다.
+     nowrap 을 그대로 두면 320px Reflow 에서 가로 스크롤이 생기므로, 알약 형태는 유지하고
+     넘칠 때만 어절 단위로 접는다(문구를 잘라내지 않는다). */
+  max-width: 100%;
+  white-space: normal;
   word-break: keep-all;
+  text-align: left;
 }
-.agent-suggestions .suggestion:hover { border-color: #9cc4e5; background: #f5faff; }
+.agent-suggestions .suggestion:hover { border-color: var(--c-brand); background: var(--surface-panel-blue); color: var(--c-brand); }
+@media (pointer: coarse) { .agent-suggestions .suggestion { min-height: 44px; } }
 
 /* =========================================================================
    v1.6 (b) 보고서 초안 렌더 미리보기 — 문서(종이) 레이아웃
@@ -720,7 +911,7 @@ th { background: #f2f6f9; }
 .report-preview { background: #f2f6f9; }
 
 .report-preview-doc {
-  max-height: calc(100vh - 245px);
+  max-height: var(--report-preview-h);
   overflow: auto;
   border: 1px solid #dbe3ec;
   border-radius: var(--r-lg);
@@ -729,7 +920,7 @@ th { background: #f2f6f9; }
   box-shadow: inset 0 1px 0 #fff, 0 1px 4px rgba(24, 49, 77, .06);
   color: #1f3448;
   font-size: var(--fs-md);
-  line-height: 1.75;
+  line-height: 1.7;
   word-break: keep-all;
   overflow-wrap: break-word;
 }
@@ -738,12 +929,11 @@ th { background: #f2f6f9; }
 .report-doc-title {
   margin: 0 0 clamp(14px, 1.15vw, 24px);
   padding-bottom: var(--sp-4);
-  border-bottom: 2px solid #c3d3e0;
+  border-bottom: 2px solid var(--border-panel-blue);
   color: var(--c-text-strong);
   font-size: var(--fs-xl);
-  font-weight: 800;
-  line-height: 1.35;
-  letter-spacing: -.01em;
+  font-weight: 700;
+  line-height: var(--lh-xl);
 }
 
 .report-doc-section { margin: 0 0 clamp(16px, 1.35vw, 28px); }
@@ -751,11 +941,11 @@ th { background: #f2f6f9; }
 .report-doc-heading {
   margin: 0 0 var(--sp-3);
   padding-bottom: 5px;
-  border-bottom: 1px solid #e2e9f0;
+  border-bottom: 1px solid var(--border-inner-blue);
   color: #174367;
   font-size: var(--fs-lg);
-  font-weight: 800;
-  line-height: 1.4;
+  font-weight: 700;
+  line-height: var(--lh-lg);
 }
 .report-doc-subsection {
   margin: var(--sp-4) 0 0;
@@ -766,16 +956,16 @@ th { background: #f2f6f9; }
   margin: 0 0 var(--sp-2);
   color: #2b5273;
   font-size: var(--fs-md);
-  font-weight: 800;
+  font-weight: 700;
   line-height: 1.45;
 }
 
-.report-doc-paragraph { margin: 0 0 var(--sp-3); line-height: 1.75; }
+.report-doc-paragraph { margin: 0 0 var(--sp-3); line-height: 1.7; }
 .report-doc-paragraph:last-child { margin-bottom: 0; }
 
 .report-doc-ranked-list { margin: var(--sp-2) 0 var(--sp-3); padding-left: 1.7em; }
 .report-doc-ranked-item { margin: var(--sp-1) 0; padding-left: .15em; line-height: 1.7; }
-.report-doc-ranked-item::marker { color: var(--c-brand); font-weight: 800; }
+.report-doc-ranked-item::marker { color: var(--c-brand); font-weight: 700; }
 
 .report-doc-list { margin: var(--sp-2) 0 var(--sp-3); padding-left: 1.15em; list-style: none; }
 .report-doc-item { position: relative; margin: var(--sp-2) 0; }
@@ -830,51 +1020,69 @@ th { background: #f2f6f9; }
    줄지 않는다. 실제로 줄이려면 height 를 함께 지정해야 한다(resize:vertical 로 사용자가 다시 늘릴 수 있다). */
 @media (max-height: 860px) {
   .agent-composer { padding: var(--sp-3) var(--sp-4); }
-  .agent-composer .agent-input { min-height: 88px; height: 88px; }
   .agent-suggestions { max-height: 22%; padding: var(--sp-2) var(--sp-4) var(--sp-3); }
   .agent-chat .agent-thread { padding: var(--sp-3) var(--sp-4) var(--sp-4); }
   .agent-thread-intro { padding: var(--sp-2) var(--sp-3); line-height: 1.5; }
 }
 
-/* 3열 상황판 구간에서는 행 높이를 확정해 각 패널이 자체 스크롤을 갖게 한다.
+/* 4열 상황판 구간에서는 행 높이를 확정해 각 패널이 자체 스크롤을 갖게 한다.
    (확정 높이가 없으면 AI Agent 대화 스레드가 늘어나며 패널 자체를 밀어낸다) */
-@media (min-width: 1281px) {
+@media (min-width: 901px) {
   .dashboard-grid { height: var(--panel-min-h); }
   .dashboard-grid > .left-panel, .dashboard-grid > .right-panel, .dashboard-grid > .map-panel { min-height: 0; height: 100%; }
 }
 
 /* =========================================================================
    v1.6 (c) 확대 방향 반응형 — 와이드/상황실 대형 모니터
-   rem 기반 토큰이 함께 커지도록 루트 폰트 배율을 단계적으로 올린다.
+   타입 스케일은 고정값이므로 여기서는 레이아웃 밀도만 조정한다.
+   --sticky-offset 오버라이드 3줄(160/172/184px)은 F-14 로 삭제했다 —
+   그 값들은 실측 헤더 높이 50px 과 무관한 상수였다.
    ========================================================================= */
 @media (min-width: 1600px) {
-  :root { --sticky-offset: 160px; --panel-min-h: clamp(660px, 72vh, 1080px); font-size: 106.25%; }
+  :root { --panel-min-h: clamp(660px, 72vh, 1080px); }
   .map-canvas { min-height: 500px; }
   .timeline-list { grid-auto-columns: minmax(200px, 1fr); }
   .agent-turn, .agent-turn-pending { max-width: 84%; }
-  .agent-composer .agent-input { min-height: 132px; }
+  .agent-composer .agent-input { min-height: 108px; }
 }
 
 @media (min-width: 2000px) {
-  :root { --sticky-offset: 172px; --panel-min-h: clamp(700px, 74vh, 1160px); font-size: 112.5%; }
+  :root { --panel-min-h: clamp(700px, 74vh, 1160px); }
   .map-canvas { min-height: 600px; }
   .readiness-dimensions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .cq-coverage ol { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .timeline-list { grid-auto-columns: minmax(230px, 1fr); }
-  .agent-composer .agent-input { min-height: 150px; }
   .report-doc-list, .report-doc-ranked-list { padding-left: 1.5em; }
 }
 
 @media (min-width: 2400px) {
-  :root { --sticky-offset: 184px; font-size: 118.75%; }
   .map-canvas { min-height: 680px; }
   .readiness-dimensions { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+}
+
+/* F-16 · 초와이드(>2560px) 지도 밀도 tier B.
+   지도가 상한(--map-max)에 닿은 뒤 남는 폭은 우측 패널 → 좌측 패널 순으로 흡수한다.
+   패널 본문 타이포는 14px 기준을 그대로 두고, 커지는 것은 지도 안 요소뿐이다. */
+@media (min-width: 2561px) {
+  :root {
+    --map-max: 2400px;
+    --left-panel-w: clamp(340px, 15vw, 460px);
+    --right-panel-w: clamp(400px, 17vw, 560px);
+    --overlay-inset: 20px;
+    --map-poi-size: 28px;
+  }
+  .dashboard-grid {
+    grid-template-columns:
+      var(--left-panel-w) 26px minmax(420px, min(1fr, var(--map-max))) var(--right-panel-w);
+  }
+  /* 우측 패널이 520px 를 넘으면 우선 확인지역 카드를 2열로 흘린다. */
+  #insight-panel-0 .priority-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--sp-3); }
 }
 
 /* =========================================================================
    v1.6 (d) 축소 방향 보정 — 320px Reflow에서 가로 스크롤이 생기지 않도록 정리
    ========================================================================= */
-@media (max-width: 900px) {
+@media (max-width: 899px) {
   .panel-scroll.agent-chat { min-height: 520px; }
   .agent-turn, .agent-turn-pending { max-width: 94%; }
 }
@@ -901,64 +1109,80 @@ th { background: #f2f6f9; }
 }
 
 /* =========================================================================
-   v1.7 (a) 지도 POI 말풍선 팝업 (`MapPanel`)
-   - position/left/top/z-index/max-width/max-height/overflow-y/visibility 는
-     MapPanel 이 배치계산 결과로 인라인 지정하므로 여기서 덮어쓰지 않는다.
-   - 꼬리 위치는 인라인 커스텀 속성 `--map-popup-tail-x`(px)로 전달된다.
+   v2.0 지도 상세 팝업 (`MapPanel`) — 상단 우측 띠
+   - 오버레이가 없는 우측에 두어 연결상태 필·레이어 칩을 덮지 않는다.
+   - 기본값은 '닫힘'이다. 항상 열어 두면 267px 폭 지도에서 팝업(220px)이
+     POI·레이어 칩·요약 카드와 공존할 수 없다.
+   - 고정 높이를 주지 않는다. 200px 를 주었더니 머리말 80 + 푸터 114 가 먼저 먹고
+     스크롤 본문이 20px 로 무너졌다.
    ========================================================================= */
 .map-feature-popup {
-  /* 인라인 max-width(맵폭-16)보다 항상 작은 고정 폭. 상황실 대형 모니터에서 rem 과 함께 커진다. */
-  width: clamp(320px, 21rem, 360px);
-  border: 1px solid var(--c-line);
-  border-radius: var(--r-lg);
+  position: absolute;
+  right: var(--overlay-inset);
+  /* 상단 띠가 실제로 차지할 수 있는 최대 높이만큼 내려서 시작한다. 전환 버튼 한 줄이면 28px 이지만
+     좁은 지도에서 연결상태 필이 두 줄(46px)이 되므로 그 높이를 기준으로 잡는다. */
+  top: calc(var(--overlay-inset) + 46px);
+  z-index: 7;
+  width: clamp(220px, 62%, 300px);
+  height: auto;
+  /* 위 58px(상단 띠) + 아래 52px(레이어 칩 28 + inset 12 + 여유 12)를 비운다.
+     핸드오프 README 수치는 `top:56px` · `max-height:calc(100% - 80px)` 이고 그 값들은
+     프로토타입(design_reference.dc.html 292행)에 실제로 구현돼 있다. 다만 그 프로토타입은
+     한 줄짜리 짧은 연결상태 문구를 전제하는데, 이 서비스의 seed-only 문구
+     ("VWorld 키 미설정: 공간 Seed만 표시")는 지도 282px(뷰포트 900px)에서 두 줄이 된다.
+     그 상태로 원 수치를 쓰면 팝업이 두 줄 필과 40px 칩 띠를 실측 232px²·수백 px² 덮어,
+     README 자신이 이 배치의 목적으로 적은 "서로 다른 가로띠를 점유해 겹치지 않는다"가 깨진다.
+     즉 원 수치를 벗어난 근거는 상위 원칙이 아니라 **README 의 배치 의도와 실측의 불일치**다.
+     (F-5 는 문제 제기일 뿐 이 수치의 권위가 아니다 — 위 절 머리말 참고) */
+  max-height: calc(100% - 110px);
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-panel-blue);
+  border-radius: 12px;
   background: var(--c-surface);
   box-shadow: 0 8px 26px rgba(19, 43, 69, .24);
   color: var(--c-text);
   font-size: var(--fs-sm);
-  line-height: 1.5;
+  line-height: var(--lh-sm);
+  overflow: hidden;
   overscroll-behavior: contain;
 }
-/* 위험지구는 임계값 표·피해이력까지 붙어 내용이 길다. 폭만 미세 조정한다. */
-.map-feature-popup.district { width: clamp(336px, 22rem, 360px); }
+.map-feature-popup:focus-visible { outline: 3px solid var(--c-focus); outline-offset: -3px; }
 
 .map-popup-head {
-  position: sticky;
-  top: 0;
-  z-index: 2;
+  flex: 0 0 auto;
   display: flex;
   align-items: flex-start;
   gap: var(--sp-2);
-  padding: var(--sp-2) var(--sp-2) var(--sp-2) var(--sp-4);
-  border-bottom: 1px solid var(--c-line-soft);
-  border-radius: var(--r-lg) var(--r-lg) 0 0;
-  background: #fff;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-inner-blue);
+  background: var(--c-surface);
 }
+.map-popup-headings { flex: 1 1 auto; min-width: 0; display: grid; gap: var(--sp-1); }
+/* DetailModal 은 같은 머리말을 `.map-popup-headings` 래퍼 없이 h3·배지·닫기 3형제로 쓴다.
+   두 형태 모두에서 제목이 남은 폭을 갖도록 h3 에도 직접 flex 를 준다. */
+.map-popup-head > h3 { flex: 1 1 auto; min-width: 0; }
+.map-popup-head > .map-popup-badge { flex: 0 0 auto; align-self: center; }
 .map-popup-head h3 {
-  flex: 1 1 auto;
-  min-width: 0;
   margin: 0;
-  padding-top: 5px;
   color: var(--c-text-strong);
-  font-size: var(--fs-md);
-  font-weight: 800;
-  line-height: 1.35;
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  line-height: var(--lh-lg);
   word-break: keep-all;
   overflow-wrap: break-word;
 }
+.map-popup-badges { display: flex; flex-wrap: wrap; gap: var(--sp-1); margin: 0; }
 .map-popup-badge {
-  flex: 0 0 auto;
-  max-width: 10em;
-  margin-top: 6px;
-  border-radius: var(--r-pill);
-  padding: 3px 9px;
+  max-width: 100%;
+  border-radius: var(--r-sm);
+  padding: 1px 8px;
   background: var(--c-brand);
   color: #fff;
   font-size: var(--fs-xs);
-  font-weight: 750;
-  line-height: 1.5;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-weight: 500;
+  line-height: var(--lh-xs);
+  word-break: keep-all;
 }
 .map-popup-close {
   flex: 0 0 auto;
@@ -975,11 +1199,10 @@ th { background: #f2f6f9; }
   font-size: 15px;
   line-height: 1;
 }
-.map-popup-close:hover { background: var(--c-surface-alt); color: #12395c; }
+.map-popup-close:hover { background: var(--surface-panel-blue); color: #12395c; }
 
-.map-popup-body { padding: var(--sp-3) var(--sp-4) var(--sp-2); }
+.map-popup-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; display: grid; gap: 10px; align-content: start; padding: 10px 12px; }
 
-.map-popup-flags { display: flex; flex-wrap: wrap; gap: var(--sp-1); margin: 0 0 var(--sp-3); }
 .map-popup-flag {
   border: 1px solid var(--c-warn-line);
   border-radius: var(--r-pill);
@@ -992,19 +1215,22 @@ th { background: #f2f6f9; }
 }
 
 .map-popup-facts { margin: 0; }
+/* 팝업 폭이 % 이므로 px 트랙을 쓰지 않는다. 고정 100px 트랙은 좁은 팝업에서 값 열을 32px 로 무너뜨렸다. */
 .map-popup-facts > div {
   display: grid;
-  grid-template-columns: 100px minmax(0, 1fr);
+  grid-template-columns: minmax(56px, auto) minmax(0, 1fr);
   gap: 0 var(--sp-3);
   padding: 5px 0;
-  border-top: 1px solid #eef2f6;
+  border-top: 1px solid var(--border-inner-blue);
 }
 .map-popup-facts > div:first-child { border-top: 0; padding-top: 0; }
 .map-popup-facts dt { color: var(--c-text-muted); font-size: var(--fs-sm); font-weight: 700; line-height: 1.5; word-break: keep-all; }
 .map-popup-facts dd { margin: 0; color: var(--c-text); font-size: var(--fs-sm); line-height: 1.5; overflow-wrap: anywhere; }
 
 .map-popup-section { margin-top: var(--sp-4); }
-.map-popup-section h4 { margin: 0 0 var(--sp-2); color: var(--c-text-strong); font-size: var(--fs-sm); font-weight: 800; line-height: 1.4; }
+/* 본문이 grid + gap 이므로 절 사이 여백을 margin 으로 한 번 더 주지 않는다. */
+.map-popup-body > .map-popup-section { margin-top: 0; }
+.map-popup-section h4 { margin: 0 0 var(--sp-2); color: var(--c-text-strong); font-size: var(--fs-sm); font-weight: 700; line-height: 1.4; }
 .map-popup-section p { margin: 0; font-size: var(--fs-sm); line-height: 1.55; word-break: keep-all; overflow-wrap: break-word; }
 
 .map-popup-list { margin: 0; padding-left: 17px; font-size: var(--fs-sm); line-height: 1.55; }
@@ -1033,56 +1259,32 @@ th { background: #f2f6f9; }
   word-break: keep-all;
   overflow-wrap: break-word;
 }
-/* `.map-connection` 상태 표시는 열려 있는 팝업(dialog, inline z-index:5)을 덮지 않도록
-   `.map-key-notice`·`.map-error` 와 같은 3단으로 내린다. */
-.map-connection { z-index: 3; }
-.map-popup-table thead th { background: var(--c-surface-alt); color: var(--c-text-strong); white-space: nowrap; }
+.map-popup-table thead th { background: var(--surface-panel-blue); color: var(--c-text-strong); white-space: nowrap; }
 .map-popup-table tbody th { color: var(--c-text-strong); font-weight: 700; }
 
 .map-popup-source { display: block; color: var(--c-text-muted); font-size: var(--fs-xs); line-height: 1.5; word-break: keep-all; overflow-wrap: break-word; }
 
+/* 푸터에는 36px CTA 하나만 둔다. 3줄짜리 면책문구는 스크롤 본문 끝으로 내렸다 —
+   푸터에 함께 두면 그 높이가 먼저 확정되어 본문 스크롤 영역이 남지 않는다. */
 .map-popup-foot {
-  position: sticky;
-  bottom: 0;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-2);
-  padding: var(--sp-3) var(--sp-4);
-  border-top: 1px solid var(--c-line-soft);
-  border-radius: 0 0 var(--r-lg) var(--r-lg);
-  background: var(--c-surface-alt);
+  flex: 0 0 auto;
+  padding: 10px 12px;
+  border-top: 1px solid var(--border-inner-blue);
+  background: var(--surface-panel-blue);
 }
 .map-popup-action {
   width: 100%;
-  min-height: 44px;
+  min-height: 36px;
   border: 0;
-  border-radius: var(--r-md);
+  border-radius: var(--r-sm);
   background: var(--c-brand);
   color: #fff;
   font-size: var(--fs-sm);
-  font-weight: 800;
+  line-height: var(--lh-sm);
+  font-weight: 700;
 }
 .map-popup-action:hover { background: var(--c-brand-deep); }
-.map-popup-disclaimer { margin: 0; color: #4d6274; font-size: var(--fs-xs); line-height: 1.5; word-break: keep-all; }
-
-/* 꼬리: 인라인 overflow-y:auto 로 상자 밖으로 나갈 수 없으므로 머리말·꼬리말의
-   여백 안쪽에 두어 본문 글자를 가리지 않게 한다. */
-.map-popup-tail {
-  position: absolute;
-  left: var(--map-popup-tail-x, 20px);
-  z-index: 3;
-  width: 0;
-  height: 0;
-  margin-left: -9px;
-  border-left: 9px solid transparent;
-  border-right: 9px solid transparent;
-}
-.map-feature-popup.place-above .map-popup-foot { padding-bottom: 19px; }
-.map-feature-popup.place-above .map-popup-tail { bottom: 4px; border-top: 10px solid var(--c-brand); }
-.map-feature-popup.place-below .map-popup-head { padding-top: 19px; }
-.map-feature-popup.place-below .map-popup-tail { top: 4px; border-bottom: 10px solid var(--c-brand); }
-.map-feature-popup.place-side .map-popup-tail { display: none; }
+.map-popup-disclaimer { margin: 0; color: var(--c-text-muted); font-size: var(--fs-xs); line-height: var(--lh-xs); word-break: keep-all; }
 
 /* =========================================================================
    v1.9 상세보기 모달 (`DetailModal`)
@@ -1146,7 +1348,7 @@ th { background: #f2f6f9; }
   padding-top: var(--sp-4);
   border-top: 1px solid var(--c-line-soft);
 }
-.plan-district-section > h3, .plan-river-section > h3 { margin: 0; color: var(--c-text-strong); font-size: var(--fs-md); font-weight: 800; }
+.plan-district-section > h3, .plan-river-section > h3 { margin: 0; color: var(--c-text-strong); font-size: var(--fs-md); font-weight: 700; }
 
 .plan-summary { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-2); margin: 0; }
 .plan-summary > div {
@@ -1160,7 +1362,7 @@ th { background: #f2f6f9; }
   background: var(--c-surface-alt);
 }
 .plan-summary dt { color: var(--c-text-muted); font-size: var(--fs-xs); font-weight: 700; line-height: 1.4; word-break: keep-all; }
-.plan-summary dd { margin: 0; color: var(--c-text-strong); font-size: var(--fs-sm); font-weight: 800; line-height: 1.4; overflow-wrap: anywhere; }
+.plan-summary dd { margin: 0; color: var(--c-text-strong); font-size: var(--fs-sm); font-weight: 700; line-height: 1.4; overflow-wrap: anywhere; }
 
 .plan-fact-list { display: flex; flex-direction: column; margin: 0; min-width: 0; }
 .plan-fact-list > div {
@@ -1213,10 +1415,10 @@ th { background: #f2f6f9; }
 .plan-district-toggle > span { display: block; }
 .plan-district-toggle:hover { background: var(--c-brand-soft); }
 .plan-district-head { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); }
-.plan-district-head strong { color: var(--c-text-strong); font-size: var(--fs-sm); font-weight: 800; line-height: 1.4; overflow-wrap: anywhere; }
+.plan-district-head strong { color: var(--c-text-strong); font-size: var(--fs-sm); font-weight: 700; line-height: 1.4; overflow-wrap: anywhere; }
 .plan-district-sub { color: var(--c-text-muted); font-size: var(--fs-xs); font-weight: 400; line-height: 1.5; overflow-wrap: anywhere; }
 
-.plan-badge { display: inline-block; border-radius: var(--r-pill); padding: 2px 8px; font-size: var(--fs-xs); font-weight: 750; line-height: 1.5; white-space: nowrap; }
+.plan-badge { display: inline-block; border-radius: var(--r-pill); padding: 2px 8px; font-size: var(--fs-xs); font-weight: 700; line-height: 1.5; white-space: nowrap; }
 .plan-badge.type { background: var(--c-brand); color: #fff; }
 .plan-badge.grade { border: 1px solid var(--c-neutral-line); background: var(--c-neutral-bg); color: var(--c-neutral-text); }
 
@@ -1231,7 +1433,7 @@ th { background: #f2f6f9; }
 }
 /* aria-expanded=false 일 때 [hidden] 을 반드시 존중한다. */
 .plan-district-detail[hidden] { display: none; }
-.plan-district-detail h4 { margin: var(--sp-2) 0 0; color: var(--c-text-strong); font-size: var(--fs-sm); font-weight: 800; line-height: 1.4; }
+.plan-district-detail h4 { margin: var(--sp-2) 0 0; color: var(--c-text-strong); font-size: var(--fs-sm); font-weight: 700; line-height: 1.4; }
 .plan-district-detail > h4:first-child { margin-top: 0; }
 .plan-district-detail ul { margin: 0; padding-left: 17px; color: var(--c-text); font-size: var(--fs-sm); line-height: 1.55; }
 .plan-district-detail li { margin: 2px 0; word-break: keep-all; overflow-wrap: break-word; }
@@ -1284,7 +1486,7 @@ th { background: #f2f6f9; }
   background: var(--c-surface);
 }
 .plan-river-head { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); }
-.plan-river-head strong { color: var(--c-text-strong); font-size: var(--fs-sm); font-weight: 800; line-height: 1.4; }
+.plan-river-head strong { color: var(--c-text-strong); font-size: var(--fs-sm); font-weight: 700; line-height: 1.4; }
 .plan-river-card .table-scroll { margin: 0; }
 
 .plan-station-table { font-size: var(--fs-xs); }
@@ -1305,7 +1507,7 @@ button.context-add-button {
   background: var(--c-brand-soft);
   color: var(--c-brand-ink);
   font-size: var(--fs-xs);
-  font-weight: 750;
+  font-weight: 700;
   line-height: 1.3;
   white-space: nowrap;
 }
@@ -1324,8 +1526,8 @@ button.context-add-button:hover { background: #dcecf9; border-color: #7fb2dc; }
   padding: var(--sp-3) var(--sp-4);
   background: var(--c-surface);
 }
-.event-damage-block h4 { margin: 0 0 var(--sp-2); color: var(--c-text-strong); font-size: var(--fs-sm); font-weight: 800; line-height: 1.4; }
-.event-damage-block h5 { margin: 0 0 var(--sp-1); color: #2b5273; font-size: var(--fs-xs); font-weight: 800; line-height: 1.4; }
+.event-damage-block h4 { margin: 0 0 var(--sp-2); color: var(--c-text-strong); font-size: var(--fs-sm); font-weight: 700; line-height: 1.4; }
+.event-damage-block h5 { margin: 0 0 var(--sp-1); color: #2b5273; font-size: var(--fs-xs); font-weight: 700; line-height: 1.4; }
 .similar-event-detail .event-damage-block > p { margin: 0 0 var(--sp-2); color: var(--c-text); font-size: var(--fs-sm); line-height: 1.55; word-break: keep-all; }
 .similar-event-detail .event-damage-columns p { margin: 0 0 var(--sp-2); color: var(--c-text-muted); font-size: var(--fs-xs); line-height: 1.5; }
 
@@ -1366,7 +1568,7 @@ button.context-add-button:hover { background: #dcecf9; border-color: #7fb2dc; }
   background: var(--c-brand);
   color: #fff;
   font-size: var(--fs-xs);
-  font-weight: 800;
+  font-weight: 700;
   line-height: 1;
   vertical-align: middle;
 }
@@ -1384,44 +1586,55 @@ button.context-add-button:hover { background: #dcecf9; border-color: #7fb2dc; }
 }
 .agent-context-hint { margin: 0; color: #4d6274; font-size: var(--fs-xs); line-height: 1.45; word-break: keep-all; }
 
+/* 참조 칩은 컴포저 위에 얹히는 임시 토큰이므로 DS `InputChip` 보다 한 단계 작은
+   컴팩트 아웃라인 알약으로 둔다. 44px 짜리 칩을 5개 쌓으면 그것만으로 컴포저 높이를 먹는다. */
 .agent-context-chips { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; padding: 0; margin: 0; }
 .agent-context-chip {
   display: inline-flex;
   align-items: center;
-  gap: 2px;
+  gap: 4px;
+  height: 22px;
   max-width: 100%;
   min-width: 0;
-  border: 1px solid var(--c-brand-line);
+  border: 1px solid var(--border-panel-blue);
   border-radius: var(--r-pill);
-  padding: 0 3px 0 11px;
-  background: var(--c-brand-soft);
-  color: var(--c-brand-ink);
-  font-size: var(--fs-xs);
-  font-weight: 700;
-  line-height: 1.35;
+  padding: 0 6px 0 9px;
+  background: var(--c-surface);
+  color: var(--c-text-muted);
+  /* 10px 은 시스템 최소 크기(11px)보다 작은 의도적 예외이며, 지워질 수 있는 임시 참조 토큰에만 허용한다.
+     다른 곳에 쓰지 않는다. */
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 16px;
 }
-.agent-context-chip.kind-district { border-color: #9cc4e5; background: #e8f2fb; color: #134a72; }
-.agent-context-chip.kind-similar_event { border-color: #ddc48b; background: #fdf4e2; color: #6b4c07; }
-.agent-context-chip.kind-river { border-color: #8fc2b6; background: #e6f5f0; color: #145244; }
+.agent-context-chip.kind-district { border-color: #9cc4e5; color: #134a72; }
+.agent-context-chip.kind-similar_event { border-color: #ddc48b; color: #6b4c07; }
+.agent-context-chip.kind-river { border-color: #8fc2b6; color: #145244; }
 .agent-context-chip-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-/* 터치타깃 44px 확보. 칩 높이도 이 버튼이 결정한다. */
+/* 밀집 데스크톱 컨트롤이라 44px 터치타깃(D-1 461행)의 의도적 예외다 — README 183행이 명시적으로
+   예외 선언한 유일한 컨트롤. 근거·완화 전체는 `.map-layer-chips .chip` 위 '승인된 이탈' 블록 참고.
+   14px 은 AA(24×24)에도 미달하므로 포인터가 굵은 환경에서는 아래에서 24px 로 키운다. */
 .agent-context-remove {
   flex: 0 0 auto;
   display: grid;
   place-items: center;
-  width: 44px;
-  min-width: 44px;
-  height: 44px;
-  min-height: 44px;
+  width: 14px;
+  min-width: 14px;
+  height: 14px;
+  min-height: 14px;
   padding: 0;
   border: 0;
-  border-radius: 50%;
+  border-radius: var(--r-pill);
   background: transparent;
   color: inherit;
-  font-size: 15px;
+  font-size: 9px;
   line-height: 1;
 }
-.agent-context-remove:hover { background: rgba(19, 74, 114, .14); }
+.agent-context-remove:hover { background: var(--surface-panel-blue); color: var(--c-brand); }
+@media (pointer: coarse) {
+  .agent-context-chip { height: 28px; font-size: var(--fs-xs); line-height: var(--lh-xs); padding: 0 6px 0 11px; }
+  .agent-context-remove { width: 24px; min-width: 24px; height: 24px; min-height: 24px; font-size: 12px; }
+}
 
 .agent-turn-context {
   display: flex;
@@ -1434,7 +1647,7 @@ button.context-add-button:hover { background: #dcecf9; border-color: #7fb2dc; }
   font-size: var(--fs-xs);
   line-height: 1.4;
 }
-.agent-turn-context-label { font-weight: 800; color: #2c587a; }
+.agent-turn-context-label { font-weight: 700; color: #2c587a; }
 .agent-turn-context-item {
   max-width: 100%;
   border: 1px solid var(--c-brand-line);

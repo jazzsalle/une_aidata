@@ -210,27 +210,39 @@ export function DamageRecoveryEvidence({ events, selectedEventIds = [], onToggle
           const selected = selectedEventIds.includes(event.event_id);
           // 재해대장 집계가 있는 사례만 '과거 확정 집계'로 표기하고, 나머지는 시연 Seed 기록임을 밝힌다.
           const fromLedger = Boolean(damage.ledger_aggregate);
+          // F-15: 열 수는 데이터가 결정한다. 이력이 없는 열을 빈 채로 남기면 금액 카드가 좁아지고
+          // 화면 폭만 낭비된다. 클래스명(.damage-columns)은 유지하고 data-history 만 덧붙인다.
+          const history = response.length && recovery.length ? 'both' : response.length ? 'response' : recovery.length ? 'recovery' : 'none';
           return (
             <article key={event.event_id} className="damage-event-card">
               <header>
                 <div><strong>{event.event_name}</strong><small>{new Date(event.occurred_from).toLocaleDateString('ko-KR')} · {event.admin_name}</small></div>
                 <span>{event.similarity_score}점</span>
               </header>
-              <div className="damage-columns">
+              <div className="damage-columns" data-history={history}>
                 <DamageSummary damage={damage} />
-                <section>
-                  <h3>대응 이력</h3>
-                  {response.length
-                    ? <ol className="damage-history">{response.map((item, index) => <li key={`${event.event_id}-res-${index}`}>{historyText(item)}</li>)}</ol>
-                    : <p className="damage-history-empty">대응 이력 기록 미확보</p>}
-                </section>
-                <section>
-                  <h3>복구 이력</h3>
-                  {recovery.length
-                    ? <ol className="damage-history">{recovery.map((item, index) => <li key={`${event.event_id}-rec-${index}`}>{historyText(item)}</li>)}</ol>
-                    : <p className="damage-history-empty">복구 이력 기록 미확보</p>}
-                </section>
+                {response.length ? (
+                  <section>
+                    <h3>대응 이력</h3>
+                    <ol className="damage-history">{response.map((item, index) => <li key={`${event.event_id}-res-${index}`}>{historyText(item)}</li>)}</ol>
+                  </section>
+                ) : null}
+                {recovery.length ? (
+                  <section>
+                    <h3>복구 이력</h3>
+                    <ol className="damage-history">{recovery.map((item, index) => <li key={`${event.event_id}-rec-${index}`}>{historyText(item)}</li>)}</ol>
+                  </section>
+                ) : null}
               </div>
+              {/* '미확보' 문구는 삭제하지 않는다(D-2). 빈 열을 만드는 대신 카드 하단 데이터 상태 줄로 옮긴다. */}
+              {history !== 'both' ? (
+                <p className="damage-history-empty">
+                  <span className="damage-history-empty-label">데이터 상태</span>
+                  {response.length ? null : <span className="damage-history-empty-badge">대응 이력 미확보</span>}
+                  {recovery.length ? null : <span className="damage-history-empty-badge">복구 이력 미확보</span>}
+                  <span className="damage-history-empty-note">기록 미확보 — 빈 열 대신 상태 줄로 표기</span>
+                </p>
+              ) : null}
               <div className="damage-card-tools">
                 <button type="button" className="damage-structure-button" onClick={() => setStructureEventId(event.event_id)}>
                   응답 구조 보기

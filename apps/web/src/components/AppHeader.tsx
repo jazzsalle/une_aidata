@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import type { CurrentSituation } from '../types/contracts';
 import type { RouteDefinition } from '../hooks/useRoute';
 import { routes } from '../hooks/useRoute';
@@ -12,31 +13,68 @@ interface Props {
   onSave(): void;
 }
 
-/** 브랜드·페이지명(h1) + 현재상황 컨텍스트 + 전역 내비를 한 줄로 합친 헤더.
- *  좁은 화면에서는 `.header-row`의 flex-wrap으로 접힌다. */
+/** 헤더에는 4개 항목만 둔다: 브랜드(+h1) · 지역 Select · 전역 내비 · 상황뷰 저장.
+ *
+ *  기준시각·모드·재난유형은 `<main>` 최상단 컨텍스트 줄(`SituationContextRow`)로 옮겼다.
+ *  헤더에 두면 `overflow:hidden` 이 값을 문자열 중간에서 잘라 "2026-08-02 14" 같은 틀린 시각을
+ *  보여준다 — 값은 절대 부분 클리핑하지 않는다.
+ *
+ *  축소 예산(회귀 주의): 수축 경로는 브랜드 블록의 h1 말줄임 하나뿐이다.
+ *  브랜드 블록만 `flex:1 1 auto; min-width:120px`, 나머지는 전부 `flex:0 0 auto`,
+ *  빈 스페이서가 내비를 오른쪽으로 밀어붙인다. */
 export function AppHeader({ route, situations, selected, onNavigate, onSelect, onSave }: Props) {
+  const headerRef = useRef<HTMLElement | null>(null);
+
+  // sticky 기준값은 전부 --header-h 에서 파생하므로(F-14), 실측 높이만 여기서 갱신한다.
+  // 셀렉터·문구는 건드리지 않는다.
+  //
+  // 되먹임 주의: 헤더 자신의 높이를 --header-h 로 지정하면 안 된다(높이→변수→높이 진동).
+  // `.header-row` 는 리터럴 min-height 를 쓰고, 여기서는 그 결과만 읽어 내보낸다.
+  // 1px 미만 변화는 무시해 반올림 잡음으로 리렌더가 반복되지 않게 한다.
+  useEffect(() => {
+    const element = headerRef.current;
+    if (!element || typeof ResizeObserver === 'undefined') return;
+    let last = 0;
+    const apply = () => {
+      // ≤900px 에서 헤더는 static 이고 CSS 가 --header-h 를 0 으로 둔다. 인라인 값은 그 규칙보다
+      // 우선하므로, sticky 가 아닐 때는 아예 쓰지 않고 CSS 판단에 맡긴다.
+      if (getComputedStyle(element).position !== 'sticky') {
+        last = 0;
+        document.documentElement.style.removeProperty('--header-h');
+        return;
+      }
+      const height = Math.round(element.getBoundingClientRect().height);
+      if (height <= 0 || height === last) return;
+      last = height;
+      document.documentElement.style.setProperty('--header-h', `${height}px`);
+    };
+    apply();
+    const observer = new ResizeObserver(apply);
+    observer.observe(element);
+    return () => {
+      observer.disconnect();
+      document.documentElement.style.removeProperty('--header-h');
+    };
+  }, []);
+
   return (
-    <header className="site-header">
+    <header className="site-header" ref={headerRef}>
       <a className="skip-link" href="#main-content">본문 바로가기</a>
       <div className="header-row">
         <div className="brand-block">
           <strong>재난안전 AI 대응지원</strong>
+          <span className="brand-divider" aria-hidden="true" />
           <PageHeading title={route.title} />
         </div>
-        <div className="context-bar" aria-label="현재 상황 기준">
-          <label className="context-select">
-            <span>지역·상황</span>
-            <select value={selected?.situation_id ?? ''} onChange={(event) => onSelect(event.target.value)}>
-              {situations.map((item) => (
-                <option key={item.situation_id} value={item.situation_id}>{item.admin_name}</option>
-              ))}
-            </select>
-          </label>
-          <div className="context-item"><span>기준시각</span><strong>{selected ? new Date(selected.reference_time).toLocaleString('ko-KR', { dateStyle: 'short', timeStyle: 'short', hourCycle: 'h23' }) : '-'}</strong></div>
-          <div className="context-item"><span>모드</span><strong>{selected?.mode === 'scenario' ? '시나리오' : selected?.mode === 'hybrid' ? '공공 API + 입력' : '실시간'}</strong></div>
-          <div className="context-item"><span>재난유형</span><strong>{selected?.hazards.join(' · ') ?? '-'}</strong></div>
-          <button type="button" className="secondary-action" onClick={onSave}>상황뷰 저장</button>
-        </div>
+        <label className="context-select">
+          <span>지역·상황</span>
+          <select value={selected?.situation_id ?? ''} onChange={(event) => onSelect(event.target.value)}>
+            {situations.map((item) => (
+              <option key={item.situation_id} value={item.situation_id}>{item.admin_name}</option>
+            ))}
+          </select>
+        </label>
+        <span className="header-spacer" aria-hidden="true" />
         <nav className="global-nav" aria-label="주요 메뉴">
           {routes.map((item) => (
             <a
@@ -52,7 +90,32 @@ export function AppHeader({ route, situations, selected, onNavigate, onSelect, o
             </a>
           ))}
         </nav>
+        <button type="button" className="secondary-action" onClick={onSave}>상황뷰 저장</button>
       </div>
     </header>
+  );
+}
+
+/** `<main>` 최상단 컨텍스트 줄. 헤더에서 내린 기준시각·모드·재난유형을 항목 단위로 줄바꿈한다.
+ *  공간이 부족하면 항목을 통째로 내리고, 값 문자열을 중간에서 자르지 않는다. */
+export function SituationContextRow({ selected }: { selected: CurrentSituation | null }) {
+  const modeText = selected?.mode === 'scenario' ? '시나리오' : selected?.mode === 'hybrid' ? '공공 API + 입력' : '실시간';
+  return (
+    <div className="page-context-row" aria-label="현재 상황 기준">
+      <div className="page-context-item">
+        <span>기준시각</span>
+        <strong className="page-context-time">
+          {selected ? new Date(selected.reference_time).toLocaleString('ko-KR', { dateStyle: 'short', timeStyle: 'short', hourCycle: 'h23' }) : '-'}
+        </strong>
+      </div>
+      <div className="page-context-item">
+        <span>모드</span>
+        <strong className={`page-context-badge mode-${selected?.mode ?? 'unknown'}`}>{modeText}</strong>
+      </div>
+      <div className="page-context-item">
+        <span>재난유형</span>
+        <strong className="page-context-badge hazard">{selected?.hazards.join(' · ') ?? '-'}</strong>
+      </div>
+    </div>
   );
 }

@@ -15,11 +15,14 @@ function turnTime(iso:string){return new Date(iso).toLocaleTimeString('ko-KR',{h
 function contextKey(item:AgentContextItem){return `${item.kind}:${item.id}`;}
 function contextText(item:AgentContextItem){return item.detail?`${item.label} · ${item.detail}`:item.label;}
 export function SituationAgentPanel({situation,onSituationCreated,onAgentResponse,contextItems,onRemoveContext}:Props){
- const [activeTab,setActiveTab]=useState<'input'|'agent'>('input');const [message,setMessage]=useState('현재 조건에서 우선 확인해야 할 지역과 근거를 알려줘');const [sending,setSending]=useState(false);const [applying,setApplying]=useState(false);const [applyError,setApplyError]=useState('');const [sendError,setSendError]=useState('');const [mode,setMode]=useState<SituationMode>('hybrid');const [rain3h,setRain3h]=useState('');const [rain12h,setRain12h]=useState('');const [water,setWater]=useState('');const [flow,setFlow]=useState('');const [symptom,setSymptom]=useState('');const [turns,setTurns]=useState<AgentTurn[]>([]);const [suggestionsOpen,setSuggestionsOpen]=useState(true);
+ const [activeTab,setActiveTab]=useState<'input'|'agent'>('input');const [message,setMessage]=useState('현재 조건에서 우선 확인해야 할 지역과 근거를 알려줘');const [sending,setSending]=useState(false);const [applying,setApplying]=useState(false);const [applyError,setApplyError]=useState('');const [sendError,setSendError]=useState('');const [mode,setMode]=useState<SituationMode>('hybrid');const [rain3h,setRain3h]=useState('');const [rain12h,setRain12h]=useState('');const [water,setWater]=useState('');const [flow,setFlow]=useState('');const [symptom,setSymptom]=useState('');const [turns,setTurns]=useState<AgentTurn[]>([]);
+ // 추천질문은 접힘이 기본이다. 펼친 채로 두면 좌측 패널 높이를 먼저 먹어 대화 스레드가 눌린다.
+ // 건수를 summary 라벨에 적어 접혀 있어도 무엇이 있는지 읽히게 한다.
+ const [suggestionsOpen,setSuggestionsOpen]=useState(false);
  const threadRef=useRef<HTMLDivElement|null>(null);
  const observations=useMemo(()=>situation?.observations??[],[situation]);
  const context=useMemo(()=>contextItems??[],[contextItems]);
- useEffect(()=>{setMode(situation?.mode==='scenario'?'scenario':'hybrid');setRain3h(valueOf(situation,'RAINFALL_3H'));setRain12h(valueOf(situation,'RAINFALL_12H'));setWater(valueOf(situation,'WATER_LEVEL'));setFlow(valueOf(situation,'DISCHARGE'));setSymptom(String(situation?.user_input?.location_text??''));setTurns([]);setSendError('');setSuggestionsOpen(true);},[situation?.situation_id]);
+ useEffect(()=>{setMode(situation?.mode==='scenario'?'scenario':'hybrid');setRain3h(valueOf(situation,'RAINFALL_3H'));setRain12h(valueOf(situation,'RAINFALL_12H'));setWater(valueOf(situation,'WATER_LEVEL'));setFlow(valueOf(situation,'DISCHARGE'));setSymptom(String(situation?.user_input?.location_text??''));setTurns([]);setSendError('');setSuggestionsOpen(false);},[situation?.situation_id]);
  useEffect(()=>{const el=threadRef.current;if(el)el.scrollTop=el.scrollHeight;},[turns.length,sending,activeTab]);
  function observation(type:string,value:string,unit:string,trend?:string):Observation|undefined{const n=Number(value);if(!Number.isFinite(n))return undefined;return{type,value:n,unit,trend,observed_at:new Date().toISOString(),source_provider:'UserInputProvider',value_status:'scenario',official_data:false};}
  async function apply(){if(!situation||applying)return;setApplying(true);setApplyError('');try{const obs=[observation('RAINFALL_3H',rain3h,'mm'),observation('RAINFALL_12H',rain12h,'mm'),observation('WATER_LEVEL',water,'m','rising'),observation('DISCHARGE',flow,'m3/s','rising')].filter(Boolean) as Observation[];const input:CreateSituationInput={admin_code:situation.admin_code,reference_time:new Date().toISOString(),mode,hazards:situation.hazards,observations:obs.length?obs:situation.observations,user_input:{field_symptoms:symptom?[symptom]:[],location_text:symptom}};onSituationCreated(await createSituation(input));}catch(e){setApplyError(`조건 적용·재산정에 실패했습니다. 기존 조건이 유지됩니다. (${e instanceof Error?e.message:'알 수 없는 오류'})`);}finally{setApplying(false);}}
@@ -46,6 +49,10 @@ export function SituationAgentPanel({situation,onSituationCreated,onAgentRespons
    {turns.map(renderTurn)}
    {sending?<p className="agent-turn-pending">AI Agent가 답변을 정리하는 중입니다…</p>:null}
   </div>
+  <details className="agent-suggestions" open={suggestionsOpen} onToggle={e=>setSuggestionsOpen(e.currentTarget.open)}>
+   <summary>추천질문 {SUGGESTIONS.length}건</summary>
+   <div className="agent-suggestion-list">{SUGGESTIONS.map(i=><button key={i} type="button" className="suggestion" onClick={()=>setMessage(i)}>{i}</button>)}</div>
+  </details>
   <div className="agent-composer">
    {context.length?<div className="agent-context-bar">
     <p id="agent-context-hint" className="agent-context-hint">선택한 대상 {context.length}건이 질의와 함께 전달됩니다. 질문에 대상을 적지 않아도 됩니다.</p>
@@ -54,14 +61,10 @@ export function SituationAgentPanel({situation,onSituationCreated,onAgentRespons
      {onRemoveContext?<button type="button" className="agent-context-remove" aria-label={`${item.label} 참조 제거`} onClick={()=>onRemoveContext(item)}><span aria-hidden="true">×</span></button>:null}
     </li>)}</ul>
    </div>:null}
-   <textarea id="agent-composer-input" className="agent-input" aria-label="AI Agent 질의" aria-describedby={context.length?'agent-composer-hint agent-context-hint':'agent-composer-hint'} rows={6} placeholder="현재 상황에서 확인할 내용을 질문하세요" value={message} onChange={e=>setMessage(e.target.value)} onKeyDown={onComposerKeyDown}/>
+   <textarea id="agent-composer-input" className="agent-input" aria-label="AI Agent 질의" aria-describedby={context.length?'agent-composer-hint agent-context-hint':'agent-composer-hint'} rows={3} placeholder="현재 상황에서 확인할 내용을 질문하세요" value={message} onChange={e=>setMessage(e.target.value)} onKeyDown={onComposerKeyDown}/>
    <p id="agent-composer-hint" className="agent-composer-hint">Ctrl(⌘)+Enter로 전송합니다.</p>
    {sendError?<p role="alert" className="inline-error">{sendError}</p>:null}
    <button type="button" className="primary full agent-send" disabled={sending||!situation} onClick={()=>{void submit();}}>{sending?'조회 중…':'질의 실행'}</button>
   </div>
-  <details className="agent-suggestions" open={suggestionsOpen} onToggle={e=>setSuggestionsOpen(e.currentTarget.open)}>
-   <summary>추천질문</summary>
-   <div className="agent-suggestion-list">{SUGGESTIONS.map(i=><button key={i} type="button" className="suggestion" onClick={()=>setMessage(i)}>{i}</button>)}</div>
-  </details>
  </div>}</aside>;
 }
