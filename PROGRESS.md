@@ -1,7 +1,7 @@
 # PROGRESS.md — 회사↔집 인계 기록
 
 ## Last updated
-2026-08-03 (시범화면 UI 디자인 핸드오프 반영 — `design_handoff_pilot_ui/` 기준. 디자인 원본은 `UNE Design System/`)
+2026-08-03 회사 PC (시범화면 UI 디자인 핸드오프 반영 2차 — 초와이드 3열 붕괴 P0 수정 + 패널 컴포넌트 스펙. 기준은 `design_handoff_pilot_ui/`, 디자인 원본은 `UNE Design System/`)
 
 ## Current goal
 Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: evaluation_criteria.md Phase 8, 승격마다 사용자 승인 필요)
@@ -13,6 +13,24 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 - **Phase 1 완료 (2026-08-02, evaluator PASS)**: npm install 성공(package-lock.json 생성, playwright 1.62.1 정상 — 404 재발 없음), validate·contracts(OpenAPI 31/31, JSON Schema 260/18)·typecheck:functions·typecheck:web·runtime-gate·provider-conformance 전부 PASS, `npm run build` 성공(apps/web/dist 산출). 계약 파일 변경 0건.
 
 ## Done this session
+- **[P0 회귀 수정] 초와이드 3열 붕괴 (2026-08-03, 프로덕션 반영분에서 발견)**: 2561px 이상에서 `.dashboard-grid` 가 1열로 붕괴해 좌패널·지도·우패널이 세로로 쌓였다. 사용자가 실제 초와이드 모니터(브라우저 폭 약 2900px)에서 발견.
+  - 원인: 핸드오프 README §4 의 `minmax(420px, min(1fr, var(--map-max)))` 를 그대로 옮겼는데 **`fr` 은 `min()`·`max()`·`clamp()` 안에 쓸 수 없다.** 선언 전체가 무효가 되어 `grid-template-columns` 가 통째로 버려졌다.
+  - 놓친 이유: 최초 폭 스윕이 2560px 에서 끝나 브레이크포인트(2561px) 바로 아래만 검사했다. **이후 스윕에는 3840/3440/2900/2600/2561px 을 반드시 포함한다.**
+  - 수정: `minmax(var(--left-panel-w),1fr) 26px minmax(420px,var(--map-max)) minmax(var(--right-panel-w),1.2fr)`. 그리드가 fr 트랙보다 확정 상한 트랙을 먼저 키우므로(CSS Grid §12.6→§12.7) "지도가 상한 도달 후 남는 폭은 우측→좌측 패널 흡수"가 그대로 나온다. 실측 3840px 에서 지도 2400px 상한, 잔여 294px 을 우측 +157 / 좌측 +137 로 흡수.
+  - 함께 수정: 팝업 `max-height` 상수 110px → `calc(100% - var(--overlay-inset)*2 - 86px)`, 호버 카드 `bottom` 52px → `calc(var(--overlay-inset) + 40px)`. tier B 에서 `--overlay-inset` 이 12→20px 로 커지는데 상수가 따라가지 못해 팝업이 칩 띠를 파고들었다(실측 2,419px²).
+
+- **패널 컴포넌트 스펙 반영 (2026-08-03, 핸드오프 §6 잔여)**: 1차 반영이 토큰·F항목·지도에 그쳐 좌우 패널이 예전 스타일 그대로였다. 화면 인상을 좌우하는 면적이라 "전반적으로 반영 안 됨"으로 보였다. 레퍼런스 4개 화면 전수 대조 후 잔여분 반영.
+  - **패널 탭바**: 회색 면 + 3px 밑줄 → DS Tabs `line/sm`(패널 표면 위 1px 구분선 + 활성 탭 2px 브랜드 밑줄, 굵기 500/700)
+  - **우선 확인지역 카드**: 지역명 14/20 700 브랜드색+밑줄, 점수 14/20 700 `text-error`(#d92d20) tabular-nums, 재해유형 20px 알약 배지, 위치 11/17, 하단 버튼 28px(상세보기 outline / 질의에 참조 ghost), 카드 hover 시 브랜드 테두리 + 파랑 틴트 면
+  - **입력 폼**: 반경 7px→4px, 테두리 `field-border-default`(#cecfd2), 라벨 11px `field-text-label`(#686d78), 면 흰색
+  - **배너**: `.notice-card.warning` → yellow-25/yellow-400/yellow-700(대비 6.5:1), `.page-status` → green-20/border-success/text-success, `.status-banner.scenario` 동일 계열
+  - **버튼**: `.primary` 반경 4px·굵기 500, `.page-subnav a` ghost 링크, 피해카드 footer 버튼 28px outline
+  - **피해카드 footer 배지 3종 분리**: 전부 같은 노란 pill 이라 "과거 확정 집계"가 경고처럼 읽혔다 → 경고/성공/중립으로 구분
+  - **보고서**: 문서 제목 밑줄 `border-strong`(#888c94), 목차 링크 굵기 500
+  - DS 상태·필드 토큰 9개를 `:root` 에 승격(`--c-text-error`·`--c-text-success`·`--c-warn-*-ds`·`--c-field-*`·`--c-border-strong`). 값은 DS 라이트 테마 원본(`fig-tokens.css` `:root`, 다크는 `[data-theme="dark"]` 스코프라 혼동 주의)
+  - **판단 보류한 것**: 좌측 탭의 개수 배지. README 164행이 "탭에 badge 를 넣지 않는다"고 했으나 그 근거는 "DS Tabs 가 badge 를 라벨 문자열에 이어 붙여 'AI Agent2'로 읽힌다"는 것이다. 현재 구현은 별도 `<span aria-hidden>` 이라 화면낭독기는 "AI Agent"로 읽고 시각적으로도 분리돼 있어 그 문제가 없다. 마크업 구조 변경은 A-1 이 반영 대상에서 제외하므로 그대로 뒀다.
+  - 검증: 폭 16종(3840~320px) 가로 스크롤 0 · 오버레이 겹침 0px² · ≥900px 4열 유지, 스모크 3종·E2E 7/7·typecheck·build 통과
+
 - **시범화면 UI 디자인 반영 완료 (2026-08-03)**: `design_handoff_pilot_ui/` 핸드오프(README + 30_design_system_handoff.md + design_reference.dc.html) 반영. 변경 범위는 `apps/web/src` 9파일이며 API·OpenAPI·JSON Schema·Seed·Provider 계약 변경 0건.
   - **타입 스케일 고정(§1)**: `--fs-*` 유동 clamp → UNE DS 고정 rem(11/12/14/16/24) + `--fs-title` 20/32 신설, `--lh-*` 동반. 루트 배율 106.25%/112.5%/118.75% 3단 → 100%(≥2400px만 106.25%). 자간 -0.03em 전역, 굵기 750/800 → 700 일괄 32건.
   - **F-14 sticky offset 파생**: `--header-h`(3.125rem) 하나에서 `--sticky-offset`·`--subnav-offset`·`--report-preview-h` 파생. 1600/2000/2400px의 상수 오버라이드(160/172/184px) 3줄 삭제. `AppHeader`가 ResizeObserver로 `--header-h`만 갱신하되, `.header-row` 높이는 리터럴 `min-height`로 둬 높이→변수→높이 되먹임 진동을 차단(이 되먹임이 초기 구현에서 Playwright "element is not stable" 무한 대기를 유발).
@@ -113,7 +131,9 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 - 참고: 원시 xlsx(`메타데이터 참고자료(T3Q)/`)에는 전국 재해대장 115,563행·위험지구 약 6,300지구가 있으나 **위험요인 서술·임계값·근거 문서페이지·좌표가 없어** 팝업 수준의 정보를 만들 수 없다(그 정보는 저감계획 PDF 판독에서 나옴). 재해대장은 피해금액·복구비 보강용으로 조인 가능.
 
 ## Pending approval (Seed 불일치 영향범위 보고)
-- **[디자이너 사인오프 필요] 44px 터치타깃 예외 4곳 (2026-08-03 UI 반영분)**
+- **[디자이너 사인오프 필요] 44px 터치타깃 예외 (2026-08-03 UI 반영분 · 패널 스펙 반영으로 4곳 → 7곳으로 확대)**
+  - 2차 추가분: `.panel-tabs button[role="tab"]` **32px**(DS Tabs sm), `button.priority-detail-button`·`button.context-add-button` **28px**(DS Button 2xs), `.damage-event-card footer button` **28px**. 모두 AA(24×24) 충족이며 `pointer: coarse` 에서 44px 복원.
+  - 예외로 두지 **않은** 것(디자인 스펙보다 D-1 을 우선): `.field` 입력 3종과 `.primary`(질의 실행·현재 조건 적용) — 디자인은 36px 이나 텍스트 입력·주 액션이라 44px 유지. `.map-popup-close` 44px 유지.
   - 벗어난 조항: 인계문서 **D-1 461행** "44px 미만 컨트롤 제안 금지"(`.chip`·`.agent-context-remove`를 개별 44px 지정 대상으로 이름까지 열거), **D-3 511행** 고정 치수 "터치타깃 44px". 핸드오프 README 16~18행도 "절대 깨지 않을 것"에 44px을 올렸다.
   - 대상·현재값: `.map-layer-chips .chip`·`.map-layer-count`·`.map-basemap-switch button` **28px** / `.agent-suggestions > summary` **36px** / `.agent-context-remove` **14px**
   - 줄인 근거: (1) 같은 README가 뒤에서 28px 컨트롤을 지정해 스스로 모순된다(176·202·222행). (2) D-1이 표방한 기준은 **WCAG 2.2 AA**이고 AA의 터치타깃 요구는 24×24 CSS px(2.5.8), **44px은 AAA(2.5.5)** 수준이다 — 28px·36px은 AA를 충족한다. (3) 지도 위 44px 컨트롤은 하단 띠가 지도 높이를 크게 잠식한다.
