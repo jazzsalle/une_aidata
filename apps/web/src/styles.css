@@ -1037,6 +1037,38 @@ th { background: var(--surface-panel-blue); }
 .report-doc-subitem { margin: 2px 0; color: #4a5f72; font-size: var(--fs-sm); line-height: 1.6; }
 .report-doc-subitem::marker { color: #93a7b8; }
 
+/* 지표 표 — 관측값이 여러 줄 나열될 때 문단 대신 쓴다. DS Table 수치(셀 8×16, 12/18, 헤더 40px). */
+.report-doc-table {
+  width: 100%;
+  margin: var(--sp-2) 0 var(--sp-3);
+  border: 1px solid var(--border-panel-blue);
+  border-radius: 8px;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  font-size: var(--fs-sm);
+  line-height: var(--lh-sm);
+}
+.report-doc-table th, .report-doc-table td {
+  border: 0;
+  border-bottom: 1px solid var(--border-inner-blue);
+  padding: 8px 16px;
+  text-align: left;
+  vertical-align: top;
+  word-break: keep-all;
+}
+.report-doc-table thead th {
+  background: var(--surface-panel-blue);
+  border-bottom: 1px solid var(--border-panel-blue);
+  color: var(--c-text-muted);
+  font-weight: 700;
+  white-space: nowrap;
+}
+.report-doc-table tbody th { color: var(--c-text-strong); font-weight: 500; }
+.report-doc-table tbody tr:last-child th, .report-doc-table tbody tr:last-child td { border-bottom: 0; }
+/* 값 열은 자릿수를 맞춰 세로로 읽히게 한다. */
+.report-doc-table-value { font-variant-numeric: tabular-nums; }
+
 .report-doc-note {
   margin: clamp(14px, 1.15vw, 24px) 0 0;
   border-left: 4px solid #8fb0c9;

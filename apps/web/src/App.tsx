@@ -13,10 +13,21 @@ import './styles.css';
 /** 질의에 함께 실어 보낼 선택 대상 상한 — 칩이 컴포저를 가리지 않도록 제한한다. */
 const MAX_AGENT_CONTEXT = 5;
 
+/** 공공 API 조회 결과를 현재 상황의 관측값에 합친다. 같은 지표(type)는 반드시 하나만 남긴다.
+ *
+ *  우선순위: 공식 관측(actual) > 담당자가 방금 적용한 상황값 > 그 밖의 조회값(시나리오·Seed 폴백).
+ *  예전 구현은 `actual` 인 지표만 걸러냈다. 그런데 키 미설정·연계 실패로 폴백만 돌아오면
+ *  걸러낼 대상이 하나도 없어 두 배열이 그대로 이어붙고, 같은 지표가 두 번 나열됐다
+ *  (`적용 중인 조건` 목록과 보고서 `2. 현재 조건`에서 RAINFALL_3H·WATER_LEVEL·DISCHARGE 중복). */
 function mergeObservations(situation: CurrentSituation, observations: CurrentSituation['observations']): CurrentSituation {
   if (!observations.length) return situation;
-  const actualTypes=new Set(observations.filter(item=>item.value_status==='actual').map(item=>item.type));
-  return {...situation,observations:[...observations,...situation.observations.filter(item=>!actualTypes.has(item.type))],data_quality:{...situation.data_quality,public_api_merged:true,merged_at:new Date().toISOString()}};
+  const merged = new Map<string, CurrentSituation['observations'][number]>();
+  for (const item of situation.observations) merged.set(item.type, item);
+  for (const item of observations) {
+    const existing = merged.get(item.type);
+    if (!existing || item.value_status === 'actual') merged.set(item.type, item);
+  }
+  return {...situation,observations:[...merged.values()],data_quality:{...situation.data_quality,public_api_merged:true,merged_at:new Date().toISOString()}};
 }
 
 export default function App() {

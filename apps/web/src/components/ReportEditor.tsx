@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useMemo, useState } from 'react';
 import type { CurrentSituation, PriorityAreaResult, ReportDraft, ReportEvidenceSelection, SimilarEvent } from '../types/contracts';
 import type { ReportBlock, ReportDocument, ReportSection } from '../domain/reportDocument';
-import { listBlock, noteBlock, rankedListBlock, textBlock, toMarkdown } from '../domain/reportDocument';
+import { listBlock, measurementBlocks, noteBlock, rankedListBlock, textBlock, toMarkdown } from '../domain/reportDocument';
 
 interface Props {
   situation: CurrentSituation | null;
@@ -72,14 +72,15 @@ export function buildReportDocument({ overview, conditions, actions, damageStatu
     title: '재난상황 보고서 초안',
     sections: [
       { id: 'overview', level: 2, heading: '1. 상황 개요', blocks: [textBlock(overview || '미입력')] },
-      { id: 'conditions', level: 2, heading: '2. 현재 조건', blocks: [textBlock(conditions || '미입력')] },
+      // 관측값이 여러 줄 나열되면 문단이 아니라 지표 표로 렌더한다(마크다운 다운로드도 GFM 표).
+      { id: 'conditions', level: 2, heading: '2. 현재 조건', blocks: measurementBlocks(conditions || '미입력') },
       { id: 'priority', level: 2, heading: '3. 우선 확인지역', blocks: [priorityBlock] },
       { id: 'evidence', level: 2, heading: '4. 피해·변화 참고근거', blocks: [] },
       { id: 'evidence-satellite', level: 3, heading: '위성영상', blocks: [satelliteBlock] },
       { id: 'evidence-flood', level: 3, heading: '침수흔적도', blocks: [floodBlock] },
       { id: 'evidence-events', level: 3, heading: '과거 피해·대응·복구 사례', blocks: [eventBlock] },
       { id: 'actions', level: 2, heading: '5. 담당자 조치결과', blocks: [textBlock(actions || '미입력')] },
-      { id: 'damage', level: 2, heading: '6. 피해현황', blocks: [textBlock(damageStatus || '미확인')] }
+      { id: 'damage', level: 2, heading: '6. 피해현황', blocks: measurementBlocks(damageStatus || '미확인') }
     ],
     closing: [noteBlock('본 문서는 담당자 검토용 초안이며 NDMS 자동 제출 또는 공식 피해예측 결과가 아닙니다.')]
   };
@@ -234,6 +235,20 @@ function ReportTextBlock({ value }: { value: string }) {
 function ReportBlockView({ block }: { block: ReportBlock }) {
   if (block.kind === 'text') return <ReportTextBlock value={block.value} />;
   if (block.kind === 'note') return <blockquote className="report-doc-note"><p>{block.value}</p></blockquote>;
+  if (block.kind === 'table') {
+    if (block.rows.length === 0) return null;
+    // 첫 열은 지표명이므로 행 표제(th scope="row")로 둔다 — 표 자체로 읽히는 구조를 유지한다.
+    return <table className="report-doc-table">
+      <thead><tr>{block.columns.map((column) => <th key={column} scope="col">{column}</th>)}</tr></thead>
+      <tbody>{block.rows.map((row, rowIndex) => (
+        <tr key={rowIndex}>{row.map((cell, cellIndex) => (
+          cellIndex === 0
+            ? <th key={cellIndex} scope="row">{cell}</th>
+            : <td key={cellIndex} className={cellIndex === 1 ? 'report-doc-table-value' : undefined}>{cell}</td>
+        ))}</tr>
+      ))}</tbody>
+    </table>;
+  }
   if (block.kind === 'ranked-list') {
     if (block.items.length === 0) return null;
     return <ol className="report-doc-ranked-list">

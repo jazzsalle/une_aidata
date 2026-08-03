@@ -13,6 +13,14 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 - **Phase 1 완료 (2026-08-02, evaluator PASS)**: npm install 성공(package-lock.json 생성, playwright 1.62.1 정상 — 404 재발 없음), validate·contracts(OpenAPI 31/31, JSON Schema 260/18)·typecheck:functions·typecheck:web·runtime-gate·provider-conformance 전부 PASS, `npm run build` 성공(apps/web/dist 산출). 계약 파일 변경 0건.
 
 ## Done this session
+- **보고서 수치 나열 → 지표 표 렌더 + 관측값 중복 제거 (2026-08-03)**: 사용자 지적 — 초안 미리보기 `2. 현재 조건`처럼 수치가 여러 줄 나열되면 문단이 아니라 표로 나와야 한다.
+  - **표 블록 신설**: `reportDocument.ts`에 `{kind:'table'}` 추가. `toMarkdown`은 GFM 파이프 표로 직렬화(셀 안 `|`는 이스케이프), 미리보기는 `<table class="report-doc-table">`로 렌더하며 첫 열은 `th scope="row"`.
+  - **파싱은 강제하지 않는다**: `measurementBlocks()`가 `지표: 값 (자료상태)` 꼴 줄만 표로 모으고, 그 꼴이 아닌 줄은 표 아래 문단으로 남긴다. 표에 넣을 줄이 2개 미만이면 예전처럼 문단 하나. 담당자가 자유롭게 고쳐 쓰는 칸이라 산문을 쓰면 산문 그대로 나온다. 실측 확인: 산문 입력 시 표 0개, 혼합 입력 시 표 1개 + 후행 문단 보존.
+  - 적용 대상은 `2. 현재 조건`과 `6. 피해현황`. `자료상태` 열은 괄호 표기가 하나라도 있을 때만 만든다.
+  - **Seed 폴백 형식 정렬**: `report_draft_seed.json`의 `current_conditions`는 산문("호우경보 시나리오")이라 표가 되지 않아 실서버 경로와 화면이 달랐다. `apiClient.loadReport` 폴백이 `server/routes/v1/reports/drafts.ts`(29행)와 같은 `지표: 값 (자료상태)` 줄을 만들도록 맞췄다. **Seed 파일은 수정하지 않았다.**
+  - **관측값 중복 제거(별건 버그)**: `App.tsx` `mergeObservations`가 `actual`인 지표만 걸러내어, 키 미설정·연계 실패로 폴백만 오면 걸러낼 대상이 없어 두 배열이 그대로 이어붙었다(같은 지표 2회 나열). 기준선 커밋 `5ec0f10`부터 있던 코드다. `type`을 키로 하나만 남기고 우선순위를 **actual > 담당자 적용값 > 그 밖의 조회값**으로 정리했다. 실측: `적용 중인 조건` 중복 0건.
+  - 검증: typecheck·build, a11y 구조검증, 스모크 3종(11/11·9/9·8/8) 외부 도메인 0건, E2E 7/7. 마크다운 다운로드 파일에서 GFM 표 구분행 확인.
+
 - **UNE 디자인 시스템 토큰 도입 + 레거시 CSS 일괄 정리 (2026-08-03)**: 1·2차 반영이 닿지 않은 구역(`/evidence` 위성 3구역, 대시보드 하단 4패널)이 예전 스타일로 남아 화면에 두 가지 톤이 섞여 있었다. 값을 손으로 옮기던 방식을 접고 DS 토큰을 직접 참조하도록 바꿨다.
   - **토큰 도입**: `apps/web/src/design-tokens/` 신설. 원본 `UNE Design System/_ds/une-design-system-bbd5ec43-f21a-4140-bff6-c1fb616b6bb1/tokens/` 에서 **6개만** 복사한다 — `fig-tokens`·`colors`·`typography`·`spacing`·`elevation`·`motion`. `styles.css` 맨 위에서 `@import`(CSS @import 는 다른 규칙보다 앞서야 한다).
   - **제외 2개 — 갱신 시에도 반드시 지킬 것**:
