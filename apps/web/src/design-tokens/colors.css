@@ -1,0 +1,28 @@
+/* ---------------------------------------------------------------------------
+   UNE 디자인 시스템 토큰 — 원본 복사본. **직접 수정하지 말 것.**
+   출처: UNE Design System/_ds/une-design-system-bbd5ec43-f21a-4140-bff6-c1fb616b6bb1/tokens/colors.css
+   갱신: 원본 폴더가 새로 오면 이 6개 파일(fig-tokens·colors·typography·spacing·
+         elevation·motion)만 다시 복사한다.
+   제외: fonts.css(jsdelivr CDN @import — 스모크의 '외부 도메인 요청 0건' 위반),
+         base.css(body·a·* 전역 셀렉터가 styles.css 와 충돌).
+   --------------------------------------------------------------------------- */
+/* Colour — the full palette lives in tokens/fig-tokens.css (445 Figma Variables across
+   Primitives / Semantic-color / Semantic-size / Component / Ungrouped, light + dark + high-contrast modes).
+   This file only adds the handful of convenience aliases the components read, and documents the ramps.
+
+   Primitive ramps (each 20,25,50,75,100,150,200,300,400,500,600,700,800,900):
+     light-blue  brand                        500 = rgb(60,105,252)
+     dark-blue   brand, dark theme            300 = rgb(71,125,255)
+     grayscale   neutral                      700 = rgb(68,74,87)  (the most-used colour in the file)
+     orange      warning                      500 = rgb(252,107,25)
+     red         error                        500 = rgb(217,45,32)
+     green       success                      500 = rgb(29,121,43)
+     yellow      light-warning                400 = rgb(232,154,0)
+     teal        accent                       500 = rgb(8,187,174)
+     purple      accent                       500 = rgb(152,94,255)
+
+   Theming: light is :root. Dark is :root[data-theme="dark"] or .dark.
+   High contrast is :root[data-mode="high-contrast"] (a text/divider-contrast overlay, not a full theme). */
+:root{
+  --une-focus-ring:0 0 0 2px var(--color-focus-visible-ring);
+}

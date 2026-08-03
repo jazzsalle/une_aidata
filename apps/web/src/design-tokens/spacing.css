@@ -1,0 +1,39 @@
+/* ---------------------------------------------------------------------------
+   UNE 디자인 시스템 토큰 — 원본 복사본. **직접 수정하지 말 것.**
+   출처: UNE Design System/_ds/une-design-system-bbd5ec43-f21a-4140-bff6-c1fb616b6bb1/tokens/spacing.css
+   갱신: 원본 폴더가 새로 오면 이 6개 파일(fig-tokens·colors·typography·spacing·
+         elevation·motion)만 다시 복사한다.
+   제외: fonts.css(jsdelivr CDN @import — 스모크의 '외부 도메인 요청 0건' 위반),
+         base.css(body·a·* 전역 셀렉터가 styles.css 와 충돌).
+   --------------------------------------------------------------------------- */
+/* Spacing, radii and control sizing, in px.
+   fig-tokens.css carries the Figma FLOAT variables unitless (they need calc(var(--x) * 1px));
+   these are the ready-to-use px aliases the components consume. */
+:root{
+  --une-space-0:0px;   --une-space-2:2px;  --une-space-4:4px;  --une-space-6:6px;
+  --une-space-8:8px;   --une-space-12:12px; --une-space-16:16px; --une-space-20:20px;
+  --une-space-24:24px; --une-space-28:28px; --une-space-32:32px; --une-space-36:36px;
+  --une-space-40:40px; --une-space-44:44px; --une-space-48:48px; --une-space-60:60px;
+  --une-space-64:64px; --une-space-76:76px; --une-space-80:80px; --une-space-96:96px;
+
+  /* semantic gaps / paddings */
+  --une-gap-2xs:4px; --une-gap-xs:8px; --une-gap-sm:12px; --une-gap-md:16px;
+  --une-gap-lg:20px; --une-gap-xl:24px; --une-gap-2xl:32px;
+  --une-pad-2xs:4px; --une-pad-xs:8px; --une-pad-sm:12px; --une-pad-md:16px;
+  --une-pad-lg:20px; --une-pad-xl:24px; --une-pad-2xl:32px;
+
+  /* radii */
+  --une-radius-none:0px; --une-radius-xs:2px; --une-radius-sm:4px;
+  --une-radius-md:8px;   --une-radius-lg:12px; --une-radius-xl:16px;
+  --une-radius-max:1000px;
+
+  /* control heights — the 10-step size ramp shared by Button / IconButton / Input / Select */
+  --une-control-4xs:20px; --une-control-3xs:24px; --une-control-2xs:28px;
+  --une-control-xs:32px;  --une-control-sm:36px;  --une-control-md:40px;
+  --une-control-lg:44px;  --une-control-xl:48px;  --une-control-2xl:52px;
+  --une-control-3xl:56px;
+
+  /* icon sizing */
+  --une-icon-sm:12px; --une-icon-md:16px; --une-icon-lg:20px; --une-icon-xl:24px;
+  --une-icon-2xl:28px; --une-icon-3xl:32px; --une-icon-4xl:36px; --une-icon-5xl:40px;
+}
