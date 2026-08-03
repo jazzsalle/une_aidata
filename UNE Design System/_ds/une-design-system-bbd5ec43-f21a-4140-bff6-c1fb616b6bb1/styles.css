@@ -1,0 +1,16 @@
+/* UNE Design System — global CSS entry point. Consumers link this one file. */
+@import './tokens/fonts.css';
+@import './tokens/fig-tokens.css';
+@import './tokens/colors.css';
+@import './tokens/typography.css';
+@import './tokens/spacing.css';
+@import './tokens/elevation.css';
+@import './tokens/motion.css';
+@import './tokens/base.css';
+@import './components/actions/actions.css';
+@import './components/forms/forms.css';
+@import './components/data-display/data-display.css';
+@import './components/navigation/navigation.css';
+@import './components/feedback/feedback.css';
+@import './components/overlay/overlay.css';
+@import './components/layout/layout.css';

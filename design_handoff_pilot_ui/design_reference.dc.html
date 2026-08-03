@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/une-design-system-bbd5ec43-f21a-4140-bff6-c1fb616b6bb1/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/une-design-system-bbd5ec43-f21a-4140-bff6-c1fb616b6bb1/tokens/fig-tokens.css">
+<link rel="stylesheet" href="_ds/une-design-system-bbd5ec43-f21a-4140-bff6-c1fb616b6bb1/tokens/colors.css">
+<link rel="stylesheet" href="_ds/une-design-system-bbd5ec43-f21a-4140-bff6-c1fb616b6bb1/tokens/typography.css">
+<link rel="stylesheet" href="_ds/une-design-system-bbd5ec43-f21a-4140-bff6-c1fb616b6bb1/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/une-design-system-bbd5ec43-f21a-4140-bff6-c1fb616b6bb1/tokens/elevation.css">
+<link rel="stylesheet" href="_ds/une-design-system-bbd5ec43-f21a-4140-bff6-c1fb616b6bb1/tokens/motion.css">
+<link rel="stylesheet" href="_ds/une-design-system-bbd5ec43-f21a-4140-bff6-c1fb616b6bb1/tokens/base.css">
+<link rel="stylesheet" href="_ds/une-design-system-bbd5ec43-f21a-4140-bff6-c1fb616b6bb1/components/actions/actions.css">
+<link rel="stylesheet" href="_ds/une-design-system-bbd5ec43-f21a-4140-bff6-c1fb616b6bb1/components/forms/forms.css">
+<link rel="stylesheet" href="_ds/une-design-system-bbd5ec43-f21a-4140-bff6-c1fb616b6bb1/components/data-display/data-display.css">
+<link rel="stylesheet" href="_ds/une-design-system-bbd5ec43-f21a-4140-bff6-c1fb616b6bb1/components/navigation/navigation.css">
+<link rel="stylesheet" href="_ds/une-design-system-bbd5ec43-f21a-4140-bff6-c1fb616b6bb1/components/feedback/feedback.css">
+<link rel="stylesheet" href="_ds/une-design-system-bbd5ec43-f21a-4140-bff6-c1fb616b6bb1/components/overlay/overlay.css">
+<link rel="stylesheet" href="_ds/une-design-system-bbd5ec43-f21a-4140-bff6-c1fb616b6bb1/components/layout/layout.css">
+<link rel="stylesheet" href="_ds/une-design-system-bbd5ec43-f21a-4140-bff6-c1fb616b6bb1/styles.css">
+<script src="_ds/une-design-system-bbd5ec43-f21a-4140-bff6-c1fb616b6bb1/_ds_bundle.js"></script>
+<style>
+:root{
+  --header-h:50px; --sticky-gap:8px;
+  --sticky-offset:calc(var(--header-h) + var(--sticky-gap));
+  --subnav-offset:calc(var(--header-h) + 4px);
+  --fs-xs:11px; --lh-xs:17px;
+  --fs-sm:12px; --lh-sm:18px;
+  --fs-md:14px; --lh-md:20px;
+  --fs-lg:16px; --lh-lg:24px;
+  --fs-title:20px; --lh-title:32px;
+  --fs-xl:24px; --lh-xl:36px;
+}
+[data-typescale="current"]{
+  --fs-xs:13.8px; --lh-xs:21px;
+  --fs-sm:14.9px; --lh-sm:23px;
+  --fs-md:17.7px; --lh-md:27px;
+  --fs-lg:20.1px; --lh-lg:30px;
+  --fs-title:24.2px; --lh-title:36px;
+  --fs-xl:30.5px; --lh-xl:44px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--color-light-blue-20);color:var(--color-text-primary);
+  font-family:"Spoqa Han Sans Neo",Pretendard,"Noto Sans KR",system-ui,sans-serif;
+  letter-spacing:-0.03em;font-synthesis:none;text-rendering:optimizeLegibility}
+a{color:var(--color-text-brand);text-decoration:none}
+a:hover{color:var(--color-text-brand);text-decoration:underline}
+p,h1,h2,h3,h4,h5,dl,dd,dt,ol,ul{margin:0}
+ol,ul{padding:0;list-style:none}
+</style>
+</helmet>
+
+<div data-typescale="{{ typeScale }}" style="min-width:900px;min-height:100vh;background:var(--color-light-blue-20)">
+
+  <header style="position:sticky;top:0;z-index:20;height:var(--header-h);display:flex;align-items:center;gap:12px;padding:0 16px;background:var(--color-surface-primary);border-bottom:1px solid var(--color-light-blue-75);white-space:nowrap">
+    <div style="display:flex;align-items:center;gap:8px;flex:0 1 auto;min-width:0">
+      <span style="flex:0 0 auto;font-size:var(--fs-lg);line-height:var(--lh-lg);font-weight:700">재난안전 AI 시범서비스</span>
+      <span style="flex:0 0 auto;width:1px;height:16px;background:var(--color-border-muted)"></span>
+      <h1 style="flex:0 1 auto;min-width:0;font-size:var(--fs-md);line-height:var(--lh-md);font-weight:700;color:var(--color-text-brand);overflow:hidden;text-overflow:ellipsis">{{ pageTitle }}</h1>
+    </div>
+    <div style="width:132px;flex:0 0 auto">
+      <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Select" size="2xs" options="{{ regionOptions }}" value="{{ region }}" on-change="{{ onRegion }}" hint-size="132px,28px"></x-import>
+    </div>
+    <span style="flex:1 1 auto"></span>
+    <nav aria-label="주요 메뉴" style="flex:0 0 auto">
+      <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Tabs" variant="line" size="sm" items="{{ navItems }}" value="{{ screen }}" on-change="{{ onNav }}" hint-size="520px,32px"></x-import>
+    </nav>
+    <div style="flex:0 0 auto;white-space:nowrap">
+      <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Button" variant="outline" color="grayscale" size="2xs" leading-icon="save-line" hint-size="auto,28px">상황뷰 저장</x-import>
+    </div>
+  </header>
+
+  <sc-if value="{{ showMeasure }}" hint-placeholder-val="{{ true }}">
+    <div style="position:sticky;top:var(--header-h);z-index:19;display:flex;gap:8px;align-items:center;padding:4px 24px;background:var(--color-interaction-primary-bg-subtle-default);border-bottom:1px dashed var(--color-border-brand)">
+      <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-brand);font-weight:500">측정 오버레이</span>
+      <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-secondary-2)">--header-h 50px · --sticky-offset 58px · --subnav-offset 54px — 세 값이 모두 실측 헤더 높이에서 파생된다(F-14)</span>
+    </div>
+  </sc-if>
+
+  <main style="padding:16px 24px 32px;display:grid;gap:16px">
+
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 20px">
+      <div style="display:flex;align-items:baseline;gap:6px">
+        <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary)">기준시각</span>
+        <strong style="font-size:var(--fs-sm);line-height:var(--lh-sm);font-weight:500;font-variant-numeric:tabular-nums">2026-08-02 14:20</strong>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary)">모드</span>
+        <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Badge" variant="solid" intent="warning" size="xs" shape="round-square" hint-size="auto,20px">시나리오</x-import>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary)">재난유형</span>
+        <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Badge" variant="subtle" intent="primary" size="xs" shape="round-square" icon="flood-fill" hint-size="auto,20px">호우·침수</x-import>
+      </div>
+    </div>
+
+
+    <sc-if value="{{ isDash }}" hint-placeholder-val="{{ true }}">
+      <div style="display:grid;gap:12px">
+        <div role="status" style="display:flex;align-items:center;gap:8px;max-width:760px;padding:8px 12px;border:1px solid var(--color-border-success);background:var(--color-green-20);border-radius:8px">
+          <span style="font-size:var(--fs-sm);line-height:var(--lh-sm);color:var(--color-text-success);font-weight:500">현재 조건을 적용하고 우선 확인지역을 재산정했습니다.</span>
+        </div>
+
+        <div style="display:grid;grid-template-columns:clamp(240px,21vw,340px) 26px minmax(240px,1fr) clamp(292px,25vw,400px);gap:12px;height:660px">
+
+          <section aria-label="재난상황 입력·AI Agent" style="display:flex;flex-direction:column;min-width:0;background:var(--color-surface-primary);border:1px solid var(--color-light-blue-75);border-radius:8px;overflow:hidden">
+            <div style="padding:0 8px;border-bottom:1px solid var(--color-light-blue-50)">
+              <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Tabs" variant="line" size="sm" items="{{ leftItems }}" value="{{ leftTab }}" on-change="{{ onLeft }}" hint-size="100%,32px"></x-import>
+            </div>
+
+            <sc-if value="{{ isAgent }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;flex-direction:column;flex:1 1 auto;min-height:0">
+                <div class="une-scroll" role="log" aria-live="polite" tabindex="0" style="flex:1 1 auto;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding:12px;background:var(--color-light-blue-20)">
+                  <div style="align-self:flex-end;max-width:88%;padding:8px 12px;border-radius:12px 12px 4px 12px;background:var(--color-interaction-primary-bg-default);color:var(--color-text-on-brand)">
+                    <div style="display:flex;justify-content:space-between;gap:12px;margin-bottom:4px">
+                      <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);font-weight:500;opacity:.85">담당자</span>
+                      <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);opacity:.85;font-variant-numeric:tabular-nums">14:18</span>
+                    </div>
+                    <p style="font-size:var(--fs-md);line-height:var(--lh-md);word-break:keep-all">요천지구에 3시간 강우 78mm가 이어질 때 우선 확인할 지점과 과거 대응 사례를 정리해 주세요.</p>
+                    <div style="margin-top:8px;padding-top:6px;border-top:1px solid rgba(255,255,255,.28)">
+                      <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);opacity:.9">함께 전달한 선택 대상 2건 · 요천지구 · 2020 남원 호우</span>
+                    </div>
+                  </div>
+
+                  <div style="align-self:flex-start;max-width:94%;padding:8px 12px;border-radius:12px 12px 12px 4px;background:var(--color-brand-subtle);border:1px solid var(--color-border-brand)">
+                    <div style="display:flex;justify-content:space-between;gap:12px;margin-bottom:4px">
+                      <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);font-weight:500;color:var(--color-text-brand)">AI Agent</span>
+                      <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary);font-variant-numeric:tabular-nums">14:19</span>
+                    </div>
+                    <p style="font-size:var(--fs-md);line-height:var(--lh-md);word-break:keep-all;color:var(--color-text-primary)">요천지구 하류 좌안 제방과 원천천 합류부를 먼저 확인한다. 계획문서 판독값 기준 3시간 강우 70mm에서 주의 단계, 90mm에서 심각 단계로 기록되어 있다.</p>
+                    <div style="margin-top:8px;padding-top:6px;border-top:1px solid var(--color-border-brand)">
+                      <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-secondary-2)">근거 4건 · 유사사례 2건 · 지도 이동 요천지구</span>
+                    </div>
+                    <div style="margin-top: 6px; padding: 6px 8px; border-radius: 5px; background: var(--color-yellow-25); border: 1px solid var(--color-border-light-warning)">
+                      <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-yellow-700);font-weight:500">담당자 확인 필요 · 공식 위험도·피해예측·자동 조치결정이 아닌 참고정보입니다.</span>
+                    </div>
+                  </div>
+                </div>
+
+                <details style="flex:0 0 auto;border-top:1px solid var(--color-light-blue-50);background:var(--color-light-blue-25)">
+                  <summary style="min-height:36px;display:flex;align-items:center;padding:0 12px;font-size:var(--fs-sm);line-height:var(--lh-sm);font-weight:500;color:var(--color-text-secondary-2);cursor:pointer">추천질문 4건</summary>
+                  <div style="display:flex;flex-wrap:wrap;gap:6px;padding:0 12px 10px">
+                    <button type="button" style="min-height:28px;padding:5px 12px;font-size:var(--fs-xs);line-height:var(--lh-xs);font-family:inherit;letter-spacing:-0.03em;white-space:nowrap;color:var(--color-text-secondary-2);background:var(--color-surface-primary);border:1px solid var(--color-light-blue-75);border-radius:1000px;cursor:pointer" style-hover="background:var(--color-interaction-primary-bg-subtle-hover);border-color:var(--color-border-brand);color:var(--color-text-brand)">요천 보여줘</button>
+                    <button type="button" style="min-height:28px;padding:5px 12px;font-size:var(--fs-xs);line-height:var(--lh-xs);font-family:inherit;letter-spacing:-0.03em;white-space:nowrap;color:var(--color-text-secondary-2);background:var(--color-surface-primary);border:1px solid var(--color-light-blue-75);border-radius:1000px;cursor:pointer" style-hover="background:var(--color-interaction-primary-bg-subtle-hover);border-color:var(--color-border-brand);color:var(--color-text-brand)">인근 대피소 수용 여력은?</button>
+                    <button type="button" style="min-height:28px;padding:5px 12px;font-size:var(--fs-xs);line-height:var(--lh-xs);font-family:inherit;letter-spacing:-0.03em;white-space:nowrap;color:var(--color-text-secondary-2);background:var(--color-surface-primary);border:1px solid var(--color-light-blue-75);border-radius:1000px;cursor:pointer" style-hover="background:var(--color-interaction-primary-bg-subtle-hover);border-color:var(--color-border-brand);color:var(--color-text-brand)">과거 복구비 규모 비교</button>
+                    <button type="button" style="min-height:28px;padding:5px 12px;font-size:var(--fs-xs);line-height:var(--lh-xs);font-family:inherit;letter-spacing:-0.03em;white-space:nowrap;color:var(--color-text-secondary-2);background:var(--color-surface-primary);border:1px solid var(--color-light-blue-75);border-radius:1000px;cursor:pointer" style-hover="background:var(--color-interaction-primary-bg-subtle-hover);border-color:var(--color-border-brand);color:var(--color-text-brand)">산사태 위험지구 보여줘</button>
+                  </div>
+                </details>
+
+                <div style="flex:0 0 auto;border-top:1px solid var(--color-light-blue-50);padding:10px 12px;background:var(--color-surface-primary)">
+                  <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px">
+                    <span style="display:inline-flex;align-items:center;gap:4px;height:22px;padding:0 6px 0 9px;border:1px solid var(--color-light-blue-75);border-radius:1000px;background:var(--color-surface-primary)">
+                      <span style="font-size:10px;line-height:16px;letter-spacing:-0.03em;color:var(--color-text-secondary-2)">요천지구</span>
+                      <button type="button" aria-label="요천지구 제거" style="display:flex;align-items:center;justify-content:center;width:14px;height:14px;padding:0;font-family:inherit;font-size:9px;line-height:1;color:var(--color-icon-secondary);background:transparent;border:0;border-radius:1000px;cursor:pointer" style-hover="background:var(--color-light-blue-25);color:var(--color-text-brand)">✕</button>
+                    </span>
+                    <span style="display:inline-flex;align-items:center;gap:4px;height:22px;padding:0 6px 0 9px;border:1px solid var(--color-light-blue-75);border-radius:1000px;background:var(--color-surface-primary)">
+                      <span style="font-size:10px;line-height:16px;letter-spacing:-0.03em;color:var(--color-text-secondary-2)">2020 남원 호우</span>
+                      <button type="button" aria-label="2020 남원 호우 제거" style="display:flex;align-items:center;justify-content:center;width:14px;height:14px;padding:0;font-family:inherit;font-size:9px;line-height:1;color:var(--color-icon-secondary);background:transparent;border:0;border-radius:1000px;cursor:pointer" style-hover="background:var(--color-light-blue-25);color:var(--color-text-brand)">✕</button>
+                    </span>
+                  </div>
+                  <textarea rows="3" placeholder="확인할 상황을 입력하세요" style="width:100%;min-height:76px;resize:vertical;padding:8px 10px;font-family:inherit;font-size:var(--fs-md);line-height:var(--lh-md);letter-spacing:-0.03em;color:var(--color-text-primary);background:var(--field-bg-surface);border:1px solid var(--field-border-default);border-radius:4px"></textarea>
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px">
+                    <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary)">Ctrl(⌘)+Enter로 전송합니다.</span>
+                    <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Button" variant="solid" color="primary" size="sm" hint-size="auto,36px">질의 실행</x-import>
+                  </div>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ isInput }}" hint-placeholder-val="{{ false }}">
+              <div class="une-scroll" style="flex:1 1 auto;min-height:0;overflow-y:auto;padding:12px;display:grid;gap:12px;align-content:start">
+                <div style="padding:8px 12px;border-radius:8px;background:var(--color-yellow-25);border:1px solid var(--color-border-light-warning)">
+                  <span style="font-size:var(--fs-sm);line-height:var(--lh-sm);color:var(--color-yellow-700);font-weight:500">시나리오 모드 · 입력값은 참고 산정에만 사용된다.</span>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                  <label style="display:grid;gap:4px">
+                    <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--field-text-label)">3시간 강우</span>
+                    <input value="78" style="min-height:36px;padding:0 10px;font-family:inherit;font-size:var(--fs-md);letter-spacing:-0.03em;border:1px solid var(--field-border-default);border-radius:4px;background:var(--field-bg-surface);color:var(--field-text-value)">
+                  </label>
+                  <label style="display:grid;gap:4px">
+                    <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--field-text-label)">12시간 강우</span>
+                    <input value="154" style="min-height:36px;padding:0 10px;font-family:inherit;font-size:var(--fs-md);letter-spacing:-0.03em;border:1px solid var(--field-border-default);border-radius:4px;background:var(--field-bg-surface);color:var(--field-text-value)">
+                  </label>
+                  <label style="display:grid;gap:4px">
+                    <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--field-text-label)">수위</span>
+                    <input value="4.12" style="min-height:36px;padding:0 10px;font-family:inherit;font-size:var(--fs-md);letter-spacing:-0.03em;border:1px solid var(--field-border-default);border-radius:4px;background:var(--field-bg-surface);color:var(--field-text-value)">
+                  </label>
+                  <label style="display:grid;gap:4px">
+                    <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--field-text-label)">유량</span>
+                    <input value="1,240" style="min-height:36px;padding:0 10px;font-family:inherit;font-size:var(--fs-md);letter-spacing:-0.03em;border:1px solid var(--field-border-default);border-radius:4px;background:var(--field-bg-surface);color:var(--field-text-value)">
+                  </label>
+                </div>
+                <label style="display:grid;gap:4px">
+                  <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--field-text-label)">현장징후</span>
+                  <textarea rows="3" style="width:100%;padding:8px 10px;font-family:inherit;font-size:var(--fs-md);line-height:var(--lh-md);letter-spacing:-0.03em;border:1px solid var(--field-border-default);border-radius:4px;background:var(--field-bg-surface)">하류 좌안 월류 흔적 신고 2건</textarea>
+                </label>
+                <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Button" variant="solid" color="primary" size="sm" full-width="{{ true }}" hint-size="100%,36px">현재 조건 적용·재산정</x-import>
+              </div>
+            </sc-if>
+          </section>
+
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px">
+            <div role="separator" tabindex="0" aria-label="좌측 패널 폭 조절" style="width:4px;height:120px;border-radius:1000px;background:var(--color-border-muted);cursor:col-resize" style-hover="background:var(--color-interaction-primary-bg-default)"></div>
+            <div style="display:grid;gap:4px">
+              <button type="button" aria-label="좁히기" style="width:26px;height:44px;font-family:inherit;font-size:var(--fs-xs);color:var(--color-icon-secondary);background:var(--color-surface-primary);border:1px solid var(--color-light-blue-75);border-radius:4px;box-shadow:var(--une-elevation-1);cursor:pointer" style-hover="background:var(--color-interaction-primary-bg-subtle-hover)">‹</button>
+              <button type="button" aria-label="넓히기" style="width:26px;height:44px;font-family:inherit;font-size:var(--fs-xs);color:var(--color-icon-secondary);background:var(--color-surface-primary);border:1px solid var(--color-light-blue-75);border-radius:4px;box-shadow:var(--une-elevation-1);cursor:pointer" style-hover="background:var(--color-interaction-primary-bg-subtle-hover)">›</button>
+            </div>
+          </div>
+
+          <section aria-label="상황 지도" style="position:relative;min-width:0;border:1px solid var(--color-light-blue-75);border-radius:8px;overflow:hidden;background:var(--color-light-blue-50)">
+            <div aria-hidden="true" style="position:absolute;inset:0;background:var(--color-light-blue-50)"></div>
+            <div aria-hidden="true" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">
+              <span style="font-size:var(--fs-sm);line-height:var(--lh-sm);color:var(--color-text-tertiary)">VWorld 2D 베이스맵 영역 (운영 시 타일 표출)</span>
+            </div>
+
+            <div tabindex="0" onMouseEnter="{{ onPoi1 }}" onMouseLeave="{{ offPoi }}" onFocus="{{ onPoi1 }}" onBlur="{{ offPoi }}" onClick="{{ openDetail }}" style="position:absolute;left:14%;top:44%;z-index:2;display:flex;cursor:pointer">
+              <svg width="20" height="25.7" viewBox="0 0 38 48.857" role="img" aria-label="원천천 합류부 POI"><path d="M19 48.857C19 48.857 38 26.5 38 19A19 19 0 1 0 0 19C0 26.5 19 48.857 19 48.857Z" fill="rgb(45,86,247)"></path><circle cx="19" cy="18.857" r="11" fill="#fff"></circle></svg>
+            </div>
+
+            <div tabindex="0" onMouseEnter="{{ onPoi2 }}" onMouseLeave="{{ offPoi }}" onFocus="{{ onPoi2 }}" onBlur="{{ offPoi }}" onClick="{{ openDetail }}" style="position:absolute;left:70%;top:62%;z-index:2;display:flex;cursor:pointer">
+              <svg width="20" height="25.7" viewBox="0 0 38 48.857" role="img" aria-label="향교동 저지대 POI"><path d="M19 48.857C19 48.857 38 26.5 38 19A19 19 0 1 0 0 19C0 26.5 19 48.857 19 48.857Z" fill="rgb(45,86,247)"></path><circle cx="19" cy="18.857" r="11" fill="#fff"></circle></svg>
+            </div>
+
+            <div tabindex="0" onMouseEnter="{{ onPoi3 }}" onMouseLeave="{{ offPoi }}" onFocus="{{ onPoi3 }}" onBlur="{{ offPoi }}" onClick="{{ openDetail }}" style="position:absolute;left:40%;top:52%;z-index:3;display:flex;cursor:pointer">
+              <svg width="28" height="36" viewBox="0 0 38 48.857" role="img" aria-label="요천지구 POI 선택됨"><path d="M19 48.857C19 48.857 38 26.5 38 19A19 19 0 1 0 0 19C0 26.5 19 48.857 19 48.857Z" fill="rgb(45,86,247)"></path><circle cx="19" cy="18.857" r="11" fill="#fff"></circle></svg>
+            </div>
+
+            <sc-if value="{{ isPoi1 }}" hint-placeholder-val="{{ false }}">
+              <div role="tooltip" style="position:absolute;left:12px;bottom:52px;z-index:6;width:220px;border-radius:4px;overflow:hidden;background:rgb(18,15,74);box-shadow:inset 0 0 0 1px rgb(8,6,40),var(--une-elevation-3);pointer-events:none">
+                <div style="display:grid;gap:5px;padding:14px 12px 12px">
+                  <span style="display:block;font-size:14px;line-height:20px;font-weight:700;color:rgb(255,255,255)">원천천 합류부</span>
+                  <span style="display:block;font-size:13px;line-height:19px;color:rgb(150,147,193)">전북 남원시 도통동 812-3</span>
+                </div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;height:40px;padding:0 12px;background:rgb(22,20,63);box-shadow:inset 0 0 0 1px rgb(8,6,40)">
+                  <span style="font-size:13px;line-height:19px;color:rgb(150,147,193)">우선순위</span>
+                  <span style="font-size:13px;line-height:19px;font-weight:700;color:rgb(255,255,255);font-variant-numeric:tabular-nums">2위 · 71점</span>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ isPoi2 }}" hint-placeholder-val="{{ false }}">
+              <div role="tooltip" style="position:absolute;left:12px;bottom:52px;z-index:6;width:220px;border-radius:4px;overflow:hidden;background:rgb(18,15,74);box-shadow:inset 0 0 0 1px rgb(8,6,40),var(--une-elevation-3);pointer-events:none">
+                <div style="display:grid;gap:5px;padding:14px 12px 12px">
+                  <span style="display:block;font-size:14px;line-height:20px;font-weight:700;color:rgb(255,255,255)">향교동 저지대</span>
+                  <span style="display:block;font-size:13px;line-height:19px;color:rgb(150,147,193)">전북 남원시 향교동 45-1</span>
+                </div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;height:40px;padding:0 12px;background:rgb(22,20,63);box-shadow:inset 0 0 0 1px rgb(8,6,40)">
+                  <span style="font-size:13px;line-height:19px;color:rgb(150,147,193)">과거 침수흔적</span>
+                  <span style="font-size:13px;line-height:19px;font-weight:700;color:rgb(255,255,255);font-variant-numeric:tabular-nums">2020년 1건</span>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ isPoi3 }}" hint-placeholder-val="{{ true }}">
+              <div role="tooltip" style="position:absolute;left:12px;bottom:52px;z-index:6;width:220px;border-radius:4px;overflow:hidden;background:rgb(18,15,74);box-shadow:inset 0 0 0 1px rgb(8,6,40),var(--une-elevation-3);pointer-events:none">
+                <div style="display:grid;gap:5px;padding:14px 12px 12px">
+                  <span style="display:block;font-size:14px;line-height:20px;font-weight:700;color:rgb(255,255,255)">요천지구</span>
+                  <span style="display:block;font-size:13px;line-height:19px;color:rgb(150,147,193)">전북 남원시 향교동 산 12-4</span>
+                </div>
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;height:40px;padding:0 12px;background:rgb(22,20,63);box-shadow:inset 0 0 0 1px rgb(8,6,40)">
+                  <span style="font-size:13px;line-height:19px;color:rgb(150,147,193)">우선순위</span>
+                  <span style="font-size:13px;line-height:19px;font-weight:700;color:rgb(255,255,255);font-variant-numeric:tabular-nums">1위 · 86점</span>
+                </div>
+              </div>
+            </sc-if>
+
+            <div role="status" style="position:absolute;left:12px;top:12px;z-index:4;display:flex;align-items:center;gap:6px;padding:5px 10px;border-radius:1000px;background:var(--color-surface-primary);border:1px solid var(--color-light-blue-75);box-shadow:var(--une-elevation-1)">
+              <span aria-hidden="true" style="flex:0 0 auto;width:8px;height:8px;border-radius:1000px;background:var(--color-icon-success)"></span>
+              <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);font-weight:500;white-space:nowrap">Seed 연결 · 실데이터 아님</span>
+            </div>
+
+            <div style="position:absolute;right:12px;top:12px;z-index:4;display:flex">
+              <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Button" variant="outline" color="grayscale" size="2xs" hint-size="auto,28px">영상지도로</x-import>
+            </div>
+
+            <div style="position:absolute;left:12px;right:12px;bottom:12px;z-index:3;display:flex;align-items:center;gap:6px">
+              <div style="flex:1 1 auto;min-width:0;display:flex;flex-wrap:nowrap;gap:6px;overflow:hidden">
+                <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.FilterChip" size="sm" label="위험지구" icon="flood-line" selected="{{ true }}" hint-size="auto,28px"></x-import>
+                <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.FilterChip" size="sm" label="하천" selected="{{ true }}" hint-size="auto,28px"></x-import>
+                <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.FilterChip" size="sm" label="침수흔적" hint-size="auto,28px"></x-import>
+              </div>
+              <button type="button" style="flex:0 0 auto;height:28px;padding:0 10px;font-family:inherit;font-size:var(--fs-xs);line-height:var(--lh-xs);letter-spacing:-0.03em;white-space:nowrap;color:var(--color-text-secondary-2);background:var(--color-surface-primary);border:1px solid var(--color-light-blue-75);border-radius:1000px;cursor:pointer" style-hover="border-color:var(--color-border-brand);color:var(--color-text-brand)">레이어 5</button>
+            </div>
+
+            <sc-if value="{{ detailOpen }}" hint-placeholder-val="{{ false }}">
+            <div role="dialog" aria-label="요천지구 상세" style="position:absolute;right:12px;top:56px;z-index:7;width:clamp(220px,62%,300px);height:auto;max-height:calc(100% - 80px);display:flex;flex-direction:column;border-radius:12px;background:var(--color-surface-primary);border:1px solid var(--color-light-blue-75);box-shadow:var(--une-elevation-3);overflow:hidden">
+              <div style="display:flex;align-items:flex-start;gap:8px;padding:10px 12px;border-bottom:1px solid var(--color-light-blue-50)">
+                <div style="flex:1 1 auto;min-width:0;display:grid;gap:4px">
+                  <h3 style="font-size:var(--fs-lg);line-height:var(--lh-lg);font-weight:700">요천지구</h3>
+                  <div style="display:flex;gap:4px;flex-wrap:wrap">
+                    <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Badge" variant="solid" intent="primary" size="xs" shape="cylinder" hint-size="auto,20px">호우·침수</x-import>
+                    <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Badge" variant="solid" intent="warning" size="xs" shape="cylinder" hint-size="auto,20px">계획문서 판독값</x-import>
+                  </div>
+                </div>
+                <button type="button" aria-label="닫기" onClick="{{ closeDetail }}" style="flex:0 0 auto;width:44px;height:44px;margin:-6px -6px 0 0;font-family:inherit;font-size:var(--fs-md);color:var(--color-icon-secondary);background:transparent;border:0;border-radius:4px;cursor:pointer" style-hover="background:var(--color-light-blue-25)">✕</button>
+              </div>
+              <div class="une-scroll" style="flex:1 1 auto;min-height:0;overflow-y:auto;padding:10px 12px;display:grid;gap:10px">
+                <dl style="display:grid;grid-template-columns:minmax(56px,auto) minmax(0,1fr);gap:4px 8px">
+                  <dt style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary)">행정구역</dt>
+                  <dd style="font-size:var(--fs-sm);line-height:var(--lh-sm)">전북 남원시 향교동</dd>
+                  <dt style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary)">최근 점검</dt>
+                  <dd style="font-size:var(--fs-sm);line-height:var(--lh-sm)">2026-06-18</dd>
+                  <dt style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary)">총사업비</dt>
+                  <dd style="font-size:var(--fs-sm);line-height:var(--lh-sm)">184억원</dd>
+                </dl>
+                <div style="display:grid;gap:4px">
+                  <h4 style="font-size:var(--fs-sm);line-height:var(--lh-sm);font-weight:700;color:var(--color-text-brand)">위험요인</h4>
+                  <ul style="display:grid;gap:2px">
+                    <li style="font-size:var(--fs-sm);line-height:var(--lh-sm);color:var(--color-text-secondary-2)">· 하류 좌안 제방고 부족</li>
+                    <li style="font-size:var(--fs-sm);line-height:var(--lh-sm);color:var(--color-text-secondary-2)">· 원천천 합류부 통수능 부족</li>
+                  </ul>
+                </div>
+                <div style="display:grid;gap:4px">
+                  <h4 style="font-size:var(--fs-sm);line-height:var(--lh-sm);font-weight:700;color:var(--color-text-brand)">위험조건 임계값</h4>
+                  <div style="border:1px solid var(--color-light-blue-50);border-radius:4px;overflow:hidden">
+                    <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(44px,auto) minmax(44px,auto);background:var(--color-light-blue-25)">
+                      <span style="padding:4px 6px;font-size:var(--fs-xs);line-height:var(--lh-xs);font-weight:500;color:var(--color-text-secondary-2)">지표</span>
+                      <span style="padding:4px 6px;font-size:var(--fs-xs);line-height:var(--lh-xs);font-weight:500;color:var(--color-text-secondary-2);text-align:right">주의</span>
+                      <span style="padding:4px 6px;font-size:var(--fs-xs);line-height:var(--lh-xs);font-weight:500;color:var(--color-text-secondary-2);text-align:right">심각</span>
+                    </div>
+                    <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(44px,auto) minmax(44px,auto);border-top:1px solid var(--color-light-blue-50)">
+                      <span style="padding:4px 6px;font-size:var(--fs-xs);line-height:var(--lh-xs)">3시간 강우</span>
+                      <span style="padding:4px 6px;font-size:var(--fs-xs);line-height:var(--lh-xs);text-align:right;font-variant-numeric:tabular-nums">70mm</span>
+                      <span style="padding:4px 6px;font-size:var(--fs-xs);line-height:var(--lh-xs);text-align:right;font-variant-numeric:tabular-nums">90mm</span>
+                    </div>
+                    <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(44px,auto) minmax(44px,auto);border-top:1px solid var(--color-light-blue-50)">
+                      <span style="padding:4px 6px;font-size:var(--fs-xs);line-height:var(--lh-xs)">수위</span>
+                      <span style="padding:4px 6px;font-size:var(--fs-xs);line-height:var(--lh-xs);text-align:right;font-variant-numeric:tabular-nums">3.80m</span>
+                      <span style="padding:4px 6px;font-size:var(--fs-xs);line-height:var(--lh-xs);text-align:right;font-variant-numeric:tabular-nums">4.50m</span>
+                    </div>
+                  </div>
+                  <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary)">계획서 판독값이며 발령기준이 아닙니다.</span>
+                </div>
+                <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary)">본 요약은 관리대장·계획문서 판독 및 Mock/Seed 기반 참고 정보이며, 공식 위험등급 판정이나 피해예측이 아닙니다.</span>
+              </div>
+              <div style="flex:0 0 auto;padding:10px 12px;border-top:1px solid var(--color-light-blue-50);background:var(--color-light-blue-25)">
+                <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Button" variant="solid" color="primary" size="sm" full-width="{{ true }}" hint-size="100%,36px">질의에 참조 추가</x-import>
+              </div>
+            </div>
+            </sc-if>
+          </section>
+
+          <section aria-label="판단 패널" style="display:flex;flex-direction:column;min-width:0;background:var(--color-surface-primary);border:1px solid var(--color-light-blue-75);border-radius:8px;overflow:hidden">
+            <div style="padding:0 8px;border-bottom:1px solid var(--color-light-blue-50)">
+              <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Tabs" variant="line" size="sm" items="{{ rightItems }}" value="{{ rightTab }}" on-change="{{ onRight }}" hint-size="100%,32px"></x-import>
+            </div>
+            <div class="une-scroll" style="flex:1 1 auto;min-height:0;overflow-y:auto;padding:12px;display:grid;gap:10px;align-content:start">
+              <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.AlertBanner" intent="warning" hint-size="100%,64px">공식 위험도·피해예측 결과가 아니며 담당자 확인이 필요합니다.</x-import>
+
+              <article tabindex="0" style="display:grid;grid-template-columns:32px 1fr;gap:8px;padding:10px;border:1px solid var(--color-light-blue-75);border-radius:8px;background:var(--color-surface-primary);cursor:pointer" style-hover="border-color:var(--color-border-brand);background:var(--color-interaction-primary-bg-subtle-default)">
+                <span aria-hidden="true" style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:1000px;background:var(--color-interaction-primary-bg-default);color:var(--color-text-on-brand);font-size:var(--fs-sm);font-weight:700">1</span>
+                <div style="min-width:0;display:grid;gap:6px">
+                  <div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px">
+                    <span style="font-size:var(--fs-md);line-height:var(--lh-md);font-weight:700;color:var(--color-text-brand);text-decoration:underline">요천지구</span>
+                    <span style="font-size:var(--fs-md);line-height:var(--lh-md);font-weight:700;color:var(--color-text-error);font-variant-numeric:tabular-nums">86점</span>
+                  </div>
+                  <div style="display:flex;flex-wrap:wrap;gap:4px">
+                    <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Badge" variant="subtle" intent="primary" size="xs" shape="cylinder" hint-size="auto,20px">호우·침수</x-import>
+                    <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Badge" variant="outline" intent="grayscale" size="xs" shape="cylinder" hint-size="auto,20px">제방</x-import>
+                  </div>
+                  <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary)">전북 남원시 향교동 · 요천 하류 좌안</span>
+                  <div style="display:flex;flex-wrap:wrap;gap:6px">
+                    <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Button" variant="outline" color="primary" size="2xs" on-click="{{ openDetail }}" hint-size="auto,28px">상세보기</x-import>
+                    <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Button" variant="ghost" color="primary" size="2xs" hint-size="auto,28px">질의에 참조</x-import>
+                  </div>
+                </div>
+              </article>
+
+              <article tabindex="0" style="display:grid;grid-template-columns:32px 1fr;gap:8px;padding:10px;border:1px solid var(--color-light-blue-75);border-radius:8px;background:var(--color-surface-primary);cursor:pointer" style-hover="border-color:var(--color-border-brand);background:var(--color-interaction-primary-bg-subtle-default)">
+                <span aria-hidden="true" style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:1000px;background:var(--color-interaction-primary-bg-default);color:var(--color-text-on-brand);font-size:var(--fs-sm);font-weight:700">2</span>
+                <div style="min-width:0;display:grid;gap:6px">
+                  <div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px">
+                    <span style="font-size:var(--fs-md);line-height:var(--lh-md);font-weight:700;color:var(--color-text-brand);text-decoration:underline">원천천 합류부</span>
+                    <span style="font-size:var(--fs-md);line-height:var(--lh-md);font-weight:700;color:var(--color-text-error);font-variant-numeric:tabular-nums">71점</span>
+                  </div>
+                  <div style="display:flex;flex-wrap:wrap;gap:4px">
+                    <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Badge" variant="subtle" intent="primary" size="xs" shape="cylinder" hint-size="auto,20px">호우·침수</x-import>
+                  </div>
+                  <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary)">위치 요약 미확보</span>
+                  <div style="display:flex;flex-wrap:wrap;gap:6px">
+                    <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Button" variant="outline" color="primary" size="2xs" hint-size="auto,28px">상세보기</x-import>
+                    <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Button" variant="ghost" color="primary" size="2xs" hint-size="auto,28px">질의에 참조</x-import>
+                  </div>
+                </div>
+              </article>
+
+              <div style="padding:8px 10px;border-left:4px solid var(--color-light-blue-200);background:var(--color-light-blue-25);border-radius:4px">
+                <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-secondary-2)">Mock 가중치와 과거 참고사례를 이용한 비교이며 실제 T3Q 검색성능·공식 대응결정이 아닙니다.</span>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isEvi }}" hint-placeholder-val="{{ false }}">
+      <div style="display:grid;gap:12px">
+        <nav aria-label="페이지 내 이동" style="position:sticky;top:var(--subnav-offset);z-index:10;display:flex;gap:8px;padding:8px 12px;background:var(--color-surface-primary);border:1px solid var(--color-light-blue-75);border-radius:8px">
+          <a href="#satellite" style="font-size:var(--fs-sm);line-height:var(--lh-sm);font-weight:500">위성영상</a>
+          <a href="#trace" style="font-size:var(--fs-sm);line-height:var(--lh-sm);font-weight:500">침수흔적</a>
+          <a href="#damage" style="font-size:var(--fs-sm);line-height:var(--lh-sm);font-weight:500">과거 피해·대응·복구 사례</a>
+          <span style="margin-left:auto;font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary)">sticky top = --subnav-offset (헤더 50px + 4px)</span>
+        </nav>
+
+        <section id="damage" style="padding:16px;background:var(--color-surface-primary);border:1px solid var(--color-light-blue-75);border-radius:8px;display:grid;gap:12px">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px">
+            <h2 style="font-size:var(--fs-title);line-height:var(--lh-title);font-weight:700">과거 피해·대응·복구 사례</h2>
+            <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary)">F-15 해결안 — 이력 유무에 따라 열 수가 바뀐다</span>
+          </div>
+
+          <article style="border:1px solid var(--color-light-blue-75);border-radius:12px;overflow:hidden">
+            <header style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:10px 14px;background:var(--color-brand-subtle);border-bottom:1px solid var(--color-light-blue-50)">
+              <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap">
+                <strong style="font-size:var(--fs-lg);line-height:var(--lh-lg);font-weight:700">2020 남원 호우</strong>
+                <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary)">2020-08-07 · 전북 남원시</span>
+              </div>
+              <span style="font-size:var(--fs-sm);line-height:var(--lh-sm);font-weight:700;color:var(--color-text-brand);font-variant-numeric:tabular-nums">유사도 84점</span>
+            </header>
+            <div style="padding:14px;display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr) minmax(0,1fr);gap:16px">
+              <div style="display:grid;gap:10px;min-width:0">
+                <h3 style="font-size:var(--fs-md);line-height:var(--lh-md);font-weight:700">피해 규모</h3>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px">
+                  <div style="padding:8px 10px;border-left:4px solid var(--color-border-brand);background:var(--color-brand-subtle);border-radius:4px">
+                    <span style="display:block;font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary)">공공시설 피해액</span>
+                    <strong style="font-size:var(--fs-lg);line-height:var(--lh-lg);font-weight:700;font-variant-numeric:tabular-nums">312억원</strong>
+                    <span style="display:block;font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary)">재해대장 31,204,880천원</span>
+                  </div>
+                  <div style="padding:8px 10px;border-left:4px solid var(--color-border-brand);background:var(--color-brand-subtle);border-radius:4px">
+                    <span style="display:block;font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary)">복구비</span>
+                    <strong style="font-size:var(--fs-lg);line-height:var(--lh-lg);font-weight:700;font-variant-numeric:tabular-nums">428억원</strong>
+                    <span style="display:block;font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary)">재해대장 42,801,000천원</span>
+                  </div>
+                </div>
+                <p style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-secondary-2)">공공시설 재해대장(피해시설 단위) 집계 — 인명피해·사유재산 피해는 포함하지 않음</p>
+                <p style="font-size:var(--fs-sm);line-height:var(--lh-sm);color:var(--color-text-secondary-2);word-break:keep-all">요천 하류 좌안 월류로 향교동 저지대 침수, 도로·하천시설 다수 유실.</p>
+              </div>
+              <div style="display:grid;gap:6px;align-content:start;min-width:0">
+                <h3 style="font-size:var(--fs-md);line-height:var(--lh-md);font-weight:700">대응 이력</h3>
+                <ol style="display:grid;gap:6px">
+                  <li style="font-size:var(--fs-sm);line-height:var(--lh-sm);color:var(--color-text-secondary-2)">08-07 06:20 · 주민 대피 권고</li>
+                  <li style="font-size:var(--fs-sm);line-height:var(--lh-sm);color:var(--color-text-secondary-2)">08-07 09:40 · 배수펌프 3기 가동</li>
+                </ol>
+              </div>
+              <div style="display:grid;gap:6px;align-content:start;min-width:0">
+                <h3 style="font-size:var(--fs-md);line-height:var(--lh-md);font-weight:700">복구 이력</h3>
+                <ol style="display:grid;gap:6px">
+                  <li style="font-size:var(--fs-sm);line-height:var(--lh-sm);color:var(--color-text-secondary-2)">08-12 · 제방 응급복구 착수</li>
+                  <li style="font-size:var(--fs-sm);line-height:var(--lh-sm);color:var(--color-text-secondary-2)">2021-05 · 항구복구 준공</li>
+                </ol>
+              </div>
+            </div>
+            <footer style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:10px 14px;border-top:1px solid var(--color-light-blue-50);background:var(--color-light-blue-25)">
+              <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Badge" variant="subtle" intent="warning" size="sm" shape="round-square" hint-size="auto,24px">현재 피해예측 아님</x-import>
+              <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Badge" variant="subtle" intent="success" size="sm" shape="round-square" hint-size="auto,24px">과거 확정 집계</x-import>
+              <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Badge" variant="subtle" intent="grayscale" size="sm" shape="round-square" hint-size="auto,24px">담당자 검토 필요</x-import>
+              <span style="margin-left:auto"></span>
+              <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Button" variant="outline" color="primary" size="2xs" hint-size="auto,28px">보고서 참고사례로 반영</x-import>
+            </footer>
+          </article>
+
+          <article style="border:1px solid var(--color-light-blue-75);border-radius:12px;overflow:hidden">
+            <header style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:10px 14px;background:var(--color-brand-subtle);border-bottom:1px solid var(--color-light-blue-50)">
+              <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap">
+                <strong style="font-size:var(--fs-lg);line-height:var(--lh-lg);font-weight:700">2022 인제 호우</strong>
+                <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary)">2022-08-09 · 강원 인제군</span>
+              </div>
+              <span style="font-size:var(--fs-sm);line-height:var(--lh-sm);font-weight:700;color:var(--color-text-brand);font-variant-numeric:tabular-nums">유사도 72점</span>
+            </header>
+            <div style="padding:14px;display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:16px">
+              <div style="display:grid;gap:10px;min-width:0">
+                <h3 style="font-size:var(--fs-md);line-height:var(--lh-md);font-weight:700">피해 규모</h3>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px">
+                  <div style="padding:8px 10px;border-left:4px solid var(--color-border-brand);background:var(--color-brand-subtle);border-radius:4px">
+                    <span style="display:block;font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary)">공공시설 피해액</span>
+                    <strong style="font-size:var(--fs-lg);line-height:var(--lh-lg);font-weight:700;font-variant-numeric:tabular-nums">96억원</strong>
+                    <span style="display:block;font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary)">재해대장 9,612,400천원</span>
+                  </div>
+                  <div style="padding:8px 10px;border-left:4px solid var(--color-light-blue-200);background:var(--color-light-blue-25);border-radius:4px">
+                    <span style="display:block;font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary)">복구비</span>
+                    <strong style="font-size:var(--fs-md);line-height:var(--lh-md);font-weight:700;color:var(--color-text-secondary-2)">미확보</strong>
+                  </div>
+                </div>
+                <p style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-secondary-2)">공공시설 재해대장(피해시설 단위) 집계 — 인명피해·사유재산 피해는 포함하지 않음</p>
+              </div>
+              <div style="display:grid;gap:6px;align-content:start;min-width:0">
+                <h3 style="font-size:var(--fs-md);line-height:var(--lh-md);font-weight:700">대응 이력</h3>
+                <ol style="display:grid;gap:6px">
+                  <li style="font-size:var(--fs-sm);line-height:var(--lh-sm);color:var(--color-text-secondary-2)">08-09 05:10 · 도로 2개 구간 통제</li>
+                </ol>
+              </div>
+            </div>
+            <footer style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:10px 14px;border-top:1px solid var(--color-light-blue-50);background:var(--color-light-blue-25)">
+              <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-secondary-2)">복구 이력 미확보 — 열을 만들지 않고 데이터 상태 줄로 표기한다</span>
+              <span style="margin-left:auto"></span>
+              <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Badge" variant="subtle" intent="warning" size="sm" shape="round-square" hint-size="auto,24px">현재 피해예측 아님</x-import>
+              <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Badge" variant="solid" intent="warning" size="sm" shape="round-square" hint-size="auto,24px">시연 Seed 기록</x-import>
+              <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Button" variant="outline" color="primary" size="2xs" hint-size="auto,28px">보고서 참고사례로 반영</x-import>
+            </footer>
+          </article>
+
+          <article style="border:1px solid var(--color-light-blue-75);border-radius:12px;overflow:hidden">
+            <header style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:10px 14px;background:var(--color-brand-subtle);border-bottom:1px solid var(--color-light-blue-50)">
+              <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap">
+                <strong style="font-size:var(--fs-lg);line-height:var(--lh-lg);font-weight:700">2023 영천 호우</strong>
+                <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary)">2023-07-14 · 경북 영천시</span>
+              </div>
+              <span style="font-size:var(--fs-sm);line-height:var(--lh-sm);font-weight:700;color:var(--color-text-brand);font-variant-numeric:tabular-nums">유사도 65점</span>
+            </header>
+            <div style="padding:14px;display:grid;gap:12px">
+              <div style="display:grid;gap:10px;min-width:0">
+                <h3 style="font-size:var(--fs-md);line-height:var(--lh-md);font-weight:700">피해 규모</h3>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px">
+                  <div style="padding:8px 10px;border-left:4px solid var(--color-border-brand);background:var(--color-brand-subtle);border-radius:4px">
+                    <span style="display:block;font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary)">공공시설 피해액</span>
+                    <strong style="font-size:var(--fs-lg);line-height:var(--lh-lg);font-weight:700;font-variant-numeric:tabular-nums">54억원</strong>
+                    <span style="display:block;font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary)">재해대장 5,401,600천원</span>
+                  </div>
+                  <div style="padding:8px 10px;border-left:4px solid var(--color-border-brand);background:var(--color-brand-subtle);border-radius:4px">
+                    <span style="display:block;font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary)">피해시설 건수</span>
+                    <strong style="font-size:var(--fs-lg);line-height:var(--lh-lg);font-weight:700;font-variant-numeric:tabular-nums">37건</strong>
+                  </div>
+                  <div style="padding:8px 10px;border-left:4px solid var(--color-border-brand);background:var(--color-brand-subtle);border-radius:4px">
+                    <span style="display:block;font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary)">확정 단계</span>
+                    <strong style="font-size:var(--fs-md);line-height:var(--lh-md);font-weight:700">중앙 확정</strong>
+                  </div>
+                </div>
+                <p style="font-size:var(--fs-sm);line-height:var(--lh-sm);color:var(--color-text-secondary-2);word-break:keep-all">금호강 지류 범람으로 농경지·소하천 시설 피해. 대응·복구 이력은 재해대장에 기록되지 않았다.</p>
+              </div>
+              <sc-if value="{{ emptyAsStrip }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:8px 10px;border:1px dashed var(--color-light-blue-100);border-radius:4px;background:var(--color-light-blue-25)">
+                  <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);font-weight:500;color:var(--color-text-secondary-2)">데이터 상태</span>
+                  <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Badge" variant="outline" intent="grayscale" size="xs" shape="round-square" hint-size="auto,20px">대응 이력 미확보</x-import>
+                  <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Badge" variant="outline" intent="grayscale" size="xs" shape="round-square" hint-size="auto,20px">복구 이력 미확보</x-import>
+                  <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary)">기록 미확보 — 빈 열 대신 상태 줄로 표기</span>
+                </div>
+              </sc-if>
+              <sc-if value="{{ emptyAsColumns }}" hint-placeholder-val="{{ false }}">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+                  <div style="display:grid;gap:6px;align-content:start">
+                    <h3 style="font-size:var(--fs-md);line-height:var(--lh-md);font-weight:700">대응 이력</h3>
+                    <p style="font-size:var(--fs-sm);line-height:var(--lh-sm);color:var(--color-text-secondary-2)">기록 미확보</p>
+                  </div>
+                  <div style="display:grid;gap:6px;align-content:start">
+                    <h3 style="font-size:var(--fs-md);line-height:var(--lh-md);font-weight:700">복구 이력</h3>
+                    <p style="font-size:var(--fs-sm);line-height:var(--lh-sm);color:var(--color-text-secondary-2)">기록 미확보</p>
+                  </div>
+                </div>
+              </sc-if>
+            </div>
+            <footer style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:10px 14px;border-top:1px solid var(--color-light-blue-50);background:var(--color-light-blue-25)">
+              <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Badge" variant="subtle" intent="warning" size="sm" shape="round-square" hint-size="auto,24px">현재 피해예측 아님</x-import>
+              <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Badge" variant="subtle" intent="success" size="sm" shape="round-square" hint-size="auto,24px">과거 확정 집계</x-import>
+              <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Badge" variant="subtle" intent="grayscale" size="sm" shape="round-square" hint-size="auto,24px">담당자 검토 필요</x-import>
+              <span style="margin-left:auto"></span>
+              <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Button" variant="outline" color="primary" size="2xs" hint-size="auto,28px">보고서 참고사례로 반영</x-import>
+            </footer>
+          </article>
+
+          <div style="padding:8px 10px;border-left:4px solid var(--color-light-blue-200);background:var(--color-light-blue-25);border-radius:4px">
+            <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-secondary-2)">표시 금액은 과거 재해대장 확정 집계이며 현재 사건의 피해예측이 아닙니다. 시군구 전체 합계라서 위험지구 단위 금액이 아니고, 담당자 검토 후 사용해야 합니다.</span>
+          </div>
+        </section>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isRep }}" hint-placeholder-val="{{ false }}">
+      <div style="display:grid;grid-template-columns:clamp(196px,13.5vw,300px) minmax(260px,1.15fr) minmax(260px,.95fr);gap:12px;align-items:start">
+        <aside style="position:sticky;top:var(--sticky-offset);display:grid;gap:8px;padding:12px;background:var(--color-surface-primary);border:1px solid var(--color-light-blue-75);border-radius:8px">
+          <h2 style="font-size:var(--fs-lg);line-height:var(--lh-lg);font-weight:700">목차</h2>
+          <ol style="display:grid;gap:4px">
+            <li style="font-size:var(--fs-sm);line-height:var(--lh-sm);color:var(--color-text-brand);font-weight:500">1. 상황 개요</li>
+            <li style="font-size:var(--fs-sm);line-height:var(--lh-sm);color:var(--color-text-secondary-2)">2. 현재 조건</li>
+            <li style="font-size:var(--fs-sm);line-height:var(--lh-sm);color:var(--color-text-secondary-2)">3. 우선 확인지역</li>
+            <li style="font-size:var(--fs-sm);line-height:var(--lh-sm);color:var(--color-text-secondary-2)">4. 참고근거</li>
+          </ol>
+          <div style="padding:8px 10px;border-radius:8px;background:var(--color-yellow-25);border:1px solid var(--color-border-light-warning)">
+            <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-yellow-700);font-weight:500">검토용 초안 · NDMS 자동등록과 공식 보고 승인은 수행하지 않습니다.</span>
+          </div>
+          <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary)">sticky top = --sticky-offset (58px)</span>
+        </aside>
+
+        <section style="display:grid;gap:12px;padding:16px;background:var(--color-surface-primary);border:1px solid var(--color-light-blue-75);border-radius:8px">
+          <h2 style="font-size:var(--fs-title);line-height:var(--lh-title);font-weight:700">보고서 편집</h2>
+          <label style="display:grid;gap:4px">
+            <span style="font-size:var(--fs-sm);line-height:var(--lh-sm);font-weight:500">상황 개요</span>
+            <textarea rows="4" style="width:100%;padding:8px 10px;font-family:inherit;font-size:var(--fs-md);line-height:var(--lh-md);letter-spacing:-0.03em;border:1px solid var(--field-border-default);border-radius:4px;background:var(--field-bg-surface)">2026-08-02 14:20 기준 남원시 호우로 요천지구 하류 좌안 월류 위험이 확인되었다.</textarea>
+          </label>
+          <label style="display:grid;gap:4px">
+            <span style="font-size:var(--fs-sm);line-height:var(--lh-sm);font-weight:500">담당자 조치결과</span>
+            <textarea rows="3" placeholder="입력하세요" style="width:100%;padding:8px 10px;font-family:inherit;font-size:var(--fs-md);line-height:var(--lh-md);letter-spacing:-0.03em;border:1px solid var(--field-border-default);border-radius:4px;background:var(--field-bg-surface)"></textarea>
+          </label>
+          <div style="padding:12px;border:1px solid var(--color-light-blue-75);border-radius:8px;display:grid;gap:6px">
+            <h3 style="font-size:var(--fs-md);line-height:var(--lh-md);font-weight:700">선택된 참고근거</h3>
+            <ul style="display:grid;gap:4px">
+              <li style="font-size:var(--fs-sm);line-height:var(--lh-sm);color:var(--color-text-secondary-2)">증거세트 ES-2026-014 선택됨</li>
+              <li style="font-size:var(--fs-sm);line-height:var(--lh-sm);color:var(--color-text-secondary-2)">침수흔적도: 포함</li>
+              <li style="font-size:var(--fs-sm);line-height:var(--lh-sm);color:var(--color-text-secondary-2)">과거 피해·복구 사례: 1건</li>
+            </ul>
+            <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-secondary-2)">시범 대상지역 자료가 아닙니다. 담당자 확인이 필요합니다.</span>
+          </div>
+          <div role="status" style="padding:10px 12px;border-radius:8px;background:var(--color-yellow-25);border:1px solid var(--color-border-light-warning);display:grid;gap:4px">
+            <strong style="font-size:var(--fs-sm);line-height:var(--lh-sm);color:var(--color-yellow-700)">초안 검증 · 확인 필요 2건</strong>
+            <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-secondary-2)">담당자 조치결과가 미입력 · 피해현황이 미확인으로 남아 있습니다.</span>
+            <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary)">확인 안내이며 저장·다운로드를 차단하지 않습니다.</span>
+          </div>
+          <div style="display:flex;justify-content:flex-end;gap:8px">
+            <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Button" variant="outline" color="grayscale" size="sm" hint-size="auto,36px">브라우저에 저장</x-import>
+            <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Button" variant="solid" color="primary" size="sm" leading-icon="file-download" hint-size="auto,36px">Markdown 다운로드</x-import>
+          </div>
+        </section>
+
+        <section style="position:sticky;top:var(--sticky-offset);padding:12px;background:var(--color-light-blue-25);border:1px solid var(--color-light-blue-75);border-radius:8px;display:grid;gap:8px">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px">
+            <h2 style="font-size:var(--fs-lg);line-height:var(--lh-lg);font-weight:700">미리보기</h2>
+            <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary)">높이 = 100vh − 헤더 − 88px</span>
+          </div>
+          <div class="une-scroll" tabindex="0" style="max-height:calc(100vh - var(--header-h) - 88px);overflow-y:auto;padding:20px;background:var(--color-surface-primary);border:1px solid var(--color-light-blue-75);border-radius:8px;display:grid;gap:12px">
+            <h3 style="font-size:var(--fs-xl);line-height:var(--lh-xl);font-weight:700;padding-bottom:8px;border-bottom:2px solid var(--color-border-strong)">남원시 호우 상황보고서 초안</h3>
+            <div style="display:grid;gap:6px">
+              <h4 style="font-size:var(--fs-lg);line-height:var(--lh-lg);font-weight:700">1. 상황 개요</h4>
+              <p style="font-size:var(--fs-md);line-height:1.7;color:var(--color-text-secondary-2);word-break:keep-all">2026-08-02 14:20 기준 남원시 호우로 요천지구 하류 좌안 월류 위험이 확인되었다. 3시간 강우 78mm, 수위 4.12m가 관측 조건으로 적용되었다.</p>
+            </div>
+            <div style="display:grid;gap:6px">
+              <h4 style="font-size:var(--fs-lg);line-height:var(--lh-lg);font-weight:700">2. 우선 확인지역</h4>
+              <ol style="display:grid;gap:4px;padding-left:16px">
+                <li style="font-size:var(--fs-md);line-height:var(--lh-md);color:var(--color-text-secondary-2)">요천지구 — 86점 · 하류 좌안 제방고 부족</li>
+                <li style="font-size:var(--fs-md);line-height:var(--lh-md);color:var(--color-text-secondary-2)">원천천 합류부 — 71점 · 통수능 부족</li>
+              </ol>
+            </div>
+            <div style="display:grid;gap:6px">
+              <h4 style="font-size:var(--fs-lg);line-height:var(--lh-lg);font-weight:700">3. 참고근거</h4>
+              <p style="font-size:var(--fs-md);line-height:1.7;color:var(--color-text-secondary-2)">PRE·EVENT·POST 증거세트 ES-2026-014 · 6개 타일 · 침수흔적도 Seed 근거 포함 (공식 침수범위 아님)</p>
+            </div>
+            <blockquote style="margin:0;padding:10px 12px;border-left:4px solid var(--color-light-blue-200);background:var(--color-light-blue-25);border-radius:4px">
+              <span style="font-size:var(--fs-sm);line-height:var(--lh-sm);color:var(--color-text-secondary-2)">본 문서는 담당자 검토용 초안이며 NDMS 자동 제출 또는 공식 피해예측 결과가 아닙니다.</span>
+            </blockquote>
+          </div>
+        </section>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isDec }}" hint-placeholder-val="{{ false }}">
+      <div style="display:grid;gap:12px;max-width:1320px">
+
+        <section style="padding:16px;background:var(--color-surface-primary);border:1px solid var(--color-light-blue-75);border-radius:8px;display:grid;gap:12px">
+          <div style="display:grid;gap:4px">
+            <h2 style="font-size:var(--fs-title);line-height:var(--lh-title);font-weight:700">타입 스케일 재정의 — 디자인 시스템 정렬</h2>
+            <p style="font-size:var(--fs-sm);line-height:var(--lh-sm);color:var(--color-text-secondary-2)">유동 clamp를 걷어내고 UNE 타입 토큰(11 / 12 / 14 / 16 / 20 / 24)에 고정한다. 자간 −3%, 굵기 400·500·700만 사용한다. 확대는 rem 유지로 1.4.4를 충족하며, 배율은 ≥2400px에서 한 번만 올린다.</p>
+          </div>
+          <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Table" columns="{{ typeCols }}" rows="{{ typeRows }}" hint-size="100%,320px"></x-import>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div style="padding:12px;border:1px solid var(--color-light-blue-75);border-radius:8px;display:grid;gap:6px">
+              <h3 style="font-size:var(--fs-md);line-height:var(--lh-md);font-weight:700">루트 배율</h3>
+              <p style="font-size:var(--fs-sm);line-height:var(--lh-sm);color:var(--color-text-secondary-2)">≥1600px · ≥2000px 배율을 제거하고 100%로 되돌린다. ≥2400px만 106.25%(=17px)로 한 단계 올려 상황실 대형 모니터 원거리 판독을 지킨다. 1366px과 1920px의 렌더 크기가 같아져 밀도가 유지된다.</p>
+              <pre style="margin:0;padding:8px 10px;background:var(--color-light-blue-25);border-radius:4px;font-size:var(--fs-xs);line-height:var(--lh-xs);overflow-x:auto">:root { font-size: 100% }
+@media (min-width:2400px){ :root{ font-size:106.25% } }</pre>
+            </div>
+            <div style="padding:12px;border:1px solid var(--color-light-blue-75);border-radius:8px;display:grid;gap:6px">
+              <h3 style="font-size:var(--fs-md);line-height:var(--lh-md);font-weight:700">토큰 교체값</h3>
+              <pre style="margin:0;padding:8px 10px;background:var(--color-light-blue-25);border-radius:4px;font-size:var(--fs-xs);line-height:var(--lh-xs);overflow-x:auto">--fs-xs:.6875rem; /* 11 / 17 */
+--fs-sm:.75rem;   /* 12 / 18 */
+--fs-md:.875rem;  /* 14 / 20 */
+--fs-lg:1rem;     /* 16 / 24 */
+--fs-title:1.25rem; /* 20 / 32 · 신규 h2 */
+--fs-xl:1.5rem;   /* 24 / 36 */</pre>
+              <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary)">Tweaks의 타입 스케일을 “현재(잠정값)”로 바꾸면 이 화면 전체가 기존 크기로 되돌아가 비교할 수 있다.</span>
+            </div>
+          </div>
+        </section>
+
+        <section style="padding:16px;background:var(--color-surface-primary);border:1px solid var(--color-light-blue-75);border-radius:8px;display:grid;gap:10px">
+          <h2 style="font-size:var(--fs-title);line-height:var(--lh-title);font-weight:700">블루 크롬 — 신규 시맨틱 토큰 제안</h2>
+          <p style="font-size:var(--fs-sm);line-height:var(--lh-sm);color:var(--color-text-secondary-2)">시스템에 파랑 틴트 면·선 시맨틱 토큰이 없어 현재는 브랜드 프리미티브를 직접 참조한다. 아래 4개를 시맨틱으로 승격하면 인계문서 B-2 표에 흡수되고 하드코딩 색(F-13)도 함께 정리된다. 상태색(경고·오류·성공)은 파랑으로 바꾸지 않는다.</p>
+          <pre style="margin:0;padding:10px 12px;background:var(--color-light-blue-25);border-radius:4px;font-size:var(--fs-xs);line-height:var(--lh-xs);overflow-x:auto">--surface-page-blue:   var(--color-light-blue-20);  /* 페이지 배경 */
+--surface-panel-blue:  var(--color-light-blue-25);  /* 보조 면·푸터바·요약칩 */
+--border-panel-blue:   var(--color-light-blue-75);  /* 패널 테두리 */
+--border-inner-blue:   var(--color-light-blue-50);  /* 내부 구분선 */
+/* 강조선 var(--color-light-blue-200) · 지도 캔버스 var(--color-light-blue-50) */</pre>
+          <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary)">대비 확인: 노랑 안내문 글자는 --color-yellow-700(6.5:1), 지도 자리표시 문구는 --color-text-tertiary(4.72:1)로 AA를 충족한다.</span>
+        </section>
+
+        <section style="padding:16px;background:var(--color-surface-primary);border:1px solid var(--color-light-blue-75);border-radius:8px;display:grid;gap:10px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Badge" variant="solid" intent="primary" size="sm" shape="round-square" hint-size="auto,24px">F-14</x-import>
+            <h2 style="font-size:var(--fs-title);line-height:var(--lh-title);font-weight:700">sticky offset을 헤더 높이에서 파생시킨다</h2>
+          </div>
+          <p style="font-size:var(--fs-sm);line-height:var(--lh-sm);color:var(--color-text-secondary-2)">헤더 높이를 상수로 세 번 적어 어긋난 것이 원인이다. 헤더 높이를 토큰으로 노출하고 sticky는 계산식으로만 쓴다. 확대 브레이크포인트의 160 / 172 / 184px 오버라이드는 전부 삭제한다 — rem 기반이므로 ≥2400px 배율에서 헤더가 53px로 자라면 offset도 자동으로 따라간다.</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <pre style="margin:0;padding:10px 12px;background:var(--color-light-blue-25);border-radius:4px;font-size:var(--fs-xs);line-height:var(--lh-xs);overflow-x:auto">:root{
+  --header-h: 3.125rem;            /* 50px = DS Header */
+  --sticky-gap: .5rem;             /* 8px */
+  --sticky-offset: calc(var(--header-h) + var(--sticky-gap));
+  --subnav-offset: calc(var(--header-h) + .25rem);
+}
+/* 삭제: @media(min-width:1600/2000/2400px){ --sticky-offset:160/172/184px } */
+@media (max-width:900px){ :root{ --header-h:0px } } /* 헤더 static */</pre>
+            <div style="display:grid;gap:6px">
+              <div style="display:grid;grid-template-columns:1fr auto auto;gap:6px 12px;align-items:baseline">
+                <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary)">뷰포트</span>
+                <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary);text-align:right">현재 offset</span>
+                <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary);text-align:right">제안 offset</span>
+                <span style="font-size:var(--fs-sm);line-height:var(--lh-sm)">1366 · 1920px (헤더 50px)</span>
+                <span style="font-size:var(--fs-sm);line-height:var(--lh-sm);text-align:right;font-variant-numeric:tabular-nums">78px</span>
+                <span style="font-size:var(--fs-sm);line-height:var(--lh-sm);text-align:right;font-weight:700;color:var(--color-text-brand);font-variant-numeric:tabular-nums">58px</span>
+                <span style="font-size:var(--fs-sm);line-height:var(--lh-sm)">1600 – 2399px</span>
+                <span style="font-size:var(--fs-sm);line-height:var(--lh-sm);text-align:right;color:var(--color-text-error);font-variant-numeric:tabular-nums">160 · 172px</span>
+                <span style="font-size:var(--fs-sm);line-height:var(--lh-sm);text-align:right;font-weight:700;color:var(--color-text-brand);font-variant-numeric:tabular-nums">58px</span>
+                <span style="font-size:var(--fs-sm);line-height:var(--lh-sm)">≥2400px (헤더 53px)</span>
+                <span style="font-size:var(--fs-sm);line-height:var(--lh-sm);text-align:right;color:var(--color-text-error);font-variant-numeric:tabular-nums">184px</span>
+                <span style="font-size:var(--fs-sm);line-height:var(--lh-sm);text-align:right;font-weight:700;color:var(--color-text-brand);font-variant-numeric:tabular-nums">61.5px</span>
+              </div>
+              <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-secondary-2)">폴백: 헤더가 줄바꿈되는 폭(≤900px)에서는 헤더가 static이므로 --header-h를 0으로 덮는다. 런타임 실측이 필요하면 AppHeader가 ResizeObserver로 --header-h만 갱신한다(선택자·문구 변경 없음).</span>
+              <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary)">--report-preview-h = calc(100vh − var(--header-h) − 5.5rem) — F-8의 상수 245px도 같은 방식으로 파생시킨다.</span>
+            </div>
+          </div>
+        </section>
+
+        <section style="padding:16px;background:var(--color-surface-primary);border:1px solid var(--color-light-blue-75);border-radius:8px;display:grid;gap:10px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Badge" variant="solid" intent="primary" size="sm" shape="round-square" hint-size="auto,24px">F-15</x-import>
+            <h2 style="font-size:var(--fs-title);line-height:var(--lh-title);font-weight:700">피해 카드의 열은 데이터가 결정한다</h2>
+          </div>
+          <p style="font-size:var(--fs-sm);line-height:var(--lh-sm);color:var(--color-text-secondary-2)">고정 3열(1.7fr 1fr 1fr)을 버리고 이력 유무에 따라 열 수를 바꾼다. “미확보” 표기는 D-2 요건이므로 지우지 않고, 빈 열이 아니라 카드 하단 데이터 상태 줄로 옮긴다. 클래스명은 유지하고 `data-history` 속성만 추가한다.</p>
+          <pre style="margin:0;padding:10px 12px;background:var(--color-light-blue-25);border-radius:4px;font-size:var(--fs-xs);line-height:var(--lh-xs);overflow-x:auto">.damage-columns[data-history="both"]     { grid-template-columns:minmax(0,1.7fr) minmax(0,1fr) minmax(0,1fr) }
+.damage-columns[data-history="response"],
+.damage-columns[data-history="recovery"] { grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) }
+.damage-columns[data-history="none"]     { grid-template-columns:minmax(0,1fr) }   /* 금액 카드가 폭을 흡수 */
+.damage-history-empty                    { /* 문구 유지 · 카드 하단 상태 줄로 이동 */ }</pre>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+            <div style="padding:10px;border:1px solid var(--color-light-blue-75);border-radius:8px;display:grid;gap:6px">
+              <strong style="font-size:var(--fs-sm);line-height:var(--lh-sm)">both — 3열</strong>
+              <div style="display:grid;grid-template-columns:1.7fr 1fr 1fr;gap:4px;height:44px">
+                <span style="background:var(--color-interaction-primary-bg-muted-default);border-radius:2px"></span>
+                <span style="background:var(--color-interaction-primary-bg-subtle-default);border-radius:2px"></span>
+                <span style="background:var(--color-interaction-primary-bg-subtle-default);border-radius:2px"></span>
+              </div>
+            </div>
+            <div style="padding:10px;border:1px solid var(--color-light-blue-75);border-radius:8px;display:grid;gap:6px">
+              <strong style="font-size:var(--fs-sm);line-height:var(--lh-sm)">response — 2열</strong>
+              <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:4px;height:44px">
+                <span style="background:var(--color-interaction-primary-bg-muted-default);border-radius:2px"></span>
+                <span style="background:var(--color-interaction-primary-bg-subtle-default);border-radius:2px"></span>
+              </div>
+            </div>
+            <div style="padding:10px;border:1px solid var(--color-light-blue-75);border-radius:8px;display:grid;gap:6px">
+              <strong style="font-size:var(--fs-sm);line-height:var(--lh-sm)">none — 1열 + 상태 줄</strong>
+              <div style="display:grid;gap:4px;height:44px">
+                <span style="background:var(--color-interaction-primary-bg-muted-default);border-radius:2px;flex:1 1 auto;height:28px"></span>
+                <span style="height:12px;border:1px dashed var(--color-light-blue-100);border-radius:2px"></span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section style="padding:16px;background:var(--color-surface-primary);border:1px solid var(--color-light-blue-75);border-radius:8px;display:grid;gap:10px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <x-import component-from-global-scope="UNEDesignSystem_bbd5ec.Badge" variant="solid" intent="primary" size="sm" shape="round-square" hint-size="auto,24px">F-16</x-import>
+            <h2 style="font-size:var(--fs-title);line-height:var(--lh-title);font-weight:700">2560px 초과 — 지도 밀도 2단계와 패널 상한 해제</h2>
+          </div>
+          <p style="font-size:var(--fs-sm);line-height:var(--lh-sm);color:var(--color-text-secondary-2)">넓어지는 폭이 전부 지도로 가는 지금 구조에서는 3840px에서 지도만 2,950px로 늘고 정보밀도는 그대로다. 지도에 유효 상한을 주고, 남는 폭은 좌우 패널과 지도 오버레이 밀도에 배분한다.</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div style="display:grid;gap:8px">
+              <h3 style="font-size:var(--fs-md);line-height:var(--lh-md);font-weight:700">폭 배분 (≥2561px, 밀도 tier B)</h3>
+              <pre style="margin:0;padding:10px 12px;background:var(--color-light-blue-25);border-radius:4px;font-size:var(--fs-xs);line-height:var(--lh-xs);overflow-x:auto">@media (min-width:2561px){
+  --map-max: 2400px;             /* 지도 유효 상한 */
+  --left-panel-w:  clamp(340px, 15vw, 460px);
+  --right-panel-w: clamp(400px, 17vw, 560px);
+  --overlay-inset: 20px;         /* 12 → 20 */
+  --map-poi-size: 28px;          /* 24 → 28, 아이콘 램프 */
+  --map-label-size: .8125rem;    /* 13 / 21 */
+}
+.dashboard-grid{ grid-template-columns:
+  var(--left-panel-w) 26px minmax(420px,min(1fr,var(--map-max))) var(--right-panel-w) }</pre>
+              <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-secondary-2)">지도가 상한에 닿은 뒤 남는 폭은 우측 패널이 먼저 흡수하고, 그 다음 좌측이다. 우측 패널이 520px를 넘으면 우선 확인지역 카드가 2열(auto-fit minmax(320px,1fr))로 전환된다.</span>
+            </div>
+            <div style="display:grid;gap:8px">
+              <h3 style="font-size:var(--fs-md);line-height:var(--lh-md);font-weight:700">지도 오버레이 밀도 지침</h3>
+              <div style="display:grid;gap:6px">
+                <div style="padding:8px 10px;border:1px solid var(--color-light-blue-75);border-radius:4px">
+                  <strong style="display:block;font-size:var(--fs-sm);line-height:var(--lh-sm)">POI · 라벨</strong>
+                  <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-secondary-2)">아이콘 24→28px, 라벨 12→13px, 라벨 최소 간격 40px. 라벨 충돌 시 우선순위는 위험지구 &gt; 하천 &gt; 관측소.</span>
+                </div>
+                <div style="padding:8px 10px;border:1px solid var(--color-light-blue-75);border-radius:4px">
+                  <strong style="display:block;font-size:var(--fs-sm);line-height:var(--lh-sm)">클러스터</strong>
+                  <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-secondary-2)">해제 임계 zoom을 +1 올린다(넓은 화면에서 개별 POI가 더 이른 배율에서 풀린다).</span>
+                </div>
+                <div style="padding:8px 10px;border:1px solid var(--color-light-blue-75);border-radius:4px">
+                  <strong style="display:block;font-size:var(--fs-sm);line-height:var(--lh-sm)">오버레이 배치</strong>
+                  <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-secondary-2)">여백 20px. 레이어 칩은 한 줄 유지(줄바꿈 금지), 10개 초과분은 “더보기” 메뉴로 접는다. 팝업은 오버레이가 없는 우측에 배치해 연결상태·레이어 칩을 덮지 않는다(F-5).</span>
+                </div>
+                <div style="padding:8px 10px;border:1px solid var(--color-light-blue-75);border-radius:4px">
+                  <strong style="display:block;font-size:var(--fs-sm);line-height:var(--lh-sm)">타이포</strong>
+                  <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-secondary-2)">본문은 ≥2400px 배율(106.25%)만 적용 — 밀도 tier B는 지도 안 요소에만 적용하고 패널 본문은 14px 기준을 유지한다.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </sc-if>
+  </main>
+
+  <footer style="padding:12px 24px;border-top:1px solid var(--color-light-blue-75);background:var(--color-surface-primary);display:flex;gap:16px;flex-wrap:wrap">
+    <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary)">시범 서비스 · Seed/Mock 기반 참고 화면이며 공식 판정·자동 조치결정을 수행하지 않습니다.</span>
+    <span style="font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--color-text-tertiary)">Design v1.8.1 · 인계문서 30 기준</span>
+  </footer>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1600,&quot;height&quot;:1000},&quot;typeScale&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;제안(디자인 시스템 정렬)&quot;,&quot;현재(잠정값)&quot;],&quot;default&quot;:&quot;제안(디자인 시스템 정렬)&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;타이포&quot;},&quot;damageEmptyMode&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;상태 줄로 축약&quot;,&quot;빈 열 유지&quot;],&quot;default&quot;:&quot;상태 줄로 축약&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;F-15 피해 카드&quot;},&quot;showMeasureOverlay&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;F-14 sticky&quot;}}">
+class Component extends DCLogic {
+  state = { screen: 'dashboard', leftTab: 'agent', rightTab: 'judgement', region: 'namwon', hoverPoi: null, detailOpen: false };
+
+  poi(id) {
+    return {
+      onMouseEnter: () => this.setState({ hoverPoi: id }),
+      onMouseLeave: () => this.setState({ hoverPoi: null }),
+      onFocus: () => this.setState({ hoverPoi: id }),
+      onBlur: () => this.setState({ hoverPoi: null })
+    };
+  }
+
+  renderVals() {
+    const s = this.state;
+    const titles = {
+      dashboard: '지도 기반 재난 상황판',
+      evidence: '위성영상·침수흔적·피해복구 근거',
+      report: '상황보고서 초안 작성',
+      decisions: '설계 결정 · 미해결지점 해결안'
+    };
+    const emptyMode = this.props.damageEmptyMode ?? '상태 줄로 축약';
+    return {
+      screen: s.screen,
+      pageTitle: titles[s.screen],
+      isDash: s.screen === 'dashboard',
+      isEvi: s.screen === 'evidence',
+      isRep: s.screen === 'report',
+      isDec: s.screen === 'decisions',
+      navItems: [
+        { value: 'dashboard', label: '상황판' },
+        { value: 'evidence', label: '피해·변화 근거' },
+        { value: 'report', label: '상황보고서 초안' },
+        { value: 'decisions', label: '설계 결정' }
+      ],
+      onNav: v => this.setState({ screen: v }),
+      leftItems: [
+        { value: 'input', label: '재난상황 입력' },
+        { value: 'agent', label: 'AI Agent' }
+      ],
+      leftTab: s.leftTab,
+      onLeft: v => this.setState({ leftTab: v }),
+      isAgent: s.leftTab === 'agent',
+      isInput: s.leftTab === 'input',
+      rightItems: [
+        { value: 'judgement', label: '현재 판단' },
+        { value: 'similar', label: '유사사례' },
+        { value: 'procedure', label: '대응절차' },
+        { value: 'plan', label: '계획·근거' }
+      ],
+      rightTab: s.rightTab,
+      onRight: v => this.setState({ rightTab: v }),
+      regionOptions: [
+        { value: 'namwon', label: '전북 남원시' },
+        { value: 'inje', label: '강원 인제군' },
+        { value: 'yeongcheon', label: '경북 영천시' }
+      ],
+      region: s.region,
+      onRegion: v => this.setState({ region: v }),
+      onPoi1: () => this.setState({ hoverPoi: 'p1' }),
+      onPoi2: () => this.setState({ hoverPoi: 'p2' }),
+      onPoi3: () => this.setState({ hoverPoi: 'p3' }),
+      offPoi: () => this.setState({ hoverPoi: null }),
+      detailOpen: s.detailOpen,
+      openDetail: () => this.setState({ detailOpen: true, hoverPoi: null }),
+      closeDetail: () => this.setState({ detailOpen: false }),
+      isPoi1: s.hoverPoi === 'p1', isPoi2: s.hoverPoi === 'p2', isPoi3: s.hoverPoi === 'p3',
+      typeScale: this.props.typeScale === '현재(잠정값)' ? 'current' : 'proposed',
+      showMeasure: this.props.showMeasureOverlay ?? false,
+      emptyAsStrip: emptyMode === '상태 줄로 축약',
+      emptyAsColumns: emptyMode !== '상태 줄로 축약',
+      typeCols: [
+        { key: 'token', header: '토큰', width: 120 },
+        { key: 'use', header: '용도' },
+        { key: 'now', header: '현재 1920px', align: 'right', width: 110 },
+        { key: 'next', header: '제안 (1366·1920)', align: 'right', width: 140 },
+        { key: 'wide', header: '제안 ≥2400px', align: 'right', width: 120 },
+        { key: 'ds', header: 'DS 대응 토큰', width: 150 }
+      ],
+      typeRows: [
+        { token: '--fs-xs', use: '배지·캡션·표 본문·단위', now: '13.8px', next: '11 / 17', wide: '11.7px', ds: 'une-label 11/17' },
+        { token: '--fs-sm', use: '카드 본문·칩·탭·보조설명', now: '14.9px', next: '12 / 18', wide: '12.8px', ds: 'body-sm 12/18' },
+        { token: '--fs-md', use: '대화 본문·입력·기본 본문', now: '17.7px', next: '14 / 20', wide: '14.9px', ds: 'body-md 14/20' },
+        { token: '--fs-lg', use: '패널 h2·팝업 제목·금액 값', now: '20.1px', next: '16 / 24', wide: '17px', ds: 'body-lg 16/24' },
+        { token: '--fs-title', use: '페이지 섹션 h2 (신규)', now: '— (없음)', next: '20 / 32', wide: '21.3px', ds: 'title-sm 20/32' },
+        { token: '--fs-xl', use: '보고서 문서 제목', now: '24.2px', next: '24 / 36', wide: '25.5px', ds: 'title-md 24/36' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

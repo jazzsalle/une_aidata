@@ -1,0 +1,90 @@
+/* Navigation — Tab, TabLine, Breadcrumb, Pagination, Tree, LNB.
+
+   Tab        lg 56 / font 20    md 48 / 16    sm 40 / 14
+   LNB item   lg 56 / font 16    md 48 / 16    sm 40 / 14
+   Tree depth left padding: 0→12, 1→28, 2→44, 3→60, 4→76 (leaf only) */
+
+/* ── Tab ───────────────────────────────────────────────────────────────────── */
+.une-tabs{display:flex;align-items:stretch;gap:0;border-bottom:1px solid var(--color-border-default)}
+.une-tab{display:inline-flex;align-items:center;justify-content:center;gap:8px;box-sizing:border-box;padding:0 16px;border:0;border-bottom:2px solid transparent;background:transparent;cursor:pointer;font-family:var(--une-font-core);font-weight:500;letter-spacing:var(--une-tracking);color:var(--color-interaction-secondary-text-default);white-space:nowrap;transition:var(--une-transition-interactive)}
+.une-tabs--lg .une-tab{height:56px;font-size:20px}
+.une-tabs--md .une-tab{height:48px;font-size:16px}
+.une-tabs--sm .une-tab{height:40px;font-size:14px}
+.une-tab:hover:not(:disabled){color:var(--color-interaction-secondary-text-hover);background:var(--color-interaction-secondary-bg-subtle-hover)}
+.une-tab:active:not(:disabled){background:var(--color-interaction-secondary-bg-subtle-active)}
+.une-tab:focus{outline:none}
+.une-tab:focus-visible{box-shadow:var(--une-focus-ring)}
+.une-tab[aria-selected="true"]{color:var(--color-interaction-primary-text-default);border-bottom-color:var(--color-interaction-primary-border-default);font-weight:700}
+.une-tab:disabled{color:var(--color-interaction-secondary-text-disabled);cursor:not-allowed}
+/* Tab_Line — the compact underline-only variant (모드 2 x 크기 2 x 상태 4) */
+.une-tabs--line{border-bottom-color:var(--color-border-subtle)}
+.une-tabs--line .une-tab{padding:0 12px}
+.une-tabs--line.une-tabs--md .une-tab{height:40px;font-size:14px}
+.une-tabs--line.une-tabs--sm .une-tab{height:32px;font-size:12px}
+
+/* ── Breadcrumb ────────────────────────────────────────────────────────────── */
+.une-breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:4px;font-family:var(--une-font-core);letter-spacing:var(--une-tracking)}
+.une-breadcrumb--lg{font-size:16px;line-height:24px}
+.une-breadcrumb--md{font-size:14px;line-height:20px}
+.une-breadcrumb--sm{font-size:12px;line-height:18px}
+.une-crumb{display:inline-flex;align-items:center;gap:4px;padding:2px 4px;border:0;border-radius:4px;background:transparent;cursor:pointer;font:inherit;color:var(--color-interaction-secondary-text-default);transition:var(--une-transition-interactive)}
+.une-crumb:hover:not(:disabled){color:var(--color-interaction-secondary-text-hover);background:var(--color-interaction-secondary-bg-subtle-hover)}
+.une-crumb:active:not(:disabled){background:var(--color-interaction-secondary-bg-subtle-active)}
+.une-crumb:focus{outline:none}
+.une-crumb:focus-visible{box-shadow:var(--une-focus-ring)}
+.une-crumb:disabled{color:var(--color-interaction-secondary-text-disabled);cursor:not-allowed}
+/* current location — no interaction at all, default state only */
+.une-crumb--current{color:var(--color-text-primary);font-weight:700;cursor:default;background:transparent}
+.une-breadcrumb__sep{display:inline-flex;color:var(--color-icon-muted)}
+
+/* ── Pagination ────────────────────────────────────────────────────────────── */
+.une-pagination{display:inline-flex;align-items:center;gap:2px}
+.une-page{display:inline-flex;align-items:center;justify-content:center;min-width:32px;height:32px;padding:0 6px;border:0;border-radius:4px;background:transparent;cursor:pointer;font:500 12px/18px var(--une-font-core);letter-spacing:var(--une-tracking);color:var(--color-interaction-secondary-text-default);transition:var(--une-transition-interactive)}
+.une-page:hover:not(:disabled){background:var(--color-interaction-secondary-bg-subtle-hover);color:var(--color-interaction-secondary-text-hover)}
+.une-page:active:not(:disabled){background:var(--color-interaction-secondary-bg-subtle-active)}
+.une-page:focus{outline:none}
+.une-page:focus-visible{box-shadow:var(--une-focus-ring)}
+.une-page[aria-current="page"]{background:var(--color-interaction-primary-bg-default);color:var(--color-text-on-brand)}
+.une-page:disabled{color:var(--color-interaction-secondary-text-disabled);cursor:not-allowed;background:transparent}
+.une-page--ellipsis{cursor:default;color:var(--color-text-muted)}
+
+/* ── Tree ──────────────────────────────────────────────────────────────────── */
+.une-tree{margin:0;padding:0;list-style:none;font-family:var(--une-font-core);letter-spacing:var(--une-tracking)}
+.une-tree-node{display:flex;align-items:center;gap:4px;box-sizing:border-box;width:100%;height:32px;border:0;background:transparent;cursor:pointer;text-align:left;font:400 12px/18px var(--une-font-core);letter-spacing:var(--une-tracking);color:var(--color-text-primary);transition:var(--une-transition-interactive);padding-right:8px}
+.une-tree-node--d0{padding-left:12px}
+.une-tree-node--d1{padding-left:28px}
+.une-tree-node--d2{padding-left:44px}
+.une-tree-node--d3{padding-left:60px}
+.une-tree-node--d4{padding-left:76px}
+.une-tree-node:hover:not(.une-tree-node--disabled){background:var(--color-interaction-secondary-bg-subtle-hover)}
+.une-tree-node:active:not(.une-tree-node--disabled){background:var(--color-interaction-secondary-bg-subtle-active)}
+.une-tree-node:focus{outline:none}
+.une-tree-node:focus-visible{background:var(--color-surface-primary);box-shadow:var(--une-focus-ring)}
+.une-tree-node--selected{background:var(--color-interaction-primary-bg-subtle-default);color:var(--color-text-brand)}
+.une-tree-node--selected:hover{background:var(--color-interaction-primary-bg-subtle-hover)}
+.une-tree-node--dragging{background:var(--color-surface-muted)}
+.une-tree-node--editing{background:var(--color-surface-subtle);color:var(--field-text-placeholder)}
+.une-tree-node--disabled{background:var(--color-interaction-secondary-bg-disabled);color:var(--color-interaction-secondary-text-disabled);cursor:not-allowed}
+.une-tree-node__chevron{flex:0 0 auto;width:16px;display:flex;align-items:center;justify-content:center;color:var(--color-icon-tertiary)}
+.une-tree-node__label{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ── LNB (left navigation bar) ─────────────────────────────────────────────── */
+.une-lnb{display:flex;flex-direction:column;box-sizing:border-box;width:240px;padding:8px;gap:2px;background:var(--color-surface-primary);border-right:1px solid var(--color-border-subtle)}
+.une-lnb--collapsed{width:56px;align-items:center}
+.une-lnb__group{font:700 11px/17px var(--une-font-core);letter-spacing:var(--une-tracking);color:var(--color-text-helper-2);padding:12px 12px 4px}
+.une-lnb-item{display:flex;align-items:center;gap:12px;box-sizing:border-box;width:100%;border:0;border-radius:4px;background:transparent;cursor:pointer;text-align:left;font-family:var(--une-font-core);font-weight:500;letter-spacing:var(--une-tracking);color:var(--color-interaction-secondary-text-default);transition:var(--une-transition-interactive)}
+.une-lnb-item--lg{height:56px;padding:0 16px;font-size:16px}
+.une-lnb-item--md{height:48px;padding:0 12px;font-size:16px}
+.une-lnb-item--sm{height:40px;padding:0 12px;font-size:14px}
+.une-lnb-item--depth1{padding-left:40px}
+.une-lnb-item--depth2{padding-left:56px}
+.une-lnb-item:hover:not(.une-lnb-item--disabled){background:var(--color-interaction-secondary-bg-subtle-hover);color:var(--color-interaction-secondary-text-hover)}
+.une-lnb-item:active:not(.une-lnb-item--disabled){background:var(--color-interaction-secondary-bg-subtle-active)}
+.une-lnb-item:focus{outline:none}
+.une-lnb-item:focus-visible{box-shadow:var(--une-focus-ring)}
+.une-lnb-item--selected{background:var(--color-interaction-primary-bg-subtle-default);color:var(--color-interaction-primary-text-default);font-weight:700}
+.une-lnb-item--selected:hover{background:var(--color-interaction-primary-bg-subtle-hover)}
+.une-lnb-item--disabled{color:var(--color-interaction-secondary-text-disabled);cursor:not-allowed}
+.une-lnb-item__label{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.une-lnb--collapsed .une-lnb-item{width:40px;height:40px;padding:0;justify-content:center}
+.une-lnb--collapsed .une-lnb-item__label,.une-lnb--collapsed .une-lnb__group{display:none}

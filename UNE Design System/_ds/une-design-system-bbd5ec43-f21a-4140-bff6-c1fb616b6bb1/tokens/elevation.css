@@ -1,0 +1,19 @@
+/* Elevation — 8 steps, each a two-layer shadow (key + ambient), transcribed from
+   Foundation ▸ Elevation ▸ "Elevation — QA Report & Dev Spec (2026-07-22)".
+   Shadows are IDENTICAL in light and dark; dark elevation is expressed with surface colour
+   (surface/primary vs surface/raised) plus the shadow, and a border/subtle where needed.
+   Fixed usage mapping — never invent an arbitrary shadow:
+     e1  Switch · Segment · Tree
+     e3  Menu · Modal · Tooltip
+     e4  Droplist
+     e6  Alert */
+:root{
+  --une-elevation-1:0 4px 11px 0 rgba(0,0,0,0.11), 0 0 3px 0 rgba(0,0,0,0.04);
+  --une-elevation-2:0 6px 13px 0 rgba(0,0,0,0.13), 0 0 3px 0 rgba(0,0,0,0.04);
+  --une-elevation-3:0 8px 15px 0 rgba(0,0,0,0.15), 0 0 5px 0 rgba(0,0,0,0.06);
+  --une-elevation-4:0 10px 17px 0 rgba(0,0,0,0.18), 0 0 5px 0 rgba(0,0,0,0.06);
+  --une-elevation-5:0 10px 24px 0 rgba(0,0,0,0.24), 0 0 5px 0 rgba(0,0,0,0.08);
+  --une-elevation-6:0 10px 32px 0 rgba(0,0,0,0.32), 0 0 7px 0 rgba(0,0,0,0.08);
+  --une-elevation-7:0 12px 36px 0 rgba(0,0,0,0.36), 0 0 7px 0 rgba(0,0,0,0.10);
+  --une-elevation-8:0 12px 40px 0 rgba(0,0,0,0.40), 0 0 7px 0 rgba(0,0,0,0.10);
+}

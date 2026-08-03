@@ -1,0 +1,168 @@
+/* Forms — Input, Textarea, Select, Checkbox, Radio, Switch, SegmentedControl, Datepicker, Upload, Filter.
+   Field state ramp (Input / Textarea / Select — 7 states, from the Input & Textarea dev specs):
+     default        field/border/default        → grayscale/100
+     hover          field/border/hover          → light-blue/600
+     focus          field/border/focus          → light-blue/800
+     focus-visible  focus border + 2px ring
+     complete       border as default, value text switches to field/text/value
+     error          field/border/error          → red/500
+     disabled       field/border/disabled + field/bg/disabled */
+
+.une-field{display:flex;flex-direction:column;gap:4px;min-width:0}
+.une-field__label{font:500 12px/18px var(--une-font-core);letter-spacing:var(--une-tracking);color:var(--field-text-label)}
+.une-field__label--required::after{content:" *";color:var(--color-text-error)}
+.une-field__help{font:400 12px/18px var(--une-font-core);letter-spacing:var(--une-tracking);color:var(--color-text-helper)}
+.une-field__help--error{color:var(--color-text-error)}
+
+.une-input{display:flex;align-items:center;gap:8px;box-sizing:border-box;background:var(--field-bg-surface);border:1px solid var(--field-border-default);border-radius:8px;transition:var(--une-transition-interactive);min-width:0}
+.une-input:hover:not(.une-input--disabled):not(.une-input--error){border-color:var(--field-border-hover)}
+.une-input--focus,.une-input:focus-within:not(.une-input--disabled){border-color:var(--field-border-focus)}
+.une-input:focus-within:not(.une-input--disabled){box-shadow:var(--une-focus-ring)}
+.une-input--error{border-color:var(--field-border-error)}
+.une-input--disabled{border-color:var(--field-border-disabled);background:var(--field-bg-disabled);cursor:not-allowed}
+.une-input--inline{border-color:transparent;background:transparent;border-radius:0;border-bottom-color:var(--field-border-default)}
+.une-input--inline:focus-within{box-shadow:none;border-bottom-color:var(--field-border-focus)}
+.une-input__control{flex:1 1 auto;min-width:0;border:0;outline:none;background:transparent;font-family:var(--une-font-core);letter-spacing:var(--une-tracking);color:var(--field-text-value)}
+.une-input__control::placeholder{color:var(--field-text-placeholder)}
+.une-input__control:disabled{color:var(--field-text-disabled);cursor:not-allowed}
+.une-input__affix{flex:0 0 auto;color:var(--field-text-trailing-text);font-family:var(--une-font-core);letter-spacing:var(--une-tracking)}
+.une-input__prefix-box{align-self:stretch;display:flex;align-items:center;padding:0 12px;background:var(--field-bg-prefix);border-right:1px solid var(--field-border-default);color:var(--color-text-tertiary)}
+.une-input__icon{flex:0 0 auto;color:var(--color-icon-tertiary);display:flex}
+
+/* Input / Select size ramp: field height + value font */
+.une-input--3xl{height:56px;padding:0 16px;font-size:20px}
+.une-input--2xl{height:52px;padding:0 16px;font-size:16px}
+.une-input--xl{height:48px;padding:0 16px;font-size:16px}
+.une-input--lg{height:44px;padding:0 12px;font-size:16px}
+.une-input--md{height:40px;padding:0 12px;font-size:14px}
+.une-input--sm{height:36px;padding:0 12px;font-size:14px}
+.une-input--xs{height:32px;padding:0 8px;border-radius:4px;font-size:12px}
+.une-input--2xs{height:28px;padding:0 8px;border-radius:4px;font-size:12px}
+.une-input--3xl .une-input__control,.une-input--3xl .une-input__affix{font-size:20px}
+.une-input--2xl .une-input__control,.une-input--2xl .une-input__affix,
+.une-input--xl .une-input__control,.une-input--xl .une-input__affix,
+.une-input--lg .une-input__control,.une-input--lg .une-input__affix{font-size:16px}
+.une-input--md .une-input__control,.une-input--md .une-input__affix,
+.une-input--sm .une-input__control,.une-input--sm .une-input__affix{font-size:14px}
+.une-input--xs .une-input__control,.une-input--xs .une-input__affix,
+.une-input--2xs .une-input__control,.une-input--2xs .une-input__affix{font-size:12px}
+.une-input--3xl .une-input__prefix-box,.une-input--2xl .une-input__prefix-box,.une-input--xl .une-input__prefix-box{margin:0 16px 0 -16px}
+.une-input--lg .une-input__prefix-box,.une-input--md .une-input__prefix-box,.une-input--sm .une-input__prefix-box{margin:0 12px 0 -12px}
+.une-input--xs .une-input__prefix-box,.une-input--2xs .une-input__prefix-box{margin:0 8px 0 -8px;padding:0 8px}
+
+/* Textarea — lg(16)/md(14)/sm(12); pad-h 16/12/8, pad-v 8; default box 300×100 */
+.une-textarea{box-sizing:border-box;width:100%;min-height:100px;resize:vertical;border:1px solid var(--field-border-default);border-radius:8px;background:var(--field-bg-surface);font-family:var(--une-font-core);letter-spacing:var(--une-tracking);color:var(--field-text-value);transition:var(--une-transition-interactive);outline:none}
+.une-textarea::placeholder{color:var(--field-text-placeholder)}
+.une-textarea:hover:not(:disabled):not(.une-textarea--error){border-color:var(--field-border-hover)}
+.une-textarea:focus{border-color:var(--field-border-focus);box-shadow:var(--une-focus-ring)}
+.une-textarea--error{border-color:var(--field-border-error)}
+.une-textarea:disabled{border-color:var(--field-border-disabled);background:var(--field-bg-disabled);color:var(--field-text-disabled);cursor:not-allowed}
+.une-textarea--lg{padding:8px 16px;font-size:16px;line-height:24px}
+.une-textarea--md{padding:8px 12px;font-size:14px;line-height:20px}
+.une-textarea--sm{padding:8px 8px;font-size:12px;line-height:18px}
+.une-textarea__count{align-self:flex-end;font:400 12px/18px var(--une-font-core);letter-spacing:var(--une-tracking);color:var(--color-text-helper-2)}
+
+/* Select trigger reuses .une-input; its chevron follows the icon ramp 24/24/20/20/16/16/16/16 */
+.une-select{cursor:pointer;user-select:none}
+.une-select__value{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--field-text-value)}
+.une-select__value--placeholder{color:var(--field-text-placeholder)}
+.une-select__chevron{flex:0 0 auto;color:var(--color-icon-tertiary);transition:transform var(--une-duration-fast) var(--une-ease-standard)}
+.une-select--open .une-select__chevron{transform:rotate(180deg)}
+
+/* Checkbox — lg 24/label 20, md 20/16, sm 16/14; gap 8; radius 4 (sm: 2) */
+.une-check,.une-radio{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-family:var(--une-font-core);letter-spacing:var(--une-tracking);color:var(--color-text-primary)}
+.une-check--disabled,.une-radio--disabled{cursor:not-allowed;color:var(--color-text-disabled)}
+.une-check__box{flex:0 0 auto;display:flex;align-items:center;justify-content:center;box-sizing:border-box;border:1px solid var(--color-border-default);background:var(--color-interaction-secondary-bg-subtle-default);border-radius:4px;transition:var(--une-transition-interactive);color:var(--color-surface-on-brand)}
+.une-check:hover:not(.une-check--disabled) .une-check__box{border-color:var(--color-interaction-secondary-border-hover);background:var(--color-interaction-secondary-bg-subtle-hover)}
+.une-check__input{position:absolute;opacity:0;width:0;height:0}
+.une-check__input:focus-visible+.une-check__box{box-shadow:var(--une-focus-ring)}
+.une-check--on .une-check__box{background:var(--color-interaction-primary-bg-default);border-color:var(--color-interaction-primary-border-default)}
+.une-check--on:hover:not(.une-check--disabled) .une-check__box{background:var(--color-interaction-primary-bg-hover);border-color:var(--color-interaction-primary-border-hover)}
+.une-check--disabled .une-check__box{background:var(--color-surface-disabled);border-color:var(--color-border-disabled)}
+.une-check--on.une-check--disabled .une-check__box{background:var(--color-interaction-primary-bg-disabled);color:var(--color-surface-disabled-strong)}
+.une-check--lg .une-check__box{width:24px;height:24px}.une-check--lg{font-size:20px;line-height:32px}
+.une-check--md .une-check__box{width:20px;height:20px}.une-check--md{font-size:16px;line-height:24px}
+.une-check--sm .une-check__box{width:16px;height:16px;border-radius:2px}.une-check--sm{font-size:14px;line-height:20px}
+
+/* Radio — lg circle 24/dot 12, md 20/10, sm 16/8; gap 8 */
+.une-radio__circle{flex:0 0 auto;display:flex;align-items:center;justify-content:center;box-sizing:border-box;border:1px solid var(--color-border-default);background:var(--color-interaction-secondary-bg-subtle-default);border-radius:50%;transition:var(--une-transition-interactive)}
+.une-radio:hover:not(.une-radio--disabled) .une-radio__circle{border-color:var(--color-interaction-secondary-border-hover);background:var(--color-interaction-secondary-bg-subtle-hover)}
+.une-radio__input{position:absolute;opacity:0;width:0;height:0}
+.une-radio__input:focus-visible+.une-radio__circle{box-shadow:var(--une-focus-ring)}
+.une-radio__dot{border-radius:50%;background:var(--color-surface-on-brand);transform:scale(0);transition:transform var(--une-duration-fast) var(--une-ease-out)}
+.une-radio--on .une-radio__circle{background:var(--color-interaction-primary-bg-default);border-color:var(--color-interaction-primary-border-default)}
+.une-radio--on:hover:not(.une-radio--disabled) .une-radio__circle{background:var(--color-interaction-primary-bg-hover);border-color:var(--color-interaction-primary-border-hover)}
+.une-radio--on .une-radio__dot{transform:scale(1)}
+.une-radio--disabled .une-radio__circle{background:var(--color-surface-disabled);border-color:var(--color-border-disabled)}
+.une-radio--on.une-radio--disabled .une-radio__circle{background:var(--color-interaction-primary-bg-disabled)}
+.une-radio--on.une-radio--disabled .une-radio__dot{background:var(--color-surface-disabled-strong)}
+.une-radio--lg .une-radio__circle{width:24px;height:24px}.une-radio--lg .une-radio__dot{width:12px;height:12px}.une-radio--lg{font-size:20px;line-height:32px}
+.une-radio--md .une-radio__circle{width:20px;height:20px}.une-radio--md .une-radio__dot{width:10px;height:10px}.une-radio--md{font-size:16px;line-height:24px}
+.une-radio--sm .une-radio__circle{width:16px;height:16px}.une-radio--sm .une-radio__dot{width:8px;height:8px}.une-radio--sm{font-size:14px;line-height:20px}
+
+/* Switch — lg 40×24/thumb 20, md 32×20/16, sm 24×16/12; pill radius; thumb carries elevation/1 */
+.une-switch{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-family:var(--une-font-core);letter-spacing:var(--une-tracking);color:var(--color-text-primary)}
+.une-switch--disabled{cursor:not-allowed;color:var(--color-text-disabled)}
+.une-switch__input{position:absolute;opacity:0;width:0;height:0}
+.une-switch__track{position:relative;flex:0 0 auto;display:block;border-radius:1000px;background:var(--color-interaction-secondary-bg-default);transition:var(--une-transition-interactive)}
+.une-switch:hover:not(.une-switch--disabled) .une-switch__track{background:var(--color-interaction-secondary-bg-hover)}
+.une-switch__input:focus-visible+.une-switch__track{box-shadow:var(--une-focus-ring)}
+.une-switch--on .une-switch__track{background:var(--color-interaction-primary-bg-default)}
+.une-switch--on:hover:not(.une-switch--disabled) .une-switch__track{background:var(--color-interaction-primary-bg-hover)}
+.une-switch--disabled .une-switch__track{background:var(--color-surface-disabled-strong)}
+.une-switch__thumb{position:absolute;top:2px;left:2px;border-radius:50%;background:var(--color-surface-on-brand);box-shadow:var(--une-elevation-1);transition:transform var(--une-duration-base) var(--une-ease-standard)}
+.une-switch--lg .une-switch__track{width:40px;height:24px}.une-switch--lg .une-switch__thumb{width:20px;height:20px}.une-switch--lg.une-switch--on .une-switch__thumb{transform:translateX(16px)}
+.une-switch--md .une-switch__track{width:32px;height:20px}.une-switch--md .une-switch__thumb{width:16px;height:16px}.une-switch--md.une-switch--on .une-switch__thumb{transform:translateX(12px)}
+.une-switch--sm .une-switch__track{width:24px;height:16px}.une-switch--sm .une-switch__thumb{width:12px;height:12px}.une-switch--sm.une-switch--on .une-switch__thumb{transform:translateX(8px)}
+
+/* Segmented Control — lg 40/pad 16/r 8, md 36/12/8, sm 32/12/4. Selected segment sits on
+   surface/primary with elevation/1 inside a muted track. */
+.une-segmented{display:inline-flex;box-sizing:border-box;background:var(--color-interaction-secondary-bg-muted-default);padding:2px;gap:2px}
+.une-segmented--lg{height:40px;border-radius:8px}
+.une-segmented--md{height:36px;border-radius:8px}
+.une-segmented--sm{height:32px;border-radius:4px}
+.une-segment{display:inline-flex;align-items:center;justify-content:center;gap:4px;flex:1 1 auto;border:0;background:transparent;cursor:pointer;font-family:var(--une-font-core);font-weight:500;font-size:14px;letter-spacing:var(--une-tracking);color:var(--color-interaction-secondary-text-default);transition:var(--une-transition-interactive);white-space:nowrap}
+.une-segmented--lg .une-segment{padding:0 16px;border-radius:6px}
+.une-segmented--md .une-segment{padding:0 12px;border-radius:6px}
+.une-segmented--sm .une-segment{padding:0 12px;border-radius:3px}
+.une-segment:hover:not(:disabled):not([aria-selected="true"]){color:var(--color-interaction-secondary-text-hover);background:var(--color-interaction-secondary-bg-subtle-hover)}
+.une-segment:focus{outline:none}
+.une-segment:focus-visible{box-shadow:var(--une-focus-ring)}
+.une-segment[aria-selected="true"]{background:var(--color-surface-primary);box-shadow:var(--une-elevation-1);color:var(--color-text-primary)}
+.une-segmented--primary .une-segment[aria-selected="true"]{color:var(--color-interaction-primary-text-default)}
+.une-segment:disabled{color:var(--color-interaction-secondary-text-disabled);cursor:not-allowed}
+
+/* Datepicker — a 7-column day grid. today / selected / range(4) / state(5). */
+.une-datepicker{display:inline-flex;flex-direction:column;gap:12px;padding:16px;background:var(--color-surface-primary);border:1px solid var(--color-border-default);border-radius:12px;box-shadow:var(--une-elevation-4)}
+.une-datepicker__head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.une-datepicker__month{font:700 14px/20px var(--une-font-core);letter-spacing:var(--une-tracking);color:var(--color-text-primary)}
+.une-datepicker__grid{display:grid;grid-template-columns:repeat(7,32px);gap:2px}
+.une-datepicker__dow{display:flex;align-items:center;justify-content:center;height:24px;font:500 11px/17px var(--une-font-core);letter-spacing:var(--une-tracking);color:var(--color-text-tertiary)}
+.une-day{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border:0;background:transparent;border-radius:4px;cursor:pointer;font:400 12px/18px var(--une-font-core);letter-spacing:var(--une-tracking);color:var(--color-text-primary);transition:var(--une-transition-interactive)}
+.une-day:hover:not(:disabled){background:var(--color-interaction-secondary-bg-subtle-hover)}
+.une-day:focus{outline:none}.une-day:focus-visible{box-shadow:var(--une-focus-ring)}
+.une-day--today{box-shadow:inset 0 0 0 1px var(--color-interaction-primary-border-default);color:var(--color-interaction-primary-text-default);font-weight:700}
+.une-day--muted{color:var(--color-text-muted)}
+.une-day--in-range{background:var(--color-interaction-primary-bg-subtle-default);border-radius:0}
+.une-day--range-start{background:var(--color-interaction-primary-bg-default);color:var(--color-text-on-brand);border-radius:4px 0 0 4px}
+.une-day--range-end{background:var(--color-interaction-primary-bg-default);color:var(--color-text-on-brand);border-radius:0 4px 4px 0}
+.une-day--selected{background:var(--color-interaction-primary-bg-default);color:var(--color-text-on-brand)}
+.une-day:disabled{color:var(--color-text-disabled);cursor:not-allowed;background:transparent}
+
+/* Upload — dashed drop zone (2 states) + Upload List rows (3 states) */
+.une-upload{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:32px 24px;border:1px dashed var(--color-border-strong);border-radius:8px;background:var(--color-surface-gray-subtle);text-align:center;transition:var(--une-transition-interactive)}
+.une-upload--active{border-color:var(--color-interaction-primary-border-default);background:var(--color-interaction-primary-bg-subtle-default)}
+.une-upload__title{font:500 14px/20px var(--une-font-core);letter-spacing:var(--une-tracking);color:var(--color-text-primary)}
+.une-upload__hint{font:400 12px/18px var(--une-font-core);letter-spacing:var(--une-tracking);color:var(--color-text-helper)}
+.une-upload-list{display:flex;flex-direction:column;gap:4px;margin:0;padding:0;list-style:none}
+.une-upload-row{display:flex;align-items:center;gap:8px;height:40px;padding:0 12px;border:1px solid var(--color-border-default);border-radius:4px;background:var(--color-surface-primary);font:400 12px/18px var(--une-font-core);letter-spacing:var(--une-tracking);color:var(--color-text-primary)}
+.une-upload-row__name{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.une-upload-row--uploading{border-color:var(--color-interaction-primary-border-default)}
+.une-upload-row--error{border-color:var(--color-border-error);background:var(--color-surface-error-subtle);color:var(--color-text-error)}
+.une-upload-row__bar{flex:0 0 96px;height:4px;border-radius:1000px;background:var(--color-surface-muted);overflow:hidden}
+.une-upload-row__bar>i{display:block;height:100%;background:var(--color-surface-brand)}
+
+/* Filter — a composed bar: label + chips/selects + reset. Assembly component, no own variants. */
+.une-filter{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:12px 16px;background:var(--color-surface-gray-subtle);border:1px solid var(--color-border-subtle);border-radius:8px}
+.une-filter__label{font:700 12px/18px var(--une-font-core);letter-spacing:var(--une-tracking);color:var(--color-text-secondary-2);margin-right:4px}
+.une-filter__spacer{flex:1 1 auto}

@@ -1,0 +1,13 @@
+/* Motion. The source file carries no animation tokens or prototype easing curves — interaction is
+   expressed purely as discrete state tokens (default → hover → active → focus-visible → disabled).
+   These are the conservative house values the components use so state changes read as a settle,
+   never a bounce. Nothing here is a Figma variable; see readme.md → Visual foundations ▸ Animation. */
+:root{
+  --une-duration-instant:80ms; /* @kind other */
+  --une-duration-fast:120ms; /* @kind other */
+  --une-duration-base:160ms; /* @kind other */
+  --une-duration-slow:240ms; /* @kind other */
+  --une-ease-standard:cubic-bezier(0.2,0,0.2,1); /* @kind other */
+  --une-ease-out:cubic-bezier(0,0,0.2,1); /* @kind other */
+  --une-transition-interactive:background-color var(--une-duration-fast) var(--une-ease-standard),border-color var(--une-duration-fast) var(--une-ease-standard),color var(--une-duration-fast) var(--une-ease-standard),box-shadow var(--une-duration-fast) var(--une-ease-standard);
+}
