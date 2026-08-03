@@ -1,7 +1,7 @@
 # PROGRESS.md — 회사↔집 인계 기록
 
 ## Last updated
-2026-08-03 회사 PC (시범화면 UI 디자인 반영 3차 — UNE 디자인 시스템 토큰 도입 + 레거시 CSS 일괄 정리. 기준은 `design_handoff_pilot_ui/`, 토큰 원본은 `UNE Design System/`, 앱 복사본은 `apps/web/src/design-tokens/`)
+2026-08-03 회사 PC 작업 종료 인계. 오늘 한 일은 시범화면 UI 디자인 반영 3차(핸드오프 → 패널 스펙 → DS 토큰 도입)와 보고서 지표 표이며 **PR #1~#4 전부 main 머지 완료**. 이후 Phase 8 착수 전 조사를 마치고 계획을 확정했으나 **구현은 시작하지 않았다** — 재개 지점은 아래 "다음 세션에서 이어서 할 일" 2번.
 
 ## Current goal
 Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: evaluation_criteria.md Phase 8, 승격마다 사용자 승인 필요)
@@ -159,14 +159,37 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 - 참고: 원시 xlsx(`메타데이터 참고자료(T3Q)/`)에는 전국 재해대장 115,563행·위험지구 약 6,300지구가 있으나 **위험요인 서술·임계값·근거 문서페이지·좌표가 없어** 팝업 수준의 정보를 만들 수 없다(그 정보는 저감계획 PDF 판독에서 나옴). 재해대장은 피해금액·복구비 보강용으로 조인 가능.
 
 ## Pending approval (Seed 불일치 영향범위 보고)
+- **[보류 확정 · 2026-08-03 사용자 결정] `GM-A-01` seed 불일치** — 현행 비차단 가드를 유지한다. 아래 원 항목은 배경으로 남긴다.
+  - 보류 이유: **수정 두 안이 모두 스모크 S8을 깨뜨린다**(이번에 새로 확인된 미기록 사실). `scripts/smoke_dashboard_console.py:216-224`의 S8이 `.map-highlight-notice` 문구에 `'GM-A-01'`이 들어가는지를 단언하는데, (a)를 하면 feature가 생겨 배너가 안 뜨고, (b)를 하면 문구가 바뀐다. S8은 **"미존재 ID 비차단 가드"의 유일한 회귀 테스트**이므로 어느 쪽이든 가드 검증 자체는 보존하는 형태로 재작성해야 하고, 그 테스트 수정도 승인 범위에 포함된다.
+  - 실측 확인: `geo.json`의 47190 GM 계열은 `GM-A-03/A-04/A-07/B-10/B-13/C-01` 6건이고 `GM-A-01`은 없다. `priority_areas_seed.json`의 `spatial_object_id` 참조 4건 중 깨진 것은 이 1건뿐. `data/seed`↔`public/seed` 사본은 현재 완전 동일.
+  - (a)안은 **`GM-A-01`의 실제 Geometry 좌표**가 있어야 하는데 리포에 없다 → 계획 PDF 수령 후에만 가능(정공법). 임의 폴리곤을 넣으면 v0.7·v1.1의 "Geometry 검증 전 표출 금지"를 위반한다.
+  - (b)안(`GM-A-04 구미천지구`로 교체)은 이름상 정확히 대응하고 즉시 가능하지만 `data/seed`의 ID 변경이라 `evaluation_criteria.md:4` + `CLAUDE.md:132` 동결 규칙에 정면으로 걸려 **명시적 동결 해제 승인**이 필요하다.
 - `apps/web/public/seed/priority_areas_seed.json`의 `SIT-GM-POC-001`(47190 구미) rank 1이 `spatial_object_id: "GM-A-01"` 참조하나 `geo.json`에 해당 feature 없음(GM 계열은 GM-A-03/04/07, GM-B-10/13, GM-C-01만 존재). 현재 UI 가드로 비차단 안내 처리됨. 근본 수정은 seed 동결 해제 승인 필요 — 택1: (a) geo.json에 GM-A-01 feature 추가, (b) priority_areas_seed의 참조 ID를 기존 ID로 교체
 
-## 회사 PC에서 이어서 할 일 (2026-08-03 기준 우선순위)
-0. `git pull` → (신규 환경이면 `npm install` + `pip install -r requirements.txt` + `python -m playwright install chromium`)
-1. **GM-A-01 seed 불일치 결정** — 승인 한 번이면 끝. 아래 "Pending approval" 절 택1. 검수에서 눈에 띌 수 있는 항목
-2. **kma_nowcast 실연계** — 공공데이터포털 키 발급이 유일한 선행조건. 가장 간단한 Phase 8 진행 건
+## 다음 세션에서 이어서 할 일 (2026-08-03 저녁 기준 · 우선순위)
+
+> **결론: Phase 8은 Provider 6종 전부 "사용자만 할 수 있는 선행조건"에 막혀 있다.** 코드측 승격 준비는 100% 끝나 있어 키·Endpoint 없이 미리 할 수 있는 승격 작업은 없다. 그래서 아래 0~1번(사용자 조치)과 2번(승인 불필요 코드 작업)을 분리했다.
+
+0. `git pull` → **`python -m pip install -r requirements.txt`** (jsonschema 미설치 — 위 Blockers 참고). 신규 환경이면 `npm install` + `python -m playwright install chromium`도.
+1. **[사용자] `DATA_GO_KR_SERVICE_KEY` 발급** — 공공데이터포털 기상청 초단기실황 활용신청. **Phase 8에서 가장 간단한 건이고 이 키 하나면 그날 Shadow Test → 승인1까지 간다.** 실행: `DATA_GO_KR_SERVICE_KEY=<키> node tests/provider/provider_shadow_gate.cjs --provider kma_nowcast`. 키는 **로컬 셸 env로만** — Vercel env 설정은 그 자체가 SELECTABLE 승격이라 승인2 이후 사용자가 직접 한다(docs/29 §17-18).
+   - 함정 2가지: 기상청이 `base_time` 발표 전이면 `NO_DATA(03)`을 반환해 FAILED로 떨어진다 → `KMA_REQUEST_LAG_MINUTES`를 60~70으로 올려 재시도(코드 변경 불필요). 신규 키는 활용신청 승인 반영 전 `SERVICE_KEY_IS_NOT_REGISTERED_ERROR(30)`가 온다 → 시간 두고 재시도.
+2. **[승인 불필요 · 바로 착수 가능] 버그 4건 + 검증 게이트 3건** — 계획서 승인 완료, 구현 미착수. 상세는 아래 "다음 작업 상세" 절.
 3. 디자인 산출물 수령 시 타이포 스케일 확정 (`docs/30` B-7 — 교체 지점 2곳뿐)
-4. 부산·인제·영천 계획 PDF 수령 시 전사 (코드 변경 불필요)
+4. 부산·인제·영천 계획 PDF 수령 시 전사 (코드 변경 불필요). **`GM-A-01`은 이 PDF가 와야 정공법으로 풀린다** — 아래 Pending approval 참고.
+
+### 다음 작업 상세 (계획 승인 완료 · 구현 미착수)
+
+**버그 4건**
+- `scripts/smoke_mock_spatial_layers.py:6`, `scripts/smoke_t3q_mock_contract.py:4-6` — `read_text()`에 encoding 누락으로 **Windows에서 실행 자체가 크래시**(cp949). 다른 스크립트는 Phase 3·7에서 이미 같은 수정을 받았다. → `read_text(encoding='utf-8')`
+- `.env.example` — `server/providers/uneRag.ts:24`가 읽는 `UNE_RAG_LOGIN_ACCOUNT_FIELD`가 선언돼 있지 않다(코드 전 env 이름 대조 결과 누락은 이 1건뿐). → `UNE_RAG_LOGIN_ACCOUNT_FIELD=account` 추가
+- `server/routes/v1/integrations/status.ts:9` — `FIXTURE_VALIDATED_NOTE`를 `:54,:63,:73,:91`에서 **4개 Provider 전부에 무조건 append**한다. 원장상 `une_rag`는 이미 `SHADOW_TESTED`인데 화면은 FIXTURE_VALIDATED로 표기 중. → provider별 lifecycle 문구로 분기. **`validation_state` enum(`server/contracts.ts:55`)은 건드리지 않는다 = 계약 무변경.** 이 문자열을 단언하는 테스트는 없음을 확인했다.
+
+**검증 게이트 3건**
+- **(핵심) `provider_promotion_status.json`을 읽는 코드가 리포에 하나도 없다.** Phase 8이 승격 기록을 쌓아갈 원장인데 단계 역행·`approvals` 누락·`promotion_hold` 위반을 아무도 검사하지 않는다. → `scripts/smoke_provider_promotion_status.py` 신설 + `package.json`에 `test:promotion-status` 등록. 검사: 사다리 유효값 / **DEFAULT 금지**(CLAUDE.md:133) / SHADOW_TESTED 이상이면 `approvals` 기록 + `provider_shadow_test_result.json`의 SHADOW_PASSED 근거 존재 / `promotion_hold`면 `hold_reason` 필수 / `provider_contracts_seed.json`의 `current`가 전부 `mock` / 비밀값 미포함. 기존 게이트 판정 규칙을 재구현하지 말고 결과 파일 교차참조만.
+- 베이스맵 `aria-pressed` 단언이 없다 — 인계문서 D-4-2 585행 계약인데 어느 게이트도 안 본다. → `smoke_dashboard_console.py`에 S12 추가(false→true→false 전이 + 레이어 칩 `aria-pressed` 존재). S1~S11은 불변.
+- `data/seed` ↔ `apps/web/public/seed` 이중 사본의 동기화를 검사하는 게이트가 없다(지금은 전부 SYNC). → `validate_vercel_repo.py`에 공통 파일명 SHA-256 비교 추가(`geo.json` 2MB라 해시로). `data/reference` ↔ `public/seed` 공통분(criteria·districts·geo·rivers)도 포함.
+
+계획 원문: `C:\Users\kyh\.claude\plans\bright-kindling-comet.md`
 
 **현재 상태 요약**: Phase 1~7 완료. Phase 8은 une_rag만 SHADOW_TESTED(SELECTABLE 보류 — 내부망이라 외부 시연 불가), 나머지는 FIXTURE_VALIDATED. **실제 연결된 Provider는 없으며 배포본은 전부 Seed/Mock 동작.** 전 게이트 통과 상태(typecheck·OpenAPI 30/30/30·JSON Schema·conformance·runtime gate·fixture gate 18/18·a11y·build).
 
@@ -178,7 +201,9 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 5. 주의: 키는 로컬 셸 env로만 (Vercel env 설정은 SELECTABLE 승격 승인 후에만), 키를 채팅·코드·문서에 남기지 말 것, DEFAULT 전환 금지. 상세 절차: docs/29
 
 ## Blockers
-- 없음. (@playwright/test 404는 재발하지 않음 — 1.62.1 설치 완료)
+- **`jsonschema` 미설치로 `npm run test:contracts`의 절반이 실행 불가** (2026-08-03 확인). `scripts/validate_json_schema_contracts.py:5`가 import하는데 `requirements.txt:4`에 선언만 있고 설치가 안 돼 있다. `test:contracts` = `test:openapi-contracts && test:schema-contracts`이므로 **Phase 8 승인2 전 회귀 번들 8종 중 2번 항목이 통째로 실패**한다. 해소: `python -m pip install -r requirements.txt` 한 줄. (`test:openapi-contracts`는 정상 — 실측 `30 handler routes = 30 routing-table entries = 30 operations`.)
+- **PowerShell에서 `.sh` 게이트 실행 주의 — Phase 8 주 실행 경로에 직접 걸린다.** `npm run test:provider-shadow` = `bash scripts/run_provider_shadow_test.sh`이고 그 `:10`이 `rm -rf .runtime-cjs`를 한다. bash가 WSL로 잡히면 `.runtime-cjs`가 삭제된 채 재컴파일에 실패할 수 있다. 우회: Git Bash에서 `tsc -p tsconfig.runtime.json` + `.runtime-cjs/package.json`(`{"type":"commonjs"}`) 확인 후 `node tests/provider/provider_shadow_gate.cjs --provider <id>` 직접 실행.
+- (해소됨) @playwright/test 404는 재발하지 않음 — 1.62.1 설치 완료.
 
 ## How to run
 - 의존성: `npm install` (Node >= 22.12.0) + `python -m pip install -r requirements.txt` + `python -m playwright install chromium`
