@@ -33,7 +33,7 @@ export function DashboardPage(props: Props) {
       <div className="dashboard-grid" ref={leftPanel.gridRef} style={leftPanel.style}>
         <SituationAgentPanel situation={props.situation} onSituationCreated={props.onSituationCreated} onAgentResponse={props.onAgentResponse} contextItems={props.agentContext} onRemoveContext={props.onRemoveContext} />
         <PanelResizer control={leftPanel} />
-        <MapPanel adminCode={props.situation?.admin_code ?? '45190'} highlightedFeatureId={props.highlightedFeature} onSelectFeature={props.onAddContext} />
+        <MapPanel adminCode={props.situation?.admin_code ?? '45190'} highlightedFeatureId={props.highlightedFeature} priorityAreas={props.priorities?.areas} onSelectFeature={props.onAddContext} />
         <InsightPanel priorities={props.priorities} procedures={props.procedures} similarEvents={props.events} selectedEventId={props.selectedEventId} onHighlight={props.onHighlight} onSelectEvent={props.onSelectEvent} adminCode={props.situation?.admin_code ?? null} onAddContext={props.onAddContext} />
       </div>
       <IntegrationStatusPanel />

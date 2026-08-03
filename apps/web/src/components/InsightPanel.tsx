@@ -158,7 +158,8 @@ export function InsightPanel({priorities,procedures,similarEvents,selectedEventI
       {tab==='현재 판단'&&<>
         <div className="notice-card warning"><strong>우선 확인 상대순위</strong><p>공식 위험도·피해예측 결과가 아니며 담당자 확인이 필요합니다.</p></div>
         <p className="sr-only">각 카드의 지역명 버튼은 지도의 해당 지점으로 이동하고, 상세보기 버튼은 지도 표시와 같은 위험지구 상세 정보를 창으로 엽니다.</p>
-        {priorities?.areas.map(area=>{
+        {/* 카드 목록 래퍼. 초와이드(>2560px)에서 우측 패널이 520px 를 넘으면 이 래퍼만 2열로 흐른다(F-16 tier B). */}
+        <div className="priority-list">{priorities?.areas.map(area=>{
           const district=districtByCode.get(area.spatial_object_id)??null;
           const typeTag=str(district?.disaster_type);           // 계획문서 판독 재해유형. 매칭 실패 시 태그를 만들지 않는다.
           const locationSummary=str(district?.location);
@@ -185,7 +186,7 @@ export function InsightPanel({priorities,procedures,similarEvents,selectedEventI
               </div>
             </div>
           </article>;
-        })}
+        })}</div>
       </>}
 
       {tab==='유사사례'&&<div className="event-list">

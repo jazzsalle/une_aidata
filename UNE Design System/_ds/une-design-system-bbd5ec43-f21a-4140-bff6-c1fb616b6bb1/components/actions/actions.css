@@ -1,0 +1,91 @@
+/* Actions — Button, IconButton, TextButton.
+   Geometry transcribed from "Button — QA Report & Dev Spec (2026-07-22)" and
+   "IconButton — QA Report & Dev Spec (2026-07-22)".
+
+   Button size ramp   height / pad-h / gap / radius / font / icon
+     3xl  56 / 24 / 4 / 8 / 16 / 20      lg   44 / 16 / 4 / 8 / 14 / 16
+     2xl  52 / 20 / 4 / 8 / 16 / 20      md   40 / 16 / 4 / 8 / 14 / 16
+     xl   48 / 16 / 4 / 8 / 16 / 20      sm   36 / 12 / 4 / 8 / 14 / 16
+                                         xs   32 / 12 / 4 / 4 / 14 / 16
+     2xs  28 / 12 / 4 / 4 / 12 / 12      3xs  24 /  8 / 4 / 4 / 12 / 12
+     4xs  20 /  8 / 4 / 4 / 12 / 12
+   IconButton is always square (w = h) with its own icon ramp: 56/28, 52/24, 48/24,
+   44/20, 40/20, 36/20, 32/16, 28/16, 24/12, 20/12. */
+
+.une-btn{display:inline-flex;align-items:center;justify-content:center;gap:4px;box-sizing:border-box;font-family:var(--une-font-core);font-weight:500;letter-spacing:var(--une-tracking);border:1px solid transparent;background:transparent;cursor:pointer;white-space:nowrap;text-decoration:none;transition:var(--une-transition-interactive);-webkit-appearance:none;appearance:none}
+.une-btn>span.une-btn__label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.une-btn:focus{outline:none}
+.une-btn:focus-visible{box-shadow:var(--une-focus-ring)}
+.une-btn:disabled{cursor:not-allowed}
+
+/* size ramp */
+.une-btn--3xl{height:56px;padding:0 24px;border-radius:8px;font-size:16px;line-height:24px}
+.une-btn--2xl{height:52px;padding:0 20px;border-radius:8px;font-size:16px;line-height:24px}
+.une-btn--xl{height:48px;padding:0 16px;border-radius:8px;font-size:16px;line-height:24px}
+.une-btn--lg{height:44px;padding:0 16px;border-radius:8px;font-size:14px;line-height:20px}
+.une-btn--md{height:40px;padding:0 16px;border-radius:8px;font-size:14px;line-height:20px}
+.une-btn--sm{height:36px;padding:0 12px;border-radius:8px;font-size:14px;line-height:20px}
+.une-btn--xs{height:32px;padding:0 12px;border-radius:4px;font-size:14px;line-height:20px}
+.une-btn--2xs{height:28px;padding:0 12px;border-radius:4px;font-size:12px;line-height:18px}
+.une-btn--3xs{height:24px;padding:0 8px;border-radius:4px;font-size:12px;line-height:18px}
+.une-btn--4xs{height:20px;padding:0 8px;border-radius:4px;font-size:12px;line-height:18px}
+
+/* solid */
+.une-btn--solid.une-btn--primary{background:var(--color-interaction-primary-bg-default);color:var(--color-text-on-brand)}
+.une-btn--solid.une-btn--primary:hover:not(:disabled){background:var(--color-interaction-primary-bg-hover)}
+.une-btn--solid.une-btn--primary:active:not(:disabled){background:var(--color-interaction-primary-bg-active)}
+.une-btn--solid.une-btn--grayscale{background:var(--color-interaction-secondary-bg-default);color:var(--color-text-on-brand)}
+.une-btn--solid.une-btn--grayscale:hover:not(:disabled){background:var(--color-interaction-secondary-bg-hover)}
+.une-btn--solid.une-btn--grayscale:active:not(:disabled){background:var(--color-interaction-secondary-bg-active)}
+.une-btn--solid:disabled{background:var(--color-interaction-primary-bg-strong-disabled);color:var(--color-interaction-primary-text-disabled)}
+
+/* outline — border only, no fill */
+.une-btn--outline.une-btn--primary{border-color:var(--color-interaction-primary-border-default);color:var(--color-interaction-primary-text-default)}
+.une-btn--outline.une-btn--primary:hover:not(:disabled){border-color:var(--color-interaction-primary-border-hover);color:var(--color-interaction-primary-text-hover);background:var(--color-interaction-primary-bg-subtle-hover)}
+.une-btn--outline.une-btn--primary:active:not(:disabled){border-color:var(--color-interaction-primary-border-active);color:var(--color-interaction-primary-text-active);background:var(--color-interaction-primary-bg-subtle-active)}
+.une-btn--outline.une-btn--grayscale{border-color:var(--color-interaction-secondary-border-default);color:var(--color-interaction-secondary-text-default)}
+.une-btn--outline.une-btn--grayscale:hover:not(:disabled){border-color:var(--color-interaction-secondary-border-hover);color:var(--color-interaction-secondary-text-hover);background:var(--color-interaction-secondary-bg-subtle-hover)}
+.une-btn--outline.une-btn--grayscale:active:not(:disabled){border-color:var(--color-interaction-secondary-border-active);color:var(--color-interaction-secondary-text-active);background:var(--color-interaction-secondary-bg-subtle-active)}
+.une-btn--outline:disabled{border-color:var(--color-interaction-secondary-border-disabled);color:var(--color-interaction-secondary-text-disabled);background:transparent}
+
+/* ghost — no background until hover */
+.une-btn--ghost.une-btn--primary{color:var(--color-interaction-primary-text-default)}
+.une-btn--ghost.une-btn--primary:hover:not(:disabled){background:var(--color-interaction-primary-bg-subtle-hover);color:var(--color-interaction-primary-text-hover)}
+.une-btn--ghost.une-btn--primary:active:not(:disabled){background:var(--color-interaction-primary-bg-subtle-active);color:var(--color-interaction-primary-text-active)}
+.une-btn--ghost.une-btn--grayscale{color:var(--color-interaction-secondary-text-default)}
+.une-btn--ghost.une-btn--grayscale:hover:not(:disabled){background:var(--color-interaction-secondary-bg-subtle-hover);color:var(--color-interaction-secondary-text-hover)}
+.une-btn--ghost.une-btn--grayscale:active:not(:disabled){background:var(--color-interaction-secondary-bg-subtle-active);color:var(--color-interaction-secondary-text-active)}
+.une-btn--ghost:disabled{color:var(--color-interaction-secondary-text-disabled);background:transparent}
+
+/* IconButton — square, own radius/icon ramp, badge pinned 7px from the right edge */
+.une-iconbtn{position:relative;padding:0;flex:0 0 auto}
+.une-iconbtn--3xl{width:56px;height:56px;border-radius:8px}
+.une-iconbtn--2xl{width:52px;height:52px;border-radius:8px}
+.une-iconbtn--xl{width:48px;height:48px;border-radius:8px}
+.une-iconbtn--lg{width:44px;height:44px;border-radius:8px}
+.une-iconbtn--md{width:40px;height:40px;border-radius:8px}
+.une-iconbtn--sm{width:36px;height:36px;border-radius:8px}
+.une-iconbtn--xs{width:32px;height:32px;border-radius:4px}
+.une-iconbtn--2xs{width:28px;height:28px;border-radius:4px}
+.une-iconbtn--3xs{width:24px;height:24px;border-radius:4px}
+.une-iconbtn--4xs{width:20px;height:20px;border-radius:4px}
+.une-iconbtn__badge{position:absolute;top:-2px;right:7px}
+
+/* TextButton — v0.3_텍스트 버튼. Underline optional, 10 font sizes, 3 colours,
+   two text-padding modes (padded / flush). No box, no height: it is type. */
+.une-textbtn{display:inline-flex;align-items:center;gap:4px;font-family:var(--une-font-core);font-weight:500;letter-spacing:var(--une-tracking);background:none;border:0;cursor:pointer;transition:var(--une-transition-interactive)}
+.une-textbtn:focus{outline:none}
+.une-textbtn:focus-visible{box-shadow:var(--une-focus-ring);border-radius:2px}
+.une-textbtn--padded{padding:0 4px}
+.une-textbtn--flush{padding:0}
+.une-textbtn--underline{text-decoration:underline;text-underline-offset:2px}
+.une-textbtn--primary{color:var(--color-interaction-primary-text-default)}
+.une-textbtn--primary:hover:not(:disabled){color:var(--color-interaction-primary-text-hover)}
+.une-textbtn--primary:active:not(:disabled){color:var(--color-interaction-primary-text-active)}
+.une-textbtn--grayscale{color:var(--color-interaction-secondary-text-default)}
+.une-textbtn--grayscale:hover:not(:disabled){color:var(--color-interaction-secondary-text-hover)}
+.une-textbtn--grayscale:active:not(:disabled){color:var(--color-interaction-secondary-text-active)}
+.une-textbtn--error{color:var(--color-text-error)}
+.une-textbtn--error:hover:not(:disabled){color:var(--color-red-600)}
+.une-textbtn--error:active:not(:disabled){color:var(--color-red-700)}
+.une-textbtn:disabled{color:var(--color-interaction-secondary-text-disabled);cursor:not-allowed;text-decoration:none}

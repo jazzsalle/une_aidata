@@ -1,0 +1,14 @@
+/* Webfonts.
+   Spoqa Han Sans Neo is the system's core family (4227 Regular + 954 Bold + 907 Medium uses in the source file).
+   Pretendard GOV appears only on Foundation documentation frames (10 uses); the real GOV binaries are not public,
+   so it is aliased to locally-installed Pretendard and then to Spoqa. See readme.md → Font substitutions. */
+
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css');
+
+@font-face{font-family:"Spoqa Han Sans Neo";font-style:normal;font-weight:300;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans@latest/Subset/SpoqaHanSansNeo/SpoqaHanSansNeo-Light.woff2') format('woff2'),url('https://cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans@latest/Subset/SpoqaHanSansNeo/SpoqaHanSansNeo-Light.woff') format('woff')}
+@font-face{font-family:"Spoqa Han Sans Neo";font-style:normal;font-weight:400;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans@latest/Subset/SpoqaHanSansNeo/SpoqaHanSansNeo-Regular.woff2') format('woff2'),url('https://cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans@latest/Subset/SpoqaHanSansNeo/SpoqaHanSansNeo-Regular.woff') format('woff')}
+@font-face{font-family:"Spoqa Han Sans Neo";font-style:normal;font-weight:500;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans@latest/Subset/SpoqaHanSansNeo/SpoqaHanSansNeo-Medium.woff2') format('woff2'),url('https://cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans@latest/Subset/SpoqaHanSansNeo/SpoqaHanSansNeo-Medium.woff') format('woff')}
+@font-face{font-family:"Spoqa Han Sans Neo";font-style:normal;font-weight:700;font-display:swap;src:url('https://cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans@latest/Subset/SpoqaHanSansNeo/SpoqaHanSansNeo-Bold.woff2') format('woff2'),url('https://cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans@latest/Subset/SpoqaHanSansNeo/SpoqaHanSansNeo-Bold.woff') format('woff')}
+
+/* SUBSTITUTION: "Pretendard GOV" → Pretendard (nearest public match). */
+@font-face{font-family:"Pretendard GOV";font-style:normal;font-weight:400 700;font-display:swap;src:local('Pretendard GOV'),local('Pretendard Variable'),local('Pretendard'),url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/woff2/PretendardVariable.woff2') format('woff2-variations')}

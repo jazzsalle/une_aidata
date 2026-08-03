@@ -1,0 +1,65 @@
+/* Overlay — Modal, Nonmodal, Droplist, Menu, Confirm.
+   Fixed elevation mapping: Menu e3, Modal e3, Droplist e4.
+   Overlay surfaces: Modal/Confirm/Nonmodal use surface/primary; Menu and Droplist use surface/raised. */
+
+.une-scrim{position:fixed;inset:0;background:var(--color-bg-dim);display:flex;align-items:center;justify-content:center;padding:24px;z-index:70}
+
+/* ── Modal ─────────────────────────────────────────────────────────────────── */
+.une-modal{display:flex;flex-direction:column;box-sizing:border-box;max-height:calc(100vh - 48px);background:var(--color-surface-primary);border-radius:12px;box-shadow:var(--une-elevation-3);font-family:var(--une-font-core);letter-spacing:var(--une-tracking);overflow:hidden}
+.une-modal--sm{width:400px}
+.une-modal--md{width:560px}
+.une-modal--lg{width:800px}
+.une-modal__header{display:flex;align-items:flex-start;gap:12px;padding:20px 24px}
+.une-modal__header--divider{border-bottom:1px solid var(--color-border-subtle)}
+.une-modal__icon{flex:0 0 auto;display:flex;margin-top:2px}
+.une-modal__heading{flex:1 1 auto;min-width:0}
+.une-modal__title{display:block;font-weight:700;color:var(--color-text-primary)}
+.une-modal--lg .une-modal__title{font-size:20px;line-height:32px}
+.une-modal--md .une-modal__title{font-size:16px;line-height:24px}
+.une-modal--sm .une-modal__title{font-size:14px;line-height:20px}
+.une-modal__desc{display:block;margin-top:4px;font-size:12px;line-height:18px;color:var(--color-text-helper)}
+.une-modal__desc--below{padding:0 24px 12px}
+.une-modal__body{flex:1 1 auto;overflow:auto;padding:20px 24px;font-size:14px;line-height:20px;color:var(--color-text-basic)}
+.une-modal__footer{display:flex;align-items:center;gap:8px;padding:16px 24px}
+.une-modal__footer--divider{border-top:1px solid var(--color-border-subtle)}
+.une-modal__footer-option{flex:1 1 auto}
+.une-modal__footer-actions{display:flex;gap:8px;margin-left:auto}
+
+/* Confirm — the status dialog: intent(error/success/info/warning) */
+.une-confirm__icon--error{color:var(--color-icon-error)}
+.une-confirm__icon--success{color:var(--color-icon-success)}
+.une-confirm__icon--info{color:var(--color-icon-brand)}
+.une-confirm__icon--warning{color:var(--color-icon-light-warning)}
+
+/* ── Nonmodal ──────────────────────────────────────────────────────────────── */
+.une-nonmodal{display:flex;flex-direction:column;box-sizing:border-box;width:360px;background:var(--color-surface-primary);border:1px solid var(--color-border-default);border-radius:12px;box-shadow:var(--une-elevation-3);font-family:var(--une-font-core);letter-spacing:var(--une-tracking)}
+.une-nonmodal__header{display:flex;align-items:center;gap:8px;padding:16px 20px 8px}
+.une-nonmodal__title{flex:1 1 auto;min-width:0;font-weight:700;font-size:16px;line-height:24px;color:var(--color-text-primary)}
+.une-nonmodal__subtitle{font-size:12px;line-height:18px;color:var(--color-text-helper)}
+.une-nonmodal__subtitle--below-title{padding:0 20px 8px}
+.une-nonmodal__subtitle--inline{margin-left:8px}
+.une-nonmodal__body{padding:8px 20px 16px;font-size:14px;line-height:20px;color:var(--color-text-basic)}
+.une-nonmodal__footer{display:flex;justify-content:flex-end;gap:8px;padding:0 20px 16px}
+
+/* ── Droplist ──────────────────────────────────────────────────────────────── */
+.une-droplist{margin:0;padding:4px;list-style:none;background:var(--color-surface-raised);border-radius:8px;box-shadow:var(--une-elevation-4);max-height:280px;overflow:auto;font-family:var(--une-font-core);letter-spacing:var(--une-tracking)}
+.une-droplist__item{display:flex;align-items:center;gap:8px;height:36px;padding:0 12px;border-radius:4px;cursor:pointer;font-size:14px;line-height:20px;color:var(--color-text-primary);transition:var(--une-transition-interactive)}
+.une-droplist__item:hover{background:var(--color-interaction-secondary-bg-subtle-hover)}
+.une-droplist__item:active{background:var(--color-interaction-secondary-bg-subtle-active)}
+.une-droplist__item--selected{background:var(--color-interaction-primary-bg-subtle-default);color:var(--color-interaction-primary-text-default)}
+.une-droplist__item--selected:hover{background:var(--color-interaction-primary-bg-subtle-hover)}
+.une-droplist__item--disabled{color:var(--color-interaction-secondary-text-disabled);cursor:not-allowed;background:transparent}
+
+/* ── Menu ──────────────────────────────────────────────────────────────────── */
+.une-menu{margin:0;padding:4px;list-style:none;min-width:180px;background:var(--color-surface-raised);border-radius:12px;box-shadow:var(--une-elevation-3);font-family:var(--une-font-core);letter-spacing:var(--une-tracking)}
+.une-menu__section{padding:8px 12px 4px;font:700 11px/17px var(--une-font-core);letter-spacing:var(--une-tracking);color:var(--color-text-helper-2)}
+.une-menu__divider{height:1px;margin:4px 0;background:var(--color-border-subtle)}
+.une-menu__item{display:flex;align-items:center;gap:8px;width:100%;box-sizing:border-box;height:36px;padding:0 12px;border:0;border-radius:4px;background:transparent;cursor:pointer;text-align:left;font:400 14px/20px var(--une-font-core);letter-spacing:var(--une-tracking);color:var(--color-text-primary);transition:var(--une-transition-interactive)}
+.une-menu__item:hover:not(:disabled){background:var(--color-interaction-secondary-bg-subtle-hover)}
+.une-menu__item:active:not(:disabled){background:var(--color-interaction-secondary-bg-subtle-active)}
+.une-menu__item:focus{outline:none}
+.une-menu__item:focus-visible{box-shadow:var(--une-focus-ring)}
+.une-menu__item:disabled{color:var(--color-interaction-secondary-text-disabled);cursor:not-allowed}
+.une-menu__item--danger{color:var(--color-text-error)}
+.une-menu__label{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.une-menu__shortcut{flex:0 0 auto;font-size:11px;color:var(--color-text-helper-2)}

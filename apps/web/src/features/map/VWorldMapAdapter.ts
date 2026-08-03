@@ -27,6 +27,18 @@ export interface MapFeatureSelection {
   lonLat: [number, number];
   properties: Record<string, unknown>;
 }
+/** 베이스맵 위에 HTML 마커(`.map-poi`)로 그릴 위험지구 POI 1건과 그 화면 픽셀 위치.
+ *  캔버스 벡터가 아니라 DOM 요소로 그려야 호버·포커스·클릭을 브라우저 기본 동작으로 처리할 수 있다. */
+export interface MapPoiPlacement {
+  id: string;
+  layerId: string;
+  /** 지도 좌상단 기준 픽셀. 핀의 '끝'이 이 좌표에 오도록 배치한다. */
+  x: number;
+  y: number;
+  coordinate: number[];
+  lonLat: [number, number];
+  properties: Record<string, unknown>;
+}
 export interface VWorldMapHandle {
   map: OlMap;
   setRegion(code: string): void;
@@ -35,10 +47,10 @@ export interface VWorldMapHandle {
   setBaseMap(type: BaseMapType): void;
   /** 피처 클릭 구독. 빈 지도를 클릭하면 null을 전달한다. 해제 함수를 반환한다. */
   onFeatureClick(handler: (selection: MapFeatureSelection | null) => void): () => void;
-  /** 팝업 기준좌표 지정(null이면 팝업 종료 + 클릭 강조 해제). */
+  /** 팝업 기준좌표 지정(null이면 클릭 강조 해제). */
   setPopupAnchor(coordinate: number[] | null): void;
-  /** 기준좌표의 화면 픽셀 변화를 구독한다(지도 이동·확대 시 팝업 추종). 해제 함수를 반환한다. */
-  onPopupAnchorMove(handler: (pixel: [number, number] | null) => void): () => void;
+  /** 위험지구 POI 마커의 화면 위치 변화를 구독한다(이동·확대·레이어 토글). 해제 함수를 반환한다. */
+  onPoiChange(handler: (points: MapPoiPlacement[]) => void): () => void;
   destroy(): void;
 }
 
@@ -65,6 +77,9 @@ function pointStyle(radius: number, color: string, casing: string, ring: string)
 
 function styleFor(feature: FeatureLike, context: StyleContext) {
   const layer = String(feature.get('layer') ?? '');
+  // 위험지구(L1)는 캔버스 원이 아니라 HTML POI 마커로 그린다. 둘 다 그리면 같은 지점에
+  // 원과 핀이 겹쳐 두 개의 대상처럼 읽힌다. 클릭·호버도 마커가 직접 받는다.
+  if (layer === 'L1') return [];
   const id = featureKey(feature);
   const active = Boolean(id) && (id === context.selected || id === context.clicked);
   const provisional = Boolean(feature.get('provisional'));
@@ -177,20 +192,44 @@ export async function createVWorldMap(target: HTMLElement, adminCode: string, on
   const map = new OlMap({ target, layers: mapLayers, view: new View({ center: fromLonLat(center), zoom: 11 }), controls: [] });
 
   const clickHandlers = new Set<(selection: MapFeatureSelection | null) => void>();
-  const anchorHandlers = new Set<(pixel: [number, number] | null) => void>();
+  const poiHandlers = new Set<(points: MapPoiPlacement[]) => void>();
   let anchorCoordinate: number[] | null = null;
-  let anchorPixel: [number, number] | null = null;
+  let poiSignature = '';
 
-  function emitAnchor(force = false) {
-    const raw = anchorCoordinate ? map.getPixelFromCoordinate(anchorCoordinate) : null;
-    const x = raw?.[0];
-    const y = raw?.[1];
-    const next: [number, number] | null = typeof x === 'number' && typeof y === 'number' && Number.isFinite(x) && Number.isFinite(y) ? [Math.round(x), Math.round(y)] : null;
-    const previous = anchorPixel;
-    const same = next === null ? previous === null : previous !== null && next[0] === previous[0] && next[1] === previous[1];
-    if (same && !force) return;
-    anchorPixel = next;
-    anchorHandlers.forEach((handler) => handler(next));
+  /** 화면 안(여유 24/48px)에 있는 L1 점 피처만 마커 후보로 만든다.
+   *  여유값은 핀이 반쯤 걸친 상태에서도 사라지지 않게 하는 폭·높이 보정이다. */
+  function collectPoi(): MapPoiPlacement[] {
+    const layer = vectors.get('L1');
+    const source = sources.get('L1');
+    if (!layer || !source || !layer.getVisible()) return [];
+    const size = map.getSize();
+    const width = size?.[0];
+    const height = size?.[1];
+    if (typeof width !== 'number' || typeof height !== 'number') return [];
+    const points: MapPoiPlacement[] = [];
+    for (const feature of source.getFeatures()) {
+      const geometry = feature.getGeometry();
+      if (!geometry || geometry.getType() !== 'Point') continue;
+      const coordinate = (geometry as unknown as { getCoordinates(): number[] }).getCoordinates().slice(0, 2);
+      const pixel = map.getPixelFromCoordinate(coordinate);
+      const x = pixel?.[0];
+      const y = pixel?.[1];
+      if (typeof x !== 'number' || typeof y !== 'number' || !Number.isFinite(x) || !Number.isFinite(y)) continue;
+      if (x < -24 || y < -48 || x > width + 24 || y > height + 48) continue;
+      const properties: Record<string, unknown> = { ...feature.getProperties() };
+      delete properties.geometry;
+      points.push({ id: featureKey(feature), layerId: 'L1', x: Math.round(x), y: Math.round(y), coordinate, lonLat: toLonLat(coordinate) as [number, number], properties });
+    }
+    return points;
+  }
+
+  // postrender 는 프레임마다 불리므로 위치 서명이 실제로 바뀔 때만 React 로 올린다.
+  function emitPoi(force = false) {
+    const points = collectPoi();
+    const signature = points.map((point) => `${point.id}:${point.x}:${point.y}`).join('|');
+    if (!force && signature === poiSignature) return;
+    poiSignature = signature;
+    poiHandlers.forEach((handler) => handler(points));
   }
 
   function selectionAt(pixel: number[], eventCoordinate: number[]): MapFeatureSelection | null {
@@ -216,7 +255,7 @@ export async function createVWorldMap(target: HTMLElement, adminCode: string, on
     return { id: featureKey(feature), layerId, geometryType, coordinate, lonLat, properties };
   }
 
-  map.on('postrender', () => { if (anchorCoordinate) emitAnchor(); });
+  map.on('postrender', () => emitPoi());
   map.on('pointermove', (event) => {
     if (event.dragging) return;
     map.getViewport().style.cursor = map.hasFeatureAtPixel(event.pixel, { hitTolerance: 6 }) ? 'pointer' : '';
@@ -226,18 +265,16 @@ export async function createVWorldMap(target: HTMLElement, adminCode: string, on
     clicked = hit?.id || null;
     vectors.forEach((vector) => vector.changed());
     anchorCoordinate = hit ? hit.coordinate : null;
-    emitAnchor(true);
     clickHandlers.forEach((handler) => handler(hit));
   });
 
   return {
     map,
     onFeatureClick(handler) { clickHandlers.add(handler); return () => { clickHandlers.delete(handler); }; },
-    onPopupAnchorMove(handler) { anchorHandlers.add(handler); return () => { anchorHandlers.delete(handler); }; },
+    onPoiChange(handler) { poiHandlers.add(handler); handler(collectPoi()); return () => { poiHandlers.delete(handler); }; },
     setPopupAnchor(coordinate) {
       anchorCoordinate = coordinate ? coordinate.slice(0, 2) : null;
       if (!coordinate && clicked) { clicked = null; vectors.forEach((vector) => vector.changed()); }
-      emitAnchor(true);
     },
     setRegion(code) { map.getView().animate({ center: fromLonLat(CENTERS[code] ?? DEFAULT_CENTER), zoom: 11, duration: 350 }); },
     highlightFeature(id) {
@@ -253,7 +290,7 @@ export async function createVWorldMap(target: HTMLElement, adminCode: string, on
       }
       return false;
     },
-    setLayerVisible(code, visible) { vectors.get(code)?.setVisible(visible); },
+    setLayerVisible(code, visible) { vectors.get(code)?.setVisible(visible); if (code === 'L1') emitPoi(true); },
     setBaseMap(type) {
       baseMapType = type;
       baseLayer?.setVisible(type === 'base');
@@ -263,6 +300,6 @@ export async function createVWorldMap(target: HTMLElement, adminCode: string, on
       if (!key) onState?.('seed-only', 'VWorld 키 미설정: 공간 Seed만 표시');
       else onState?.('connecting', `VWorld ${type === 'satellite' ? '영상' : '일반'}지도 전환 중`);
     },
-    destroy() { clickHandlers.clear(); anchorHandlers.clear(); map.setTarget(undefined); },
+    destroy() { clickHandlers.clear(); poiHandlers.clear(); map.setTarget(undefined); },
   };
 }
