@@ -1,7 +1,7 @@
 # PROGRESS.md — 회사↔집 인계 기록
 
 ## Last updated
-2026-08-03 회사 PC (시범화면 UI 디자인 핸드오프 반영 2차 — 초와이드 3열 붕괴 P0 수정 + 패널 컴포넌트 스펙. 기준은 `design_handoff_pilot_ui/`, 디자인 원본은 `UNE Design System/`)
+2026-08-03 회사 PC (시범화면 UI 디자인 반영 3차 — UNE 디자인 시스템 토큰 도입 + 레거시 CSS 일괄 정리. 기준은 `design_handoff_pilot_ui/`, 토큰 원본은 `UNE Design System/`, 앱 복사본은 `apps/web/src/design-tokens/`)
 
 ## Current goal
 Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: evaluation_criteria.md Phase 8, 승격마다 사용자 승인 필요)
@@ -13,6 +13,20 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 - **Phase 1 완료 (2026-08-02, evaluator PASS)**: npm install 성공(package-lock.json 생성, playwright 1.62.1 정상 — 404 재발 없음), validate·contracts(OpenAPI 31/31, JSON Schema 260/18)·typecheck:functions·typecheck:web·runtime-gate·provider-conformance 전부 PASS, `npm run build` 성공(apps/web/dist 산출). 계약 파일 변경 0건.
 
 ## Done this session
+- **UNE 디자인 시스템 토큰 도입 + 레거시 CSS 일괄 정리 (2026-08-03)**: 1·2차 반영이 닿지 않은 구역(`/evidence` 위성 3구역, 대시보드 하단 4패널)이 예전 스타일로 남아 화면에 두 가지 톤이 섞여 있었다. 값을 손으로 옮기던 방식을 접고 DS 토큰을 직접 참조하도록 바꿨다.
+  - **토큰 도입**: `apps/web/src/design-tokens/` 신설. 원본 `UNE Design System/_ds/une-design-system-bbd5ec43-f21a-4140-bff6-c1fb616b6bb1/tokens/` 에서 **6개만** 복사한다 — `fig-tokens`·`colors`·`typography`·`spacing`·`elevation`·`motion`. `styles.css` 맨 위에서 `@import`(CSS @import 는 다른 규칙보다 앞서야 한다).
+  - **제외 2개 — 갱신 시에도 반드시 지킬 것**:
+    - `fonts.css` — jsdelivr CDN 을 `@import` 한다. 스모크 3종이 **외부 도메인 요청 0건**을 PASS 조건으로 걸고 있어 넣으면 게이트가 전부 깨진다. 앱은 이미 Spoqa 를 `public/fonts/` 에 self-host 한다.
+    - `base.css` — `body`·`a`·`*` 전역 셀렉터를 덮어써 `styles.css` 와 충돌한다.
+    - 복사본 최상단 주석에 이 규칙을 적어뒀다. 유입 검사: `grep -n "@import\|url(" apps/web/src/design-tokens/*.css` 가 0건이어야 한다.
+  - **앱 토큰 재배선**: `--surface-*-blue`·`--border-*-blue`·`--accent-line-blue`·`--c-text-error`·`--c-text-success`·`--c-surface-success`·`--c-warn-*-ds`·`--c-field-*`·`--c-border-strong` 14개를 `var(--color-*)` 참조로 교체. 브라우저 실측으로 **14개 전부 이전과 동일한 값**으로 해석됨을 확인했다(값 변화 0, 출처만 이동).
+  - **재배선하지 않은 것**: `--c-brand`(#1769aa) 계열 — 핸드오프 §5 "브랜드/액션은 --c-brand 계열 유지". DS `light-blue-500`(#3c69fc)로 바꾸면 화면 전체 브랜드색이 달라진다. `--sh-1`/`--sh-2` 그림자도 유지 — DS `elevation-1`은 눈에 띄게 무겁다.
+  - **정리한 블록**: `/evidence` 위성 3구역(`evidence-set-*`·`phase-rule-summary`·`flood-phase-card`·`phase-tile-pair`·`satellite-compare-tool`·`compare-*`·`phase-selection-note`) / 대시보드 하단 4패널(`integration-status`·`t3q-readiness`·`mock-search-panel`·`timeline-list`) / 표(`comparison-table` 을 DS Table 수치로 — 셀 `8px 16px`, 12/18, 헤더면 `--surface-panel-blue`, 행 구분선 `--border-inner-blue`) / 나머지(`similar-event-detail`·`event-card`·`procedure-card`·`observation-list`·`report-event-detail`)
+  - **개별 스펙**: 비교방식 라디오는 DS Radio `sm`(16px)에 맞춰 `accent-color: var(--c-brand)`. 빠른이동 버튼은 DS SegmentedControl `sm` 시각(32px·반경 4)을 따르되 **선택 표시는 `aria-pressed` 를 유지**했다 — D-4-2 585행이 "빠른 경계"의 `aria-pressed` 를 계약으로 고정한다(DS 는 `aria-selected` 를 쓴다).
+  - **경고색**: DS `AlertBanner intent="warning"` 은 오렌지(#FFF4ED/#FC6B19)지만 **yellow 램프(yellow-25/400/700)를 유지**했다. `.notice-card.warning`·`.status-banner.scenario`·`.agent-turn-confirm` 이 이미 노랑으로 통일돼 있어 한 화면에 두 경고색이 섞이는 쪽이 나쁘다.
+  - **정량 결과**: 하드코딩 hex 329 → 207(그중 18개는 `:root` 토큰 정의부라 정상, 실질 189), 비토큰 rem 폰트 크기 **17 → 0**. CSS 번들 78.02 → 111.63 kB(gzip 15.36 → 20.55 kB).
+  - 검증: typecheck·build, a11y 구조검증, 스모크 3종(11/11·9/9·8/8) **외부 도메인 요청 0건**·console error 0·pageerror 0·`/api` 0건, E2E 7/7, 폭 16종(3840~320px) 가로 스크롤 0·오버레이 겹침 0px²·≥900px 4열 유지.
+
 - **[P0 회귀 수정] 초와이드 3열 붕괴 (2026-08-03, 프로덕션 반영분에서 발견)**: 2561px 이상에서 `.dashboard-grid` 가 1열로 붕괴해 좌패널·지도·우패널이 세로로 쌓였다. 사용자가 실제 초와이드 모니터(브라우저 폭 약 2900px)에서 발견.
   - 원인: 핸드오프 README §4 의 `minmax(420px, min(1fr, var(--map-max)))` 를 그대로 옮겼는데 **`fr` 은 `min()`·`max()`·`clamp()` 안에 쓸 수 없다.** 선언 전체가 무효가 되어 `grid-template-columns` 가 통째로 버려졌다.
   - 놓친 이유: 최초 폭 스윕이 2560px 에서 끝나 브레이크포인트(2561px) 바로 아래만 검사했다. **이후 스윕에는 3840/3440/2900/2600/2561px 을 반드시 포함한다.**
