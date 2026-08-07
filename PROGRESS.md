@@ -1,8 +1,8 @@
 # PROGRESS.md — 회사↔집 인계 기록
 
 ## Last updated
-2026-08-08 집 PC — 국가기본도 하천 3종(실폭·경계·중심선) 반입. 대표 하천을 국가기본도 실폭하천으로 교체하고 기존 seed(`geo.json` L2 = VWorld 하천망)를 제거했다. 하천명(RIVER_NM)은 별도 POI 레이어로 분리.
-직전: 2026-08-07 GM-A-01 seed 불일치 해소(PR #5 머지), 2026-08-03 회사 PC UI 디자인 반영 3차·보고서 지표 표(PR #1~#4 머지).
+2026-08-08 집 PC — 인계문서의 "승인 불필요" 잔여작업(버그 4건 + 검증 게이트 3건) 완료. 신규 게이트: 승격 원장 검사·베이스맵 aria-pressed·seed 이중사본 SHA-256 동기화.
+앞서 같은 날: 국가기본도 하천 3종 반입 + 기존 seed(geo.json L2) 제거(PR #6), GM-A-01→GM-A-04 seed 교체(PR #5).
 
 ## Current goal
 Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: evaluation_criteria.md Phase 8, 승격마다 사용자 승인 필요)
@@ -14,6 +14,17 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 - **Phase 1 완료 (2026-08-02, evaluator PASS)**: npm install 성공(package-lock.json 생성, playwright 1.62.1 정상 — 404 재발 없음), validate·contracts(OpenAPI 31/31, JSON Schema 260/18)·typecheck:functions·typecheck:web·runtime-gate·provider-conformance 전부 PASS, `npm run build` 성공(apps/web/dist 산출). 계약 파일 변경 0건.
 
 ## Done this session
+- **버그 4건 + 검증 게이트 3건 (2026-08-08)** — 인계문서에 "승인 불필요·바로 착수 가능"으로 적혀 있던 항목을 전부 구현했다. 계약 변경 0건.
+  - **cp949 크래시 2건**: `smoke_mock_spatial_layers.py`(1곳)·`smoke_t3q_mock_contract.py`(3곳)의 `read_text()` 에 `encoding='utf-8'` 지정. Windows 에서 실행 자체가 안 되던 것이 이제 돈다 — `OK mock GIS 3 layers`, `OK v1.3 Event/Passage/Relation contract`.
+  - **`.env.example` 누락 1건**: `UNE_RAG_LOGIN_ACCOUNT_FIELD=account` 추가(`uneRag.ts:24` 가 읽는데 선언이 없었다). 실제 UNI RAG v1.1.0 이 `account` 를 요구한다는 근거를 주석으로 붙였다.
+  - **`status.ts` 표기 오류 1건**: `FIXTURE_VALIDATED_NOTE` 를 4개 Provider 전부에 무조건 append 하던 것을 **provider 별 lifecycle 문구로 분기**했다(`PROVIDER_LIFECYCLE` 맵 + `lifecycleNote()`). 원장상 `SHADOW_TESTED` 인 une_rag 가 화면에서는 FIXTURE_VALIDATED 로 나오던 문제가 해소됐다. **`validation_state` enum 은 건드리지 않았다 — 계약 무변경.**
+  - **게이트 신설 ①  `scripts/smoke_provider_promotion_status.py`** (`npm run test:promotion-status`): 승격 원장을 읽는 코드가 리포에 하나도 없던 것을 메웠다. 사다리 유효값 · **DEFAULT 금지** · SHADOW_TESTED 이상이면 approvals + `provider_shadow_test_result.json` 의 SHADOW_PASSED 근거 · FIXTURE_VALIDATED 이상이면 fixture 결과 근거 · `promotion_hold` 면 `hold_reason` 필수 · `provider_contracts_seed.json` 의 `current` 전부 mock · **`status.ts` 의 `PROVIDER_LIFECYCLE` 이 원장과 일치** · 비밀값 미포함. 기존 게이트 판정을 재구현하지 않고 결과 파일 교차참조만 한다.
+    - **역검증 완료**: DEFAULT 전환 / approvals 누락 / hold_reason 누락 / status.ts 표기 불일치 **4가지를 주입해 전부 FAIL 로 잡히는 것**과 복원 후 PASS 를 확인했다.
+  - **게이트 신설 ②  베이스맵 `aria-pressed`**: `smoke_dashboard_console.py` 에 **S13** 추가(false→true→false 전이 + 레이어 칩 `aria-pressed`). 인계문서 D-4-2 585행 계약인데 어느 게이트도 보지 않았고, 실제로 구현 중 한 번 사라졌다가 사후 검토로 되살아난 항목이다. S1~S12 는 불변.
+    - 이 스텝이 **실제로 차이를 잡았다** — 후속 Provider 자리표시자 칩(관측소·피해위치·대피소)은 `disabled` 라 `aria-pressed` 가 없다. 그게 맞는 마크업이므로 단언을 "켤 수 있는 칩만" 으로 좁히고, 반대로 자리표시자에 `aria-pressed` 가 붙으면 실패하도록 했다.
+  - **게이트 신설 ③  이중 사본 동기화**: `validate_vercel_repo.py` 에 `data/seed`↔`public/seed`, `data/reference`↔`public/seed` 공통 파일명 **SHA-256 비교** 추가(geo.json 이 2MB 라 해시로). 한쪽만 고쳐 실서버 경로와 seed 폴백 화면이 갈라지던 사고를 막는다(Phase 4 report_draft_seed 형식 불일치 전례). 역검증: 한쪽 파일 1바이트 변경 시 FAIL 감지 → 복원 후 PASS.
+  - 검증: typecheck·build·validate(6,989 entries)·contracts(OpenAPI 30/30/30 · JSON Schema 265/18)·runtime gate·fixture 18/18·conformance·promotion-status·a11y·seed·priority·integration-adapters·t3q 2종·콘솔 스모크 3종(**13/13**·9/9·8/8, console·pageerror·`/api`·외부도메인 전부 0)·E2E 7/7 전부 PASS.
+
 - **GM-A-01 seed 불일치 해소 (2026-08-07, 사용자 승인 — seed 동결 해제 1건)**: 구미(47190) rank 1 `구미천 하천재해 대표지구`가 `geo.json`에 없는 `GM-A-01`을 참조해 카드 클릭 시 지도 이동 대신 비차단 안내만 뜨던 문제.
   - **택(b) 참조 ID 교체**: `GM-A-01` → **`GM-A-04`(구미천지구)**. `districts.json`에 관리대장 A.4 근거(하천재해·침수위험지구, 구미천, 원평동 964-640, No.29+00~34+83)가 있고 `geo.json`에 point가 실재해 **좌표를 만들어내지 않는다**. 택(a)(geo.json에 GM-A-01 신설)는 계획자료에 없는 좌표를 임의 생성해야 해 채택하지 않았다.
   - 변경 파일은 `data/seed/priority_areas_seed.json`과 동일 사본 `apps/web/public/seed/priority_areas_seed.json` **1줄씩**. seed의 `name`·`score`·`components`·`reasons`는 그대로 뒀다(카드 표기는 POC 서술, 지도 팝업은 GM-A-04 관리대장 표기).
@@ -176,11 +187,11 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 0. `git pull` → **`python -m pip install -r requirements.txt`** (jsonschema 미설치 — 위 Blockers 참고). 신규 환경이면 `npm install` + `python -m playwright install chromium`도.
 1. **[사용자] `DATA_GO_KR_SERVICE_KEY` 발급** — 공공데이터포털 기상청 초단기실황 활용신청. **Phase 8에서 가장 간단한 건이고 이 키 하나면 그날 Shadow Test → 승인1까지 간다.** 실행: `DATA_GO_KR_SERVICE_KEY=<키> node tests/provider/provider_shadow_gate.cjs --provider kma_nowcast`. 키는 **로컬 셸 env로만** — Vercel env 설정은 그 자체가 SELECTABLE 승격이라 승인2 이후 사용자가 직접 한다(docs/29 §17-18).
    - 함정 2가지: 기상청이 `base_time` 발표 전이면 `NO_DATA(03)`을 반환해 FAILED로 떨어진다 → `KMA_REQUEST_LAG_MINUTES`를 60~70으로 올려 재시도(코드 변경 불필요). 신규 키는 활용신청 승인 반영 전 `SERVICE_KEY_IS_NOT_REGISTERED_ERROR(30)`가 온다 → 시간 두고 재시도.
-2. **[승인 불필요 · 바로 착수 가능] 버그 4건 + 검증 게이트 3건** — 계획서 승인 완료, 구현 미착수. 상세는 아래 "다음 작업 상세" 절.
+2. ~~**[승인 불필요] 버그 4건 + 검증 게이트 3건**~~ → **2026-08-08 완료.** 아래 "Done this session" 참고. (상세 계획은 "다음 작업 상세" 절에 배경으로 남겨 둠)
 3. 디자인 산출물 수령 시 타이포 스케일 확정 (`docs/30` B-7 — 교체 지점 2곳뿐)
 4. 부산·인제·영천 계획 PDF 수령 시 전사 (코드 변경 불필요).
 
-### 다음 작업 상세 (계획 승인 완료 · 구현 미착수)
+### (완료됨 · 배경) 다음 작업 상세 — 2026-08-08 에 7건 전부 구현
 
 **버그 4건**
 - `scripts/smoke_mock_spatial_layers.py:6`, `scripts/smoke_t3q_mock_contract.py:4-6` — `read_text()`에 encoding 누락으로 **Windows에서 실행 자체가 크래시**(cp949). 다른 스크립트는 Phase 3·7에서 이미 같은 수정을 받았다. → `read_text(encoding='utf-8')`
