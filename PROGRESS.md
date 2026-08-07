@@ -215,6 +215,23 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 
 **코드 상태**: 하천을 의미별 다중 소스로 분리한 카탈로그(`apps/web/src/features/map/riverLayerSources.ts`)와 런타임(`riverLayers.ts`)이 들어갔다. 소스 추가는 객체 1개 추가로 끝난다. 현재 활성 소스는 `seed-wkmstrm`(기존 geo.json L2, 표시 내용은 종전과 동일)이고, WMS·중심선·하천구역은 `unverified` 로 두어 화면에서 비활성 칩으로만 보인다. **`geo.json` L2 는 대체 자료 확정 전까지 제거하지 않는다.**
 
+### 이어서 할 일 (2026-08-07 중단 지점)
+
+**다음 후보: 국토지리정보원 국가기본도_실폭하천** — VWorld 디지털트윈국토
+`https://www.vworld.kr/dtmk/dtmk_ntads_s002.do?svcCde=MK&dsId=20250122DS00007`
+SHP · EPSG:5179(UTM-K) · 전국 218MB · 2025-02-21 갱신.
+**VWorld 베이스맵과 같은 국가기본도 계보**라 정합 가능성이 가장 높다(가설 — 숫자로 확인 전까지 확정 아님).
+
+1. **파일 확보 (사용자 작업).** 다운로드는 `/dtmk/downloadResourceFile.do?ds_id=…&fileNo=…` 이고 **로그인 세션이 필요**하다. 비로그인 호출은 200/Content-Length 0 로 빈 응답. 500MB 이상은 '선택다운로드'를 요구하지만 218MB 라 직접 받기 대상이다.
+   - 2026-08-07 시도분(`국가기본도_하천중심선/`)에는 SHP 이 없고 **라온K 다운로드 관리자 설치파일(raonkSetup.exe)** 과 테이블정의서만 받아졌다. 브라우저 설정에 따라 관리자 경유로 빠지므로 실제 `.zip` 이 떨어졌는지 확인 필요. 받은 것은 **실폭하천이 아니라 하천중심선**이었다.
+2. **추출·변환.** 준비된 스크립트: `<scratchpad>/extract_realwidth_river.py` (zip 경로만 인자로 주면 됨). 전국 SHP 을 스트리밍으로 훑어 `geo.json` L3 실경계 bbox(의왕·구미·남원, 2km 여유)에 걸리는 도형만 EPSG:4326 GeoJSON 으로 뽑는다. `.prj` 를 먼저 읽어 5179 가정이 맞는지 확인하는 가드가 들어 있다.
+3. **정합 비교.** 일반지도·위성영상에 얹어 기존 `lt_c_wkmstrm` 와 나란히 놓고 오프셋 수치화. 측정 스크립트도 scratchpad 에 있다(`measure_base.py`, `outline_overlay.py`). 세션이 바뀌어 scratchpad 가 사라졌으면 재작성.
+4. 더 잘 맞으면 카탈로그에 소스 추가 → `geo.json` L2 교체 검토(**Seed 변경이라 승인 대상, 별도 PR**).
+
+**도구**: `pyshp`, `pyproj` 전역 설치 완료(requirements.txt 에는 아직 미반영 — 실제로 쓰기로 확정되면 추가). `openpyxl` 없음(테이블정의서 판독 시 필요).
+
+**주의**: 외부 SHP 원본은 `.gitignore` 로 막아 리포에 들어가지 않는다. 전처리 산출물만 `data/` 아래로 반입한다.
+
 ## Next steps (Phase 8 잔여 — provider별 독립 진행)
 1. **kma_nowcast (가장 간단, 권장 1순위)**: 공공데이터포털에서 기상청 초단기실황 활용신청 → 서비스키 확보 → 로컬 셸에서 `DATA_GO_KR_SERVICE_KEY=<키>` 설정 후 `npm run test:provider-shadow -- --provider kma_nowcast` → 결과 검토 후 승인1(SHADOW_TESTED) → Vercel Preview env 설정(승인2)·회귀 재통과 → SELECTABLE
 2. **hrfco_hydrology**: HRFCO Endpoint·키 + **공식 관측소 코드 확정 필수** (v0.7 규칙 4 — official_station_code 없으면 하네스가 HELD 처리)
