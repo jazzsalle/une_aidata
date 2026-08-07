@@ -50,6 +50,16 @@ function styleForRiver(source: RiverLayerSource, feature: FeatureLike, context: 
   return lineStyle(context.satellite ? satelliteColor : color, tone.casing, width, context.satellite ? satelliteFill : fill, dash);
 }
 
+/** VWorld 는 DOMAIN 파라미터를 키에 등록된 서비스 URL 과 대조한다.
+ *  등록되지 않은 출처(예: localhost)로 요청하면 INCORRECT_KEY 로 거절한다 —
+ *  키가 유효해도 그렇다. 배포 환경에서는 origin 이 곧 등록 도메인이라 그대로 맞지만,
+ *  로컬 개발에서는 등록 도메인을 VITE_VWORLD_SERVICE_DOMAIN 으로 알려줘야 한다. */
+function serviceDomain() {
+  const configured = import.meta.env.VITE_VWORLD_SERVICE_DOMAIN?.trim();
+  if (configured) return configured;
+  return typeof window === 'undefined' ? '' : window.location.origin;
+}
+
 /** VWorld WMS 요청 파라미터.
  *  CRS는 EPSG:3857로 고정한다 — WMS 1.3.0의 EPSG:4326은 축 순서가 lat,lon이라
  *  잘못 쓰면 우리가 지금 쫓고 있는 오정렬과 똑같은 증상이 새로 생긴다. */
@@ -65,7 +75,7 @@ function wmsSource(source: RiverLayerSource, key: string, onError: () => void) {
       STYLES: source.styleName,
       TRANSPARENT: true,
       KEY: key,
-      DOMAIN: typeof window === 'undefined' ? '' : window.location.origin,
+      DOMAIN: serviceDomain(),
     },
     ratio: 1,
     crossOrigin: undefined,

@@ -87,41 +87,42 @@ export const SEMANTIC_ALIGNMENT_NOTE: Record<RiverSemantic, string> = {
 
 export const RIVER_LAYER_SOURCES: RiverLayerSource[] = [
   {
-    id: 'vworld-wms-wkmstrm',
+    id: 'seed-wkmstrm',
     label: '실폭하천 (VWorld 하천망)',
     semantic: 'channel',
-    kind: 'wms',
-    status: 'active',
-    sourceOrg: '한강홍수통제소 / VWorld',
-    url: 'https://api.vworld.kr/req/wms',
-    layerName: 'lt_c_wkmstrm',
-    // VWorld는 STYLES 미지정 시 예외를 반환하는 경우가 있어 레이어명과 같은 값을 1차로 보낸다.
-    styleName: 'lt_c_wkmstrm',
-    projection: 'EPSG:3857',
-    requiresVWorldKey: true,
-    defaultVisible: true,
-    style: { color: '#1769aa', satelliteColor: '#00e5ff', width: 2.4, fill: 'rgba(23,105,170,.07)', satelliteFill: 'rgba(0,229,255,.24)' },
-    // 원격 실패·키 부재 시 기존 정적 시드로 강등한다. seed-only 모드에서도 하천이 사라지지 않게 한다.
-    geojson: { property: 'layer', value: 'L2' },
-    note: 'VWorld가 서버에서 EPSG:3857로 직접 렌더하므로 클라이언트 재투영 단계가 없다. geo.json L2와 같은 원천(LT_C_WKMSTRM)이라 둘을 겹쳐 보면 우리 재투영의 오차가 그대로 드러난다.',
-  },
-  {
-    id: 'seed-l2-legacy',
-    label: '실폭하천 (기존 Seed · 비교용)',
-    semantic: 'channel',
     kind: 'geojson',
-    status: 'legacy',
-    sourceOrg: 'geo.json L2 (VWorld LT_C_WKMSTRM 오프라인 추출)',
+    status: 'active',
+    sourceOrg: '한강홍수통제소 / VWorld LT_C_WKMSTRM',
     url: '',
     layerName: '',
     styleName: '',
     projection: 'EPSG:3857',
     requiresVWorldKey: false,
-    defaultVisible: false,
-    // WMS와 구분되도록 점선 + 대비색으로 그린다. 겹쳤는지 아닌지가 한눈에 보여야 한다.
-    style: { color: '#d81b60', satelliteColor: '#ff2d95', width: 2, fill: undefined, satelliteFill: undefined, dash: [6, 4] },
+    defaultVisible: true,
+    style: { color: '#1769aa', satelliteColor: '#00e5ff', width: 2.4, fill: 'rgba(23,105,170,.07)', satelliteFill: 'rgba(0,229,255,.24)' },
     geojson: { property: 'layer', value: 'L2' },
-    note: '오프라인 재투영(좌표 소수점 14자리)을 거친 정적 시드. VWorld WMS와의 오프셋을 확인하기 위한 대조군이며, 정합 원인이 확정되면 제거한다.',
+    // 2026-08-07 실측: 2D데이터 API 가 지금 주는 LT_C_WKMSTRM 형상과 이 시드가 정점 5629개 전부
+    // 최근접거리 0.000 m 로 동일했다. 즉 오프라인 추출·재투영 과정에 오차가 없다.
+    // 베이스맵과의 어긋남은 우리 변환이 아니라 데이터셋 자체가 베이스맵 도식과 다른 데서 온다.
+    note: 'geo.json L2. VWorld 2D데이터 API 의 LT_C_WKMSTRM 과 형상이 완전히 일치함을 실측 확인(오차 0.000 m). 재투영 오류는 없다.',
+  },
+  {
+    id: 'vworld-wms-wkmstrm',
+    label: '실폭하천 (VWorld WMS 직결)',
+    semantic: 'channel',
+    kind: 'wms',
+    status: 'unverified',
+    sourceOrg: '한강홍수통제소 / VWorld',
+    url: 'https://api.vworld.kr/req/wms',
+    layerName: 'lt_c_wkmstrm',
+    styleName: 'lt_c_wkmstrm',
+    projection: 'EPSG:3857',
+    requiresVWorldKey: true,
+    defaultVisible: false,
+    style: { color: '#d81b60', satelliteColor: '#ff2d95', width: 2, dash: [6, 4] },
+    geojson: { property: 'layer', value: 'L2' },
+    // 서버 응답 자체는 정상(HTTP 200, image/png)이지만 브라우저에서는 쓸 수 없다.
+    note: 'VWorld WMS 는 Access-Control-Allow-Origin 을 보내지 않아(WMTS 는 보낸다) OpenLayers 10 의 fetch 기반 이미지 로더에서 ORB 로 차단된다. 키·등록도메인 문제가 아니라 VWorld 서버 설정 문제다. 서버측 프록시를 두면 우회되지만, 렌더되는 형상이 seed-wkmstrm 과 동일하므로 정합 개선 효과는 없다. DOMAIN 은 등록 서비스 URL 이어야 하며 localhost 는 거절된다(VITE_VWORLD_SERVICE_DOMAIN 참고).',
   },
   {
     id: 'vworld-wms-centerline',

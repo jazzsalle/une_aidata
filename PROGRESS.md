@@ -193,6 +193,28 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 
 **현재 상태 요약**: Phase 1~7 완료. Phase 8은 une_rag만 SHADOW_TESTED(SELECTABLE 보류 — 내부망이라 외부 시연 불가), 나머지는 FIXTURE_VALIDATED. **실제 연결된 Provider는 없으며 배포본은 전부 Seed/Mock 동작.** 전 게이트 통과 상태(typecheck·OpenAPI 30/30/30·JSON Schema·conformance·runtime gate·fixture gate 18/18·a11y·build).
 
+## 하천 레이어 정합 조사 (2026-08-07) — 결론: 우리 변환은 정상, 데이터셋 교체가 필요
+
+지도에서 하천경계가 베이스맵과 어긋나 보인다는 보고로 조사. 실제 VWorld 키로 API를 호출해 실측했다.
+
+**확정된 사실**
+- **`geo.json` L2 == VWorld 2D데이터 API 의 `LT_C_WKMSTRM` 현재 응답.** 요천 기준 정점 5629개 전부 최근접거리 **0.000 m**, 평균 오프셋 **0.00 m**. → **오프라인 추출·재투영 오류는 없다.** 좌표 소수점 14자리는 VWorld API 원본이 그렇게 준다(재투영 흔적이 아님).
+- **VWorld 에 하천 레이어는 `lt_c_wkmstrm`(하천망) 하나뿐.** WMS GetCapabilities 실측 177개 레이어 중 수자원 계열은 하천망 + 대/중/표준권역뿐이고 **실폭·중심선·법정 하천구역 별도 레이어는 없다.** VWorld 안에서는 대안이 없다.
+- **어긋남은 상수 오프셋이 아니다.** 일반지도(Base)가 그리는 하천면과 대조하면 지점마다 E −19~+24 m, N 0~+53 m 로 방향·크기가 제각각이고 일부 지점은 0 m. 데이텀·투영 오류라면 전 지점 동일해야 한다. → **두 자료(하천망 vs 베이스맵 도식)가 서로 다른 제품**인 것이 원인.
+- 위성영상 기준으로는 하천망 경계가 제방·물가를 대체로 잘 따라간다. 어긋남이 두드러지는 쪽은 **일반지도**다.
+
+**VWorld API 제약 (실측)**
+- `DOMAIN` 파라미터는 키에 등록된 서비스 URL 과 대조된다. `localhost` 로 보내면 키가 유효해도 `INCORRECT_KEY`. 로컬 개발용으로 `VITE_VWORLD_SERVICE_DOMAIN` 을 추가했다.
+- **WMS 는 `Access-Control-Allow-Origin` 을 보내지 않는다**(WMTS 는 `*` 로 보낸다). 서버 응답 자체는 정상(200, image/png)이지만 OpenLayers 10 의 fetch 기반 이미지 로더에서 ORB 로 차단된다. **브라우저 직결 불가** — 우회하려면 서버측 프록시가 필요하다. 다만 WMS 가 렌더하는 형상은 우리가 이미 가진 것과 동일하므로 정합 개선 효과는 없다.
+
+**남은 선택지 (외부 자료 조달 필요)**
+- 국토지리정보원 기본공간정보 수계(하천경계·하천중심선) — 베이스맵과 계보가 같아 정합 가능성이 가장 높다. 국가공간정보포털/공공데이터포털 WMS·WFS. **미확인: 제공 형태·인증키**
+- river.go.kr(RIMGIS) 하천구역 — 법정 경계라 물길보다 넓다. 공개 REST 오픈API 미확인, 성과품 SHP 신청·다운로드로 보인다
+- 환경부 KRF(Korean Reach File) — 중심선 계열
+- 외부 WMS 를 붙일 경우 CORS 를 또 만날 가능성이 높으므로 `/api` 하위 프록시 라우트 도입 여부를 먼저 결정해야 한다(계약 추가라 승인 대상)
+
+**코드 상태**: 하천을 의미별 다중 소스로 분리한 카탈로그(`apps/web/src/features/map/riverLayerSources.ts`)와 런타임(`riverLayers.ts`)이 들어갔다. 소스 추가는 객체 1개 추가로 끝난다. 현재 활성 소스는 `seed-wkmstrm`(기존 geo.json L2, 표시 내용은 종전과 동일)이고, WMS·중심선·하천구역은 `unverified` 로 두어 화면에서 비활성 칩으로만 보인다. **`geo.json` L2 는 대체 자료 확정 전까지 제거하지 않는다.**
+
 ## Next steps (Phase 8 잔여 — provider별 독립 진행)
 1. **kma_nowcast (가장 간단, 권장 1순위)**: 공공데이터포털에서 기상청 초단기실황 활용신청 → 서비스키 확보 → 로컬 셸에서 `DATA_GO_KR_SERVICE_KEY=<키>` 설정 후 `npm run test:provider-shadow -- --provider kma_nowcast` → 결과 검토 후 승인1(SHADOW_TESTED) → Vercel Preview env 설정(승인2)·회귀 재통과 → SELECTABLE
 2. **hrfco_hydrology**: HRFCO Endpoint·키 + **공식 관측소 코드 확정 필수** (v0.7 규칙 4 — official_station_code 없으면 하네스가 HELD 처리)

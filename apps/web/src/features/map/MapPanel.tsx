@@ -25,7 +25,7 @@ interface Props {
 }
 /** 칩 행에 노출하는 대표 하천 소스. 나머지 소스(비교용 Seed·중심선)는 레이어 메뉴에서 켠다 —
  *  `.map-layer-chips` 는 nowrap·overflow:hidden 이라 소스 수만큼 칩을 늘리면 기존 칩이 잘린다. */
-const PRIMARY_RIVER_SOURCE = 'vworld-wms-wkmstrm';
+const PRIMARY_RIVER_SOURCE = 'seed-wkmstrm';
 const core = [
   { name: '하천', code: riverLayerId(PRIMARY_RIVER_SOURCE) },
   { name: '위험지구', code: 'L1' },
