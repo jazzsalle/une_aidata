@@ -3,7 +3,7 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 files=['mock_flood_risk_areas.geojson','mock_dangerous_reservoirs.geojson','mock_storm_flood_improvement_districts.geojson']
 for name in files:
-    data=json.loads((ROOT/'data/seed'/name).read_text())
+    data=json.loads((ROOT/'data/seed'/name).read_text(encoding='utf-8'))
     assert data['type']=='FeatureCollection' and data['metadata']['runtime_policy']=='MOCK_ONLY'
     assert len(data['features'])==3
     for f in data['features']:
