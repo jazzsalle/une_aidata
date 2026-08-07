@@ -1,7 +1,7 @@
 # PROGRESS.md — 회사↔집 인계 기록
 
 ## Last updated
-2026-08-03 회사 PC 작업 종료 인계. 오늘 한 일은 시범화면 UI 디자인 반영 3차(핸드오프 → 패널 스펙 → DS 토큰 도입)와 보고서 지표 표이며 **PR #1~#4 전부 main 머지 완료**. 이후 Phase 8 착수 전 조사를 마치고 계획을 확정했으나 **구현은 시작하지 않았다** — 재개 지점은 아래 "다음 세션에서 이어서 할 일" 2번.
+2026-08-08 집 PC — 국가기본도 하천 3종(실폭·경계·중심선) 반입, 대표 하천을 국가기본도로 교체하고 기존 seed(geo.json L2) 제거. 이전 기록: 2026-08-03 회사 PC 작업 종료 인계. 오늘 한 일은 시범화면 UI 디자인 반영 3차(핸드오프 → 패널 스펙 → DS 토큰 도입)와 보고서 지표 표이며 **PR #1~#4 전부 main 머지 완료**. 이후 Phase 8 착수 전 조사를 마치고 계획을 확정했으나 **구현은 시작하지 않았다** — 재개 지점은 아래 "다음 세션에서 이어서 할 일" 2번.
 
 ## Current goal
 Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: evaluation_criteria.md Phase 8, 승격마다 사용자 승인 필요)
@@ -213,9 +213,30 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 - 환경부 KRF(Korean Reach File) — 중심선 계열
 - 외부 WMS 를 붙일 경우 CORS 를 또 만날 가능성이 높으므로 `/api` 하위 프록시 라우트 도입 여부를 먼저 결정해야 한다(계약 추가라 승인 대상)
 
-**코드 상태**: 하천을 의미별 다중 소스로 분리한 카탈로그(`apps/web/src/features/map/riverLayerSources.ts`)와 런타임(`riverLayers.ts`)이 들어갔다. 소스 추가는 객체 1개 추가로 끝난다. 현재 활성 소스는 `seed-wkmstrm`(기존 geo.json L2, 표시 내용은 종전과 동일)이고, WMS·중심선·하천구역은 `unverified` 로 두어 화면에서 비활성 칩으로만 보인다. **`geo.json` L2 는 대체 자료 확정 전까지 제거하지 않는다.**
+**코드 상태**: 하천을 의미별 다중 소스로 분리한 카탈로그(`apps/web/src/features/map/riverLayerSources.ts`)와 런타임(`riverLayers.ts`)이 들어갔다. 소스 추가는 객체 1개 추가로 끝난다. 현재 활성 소스는 `seed-wkmstrm`(기존 geo.json L2, 표시 내용은 종전과 동일)이고, WMS·중심선·하천구역은 `unverified` 로 두어 화면에서 비활성 칩으로만 보인다. ~~**`geo.json` L2 는 대체 자료 확정 전까지 제거하지 않는다.**~~ → **2026-08-08 에 대체 자료가 확정되어 L2 를 제거했다(아래 절 참고).**
 
-### 이어서 할 일 (2026-08-07 중단 지점)
+### 완료 (2026-08-08) — 국가기본도 하천 3종 반입, 기존 seed 교체
+
+사용자가 실폭·하천경계·중심선 zip 3개를 리포 루트에 넣어 아래 계획을 그대로 수행했다. **결론: 국가기본도가 확실히 낫고, 기존 `seed-wkmstrm`(geo.json L2)은 제거했다.**
+
+- **원자료 확인**: 3종 모두 `Korea_2000_Korea_Unified_CS`(FE 1,000,000 / FN 2,000,000 / CM 127.5 / k 0.9996) = **EPSG:5179**, CP949. `TN_RIVER_BT` 실폭 Polygon 28,262 / `TN_RIVER_BNDRY` 경계 Polygon 140,851 / `TN_RIVER_CTLN` 중심선 PolyLine **3,224,769**.
+- **`RIVER_NM` 은 중심선에만 있다.** 실폭·경계에는 하천명 속성이 아예 없다(테이블정의서 실측). `RIVER_SE` 코드도 정의서 `세부코드` 시트에서 읽었다 — RVC001 국가하천 / 002 지방하천 / 003 소하천 / 004 기타하천 / **005 세류**. 남원 중심선 61,869건 중 52,912건이 세류라 그대로 그리면 하천망이 묻힌다 → **세류 제외**.
+- **정합 판단(핵심)**: 영상지도 위 실측에서 기존 L2 는 일반화가 거칠고 남서로 밀려 물가선을 벗어났고, 같은 지점에서 국가기본도 실폭은 물가선·모래톱까지 따라갔다. 두 자료 정점 거리는 요천 중앙값 **11.7 m** · 안양천 13.1 m · 구미천 29.6 m. 캡처는 `build/river/compare/` 4장.
+- **`geo.json` L2 3건(RIV-YC·GMC·AYC) 제거** — 사용자 승인. `data/reference` · `apps/web/public/seed` 양쪽 **순수 삭제 31,733줄 · 추가 0줄**(나머지 바이트 동일).
+  - **끊길 뻔한 연결 2가지를 살렸다**: ① 지도 하천 클릭 → `rivers.json` 제원 팝업 ② Agent 의 `RIV-*` highlight(CLAUDE.md 규칙 7). 실폭·경계에는 이름이 없으므로 **이름을 가진 중심선으로 공간조인**해 `river_id` 를 붙였다(요천 5 · 구미천 1 · 안양천 2 폴리곤). **이름을 추정해 붙이지 않는다 — 중심선이 실제로 그 도형을 지날 때만 연결한다.**
+  - 한 하천이 여러 폴리곤이므로 `highlightFeature` 가 **조각 전부를 잡아 합친 범위로 fit** 하도록 고쳤다(한 조각만 잡으면 엉뚱하게 확대된다).
+  - 실측: 실폭 폴리곤 클릭 시 `요천 · 국가하천 · 유역면적 485.7 km² · 연장 17.83 km · 남원수위표 계획홍수량 2,005㎥/s(주의보 1,003 / 경보 1,404) · 근거 문서·페이지`까지 그대로 나온다.
+- **신규 소스 4개**: `ngii-realwidth`(대표, 기본 표시 · 칩 행 `하천`) · `ngii-boundary` · `ngii-centerline` · `ngii-river-name`. 나머지 3개는 레이어 메뉴에서 비교용으로 켠다.
+- **하천명 POI 레이어**: 중심선 조각마다 글자를 붙이면 같은 이름이 수천 번 겹친다 → **하천당 가장 긴 조각의 중간 정점 1개**만 대표점으로 쓴다(좌표를 새로 만들지 않는다). 지자체별 33·87·100개, 10~29 KB.
+- **지연 로딩**: 파일이 지역당 0.5~3.5 MB 라 초기 로드에 얹지 않는다. `dataUrlTemplate` 소스는 **켤 때 처음 받고** 받은 지역은 캐시하며, 지역이 바뀌면 이전 형상을 치우고 켜져 있는 소스만 다시 받는다.
+- **경량화**: 2 m Douglas-Peucker + 좌표 6자리로 원본의 6~24%. 반입 `apps/web/public/reference/rivers/` 12파일 **17 MB**. 원본 SHP·`build/` 는 gitignore.
+- **스크립트 3종 신설**: `extract_river_layers.py`(3종 추출 · `.prj` 가드 · 중심선 dbf 832 MB 전건 파싱 회피) · `build_river_web_layers.py`(단순화·세류 제외·`river_id` 조인·라벨 생성) · `compare_river_alignment.py`(정합 측정). **형상만 옮기고 면적·하폭 등 파생 지표는 만들지 않는다**(ADR-011).
+- **부수 수정**: `.env` 의 `VITE_VWORLD_MAP_KEY==…` (등호 2개) 때문에 키 앞에 `=` 가 붙어 배경지도가 전부 실패하고 있었다. 그 문자만 제거해 일반·영상지도 정상. dev 서버 콘솔의 502 24건은 백엔드 없는 `/api/v1/*` 폴백이며 VWorld 와 무관하다.
+- **주의**: `compare_river_alignment.py` 는 L2 를 기준으로 삼으므로 이 커밋 이후로는 그대로 돌지 않는다(스크립트 안에 사유 기재).
+- **미정리**: `scripts/extract_realwidth_river.py` 는 `extract_river_layers.py` 가 완전히 대체한다(중복). 사용자 판단 대기.
+- 검증: typecheck·build·validate(6,931 entries)·seed·priority·contracts(OpenAPI 30/30/30 · JSON Schema 265/18)·runtime gate·fixture 18/18·conformance·spatial assets·a11y·콘솔 스모크 3종(11/11·9/9·8/8, console·pageerror·`/api`·외부도메인 전부 0)·E2E 7/7 전부 PASS.
+
+### (배경) 2026-08-07 중단 지점 — 위 작업으로 해소됨
 
 **다음 후보: 국토지리정보원 국가기본도_실폭하천** — VWorld 디지털트윈국토
 `https://www.vworld.kr/dtmk/dtmk_ntads_s002.do?svcCde=MK&dsId=20250122DS00007`

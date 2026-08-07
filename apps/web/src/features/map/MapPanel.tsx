@@ -25,7 +25,7 @@ interface Props {
 }
 /** 칩 행에 노출하는 대표 하천 소스. 나머지 소스(비교용 Seed·중심선)는 레이어 메뉴에서 켠다 —
  *  `.map-layer-chips` 는 nowrap·overflow:hidden 이라 소스 수만큼 칩을 늘리면 기존 칩이 잘린다. */
-const PRIMARY_RIVER_SOURCE = 'seed-wkmstrm';
+const PRIMARY_RIVER_SOURCE = 'ngii-realwidth';
 const core = [
   { name: '하천', code: riverLayerId(PRIMARY_RIVER_SOURCE) },
   { name: '위험지구', code: 'L1' },
@@ -46,7 +46,7 @@ const layerLabel = (layerId: string) =>
 /** 소스가 실제로 무엇으로 그려지고 있는지. 'WMS인 줄 알았는데 로컬 Seed였다'가 없게 팝업에 그대로 적는다. */
 const DELIVERY_LABEL: Record<RiverSourceState['delivery'], string> = {
   wms: 'VWorld WMS (서버 렌더)',
-  geojson: '로컬 Seed (오프라인 추출)',
+  geojson: '로컬 GeoJSON (오프라인 추출)',
   unavailable: '표시 불가',
 };
 /** 레이어 메뉴의 상태 칸은 폭이 좁다. 긴 설명은 팝업이 맡고 여기서는 공급경로만 짧게 적는다. */
@@ -190,9 +190,12 @@ export function MapPanel({ adminCode, highlightedFeatureId, initialVisible, comp
     pending
       .then((reference) => {
         if (!alive) return;
+        // 국가기본도 하천 피처는 자체 id(TN_RIVER_BT:…)를 쓰므로 rivers.json 의 river_id 와
+        // 직접 맞지 않는다. 전처리에서 붙여 둔 river_id 속성으로 연결한다.
+        const riverId = str(selection.properties.river_id) ?? selection.id;
         setDetail({
           district: reference.districts.find((row) => row.district_code === selection.id) ?? null,
-          river: reference.rivers.find((row) => row.river_id === selection.id) ?? null,
+          river: reference.rivers.find((row) => row.river_id === riverId) ?? null,
         });
       })
       .catch(() => { referenceCache.current.delete(code); if (alive) setDetail({ district: null, river: null }); });
@@ -411,7 +414,8 @@ export function MapPanel({ adminCode, highlightedFeatureId, initialVisible, comp
                     <span className="map-layer-menu-state">
                       {blocked
                         ? (source.status === 'unverified' ? '소스 미확정' : state?.message || '표시 불가')
-                        : `${visible[code] ? '표시' : '숨김'}${state ? ` · ${DELIVERY_SHORT[state.delivery]}` : ''}`}
+                        /* 공급경로만 적으면 '받는 중'·'국가기본도 N건' 같은 실제 상태가 묻힌다. */
+                        : `${visible[code] ? '표시' : '숨김'}${state ? ` · ${state.message || DELIVERY_SHORT[state.delivery]}` : ''}`}
                     </span>
                   </button>
                 </li>

@@ -150,7 +150,7 @@ export async function createVWorldMap(target: HTMLElement, adminCode: string, on
     vectors.set(code, layer);
     mapLayers.push(layer);
   }
-  const rivers: RiverLayerRegistry = createRiverLayers({ features: raw, styleContext, key });
+  const rivers: RiverLayerRegistry = createRiverLayers({ features: raw, styleContext, key, adminCode });
   mapLayers.push(...rivers.layers);
   if (floodResponse.ok) {
     const floodFeatures = new GeoJSON().readFeatures(await floodResponse.json(), { dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857' });
@@ -292,20 +292,34 @@ export async function createVWorldMap(target: HTMLElement, adminCode: string, on
       anchorCoordinate = coordinate ? coordinate.slice(0, 2) : null;
       if (!coordinate && clicked) { clicked = null; vectors.forEach((vector) => vector.changed()); rivers.redraw(); }
     },
-    setRegion(code) { map.getView().animate({ center: fromLonLat(CENTERS[code] ?? DEFAULT_CENTER), zoom: 11, duration: 350 }); },
+    setRegion(code) {
+      // 국가기본도 하천은 지자체별 파일이라 지역이 바뀌면 자료도 바꿔야 한다.
+      rivers.setRegion(code);
+      map.getView().animate({ center: fromLonLat(CENTERS[code] ?? DEFAULT_CENTER), zoom: 11, duration: 350 });
+    },
     highlightFeature(id) {
       // 하천은 표시 중인 소스에 따라 벡터가 숨어 있을 수 있으므로 먼저 해당 소스를 켠다.
       rivers.revealFeature(id);
       for (const source of [...sources.values(), ...rivers.featureSources()]) {
-        const feature = source.getFeatureById(id) ?? source.getFeatures().find((candidate) => String(candidate.get('id') ?? candidate.get('district_code') ?? candidate.get('trace_id') ?? '') === id);
-        if (feature) {
-          selected = id;
-          vectors.forEach((vector) => vector.changed());
-          rivers.redraw();
-          const extent = feature.getGeometry()?.getExtent();
-          if (extent) map.getView().fit(extent, { padding: [60, 60, 60, 60], maxZoom: 15, duration: 350 });
-          return true;
-        }
+        // 국가기본도 하천은 한 하천이 여러 폴리곤으로 나뉜다(요천 5개). river_id 로 가리키면
+        // 그 하천에 속한 조각 전부를 잡아 합친 범위로 맞춘다 — 한 조각만 잡으면 엉뚱하게 확대된다.
+        const byRiverId = source.getFeatures().filter((candidate) => String(candidate.get('river_id') ?? '') === id);
+        const matches = byRiverId.length ? byRiverId : [
+          source.getFeatureById(id) ?? source.getFeatures().find((candidate) => String(candidate.get('id') ?? candidate.get('district_code') ?? candidate.get('trace_id') ?? '') === id),
+        ].filter((feature): feature is NonNullable<typeof feature> => Boolean(feature));
+        if (!matches.length) continue;
+        selected = id;
+        vectors.forEach((vector) => vector.changed());
+        rivers.redraw();
+        type Box = [number, number, number, number];
+        const extent = matches.reduce<Box | null>((acc, feature) => {
+          const box = feature.getGeometry()?.getExtent() as Box | undefined;
+          if (!box) return acc;
+          if (!acc) return [box[0], box[1], box[2], box[3]];
+          return [Math.min(acc[0], box[0]), Math.min(acc[1], box[1]), Math.max(acc[2], box[2]), Math.max(acc[3], box[3])];
+        }, null);
+        if (extent) map.getView().fit(extent, { padding: [60, 60, 60, 60], maxZoom: 15, duration: 350 });
+        return true;
       }
       return false;
     },

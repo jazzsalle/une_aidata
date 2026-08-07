@@ -1,3 +1,4 @@
+import GeoJSON from 'ol/format/GeoJSON';
 import ImageLayer from 'ol/layer/Image';
 import VectorLayer from 'ol/layer/Vector';
 import ImageWMS from 'ol/source/ImageWMS';
@@ -5,9 +6,10 @@ import VectorSource from 'ol/source/Vector';
 import type BaseLayer from 'ol/layer/Base';
 import type Feature from 'ol/Feature';
 import type { FeatureLike } from 'ol/Feature';
-import { lineStyle, palette } from './mapStyles';
+import { labelStyle, lineStyle, palette } from './mapStyles';
 import {
   RIVER_LAYER_SOURCES,
+  riverDataUrl,
   riverLayerId,
   type RiverLayerSource,
 } from './riverLayerSources';
@@ -24,6 +26,8 @@ export interface RiverSourceState {
 export interface RiverLayerRegistry {
   /** 지도에 추가할 레이어들(하천 소스 순서대로). */
   layers: BaseLayer[];
+  /** 지자체별 파일로 나뉜 소스를 새 지역 자료로 바꾼다. 켜져 있는 소스만 받는다. */
+  setRegion(adminCode: string): void;
   setVisible(sourceId: string, visible: boolean): void;
   isVisible(sourceId: string): boolean;
   /** 베이스맵 전환 시 벡터 배색을 다시 계산한다. */
@@ -44,8 +48,18 @@ interface StyleContext { selected: string | null; clicked: string | null; satell
 function styleForRiver(source: RiverLayerSource, feature: FeatureLike, context: StyleContext) {
   const { color, satelliteColor, width, fill, satelliteFill, dash } = source.style;
   const id = String(feature.getId() ?? feature.get('id') ?? '');
-  const active = Boolean(id) && (id === context.selected || id === context.clicked);
+  // Agent·보고서는 하천을 rivers.json 의 river_id(RIV-YC 등)로 가리킨다. 국가기본도 피처는
+  // 자체 id 를 쓰므로 전처리에서 붙인 river_id 로도 선택 상태를 판정한다.
+  const riverId = String(feature.get('river_id') ?? '');
+  const marks = [context.selected, context.clicked];
+  const active = (Boolean(id) && marks.includes(id)) || (Boolean(riverId) && marks.includes(riverId));
   const tone = palette(context.satellite);
+  if (source.semantic === 'label') {
+    const text = String(feature.get('RIVER_NM') ?? '');
+    if (!text) return [];
+    const ink = active ? tone.activeLine : (context.satellite ? satelliteColor : color);
+    return labelStyle(text, ink, tone.casing, ink);
+  }
   if (active) return lineStyle(tone.activeLine, tone.activeCasing, width + 1.6, tone.activeFill, dash);
   return lineStyle(context.satellite ? satelliteColor : color, tone.casing, width, context.satellite ? satelliteFill : fill, dash);
 }
@@ -91,9 +105,11 @@ interface CreateOptions {
   styleContext(): StyleContext;
   /** 실제 사용 가능한 VWorld 키. 없으면 WMS 소스를 아예 만들지 않는다. */
   key?: string;
+  /** 지자체별 파일 소스가 처음 받을 지역. */
+  adminCode: string;
 }
 
-export function createRiverLayers({ features, styleContext, key }: CreateOptions): RiverLayerRegistry {
+export function createRiverLayers({ features, styleContext, key, adminCode }: CreateOptions): RiverLayerRegistry {
   const layers: BaseLayer[] = [];
   const wmsLayers = new Map<string, ImageLayer<ImageWMS>>();
   const vectorLayers = new Map<string, VectorLayer<VectorSource>>();
@@ -137,6 +153,78 @@ export function createRiverLayers({ features, styleContext, key }: CreateOptions
     return layer;
   }
 
+  // --- 지자체별 파일 소스 -----------------------------------------------------
+  // 파일이 지역당 0.5~3.5 MB 라 지도를 열 때 전부 받으면 초기 로드를 망친다.
+  // 켤 때 처음 받고, 받아 둔 지역은 다시 받지 않는다.
+  let region = adminCode;
+  const format = new GeoJSON();
+  const cache = new Map<string, Feature[]>();
+  const loadedRegion = new Map<string, string>();
+  const inflight = new Set<string>();
+
+  function buildRemoteVector(source: RiverLayerSource, visible: boolean) {
+    const layer = new VectorLayer({
+      properties: { layerId: riverLayerId(source.id), riverSourceId: source.id },
+      source: new VectorSource(),
+      visible,
+      style: (feature) => styleForRiver(source, feature, styleContext()),
+    });
+    vectorLayers.set(source.id, layer);
+    layers.push(layer);
+    return layer;
+  }
+
+  async function loadRemote(source: RiverLayerSource, code: string) {
+    const template = source.dataUrlTemplate;
+    const layer = vectorLayers.get(source.id);
+    if (!template || !layer) return;
+    if (loadedRegion.get(source.id) === code) return;
+    const cacheKey = `${source.id}:${code}`;
+    if (inflight.has(cacheKey)) return;
+
+    const cached = cache.get(cacheKey);
+    if (cached) {
+      layer.getSource()?.clear();
+      layer.getSource()?.addFeatures(cached);
+      loadedRegion.set(source.id, code);
+      delivery.set(source.id, 'geojson');
+      messages.set(source.id, `국가기본도 · ${cached.length.toLocaleString('ko-KR')}건`);
+      // 표시 여부는 그 사이 바뀌었을 수 있다. 받은 시점의 요청 상태를 그대로 반영한다.
+      layer.setVisible(Boolean(wanted.get(source.id)));
+      emit();
+      return;
+    }
+
+    inflight.add(cacheKey);
+    messages.set(source.id, '자료 받는 중');
+    emit();
+    try {
+      const response = await fetch(riverDataUrl(template, code), { cache: 'force-cache' });
+      if (!response.ok) throw new Error(String(response.status));
+      const parsed = format.readFeatures(await response.json(), {
+        dataProjection: 'EPSG:4326',
+        featureProjection: 'EPSG:3857',
+      }) as Feature[];
+      cache.set(cacheKey, parsed);
+      layer.getSource()?.clear();
+      layer.getSource()?.addFeatures(parsed);
+      loadedRegion.set(source.id, code);
+      delivery.set(source.id, 'geojson');
+      messages.set(source.id, `국가기본도 · ${parsed.length.toLocaleString('ko-KR')}건`);
+      layer.setVisible(Boolean(wanted.get(source.id)));
+    } catch {
+      // 이 지역 자료가 없을 수 있다(대상 3개 지자체만 반입했다). 지도를 막지 않는다.
+      layer.getSource()?.clear();
+      layer.setVisible(false);
+      loadedRegion.delete(source.id);
+      delivery.set(source.id, 'unavailable');
+      messages.set(source.id, '이 지역 자료 없음');
+    } finally {
+      inflight.delete(cacheKey);
+      emit();
+    }
+  }
+
   for (const source of RIVER_LAYER_SOURCES) {
     if (source.status === 'unverified') {
       delivery.set(source.id, 'unavailable');
@@ -147,6 +235,14 @@ export function createRiverLayers({ features, styleContext, key }: CreateOptions
 
     const useWms = source.kind === 'wms' && Boolean(source.url) && Boolean(source.layerName) && (!source.requiresVWorldKey || Boolean(key));
     wanted.set(source.id, source.defaultVisible);
+
+    if (source.dataUrlTemplate) {
+      buildRemoteVector(source, source.defaultVisible);
+      delivery.set(source.id, 'geojson');
+      messages.set(source.id, '켤 때 자료를 받는다');
+      if (source.defaultVisible) void loadRemote(source, region);
+      continue;
+    }
 
     if (useWms && key) {
       const wms = wmsSource(source, key, () => {
@@ -206,8 +302,21 @@ export function createRiverLayers({ features, styleContext, key }: CreateOptions
 
   return {
     layers,
+    setRegion(code) {
+      if (code === region) return;
+      region = code;
+      for (const source of RIVER_LAYER_SOURCES) {
+        if (!source.dataUrlTemplate) continue;
+        // 지역이 바뀌면 이전 지역 형상은 즉시 치운다. 켜져 있는 소스만 새로 받는다.
+        loadedRegion.delete(source.id);
+        vectorLayers.get(source.id)?.getSource()?.clear();
+        if (wanted.get(source.id)) void loadRemote(source, code);
+      }
+    },
     setVisible(sourceId, visible) {
       wanted.set(sourceId, visible);
+      const source = RIVER_LAYER_SOURCES.find((item) => item.id === sourceId);
+      if (visible && source?.dataUrlTemplate) void loadRemote(source, region);
       const mode = delivery.get(sourceId);
       wmsLayers.get(sourceId)?.setVisible(visible && mode === 'wms');
       vectorLayers.get(sourceId)?.setVisible(visible && mode === 'geojson');
@@ -220,7 +329,9 @@ export function createRiverLayers({ features, styleContext, key }: CreateOptions
     },
     revealFeature(id) {
       for (const [sourceId, layer] of vectorLayers) {
-        const found = layer.getSource()?.getFeatureById(id);
+        const source = layer.getSource();
+        const found = source?.getFeatureById(id)
+          ?? source?.getFeatures().find((candidate) => String(candidate.get('river_id') ?? '') === id);
         if (!found) continue;
         // WMS로 공급 중인 소스는 벡터가 폴백용으로 숨어 있다. 그때는 굳이 켜지 않는다 —
         // 같은 하천이 WMS 래스터로 이미 그려져 있다.
