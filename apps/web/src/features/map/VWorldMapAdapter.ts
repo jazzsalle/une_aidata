@@ -5,10 +5,13 @@ import TileLayer from 'ol/layer/Tile';
 import VectorLayer from 'ol/layer/Vector';
 import XYZ from 'ol/source/XYZ';
 import VectorSource from 'ol/source/Vector';
-import { Fill, Stroke, Style, Circle as CircleStyle } from 'ol/style';
 import { fromLonLat, toLonLat } from 'ol/proj';
 import type { FeatureLike } from 'ol/Feature';
 import type Layer from 'ol/layer/Layer';
+import type BaseLayer from 'ol/layer/Base';
+import { lineStyle, palette, pointStyle } from './mapStyles';
+import { createRiverLayers, type RiverLayerRegistry, type RiverSourceState } from './riverLayers';
+import { isRiverLayerId, riverLayerId } from './riverLayerSources';
 
 const DEFAULT_CENTER: [number, number] = [127.39, 35.416];
 const CENTERS: Record<string, [number, number]> = {
@@ -44,6 +47,10 @@ export interface VWorldMapHandle {
   setRegion(code: string): void;
   highlightFeature(id: string): boolean;
   setLayerVisible(layerCode: string, visible: boolean): void;
+  /** 하천 소스(실폭·중심선·비교용 Seed 등) 개별 표시 토글. */
+  setRiverSourceVisible(sourceId: string, visible: boolean): void;
+  /** 하천 소스가 실제로 무엇으로 공급되고 있는지(WMS/로컬 Seed/불가) 구독한다. */
+  onRiverStateChange(handler: (states: RiverSourceState[]) => void): () => void;
   setBaseMap(type: BaseMapType): void;
   /** 피처 클릭 구독. 빈 지도를 클릭하면 null을 전달한다. 해제 함수를 반환한다. */
   onFeatureClick(handler: (selection: MapFeatureSelection | null) => void): () => void;
@@ -60,21 +67,6 @@ function featureKey(feature: FeatureLike) {
   return String(feature.getId() ?? feature.get('id') ?? feature.get('district_code') ?? feature.get('trace_id') ?? feature.get('feature_id') ?? '');
 }
 
-// 선(면 경계)은 casing(바깥 테두리) + 본선 2겹으로 그려 영상지도·일반지도 모두에서 배경과 분리되게 한다.
-function lineStyle(color: string, casing: string, width: number, fill?: string, dash?: number[]) {
-  return [
-    new Style({ stroke: new Stroke({ color: casing, width: width + 3, lineDash: dash, lineCap: 'round', lineJoin: 'round' }) }),
-    new Style({ stroke: new Stroke({ color, width, lineDash: dash, lineCap: 'round', lineJoin: 'round' }), fill: fill ? new Fill({ color: fill }) : undefined }),
-  ];
-}
-// 점은 casing 원판 위에 본체 원을 얹어 밝은 영상 위에서도 윤곽이 남게 한다.
-function pointStyle(radius: number, color: string, casing: string, ring: string) {
-  return [
-    new Style({ image: new CircleStyle({ radius: radius + 3, fill: new Fill({ color: casing }) }) }),
-    new Style({ image: new CircleStyle({ radius, fill: new Fill({ color }), stroke: new Stroke({ color: ring, width: 1.6 }) }) }),
-  ];
-}
-
 function styleFor(feature: FeatureLike, context: StyleContext) {
   const layer = String(feature.get('layer') ?? '');
   // 위험지구(L1)는 캔버스 원이 아니라 HTML POI 마커로 그린다. 둘 다 그리면 같은 지점에
@@ -84,10 +76,7 @@ function styleFor(feature: FeatureLike, context: StyleContext) {
   const active = Boolean(id) && (id === context.selected || id === context.clicked);
   const provisional = Boolean(feature.get('provisional'));
   const sat = context.satellite;
-  // 영상지도: 어두운 casing + 형광 계열 본선 / 일반지도: 흰 casing + 짙은 본선. 선택상태는 두 모드 모두 색·굵기·casing이 함께 바뀐다.
-  const casing = sat ? 'rgba(10,12,16,.92)' : 'rgba(255,255,255,.92)';
-  const activeCasing = sat ? '#ffffff' : 'rgba(46,26,0,.55)';
-  const activeLine = sat ? '#ff2d95' : '#ff8c00';
+  const { casing, activeCasing, activeLine } = palette(sat);
   if (layer === 'L-DANGEROUS-RESERVOIR') {
     return pointStyle(active ? 10 : 7, active ? activeLine : sat ? '#00e676' : '#00897b', active ? activeCasing : casing, '#ffffff');
   }
@@ -100,15 +89,15 @@ function styleFor(feature: FeatureLike, context: StyleContext) {
   if (layer === 'L-STORM-FLOOD-IMPROVEMENT') {
     return lineStyle(active ? activeLine : sat ? '#d18cff' : '#7b1fa2', active ? activeCasing : casing, active ? 4 : 2.4, active ? (sat ? 'rgba(255,45,149,.22)' : 'rgba(255,152,0,.18)') : sat ? 'rgba(209,140,255,.2)' : 'rgba(123,31,162,.12)', [5, 4]);
   }
-  if (layer === 'L2') {
-    return lineStyle(active ? activeLine : sat ? '#00e5ff' : '#1769aa', active ? activeCasing : casing, active ? 4 : 2.4, active ? (sat ? 'rgba(255,45,149,.26)' : 'rgba(255,152,0,.18)') : sat ? 'rgba(0,229,255,.24)' : 'rgba(23,105,170,.07)');
-  }
+  // 하천(L2)은 여기서 그리지 않는다. 소스별로 나뉘어 riverLayers 가 전담한다.
   const base = sat ? '#ffffff' : provisional ? '#9b6b32' : '#1769aa';
   return lineStyle(active ? activeLine : base, active ? activeCasing : casing, active ? 4 : 2.2, active ? (sat ? 'rgba(255,45,149,.2)' : 'rgba(255,152,0,.18)') : sat ? 'rgba(255,255,255,.1)' : 'rgba(23,105,170,.07)');
 }
 
 // 배경(행정경계 등) 위에 겹친 POI를 먼저 잡도록 레이어 우선순위를 둔다.
 const HIT_PRIORITY: Record<string, number> = { L1: 0, 'L-DANGEROUS-RESERVOIR': 0, FLOOD_TRACE: 1, 'L-FLOOD-TRACE': 1, 'L-FLOOD-RISK-AREA': 1, 'L-STORM-FLOOD-IMPROVEMENT': 1, L2: 2, L3: 3 };
+// 하천 소스는 여러 개가 겹쳐 있어도 기존 L2와 같은 순위로 다룬다(위험지구·침수흔적보다 뒤, 행정경계보다 앞).
+const hitRank = (layerId: string) => (isRiverLayerId(layerId) ? 2 : HIT_PRIORITY[layerId] ?? 2);
 
 function vworldTile(key: string, type: BaseMapType, onState?: (state: MapConnectionState, message: string) => void) {
   const extension = type === 'satellite' ? 'jpeg' : 'png';
@@ -127,7 +116,7 @@ function vworldTile(key: string, type: BaseMapType, onState?: (state: MapConnect
 
 export async function createVWorldMap(target: HTMLElement, adminCode: string, onState?: (state: MapConnectionState, message: string) => void): Promise<VWorldMapHandle> {
   const key = import.meta.env.VITE_VWORLD_MAP_KEY?.trim();
-  const mapLayers: Array<TileLayer<XYZ> | VectorLayer<VectorSource>> = [];
+  const mapLayers: BaseLayer[] = [];
   let baseLayer: TileLayer<XYZ> | undefined;
   let satelliteLayer: TileLayer<XYZ> | undefined;
   if (key) {
@@ -153,13 +142,16 @@ export async function createVWorldMap(target: HTMLElement, adminCode: string, on
   let clicked: string | null = null;
   let baseMapType: BaseMapType = 'base';
   const styleContext = (): StyleContext => ({ selected, clicked, satellite: baseMapType === 'satellite' });
-  for (const code of ['L1', 'L2', 'L3']) {
+  // 하천(L2)은 이 루프에서 빠진다. 소스가 여러 개고 WMS/벡터가 섞이므로 riverLayers 가 전담한다.
+  for (const code of ['L1', 'L3']) {
     const source = new VectorSource({ features: raw.filter((feature) => String(feature.get('layer')) === code) });
     const layer = new VectorLayer({ properties: { layerId: code }, source, style: (feature) => styleFor(feature, styleContext()) });
     sources.set(code, source);
     vectors.set(code, layer);
     mapLayers.push(layer);
   }
+  const rivers: RiverLayerRegistry = createRiverLayers({ features: raw, styleContext, key, adminCode });
+  mapLayers.push(...rivers.layers);
   if (floodResponse.ok) {
     const floodFeatures = new GeoJSON().readFeatures(await floodResponse.json(), { dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857' });
     floodFeatures.forEach((feature) => {
@@ -236,7 +228,7 @@ export async function createVWorldMap(target: HTMLElement, adminCode: string, on
     const hits: Array<{ rank: number; feature: FeatureLike; layerId: string }> = [];
     map.forEachFeatureAtPixel(pixel, (feature, layer) => {
       const layerId = String((layer as Layer | null)?.get('layerId') ?? feature.get('layer') ?? '');
-      hits.push({ rank: HIT_PRIORITY[layerId] ?? 2, feature, layerId });
+      hits.push({ rank: hitRank(layerId), feature, layerId });
     }, { hitTolerance: 6 });
     hits.sort((a, b) => a.rank - b.rank);
     const best = hits[0];
@@ -260,12 +252,36 @@ export async function createVWorldMap(target: HTMLElement, adminCode: string, on
     if (event.dragging) return;
     map.getViewport().style.cursor = map.hasFeatureAtPixel(event.pixel, { hitTolerance: 6 }) ? 'pointer' : '';
   });
-  map.on('singleclick', (event) => {
-    const hit = selectionAt(event.pixel, event.coordinate);
+  function publish(hit: MapFeatureSelection | null) {
     clicked = hit?.id || null;
     vectors.forEach((vector) => vector.changed());
+    rivers.redraw();
     anchorCoordinate = hit ? hit.coordinate : null;
     clickHandlers.forEach((handler) => handler(hit));
+  }
+
+  map.on('singleclick', (event) => {
+    const hit = selectionAt(event.pixel, event.coordinate);
+    publish(hit);
+    // WMS 하천은 래스터라 피처 히트가 없다. 빈 곳을 클릭했을 때만 GetFeatureInfo로 되물어
+    // 벡터 레이어와 같은 팝업을 띄운다. 실패해도 클릭 흐름을 막지 않는다.
+    if (hit) return;
+    const resolution = map.getView().getResolution();
+    if (typeof resolution !== 'number') return;
+    const coordinate = event.coordinate.slice(0, 2);
+    void rivers.queryWms(coordinate, resolution).then((found) => {
+      if (!found) return;
+      // 되묻는 사이 사용자가 다른 곳을 클릭했으면 결과를 버린다.
+      if (anchorCoordinate || clicked) return;
+      publish({
+        id: String(found.properties.riv_nm ?? found.source.id),
+        layerId: riverLayerId(found.source.id),
+        geometryType: 'Polygon',
+        coordinate,
+        lonLat: toLonLat(coordinate) as [number, number],
+        properties: { ...found.properties, layer: 'L2', river_source_id: found.source.id },
+      });
+    });
   });
 
   return {
@@ -274,32 +290,52 @@ export async function createVWorldMap(target: HTMLElement, adminCode: string, on
     onPoiChange(handler) { poiHandlers.add(handler); handler(collectPoi()); return () => { poiHandlers.delete(handler); }; },
     setPopupAnchor(coordinate) {
       anchorCoordinate = coordinate ? coordinate.slice(0, 2) : null;
-      if (!coordinate && clicked) { clicked = null; vectors.forEach((vector) => vector.changed()); }
+      if (!coordinate && clicked) { clicked = null; vectors.forEach((vector) => vector.changed()); rivers.redraw(); }
     },
-    setRegion(code) { map.getView().animate({ center: fromLonLat(CENTERS[code] ?? DEFAULT_CENTER), zoom: 11, duration: 350 }); },
+    setRegion(code) {
+      // 국가기본도 하천은 지자체별 파일이라 지역이 바뀌면 자료도 바꿔야 한다.
+      rivers.setRegion(code);
+      map.getView().animate({ center: fromLonLat(CENTERS[code] ?? DEFAULT_CENTER), zoom: 11, duration: 350 });
+    },
     highlightFeature(id) {
-      for (const source of sources.values()) {
-        const feature = source.getFeatureById(id) ?? source.getFeatures().find((candidate) => String(candidate.get('id') ?? candidate.get('district_code') ?? candidate.get('trace_id') ?? '') === id);
-        if (feature) {
-          selected = id;
-          vectors.forEach((vector) => vector.changed());
-          const extent = feature.getGeometry()?.getExtent();
-          if (extent) map.getView().fit(extent, { padding: [60, 60, 60, 60], maxZoom: 15, duration: 350 });
-          return true;
-        }
+      // 하천은 표시 중인 소스에 따라 벡터가 숨어 있을 수 있으므로 먼저 해당 소스를 켠다.
+      rivers.revealFeature(id);
+      for (const source of [...sources.values(), ...rivers.featureSources()]) {
+        // 국가기본도 하천은 한 하천이 여러 폴리곤으로 나뉜다(요천 5개). river_id 로 가리키면
+        // 그 하천에 속한 조각 전부를 잡아 합친 범위로 맞춘다 — 한 조각만 잡으면 엉뚱하게 확대된다.
+        const byRiverId = source.getFeatures().filter((candidate) => String(candidate.get('river_id') ?? '') === id);
+        const matches = byRiverId.length ? byRiverId : [
+          source.getFeatureById(id) ?? source.getFeatures().find((candidate) => String(candidate.get('id') ?? candidate.get('district_code') ?? candidate.get('trace_id') ?? '') === id),
+        ].filter((feature): feature is NonNullable<typeof feature> => Boolean(feature));
+        if (!matches.length) continue;
+        selected = id;
+        vectors.forEach((vector) => vector.changed());
+        rivers.redraw();
+        type Box = [number, number, number, number];
+        const extent = matches.reduce<Box | null>((acc, feature) => {
+          const box = feature.getGeometry()?.getExtent() as Box | undefined;
+          if (!box) return acc;
+          if (!acc) return [box[0], box[1], box[2], box[3]];
+          return [Math.min(acc[0], box[0]), Math.min(acc[1], box[1]), Math.max(acc[2], box[2]), Math.max(acc[3], box[3])];
+        }, null);
+        if (extent) map.getView().fit(extent, { padding: [60, 60, 60, 60], maxZoom: 15, duration: 350 });
+        return true;
       }
       return false;
     },
     setLayerVisible(code, visible) { vectors.get(code)?.setVisible(visible); if (code === 'L1') emitPoi(true); },
+    setRiverSourceVisible(sourceId, visible) { rivers.setVisible(sourceId, visible); },
+    onRiverStateChange(handler) { return rivers.onStateChange(handler); },
     setBaseMap(type) {
       baseMapType = type;
       baseLayer?.setVisible(type === 'base');
       satelliteLayer?.setVisible(type === 'satellite');
       // 영상지도에서는 벡터 색·굵기 배색을 바꾸므로 벡터 레이어를 다시 그린다.
       vectors.forEach((vector) => vector.changed());
+      rivers.redraw();
       if (!key) onState?.('seed-only', 'VWorld 키 미설정: 공간 Seed만 표시');
       else onState?.('connecting', `VWorld ${type === 'satellite' ? '영상' : '일반'}지도 전환 중`);
     },
-    destroy() { clickHandlers.clear(); poiHandlers.clear(); map.setTarget(undefined); },
+    destroy() { clickHandlers.clear(); poiHandlers.clear(); rivers.destroy(); map.setTarget(undefined); },
   };
 }

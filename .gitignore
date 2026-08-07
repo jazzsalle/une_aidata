@@ -28,3 +28,12 @@ coverage/
 # playwright
 test-results/
 playwright-report/
+
+# 외부 공간자료 원본 내려받기 (국토지리정보원 국가기본도 SHP 등) — 리포에 넣지 않는다.
+# 전처리 산출물만 data/ 아래로 반입한다.
+국가기본도_*/
+*.shp
+*.dbf
+*.shx
+*.prj
+build/

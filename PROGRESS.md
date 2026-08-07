@@ -1,7 +1,8 @@
 # PROGRESS.md — 회사↔집 인계 기록
 
 ## Last updated
-2026-08-07 집 PC (GM-A-01 seed 불일치 해소 — 승인 후 참조 ID 교체 + 가드 커버리지 재확보)
+2026-08-08 집 PC — 국가기본도 하천 3종(실폭·경계·중심선) 반입. 대표 하천을 국가기본도 실폭하천으로 교체하고 기존 seed(`geo.json` L2 = VWorld 하천망)를 제거했다. 하천명(RIVER_NM)은 별도 POI 레이어로 분리.
+직전: 2026-08-07 GM-A-01 seed 불일치 해소(PR #5 머지), 2026-08-03 회사 PC UI 디자인 반영 3차·보고서 지표 표(PR #1~#4 머지).
 
 ## Current goal
 Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: evaluation_criteria.md Phase 8, 승격마다 사용자 승인 필요)
@@ -166,15 +167,94 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 - 참고: 원시 xlsx(`메타데이터 참고자료(T3Q)/`)에는 전국 재해대장 115,563행·위험지구 약 6,300지구가 있으나 **위험요인 서술·임계값·근거 문서페이지·좌표가 없어** 팝업 수준의 정보를 만들 수 없다(그 정보는 저감계획 PDF 판독에서 나옴). 재해대장은 피해금액·복구비 보강용으로 조인 가능.
 
 ## Pending approval
-- 없음. (GM-A-01 seed 불일치는 2026-08-07 승인·해소 — 아래 "Done this session" 참고)
+- 없음. **GM-A-01 seed 불일치는 2026-08-07 승인으로 해소**(PR #5 머지 · `GM-A-04 구미천지구`로 참조 교체, 스모크 S8/S9 재구성으로 미존재 ID 가드 보존). 08-03 의 "보류 확정"은 이 결정으로 대체됐다.
 
-## 회사 PC에서 이어서 할 일 (2026-08-03 기준 우선순위)
-0. `git pull` → (신규 환경이면 `npm install` + `pip install -r requirements.txt` + `python -m playwright install chromium`)
-1. **kma_nowcast 실연계** — 공공데이터포털 키 발급이 유일한 선행조건. 가장 간단한 Phase 8 진행 건
-2. 디자인 산출물 수령 시 타이포 스케일 확정 (`docs/30` B-7 — 교체 지점 2곳뿐)
-3. 부산·인제·영천 계획 PDF 수령 시 전사 (코드 변경 불필요)
+## 다음 세션에서 이어서 할 일 (2026-08-03 저녁 기준 · 우선순위)
+
+> **결론: Phase 8은 Provider 6종 전부 "사용자만 할 수 있는 선행조건"에 막혀 있다.** 코드측 승격 준비는 100% 끝나 있어 키·Endpoint 없이 미리 할 수 있는 승격 작업은 없다. 그래서 아래 0~1번(사용자 조치)과 2번(승인 불필요 코드 작업)을 분리했다.
+
+0. `git pull` → **`python -m pip install -r requirements.txt`** (jsonschema 미설치 — 위 Blockers 참고). 신규 환경이면 `npm install` + `python -m playwright install chromium`도.
+1. **[사용자] `DATA_GO_KR_SERVICE_KEY` 발급** — 공공데이터포털 기상청 초단기실황 활용신청. **Phase 8에서 가장 간단한 건이고 이 키 하나면 그날 Shadow Test → 승인1까지 간다.** 실행: `DATA_GO_KR_SERVICE_KEY=<키> node tests/provider/provider_shadow_gate.cjs --provider kma_nowcast`. 키는 **로컬 셸 env로만** — Vercel env 설정은 그 자체가 SELECTABLE 승격이라 승인2 이후 사용자가 직접 한다(docs/29 §17-18).
+   - 함정 2가지: 기상청이 `base_time` 발표 전이면 `NO_DATA(03)`을 반환해 FAILED로 떨어진다 → `KMA_REQUEST_LAG_MINUTES`를 60~70으로 올려 재시도(코드 변경 불필요). 신규 키는 활용신청 승인 반영 전 `SERVICE_KEY_IS_NOT_REGISTERED_ERROR(30)`가 온다 → 시간 두고 재시도.
+2. **[승인 불필요 · 바로 착수 가능] 버그 4건 + 검증 게이트 3건** — 계획서 승인 완료, 구현 미착수. 상세는 아래 "다음 작업 상세" 절.
+3. 디자인 산출물 수령 시 타이포 스케일 확정 (`docs/30` B-7 — 교체 지점 2곳뿐)
+4. 부산·인제·영천 계획 PDF 수령 시 전사 (코드 변경 불필요).
+
+### 다음 작업 상세 (계획 승인 완료 · 구현 미착수)
+
+**버그 4건**
+- `scripts/smoke_mock_spatial_layers.py:6`, `scripts/smoke_t3q_mock_contract.py:4-6` — `read_text()`에 encoding 누락으로 **Windows에서 실행 자체가 크래시**(cp949). 다른 스크립트는 Phase 3·7에서 이미 같은 수정을 받았다. → `read_text(encoding='utf-8')`
+- `.env.example` — `server/providers/uneRag.ts:24`가 읽는 `UNE_RAG_LOGIN_ACCOUNT_FIELD`가 선언돼 있지 않다(코드 전 env 이름 대조 결과 누락은 이 1건뿐). → `UNE_RAG_LOGIN_ACCOUNT_FIELD=account` 추가
+- `server/routes/v1/integrations/status.ts:9` — `FIXTURE_VALIDATED_NOTE`를 `:54,:63,:73,:91`에서 **4개 Provider 전부에 무조건 append**한다. 원장상 `une_rag`는 이미 `SHADOW_TESTED`인데 화면은 FIXTURE_VALIDATED로 표기 중. → provider별 lifecycle 문구로 분기. **`validation_state` enum(`server/contracts.ts:55`)은 건드리지 않는다 = 계약 무변경.** 이 문자열을 단언하는 테스트는 없음을 확인했다.
+
+**검증 게이트 3건**
+- **(핵심) `provider_promotion_status.json`을 읽는 코드가 리포에 하나도 없다.** Phase 8이 승격 기록을 쌓아갈 원장인데 단계 역행·`approvals` 누락·`promotion_hold` 위반을 아무도 검사하지 않는다. → `scripts/smoke_provider_promotion_status.py` 신설 + `package.json`에 `test:promotion-status` 등록. 검사: 사다리 유효값 / **DEFAULT 금지**(CLAUDE.md:133) / SHADOW_TESTED 이상이면 `approvals` 기록 + `provider_shadow_test_result.json`의 SHADOW_PASSED 근거 존재 / `promotion_hold`면 `hold_reason` 필수 / `provider_contracts_seed.json`의 `current`가 전부 `mock` / 비밀값 미포함. 기존 게이트 판정 규칙을 재구현하지 말고 결과 파일 교차참조만.
+- 베이스맵 `aria-pressed` 단언이 없다 — 인계문서 D-4-2 585행 계약인데 어느 게이트도 안 본다. → `smoke_dashboard_console.py`에 스텝 추가(false→true→false 전이 + 레이어 칩 `aria-pressed` 존재). **PR #5 로 이미 S12 까지 차 있으므로 신설분은 S13 이고 S1~S12 는 불변이다.**
+- `data/seed` ↔ `apps/web/public/seed` 이중 사본의 동기화를 검사하는 게이트가 없다(지금은 전부 SYNC). → `validate_vercel_repo.py`에 공통 파일명 SHA-256 비교 추가(`geo.json` 2MB라 해시로). `data/reference` ↔ `public/seed` 공통분(criteria·districts·geo·rivers)도 포함.
+
+계획 원문: `C:\Users\kyh\.claude\plans\bright-kindling-comet.md`
 
 **현재 상태 요약**: Phase 1~7 완료. Phase 8은 une_rag만 SHADOW_TESTED(SELECTABLE 보류 — 내부망이라 외부 시연 불가), 나머지는 FIXTURE_VALIDATED. **실제 연결된 Provider는 없으며 배포본은 전부 Seed/Mock 동작.** 전 게이트 통과 상태(typecheck·OpenAPI 30/30/30·JSON Schema·conformance·runtime gate·fixture gate 18/18·a11y·build).
+
+## 하천 레이어 정합 조사 (2026-08-07) — 결론: 우리 변환은 정상, 데이터셋 교체가 필요
+
+지도에서 하천경계가 베이스맵과 어긋나 보인다는 보고로 조사. 실제 VWorld 키로 API를 호출해 실측했다.
+
+**확정된 사실**
+- **`geo.json` L2 == VWorld 2D데이터 API 의 `LT_C_WKMSTRM` 현재 응답.** 요천 기준 정점 5629개 전부 최근접거리 **0.000 m**, 평균 오프셋 **0.00 m**. → **오프라인 추출·재투영 오류는 없다.** 좌표 소수점 14자리는 VWorld API 원본이 그렇게 준다(재투영 흔적이 아님).
+- **VWorld 에 하천 레이어는 `lt_c_wkmstrm`(하천망) 하나뿐.** WMS GetCapabilities 실측 177개 레이어 중 수자원 계열은 하천망 + 대/중/표준권역뿐이고 **실폭·중심선·법정 하천구역 별도 레이어는 없다.** VWorld 안에서는 대안이 없다.
+- **어긋남은 상수 오프셋이 아니다.** 일반지도(Base)가 그리는 하천면과 대조하면 지점마다 E −19~+24 m, N 0~+53 m 로 방향·크기가 제각각이고 일부 지점은 0 m. 데이텀·투영 오류라면 전 지점 동일해야 한다. → **두 자료(하천망 vs 베이스맵 도식)가 서로 다른 제품**인 것이 원인.
+- 위성영상 기준으로는 하천망 경계가 제방·물가를 대체로 잘 따라간다. 어긋남이 두드러지는 쪽은 **일반지도**다.
+
+**VWorld API 제약 (실측)**
+- `DOMAIN` 파라미터는 키에 등록된 서비스 URL 과 대조된다. `localhost` 로 보내면 키가 유효해도 `INCORRECT_KEY`. 로컬 개발용으로 `VITE_VWORLD_SERVICE_DOMAIN` 을 추가했다.
+- **WMS 는 `Access-Control-Allow-Origin` 을 보내지 않는다**(WMTS 는 `*` 로 보낸다). 서버 응답 자체는 정상(200, image/png)이지만 OpenLayers 10 의 fetch 기반 이미지 로더에서 ORB 로 차단된다. **브라우저 직결 불가** — 우회하려면 서버측 프록시가 필요하다. 다만 WMS 가 렌더하는 형상은 우리가 이미 가진 것과 동일하므로 정합 개선 효과는 없다.
+
+**남은 선택지 (외부 자료 조달 필요)**
+- 국토지리정보원 기본공간정보 수계(하천경계·하천중심선) — 베이스맵과 계보가 같아 정합 가능성이 가장 높다. 국가공간정보포털/공공데이터포털 WMS·WFS. **미확인: 제공 형태·인증키**
+- river.go.kr(RIMGIS) 하천구역 — 법정 경계라 물길보다 넓다. 공개 REST 오픈API 미확인, 성과품 SHP 신청·다운로드로 보인다
+- 환경부 KRF(Korean Reach File) — 중심선 계열
+- 외부 WMS 를 붙일 경우 CORS 를 또 만날 가능성이 높으므로 `/api` 하위 프록시 라우트 도입 여부를 먼저 결정해야 한다(계약 추가라 승인 대상)
+
+**코드 상태**: 하천을 의미별 다중 소스로 분리한 카탈로그(`apps/web/src/features/map/riverLayerSources.ts`)와 런타임(`riverLayers.ts`)이 들어갔다. 소스 추가는 객체 1개 추가로 끝난다. 현재 활성 소스는 `seed-wkmstrm`(기존 geo.json L2, 표시 내용은 종전과 동일)이고, WMS·중심선·하천구역은 `unverified` 로 두어 화면에서 비활성 칩으로만 보인다. ~~**`geo.json` L2 는 대체 자료 확정 전까지 제거하지 않는다.**~~ → **2026-08-08 에 대체 자료가 확정되어 L2 를 제거했다(아래 절 참고).**
+
+### 완료 (2026-08-08) — 국가기본도 하천 3종 반입, 기존 seed 교체
+
+사용자가 실폭·하천경계·중심선 zip 3개를 리포 루트에 넣어 아래 계획을 그대로 수행했다. **결론: 국가기본도가 확실히 낫고, 기존 `seed-wkmstrm`(geo.json L2)은 제거했다.**
+
+- **원자료 확인**: 3종 모두 `Korea_2000_Korea_Unified_CS`(FE 1,000,000 / FN 2,000,000 / CM 127.5 / k 0.9996) = **EPSG:5179**, CP949. `TN_RIVER_BT` 실폭 Polygon 28,262 / `TN_RIVER_BNDRY` 경계 Polygon 140,851 / `TN_RIVER_CTLN` 중심선 PolyLine **3,224,769**.
+- **`RIVER_NM` 은 중심선에만 있다.** 실폭·경계에는 하천명 속성이 아예 없다(테이블정의서 실측). `RIVER_SE` 코드도 정의서 `세부코드` 시트에서 읽었다 — RVC001 국가하천 / 002 지방하천 / 003 소하천 / 004 기타하천 / **005 세류**. 남원 중심선 61,869건 중 52,912건이 세류라 그대로 그리면 하천망이 묻힌다 → **세류 제외**.
+- **정합 판단(핵심)**: 영상지도 위 실측에서 기존 L2 는 일반화가 거칠고 남서로 밀려 물가선을 벗어났고, 같은 지점에서 국가기본도 실폭은 물가선·모래톱까지 따라갔다. 두 자료 정점 거리는 요천 중앙값 **11.7 m** · 안양천 13.1 m · 구미천 29.6 m. 캡처는 `build/river/compare/` 4장.
+- **`geo.json` L2 3건(RIV-YC·GMC·AYC) 제거** — 사용자 승인. `data/reference` · `apps/web/public/seed` 양쪽 **순수 삭제 31,733줄 · 추가 0줄**(나머지 바이트 동일).
+  - **끊길 뻔한 연결 2가지를 살렸다**: ① 지도 하천 클릭 → `rivers.json` 제원 팝업 ② Agent 의 `RIV-*` highlight(CLAUDE.md 규칙 7). 실폭·경계에는 이름이 없으므로 **이름을 가진 중심선으로 공간조인**해 `river_id` 를 붙였다(요천 5 · 구미천 1 · 안양천 2 폴리곤). **이름을 추정해 붙이지 않는다 — 중심선이 실제로 그 도형을 지날 때만 연결한다.**
+  - 한 하천이 여러 폴리곤이므로 `highlightFeature` 가 **조각 전부를 잡아 합친 범위로 fit** 하도록 고쳤다(한 조각만 잡으면 엉뚱하게 확대된다).
+  - 실측: 실폭 폴리곤 클릭 시 `요천 · 국가하천 · 유역면적 485.7 km² · 연장 17.83 km · 남원수위표 계획홍수량 2,005㎥/s(주의보 1,003 / 경보 1,404) · 근거 문서·페이지`까지 그대로 나온다.
+- **신규 소스 4개**: `ngii-realwidth`(대표, 기본 표시 · 칩 행 `하천`) · `ngii-boundary` · `ngii-centerline` · `ngii-river-name`. 나머지 3개는 레이어 메뉴에서 비교용으로 켠다.
+- **하천명 POI 레이어**: 중심선 조각마다 글자를 붙이면 같은 이름이 수천 번 겹친다 → **하천당 가장 긴 조각의 중간 정점 1개**만 대표점으로 쓴다(좌표를 새로 만들지 않는다). 지자체별 33·87·100개, 10~29 KB.
+- **지연 로딩**: 파일이 지역당 0.5~3.5 MB 라 초기 로드에 얹지 않는다. `dataUrlTemplate` 소스는 **켤 때 처음 받고** 받은 지역은 캐시하며, 지역이 바뀌면 이전 형상을 치우고 켜져 있는 소스만 다시 받는다.
+- **경량화**: 2 m Douglas-Peucker + 좌표 6자리로 원본의 6~24%. 반입 `apps/web/public/reference/rivers/` 12파일 **17 MB**. 원본 SHP·`build/` 는 gitignore.
+- **스크립트 3종 신설**: `extract_river_layers.py`(3종 추출 · `.prj` 가드 · 중심선 dbf 832 MB 전건 파싱 회피) · `build_river_web_layers.py`(단순화·세류 제외·`river_id` 조인·라벨 생성) · `compare_river_alignment.py`(정합 측정). **형상만 옮기고 면적·하폭 등 파생 지표는 만들지 않는다**(ADR-011).
+- **부수 수정**: `.env` 의 `VITE_VWORLD_MAP_KEY==…` (등호 2개) 때문에 키 앞에 `=` 가 붙어 배경지도가 전부 실패하고 있었다. 그 문자만 제거해 일반·영상지도 정상. dev 서버 콘솔의 502 24건은 백엔드 없는 `/api/v1/*` 폴백이며 VWorld 와 무관하다.
+- **주의**: `compare_river_alignment.py` 는 L2 를 기준으로 삼으므로 이 커밋 이후로는 그대로 돌지 않는다(스크립트 안에 사유 기재).
+- **미정리**: `scripts/extract_realwidth_river.py` 는 `extract_river_layers.py` 가 완전히 대체한다(중복). 사용자 판단 대기.
+- 검증: typecheck·build·validate(6,931 entries)·seed·priority·contracts(OpenAPI 30/30/30 · JSON Schema 265/18)·runtime gate·fixture 18/18·conformance·spatial assets·a11y·콘솔 스모크 3종(11/11·9/9·8/8, console·pageerror·`/api`·외부도메인 전부 0)·E2E 7/7 전부 PASS.
+
+### (배경) 2026-08-07 중단 지점 — 위 작업으로 해소됨
+
+**다음 후보: 국토지리정보원 국가기본도_실폭하천** — VWorld 디지털트윈국토
+`https://www.vworld.kr/dtmk/dtmk_ntads_s002.do?svcCde=MK&dsId=20250122DS00007`
+SHP · EPSG:5179(UTM-K) · 전국 218MB · 2025-02-21 갱신.
+**VWorld 베이스맵과 같은 국가기본도 계보**라 정합 가능성이 가장 높다(가설 — 숫자로 확인 전까지 확정 아님).
+
+1. **파일 확보 (사용자 작업).** 다운로드는 `/dtmk/downloadResourceFile.do?ds_id=…&fileNo=…` 이고 **로그인 세션이 필요**하다. 비로그인 호출은 200/Content-Length 0 로 빈 응답. 500MB 이상은 '선택다운로드'를 요구하지만 218MB 라 직접 받기 대상이다.
+   - 2026-08-07 시도분(`국가기본도_하천중심선/`)에는 SHP 이 없고 **라온K 다운로드 관리자 설치파일(raonkSetup.exe)** 과 테이블정의서만 받아졌다. 브라우저 설정에 따라 관리자 경유로 빠지므로 실제 `.zip` 이 떨어졌는지 확인 필요. 받은 것은 **실폭하천이 아니라 하천중심선**이었다.
+2. **추출·변환.** 준비된 스크립트: `<scratchpad>/extract_realwidth_river.py` (zip 경로만 인자로 주면 됨). 전국 SHP 을 스트리밍으로 훑어 `geo.json` L3 실경계 bbox(의왕·구미·남원, 2km 여유)에 걸리는 도형만 EPSG:4326 GeoJSON 으로 뽑는다. `.prj` 를 먼저 읽어 5179 가정이 맞는지 확인하는 가드가 들어 있다.
+3. **정합 비교.** 일반지도·위성영상에 얹어 기존 `lt_c_wkmstrm` 와 나란히 놓고 오프셋 수치화. 측정 스크립트도 scratchpad 에 있다(`measure_base.py`, `outline_overlay.py`). 세션이 바뀌어 scratchpad 가 사라졌으면 재작성.
+4. 더 잘 맞으면 카탈로그에 소스 추가 → `geo.json` L2 교체 검토(**Seed 변경이라 승인 대상, 별도 PR**).
+
+**도구**: `pyshp`, `pyproj` 전역 설치 완료(requirements.txt 에는 아직 미반영 — 실제로 쓰기로 확정되면 추가). `openpyxl` 없음(테이블정의서 판독 시 필요).
+
+**주의**: 외부 SHP 원본은 `.gitignore` 로 막아 리포에 들어가지 않는다. 전처리 산출물만 `data/` 아래로 반입한다.
 
 ## Next steps (Phase 8 잔여 — provider별 독립 진행)
 1. **kma_nowcast (가장 간단, 권장 1순위)**: 공공데이터포털에서 기상청 초단기실황 활용신청 → 서비스키 확보 → 로컬 셸에서 `DATA_GO_KR_SERVICE_KEY=<키>` 설정 후 `npm run test:provider-shadow -- --provider kma_nowcast` → 결과 검토 후 승인1(SHADOW_TESTED) → Vercel Preview env 설정(승인2)·회귀 재통과 → SELECTABLE
@@ -184,7 +264,9 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 5. 주의: 키는 로컬 셸 env로만 (Vercel env 설정은 SELECTABLE 승격 승인 후에만), 키를 채팅·코드·문서에 남기지 말 것, DEFAULT 전환 금지. 상세 절차: docs/29
 
 ## Blockers
-- 없음. (@playwright/test 404는 재발하지 않음 — 1.62.1 설치 완료)
+- **`jsonschema` 미설치로 `npm run test:contracts`의 절반이 실행 불가** (2026-08-03 확인). `scripts/validate_json_schema_contracts.py:5`가 import하는데 `requirements.txt:4`에 선언만 있고 설치가 안 돼 있다. `test:contracts` = `test:openapi-contracts && test:schema-contracts`이므로 **Phase 8 승인2 전 회귀 번들 8종 중 2번 항목이 통째로 실패**한다. 해소: `python -m pip install -r requirements.txt` 한 줄. (`test:openapi-contracts`는 정상 — 실측 `30 handler routes = 30 routing-table entries = 30 operations`.)
+- **PowerShell에서 `.sh` 게이트 실행 주의 — Phase 8 주 실행 경로에 직접 걸린다.** `npm run test:provider-shadow` = `bash scripts/run_provider_shadow_test.sh`이고 그 `:10`이 `rm -rf .runtime-cjs`를 한다. bash가 WSL로 잡히면 `.runtime-cjs`가 삭제된 채 재컴파일에 실패할 수 있다. 우회: Git Bash에서 `tsc -p tsconfig.runtime.json` + `.runtime-cjs/package.json`(`{"type":"commonjs"}`) 확인 후 `node tests/provider/provider_shadow_gate.cjs --provider <id>` 직접 실행.
+- (해소됨) @playwright/test 404는 재발하지 않음 — 1.62.1 설치 완료.
 
 ## How to run
 - 의존성: `npm install` (Node >= 22.12.0) + `python -m pip install -r requirements.txt` + `python -m playwright install chromium`

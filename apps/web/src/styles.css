@@ -264,6 +264,10 @@ button { cursor: pointer; }
 .map-layer-menu button[aria-pressed="true"] { color: var(--c-brand); font-weight: 700; }
 .map-layer-menu button:disabled { color: var(--c-text-muted); cursor: not-allowed; }
 .map-layer-menu-state { flex: 0 0 auto; color: var(--c-text-muted); font-size: var(--fs-xs); line-height: var(--lh-xs); font-weight: 400; }
+/* 하천 소스 묶음. 앞 묶음과 붙어 보이면 두 목록이 한 목록으로 읽힌다. */
+.map-layer-menu-group { margin-top: var(--sp-3); padding-top: var(--sp-2); border-top: 1px solid var(--border-panel-blue); }
+/* 소스 라벨은 길고 상태 칸은 짧다. 라벨 쪽만 줄이고 상태(WMS/Seed)는 항상 온전히 보이게 한다. */
+.map-layer-menu-group + ul button > span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* 중단 띠 · POI 핀. 핀의 끝이 좌표에 오도록 translate(-50%,-100%) 한다.
    히트영역은 28×34 로 두어 WCAG 2.5.8 최소 24×24 를 지키고, 그림 자체는 스펙 치수를 유지한다. */
