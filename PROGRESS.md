@@ -1,7 +1,7 @@
 # PROGRESS.md — 회사↔집 인계 기록
 
 ## Last updated
-2026-08-03 회사 PC (시범화면 UI 디자인 반영 3차 — UNE 디자인 시스템 토큰 도입 + 레거시 CSS 일괄 정리. 기준은 `design_handoff_pilot_ui/`, 토큰 원본은 `UNE Design System/`, 앱 복사본은 `apps/web/src/design-tokens/`)
+2026-08-07 집 PC (GM-A-01 seed 불일치 해소 — 승인 후 참조 ID 교체 + 가드 커버리지 재확보)
 
 ## Current goal
 Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: evaluation_criteria.md Phase 8, 승격마다 사용자 승인 필요)
@@ -13,6 +13,13 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 - **Phase 1 완료 (2026-08-02, evaluator PASS)**: npm install 성공(package-lock.json 생성, playwright 1.62.1 정상 — 404 재발 없음), validate·contracts(OpenAPI 31/31, JSON Schema 260/18)·typecheck:functions·typecheck:web·runtime-gate·provider-conformance 전부 PASS, `npm run build` 성공(apps/web/dist 산출). 계약 파일 변경 0건.
 
 ## Done this session
+- **GM-A-01 seed 불일치 해소 (2026-08-07, 사용자 승인 — seed 동결 해제 1건)**: 구미(47190) rank 1 `구미천 하천재해 대표지구`가 `geo.json`에 없는 `GM-A-01`을 참조해 카드 클릭 시 지도 이동 대신 비차단 안내만 뜨던 문제.
+  - **택(b) 참조 ID 교체**: `GM-A-01` → **`GM-A-04`(구미천지구)**. `districts.json`에 관리대장 A.4 근거(하천재해·침수위험지구, 구미천, 원평동 964-640, No.29+00~34+83)가 있고 `geo.json`에 point가 실재해 **좌표를 만들어내지 않는다**. 택(a)(geo.json에 GM-A-01 신설)는 계획자료에 없는 좌표를 임의 생성해야 해 채택하지 않았다.
+  - 변경 파일은 `data/seed/priority_areas_seed.json`과 동일 사본 `apps/web/public/seed/priority_areas_seed.json` **1줄씩**. seed의 `name`·`score`·`components`·`reasons`는 그대로 뒀다(카드 표기는 POC 서술, 지도 팝업은 GM-A-04 관리대장 표기).
+  - **가드 커버리지 재확보**: `smoke_dashboard_console.py` S8이 "GM-A-01 미존재 안내"를 단언하고 있었는데, seed가 고쳐지면 그 경로가 사라진다. 깨진 seed를 남겨 커버리지를 유지하는 대신 **S8을 존재 ID 정상 하이라이트로 바꾸고, S9를 신설해 `page.route`로 seed 응답만 가로채 rank1을 `GM-A-99`로 바꿔 비차단 안내를 검증**한다(파일 무변경, 스텝 종료 시 `unroute`). 이후 스텝은 S10~S12로 번호만 이동.
+  - 검증: 대시보드 스모크 **12/12**(console·pageerror·`/api`·외부도메인 전부 0), evidence 9/9·report 8/8, E2E 7/7, typecheck, build, validate·seed·priority·contracts(OpenAPI 30/30/30 · JSON Schema 265/18)·runtime gate·conformance·fixture gate 18/18·a11y 전부 PASS.
+  - **주의 — 2026-08-03 "보류 확정"을 뒤집은 결정이다.** `feat/river-layer-multi-source` 브랜치 기록에 08-03 사용자 결정으로 "현행 비차단 가드 유지(보류)"가 남아 있다. 보류 사유였던 "두 안 모두 스모크 S8을 깨뜨린다"는 위 S8/S9 재구성으로 해소했다. 그 브랜치와 머지할 때 이 절과 아래 "Pending approval" 절이 충돌한다 — **이 항목(08-07 승인)이 최신이다.**
+
 - **보고서 수치 나열 → 지표 표 렌더 + 관측값 중복 제거 (2026-08-03)**: 사용자 지적 — 초안 미리보기 `2. 현재 조건`처럼 수치가 여러 줄 나열되면 문단이 아니라 표로 나와야 한다.
   - **표 블록 신설**: `reportDocument.ts`에 `{kind:'table'}` 추가. `toMarkdown`은 GFM 파이프 표로 직렬화(셀 안 `|`는 이스케이프), 미리보기는 `<table class="report-doc-table">`로 렌더하며 첫 열은 `th scope="row"`.
   - **파싱은 강제하지 않는다**: `measurementBlocks()`가 `지표: 값 (자료상태)` 꼴 줄만 표로 모으고, 그 꼴이 아닌 줄은 표 아래 문단으로 남긴다. 표에 넣을 줄이 2개 미만이면 예전처럼 문단 하나. 담당자가 자유롭게 고쳐 쓰는 칸이라 산문을 쓰면 산문 그대로 나온다. 실측 확인: 산문 입력 시 표 0개, 혼합 입력 시 표 1개 + 후행 문단 보존.
@@ -158,15 +165,14 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 - **부산·인제·영천 계획자료 구조화**: 사용자가 자연재해저감 종합계획·하천기본계획 **PDF를 추후 제공** 예정. 수령 후 `data/reference/districts.json`·`rivers.json`·`geo.json`과 동일 스키마로 전사하면 지도 POI 팝업·계획·근거 패널이 그대로 동작한다(코드 변경 불필요). 현재는 의왕 41430(17지구)·구미 47190(6지구)·남원 45190(6지구) + 하천 3개(안양천·구미천·요천)만 커버.
 - 참고: 원시 xlsx(`메타데이터 참고자료(T3Q)/`)에는 전국 재해대장 115,563행·위험지구 약 6,300지구가 있으나 **위험요인 서술·임계값·근거 문서페이지·좌표가 없어** 팝업 수준의 정보를 만들 수 없다(그 정보는 저감계획 PDF 판독에서 나옴). 재해대장은 피해금액·복구비 보강용으로 조인 가능.
 
-## Pending approval (Seed 불일치 영향범위 보고)
-- `apps/web/public/seed/priority_areas_seed.json`의 `SIT-GM-POC-001`(47190 구미) rank 1이 `spatial_object_id: "GM-A-01"` 참조하나 `geo.json`에 해당 feature 없음(GM 계열은 GM-A-03/04/07, GM-B-10/13, GM-C-01만 존재). 현재 UI 가드로 비차단 안내 처리됨. 근본 수정은 seed 동결 해제 승인 필요 — 택1: (a) geo.json에 GM-A-01 feature 추가, (b) priority_areas_seed의 참조 ID를 기존 ID로 교체
+## Pending approval
+- 없음. (GM-A-01 seed 불일치는 2026-08-07 승인·해소 — 아래 "Done this session" 참고)
 
 ## 회사 PC에서 이어서 할 일 (2026-08-03 기준 우선순위)
 0. `git pull` → (신규 환경이면 `npm install` + `pip install -r requirements.txt` + `python -m playwright install chromium`)
-1. **GM-A-01 seed 불일치 결정** — 승인 한 번이면 끝. 아래 "Pending approval" 절 택1. 검수에서 눈에 띌 수 있는 항목
-2. **kma_nowcast 실연계** — 공공데이터포털 키 발급이 유일한 선행조건. 가장 간단한 Phase 8 진행 건
-3. 디자인 산출물 수령 시 타이포 스케일 확정 (`docs/30` B-7 — 교체 지점 2곳뿐)
-4. 부산·인제·영천 계획 PDF 수령 시 전사 (코드 변경 불필요)
+1. **kma_nowcast 실연계** — 공공데이터포털 키 발급이 유일한 선행조건. 가장 간단한 Phase 8 진행 건
+2. 디자인 산출물 수령 시 타이포 스케일 확정 (`docs/30` B-7 — 교체 지점 2곳뿐)
+3. 부산·인제·영천 계획 PDF 수령 시 전사 (코드 변경 불필요)
 
 **현재 상태 요약**: Phase 1~7 완료. Phase 8은 une_rag만 SHADOW_TESTED(SELECTABLE 보류 — 내부망이라 외부 시연 불가), 나머지는 FIXTURE_VALIDATED. **실제 연결된 Provider는 없으며 배포본은 전부 Seed/Mock 동작.** 전 게이트 통과 상태(typecheck·OpenAPI 30/30/30·JSON Schema·conformance·runtime gate·fixture gate 18/18·a11y·build).
 

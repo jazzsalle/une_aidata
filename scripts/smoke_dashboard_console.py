@@ -212,16 +212,51 @@ def main() -> int:
 
             steps.run('S7 카드 클릭 지도 이동 (45190 NW-A-02 · 존재 ID 하이라이트)', step_map_highlight_existing)
 
-            def step_map_highlight_missing() -> None:
+            def step_map_highlight_gumi() -> None:
                 page.locator('.context-select select').select_option('SIT-GM-POC-001')
                 wait_top_area('SIT-GM-POC-001')
                 click_priority_card()
-                notice = page.wait_for_selector('.map-highlight-notice')
-                text = notice.inner_text() if notice else ''
-                if 'GM-A-01' not in text:
-                    raise AssertionError(f'GM-A-01 미존재 안내 문구 불일치: {text}')
+                page.wait_for_timeout(2000)
+                if page.locator('.map-highlight-notice').count():
+                    raise AssertionError(f'존재하는 ID(GM-A-04)인데 미존재 안내 표시: {page.locator(".map-highlight-notice").inner_text()}')
 
-            steps.run('S8 카드 클릭 지도 이동 (47190 GM-A-01 · 미존재 ID 비차단 안내)', step_map_highlight_missing)
+            steps.run('S8 카드 클릭 지도 이동 (47190 GM-A-04 · 존재 ID 하이라이트)', step_map_highlight_gumi)
+
+            def step_map_highlight_missing() -> None:
+                """미존재 GeoJSON ID 비차단 가드를 검증한다.
+
+                seed 는 전부 존재하는 ID 를 참조하므로(구미 rank1 은 GM-A-04),
+                깨진 seed 를 리포에 남겨두는 대신 응답을 가로채 참조만 미존재 ID 로 바꾼다.
+                파일은 건드리지 않으며 이 스텝이 끝나면 원래 응답으로 되돌린다.
+                """
+                missing_id = 'GM-A-99'
+                source = json.loads((SEED_DIR / 'priority_areas_seed.json').read_text(encoding='utf-8'))
+                for row in source['results']:
+                    if row.get('situation_id') == 'SIT-GM-POC-001' and row.get('areas'):
+                        row['areas'][0]['spatial_object_id'] = missing_id
+                page.route(
+                    '**/seed/priority_areas_seed.json',
+                    lambda route: route.fulfill(
+                        status=200,
+                        content_type='application/json',
+                        body=json.dumps(source, ensure_ascii=False),
+                    ),
+                )
+                try:
+                    # 같은 값을 다시 고르면 재조회가 일어나지 않으므로 다른 상황을 거쳐 돌아온다.
+                    page.locator('.context-select select').select_option('SIT-NW-POC-001')
+                    wait_top_area('SIT-NW-POC-001')
+                    page.locator('.context-select select').select_option('SIT-GM-POC-001')
+                    wait_top_area('SIT-GM-POC-001')
+                    click_priority_card()
+                    notice = page.wait_for_selector('.map-highlight-notice')
+                    text = notice.inner_text() if notice else ''
+                    if missing_id not in text:
+                        raise AssertionError(f'{missing_id} 미존재 안내 문구 불일치: {text}')
+                finally:
+                    page.unroute('**/seed/priority_areas_seed.json')
+
+            steps.run('S9 미존재 GeoJSON ID 비차단 안내(응답 가로채기)', step_map_highlight_missing)
 
             def step_select_similar_event() -> None:
                 page.get_by_role('tab', name='유사사례').click()
@@ -234,7 +269,7 @@ def main() -> int:
                 page.wait_for_selector('#insight-panel-1 .event-card.selected')
                 page.wait_for_selector('.similar-event-detail')
 
-            steps.run('S9 유사사례 선택·비교 상세 표시', step_select_similar_event)
+            steps.run('S10 유사사례 선택·비교 상세 표시', step_select_similar_event)
 
             def step_t3q_mock_search() -> None:
                 page.wait_for_function('document.querySelectorAll(".mock-search-controls select option").length > 0')
@@ -244,7 +279,7 @@ def main() -> int:
                 if page.locator('.mock-search-panel .inline-error').count():
                     raise AssertionError(f'Mock 검색 오류 표시: {page.locator(".mock-search-panel .inline-error").inner_text()}')
 
-            steps.run('S10 T3Q 구조 Mock 검색 실행·결과 표시', step_t3q_mock_search)
+            steps.run('S11 T3Q 구조 Mock 검색 실행·결과 표시', step_t3q_mock_search)
 
             def step_priority_detail_modal() -> None:
                 page.get_by_role('tab', name='현재 판단').click()
@@ -265,7 +300,7 @@ def main() -> int:
                 dialog.wait_for(state='detached')
                 page.wait_for_function('document.activeElement?.classList?.contains("priority-detail-button") === true')
 
-            steps.run('S11 상세보기 모달 열기·동일 상세 확인·Esc 닫기·초점 복귀', step_priority_detail_modal)
+            steps.run('S12 상세보기 모달 열기·동일 상세 확인·Esc 닫기·초점 복귀', step_priority_detail_modal)
 
             page.wait_for_timeout(1000)  # 잔여 비동기 콘솔 메시지 수집 여유
             browser.close()
