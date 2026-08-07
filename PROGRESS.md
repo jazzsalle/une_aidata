@@ -1,7 +1,8 @@
 # PROGRESS.md — 회사↔집 인계 기록
 
 ## Last updated
-2026-08-08 집 PC — 국가기본도 하천 3종(실폭·경계·중심선) 반입, 대표 하천을 국가기본도로 교체하고 기존 seed(geo.json L2) 제거. 이전 기록: 2026-08-03 회사 PC 작업 종료 인계. 오늘 한 일은 시범화면 UI 디자인 반영 3차(핸드오프 → 패널 스펙 → DS 토큰 도입)와 보고서 지표 표이며 **PR #1~#4 전부 main 머지 완료**. 이후 Phase 8 착수 전 조사를 마치고 계획을 확정했으나 **구현은 시작하지 않았다** — 재개 지점은 아래 "다음 세션에서 이어서 할 일" 2번.
+2026-08-08 집 PC — 국가기본도 하천 3종(실폭·경계·중심선) 반입. 대표 하천을 국가기본도 실폭하천으로 교체하고 기존 seed(`geo.json` L2 = VWorld 하천망)를 제거했다. 하천명(RIVER_NM)은 별도 POI 레이어로 분리.
+직전: 2026-08-07 GM-A-01 seed 불일치 해소(PR #5 머지), 2026-08-03 회사 PC UI 디자인 반영 3차·보고서 지표 표(PR #1~#4 머지).
 
 ## Current goal
 Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: evaluation_criteria.md Phase 8, 승격마다 사용자 승인 필요)
@@ -13,6 +14,13 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 - **Phase 1 완료 (2026-08-02, evaluator PASS)**: npm install 성공(package-lock.json 생성, playwright 1.62.1 정상 — 404 재발 없음), validate·contracts(OpenAPI 31/31, JSON Schema 260/18)·typecheck:functions·typecheck:web·runtime-gate·provider-conformance 전부 PASS, `npm run build` 성공(apps/web/dist 산출). 계약 파일 변경 0건.
 
 ## Done this session
+- **GM-A-01 seed 불일치 해소 (2026-08-07, 사용자 승인 — seed 동결 해제 1건)**: 구미(47190) rank 1 `구미천 하천재해 대표지구`가 `geo.json`에 없는 `GM-A-01`을 참조해 카드 클릭 시 지도 이동 대신 비차단 안내만 뜨던 문제.
+  - **택(b) 참조 ID 교체**: `GM-A-01` → **`GM-A-04`(구미천지구)**. `districts.json`에 관리대장 A.4 근거(하천재해·침수위험지구, 구미천, 원평동 964-640, No.29+00~34+83)가 있고 `geo.json`에 point가 실재해 **좌표를 만들어내지 않는다**. 택(a)(geo.json에 GM-A-01 신설)는 계획자료에 없는 좌표를 임의 생성해야 해 채택하지 않았다.
+  - 변경 파일은 `data/seed/priority_areas_seed.json`과 동일 사본 `apps/web/public/seed/priority_areas_seed.json` **1줄씩**. seed의 `name`·`score`·`components`·`reasons`는 그대로 뒀다(카드 표기는 POC 서술, 지도 팝업은 GM-A-04 관리대장 표기).
+  - **가드 커버리지 재확보**: `smoke_dashboard_console.py` S8이 "GM-A-01 미존재 안내"를 단언하고 있었는데, seed가 고쳐지면 그 경로가 사라진다. 깨진 seed를 남겨 커버리지를 유지하는 대신 **S8을 존재 ID 정상 하이라이트로 바꾸고, S9를 신설해 `page.route`로 seed 응답만 가로채 rank1을 `GM-A-99`로 바꿔 비차단 안내를 검증**한다(파일 무변경, 스텝 종료 시 `unroute`). 이후 스텝은 S10~S12로 번호만 이동.
+  - 검증: 대시보드 스모크 **12/12**(console·pageerror·`/api`·외부도메인 전부 0), evidence 9/9·report 8/8, E2E 7/7, typecheck, build, validate·seed·priority·contracts(OpenAPI 30/30/30 · JSON Schema 265/18)·runtime gate·conformance·fixture gate 18/18·a11y 전부 PASS.
+  - **주의 — 2026-08-03 "보류 확정"을 뒤집은 결정이다.** `feat/river-layer-multi-source` 브랜치 기록에 08-03 사용자 결정으로 "현행 비차단 가드 유지(보류)"가 남아 있다. 보류 사유였던 "두 안 모두 스모크 S8을 깨뜨린다"는 위 S8/S9 재구성으로 해소했다. 그 브랜치와 머지할 때 이 절과 아래 "Pending approval" 절이 충돌한다 — **이 항목(08-07 승인)이 최신이다.**
+
 - **보고서 수치 나열 → 지표 표 렌더 + 관측값 중복 제거 (2026-08-03)**: 사용자 지적 — 초안 미리보기 `2. 현재 조건`처럼 수치가 여러 줄 나열되면 문단이 아니라 표로 나와야 한다.
   - **표 블록 신설**: `reportDocument.ts`에 `{kind:'table'}` 추가. `toMarkdown`은 GFM 파이프 표로 직렬화(셀 안 `|`는 이스케이프), 미리보기는 `<table class="report-doc-table">`로 렌더하며 첫 열은 `th scope="row"`.
   - **파싱은 강제하지 않는다**: `measurementBlocks()`가 `지표: 값 (자료상태)` 꼴 줄만 표로 모으고, 그 꼴이 아닌 줄은 표 아래 문단으로 남긴다. 표에 넣을 줄이 2개 미만이면 예전처럼 문단 하나. 담당자가 자유롭게 고쳐 쓰는 칸이라 산문을 쓰면 산문 그대로 나온다. 실측 확인: 산문 입력 시 표 0개, 혼합 입력 시 표 1개 + 후행 문단 보존.
@@ -158,13 +166,8 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 - **부산·인제·영천 계획자료 구조화**: 사용자가 자연재해저감 종합계획·하천기본계획 **PDF를 추후 제공** 예정. 수령 후 `data/reference/districts.json`·`rivers.json`·`geo.json`과 동일 스키마로 전사하면 지도 POI 팝업·계획·근거 패널이 그대로 동작한다(코드 변경 불필요). 현재는 의왕 41430(17지구)·구미 47190(6지구)·남원 45190(6지구) + 하천 3개(안양천·구미천·요천)만 커버.
 - 참고: 원시 xlsx(`메타데이터 참고자료(T3Q)/`)에는 전국 재해대장 115,563행·위험지구 약 6,300지구가 있으나 **위험요인 서술·임계값·근거 문서페이지·좌표가 없어** 팝업 수준의 정보를 만들 수 없다(그 정보는 저감계획 PDF 판독에서 나옴). 재해대장은 피해금액·복구비 보강용으로 조인 가능.
 
-## Pending approval (Seed 불일치 영향범위 보고)
-- **[보류 확정 · 2026-08-03 사용자 결정] `GM-A-01` seed 불일치** — 현행 비차단 가드를 유지한다. 아래 원 항목은 배경으로 남긴다.
-  - 보류 이유: **수정 두 안이 모두 스모크 S8을 깨뜨린다**(이번에 새로 확인된 미기록 사실). `scripts/smoke_dashboard_console.py:216-224`의 S8이 `.map-highlight-notice` 문구에 `'GM-A-01'`이 들어가는지를 단언하는데, (a)를 하면 feature가 생겨 배너가 안 뜨고, (b)를 하면 문구가 바뀐다. S8은 **"미존재 ID 비차단 가드"의 유일한 회귀 테스트**이므로 어느 쪽이든 가드 검증 자체는 보존하는 형태로 재작성해야 하고, 그 테스트 수정도 승인 범위에 포함된다.
-  - 실측 확인: `geo.json`의 47190 GM 계열은 `GM-A-03/A-04/A-07/B-10/B-13/C-01` 6건이고 `GM-A-01`은 없다. `priority_areas_seed.json`의 `spatial_object_id` 참조 4건 중 깨진 것은 이 1건뿐. `data/seed`↔`public/seed` 사본은 현재 완전 동일.
-  - (a)안은 **`GM-A-01`의 실제 Geometry 좌표**가 있어야 하는데 리포에 없다 → 계획 PDF 수령 후에만 가능(정공법). 임의 폴리곤을 넣으면 v0.7·v1.1의 "Geometry 검증 전 표출 금지"를 위반한다.
-  - (b)안(`GM-A-04 구미천지구`로 교체)은 이름상 정확히 대응하고 즉시 가능하지만 `data/seed`의 ID 변경이라 `evaluation_criteria.md:4` + `CLAUDE.md:132` 동결 규칙에 정면으로 걸려 **명시적 동결 해제 승인**이 필요하다.
-- `apps/web/public/seed/priority_areas_seed.json`의 `SIT-GM-POC-001`(47190 구미) rank 1이 `spatial_object_id: "GM-A-01"` 참조하나 `geo.json`에 해당 feature 없음(GM 계열은 GM-A-03/04/07, GM-B-10/13, GM-C-01만 존재). 현재 UI 가드로 비차단 안내 처리됨. 근본 수정은 seed 동결 해제 승인 필요 — 택1: (a) geo.json에 GM-A-01 feature 추가, (b) priority_areas_seed의 참조 ID를 기존 ID로 교체
+## Pending approval
+- 없음. **GM-A-01 seed 불일치는 2026-08-07 승인으로 해소**(PR #5 머지 · `GM-A-04 구미천지구`로 참조 교체, 스모크 S8/S9 재구성으로 미존재 ID 가드 보존). 08-03 의 "보류 확정"은 이 결정으로 대체됐다.
 
 ## 다음 세션에서 이어서 할 일 (2026-08-03 저녁 기준 · 우선순위)
 
@@ -175,7 +178,7 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
    - 함정 2가지: 기상청이 `base_time` 발표 전이면 `NO_DATA(03)`을 반환해 FAILED로 떨어진다 → `KMA_REQUEST_LAG_MINUTES`를 60~70으로 올려 재시도(코드 변경 불필요). 신규 키는 활용신청 승인 반영 전 `SERVICE_KEY_IS_NOT_REGISTERED_ERROR(30)`가 온다 → 시간 두고 재시도.
 2. **[승인 불필요 · 바로 착수 가능] 버그 4건 + 검증 게이트 3건** — 계획서 승인 완료, 구현 미착수. 상세는 아래 "다음 작업 상세" 절.
 3. 디자인 산출물 수령 시 타이포 스케일 확정 (`docs/30` B-7 — 교체 지점 2곳뿐)
-4. 부산·인제·영천 계획 PDF 수령 시 전사 (코드 변경 불필요). **`GM-A-01`은 이 PDF가 와야 정공법으로 풀린다** — 아래 Pending approval 참고.
+4. 부산·인제·영천 계획 PDF 수령 시 전사 (코드 변경 불필요).
 
 ### 다음 작업 상세 (계획 승인 완료 · 구현 미착수)
 
@@ -186,7 +189,7 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 
 **검증 게이트 3건**
 - **(핵심) `provider_promotion_status.json`을 읽는 코드가 리포에 하나도 없다.** Phase 8이 승격 기록을 쌓아갈 원장인데 단계 역행·`approvals` 누락·`promotion_hold` 위반을 아무도 검사하지 않는다. → `scripts/smoke_provider_promotion_status.py` 신설 + `package.json`에 `test:promotion-status` 등록. 검사: 사다리 유효값 / **DEFAULT 금지**(CLAUDE.md:133) / SHADOW_TESTED 이상이면 `approvals` 기록 + `provider_shadow_test_result.json`의 SHADOW_PASSED 근거 존재 / `promotion_hold`면 `hold_reason` 필수 / `provider_contracts_seed.json`의 `current`가 전부 `mock` / 비밀값 미포함. 기존 게이트 판정 규칙을 재구현하지 말고 결과 파일 교차참조만.
-- 베이스맵 `aria-pressed` 단언이 없다 — 인계문서 D-4-2 585행 계약인데 어느 게이트도 안 본다. → `smoke_dashboard_console.py`에 S12 추가(false→true→false 전이 + 레이어 칩 `aria-pressed` 존재). S1~S11은 불변.
+- 베이스맵 `aria-pressed` 단언이 없다 — 인계문서 D-4-2 585행 계약인데 어느 게이트도 안 본다. → `smoke_dashboard_console.py`에 스텝 추가(false→true→false 전이 + 레이어 칩 `aria-pressed` 존재). **PR #5 로 이미 S12 까지 차 있으므로 신설분은 S13 이고 S1~S12 는 불변이다.**
 - `data/seed` ↔ `apps/web/public/seed` 이중 사본의 동기화를 검사하는 게이트가 없다(지금은 전부 SYNC). → `validate_vercel_repo.py`에 공통 파일명 SHA-256 비교 추가(`geo.json` 2MB라 해시로). `data/reference` ↔ `public/seed` 공통분(criteria·districts·geo·rivers)도 포함.
 
 계획 원문: `C:\Users\kyh\.claude\plans\bright-kindling-comet.md`
