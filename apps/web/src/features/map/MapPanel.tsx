@@ -1,6 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import 'ol/ol.css';
 import { createVWorldMap, type BaseMapType, type MapConnectionState, type MapFeatureSelection, type MapPoiPlacement, type VWorldMapHandle } from './VWorldMapAdapter';
+import type { RiverSourceState } from './riverLayers';
+import {
+  RIVER_LAYER_SOURCES, SEMANTIC_ALIGNMENT_NOTE, SEMANTIC_LABEL,
+  isRiverLayerId, riverLayerId, riverSourceById, riverSourceIdOf,
+} from './riverLayerSources';
 import { loadPlanReference } from '../../services/apiClient';
 // 위험지구 상세 렌더·표기 규칙은 '현재 판단' 상세보기 모달과 공용 컴포넌트를 재사용한다.
 import { DistrictDetailSections, FactList, MISSING, districtFactRows, evidenceText, orMissing, str, type Fact } from '../../components/DistrictDetail';
@@ -18,8 +23,11 @@ interface Props {
   /** 팝업의 '질의에 참조 추가' 배선용. 미연결이어도 동작이 깨지지 않도록 optional 이다. */
   onSelectFeature?(item: AgentContextItem): void;
 }
+/** 칩 행에 노출하는 대표 하천 소스. 나머지 소스(비교용 Seed·중심선)는 레이어 메뉴에서 켠다 —
+ *  `.map-layer-chips` 는 nowrap·overflow:hidden 이라 소스 수만큼 칩을 늘리면 기존 칩이 잘린다. */
+const PRIMARY_RIVER_SOURCE = 'vworld-wms-wkmstrm';
 const core = [
-  { name: '하천', code: 'L2' },
+  { name: '하천', code: riverLayerId(PRIMARY_RIVER_SOURCE) },
   { name: '위험지구', code: 'L1' },
   { name: '행정경계', code: 'L3' },
   { name: '침수흔적', code: 'L-FLOOD-TRACE' },
@@ -33,6 +41,16 @@ const LAYER_LABEL: Record<string, string> = {
   FLOOD_TRACE: '침수흔적', 'L-FLOOD-TRACE': '침수흔적',
   'L-FLOOD-RISK-AREA': '홍수위험지역 (Mock)', 'L-DANGEROUS-RESERVOIR': '위험저수지 (Mock)', 'L-STORM-FLOOD-IMPROVEMENT': '풍수해개선지구 (Mock)',
 };
+const layerLabel = (layerId: string) =>
+  (isRiverLayerId(layerId) ? riverSourceById(riverSourceIdOf(layerId))?.label : undefined) ?? LAYER_LABEL[layerId] ?? layerId;
+/** 소스가 실제로 무엇으로 그려지고 있는지. 'WMS인 줄 알았는데 로컬 Seed였다'가 없게 팝업에 그대로 적는다. */
+const DELIVERY_LABEL: Record<RiverSourceState['delivery'], string> = {
+  wms: 'VWorld WMS (서버 렌더)',
+  geojson: '로컬 Seed (오프라인 추출)',
+  unavailable: '표시 불가',
+};
+/** 레이어 메뉴의 상태 칸은 폭이 좁다. 긴 설명은 팝업이 맡고 여기서는 공급경로만 짧게 적는다. */
+const DELIVERY_SHORT: Record<RiverSourceState['delivery'], string> = { wms: 'WMS', geojson: 'Seed', unavailable: '불가' };
 
 const list = (value: unknown): string[] => (Array.isArray(value) ? value.map((item) => str(item)).filter((item): item is string => Boolean(item)) : []);
 function sourceEvidence(properties: Record<string, unknown>): ReferenceEvidence | null {
@@ -42,13 +60,18 @@ function sourceEvidence(properties: Record<string, unknown>): ReferenceEvidence 
 }
 
 /** 레이어별 공통·부가 표기. 없는 항목은 '미확보'로 두고 있는 것처럼 채우지 않는다. */
-function facts(selection: MapFeatureSelection, district: DistrictReference | null, river: RiverReference | null): Fact[] {
+function facts(selection: MapFeatureSelection, district: DistrictReference | null, river: RiverReference | null, riverState: RiverSourceState | null): Fact[] {
   const properties = selection.properties;
-  const rows: Fact[] = [{ label: '레이어', value: LAYER_LABEL[selection.layerId] ?? selection.layerId ?? MISSING }];
+  const rows: Fact[] = [{ label: '레이어', value: layerLabel(selection.layerId) }];
   if (selection.layerId === 'L1') {
     rows.push(...districtFactRows(district, properties));
-  } else if (selection.layerId === 'L2') {
-    rows.push({ label: '하천등급', value: orMissing(river?.grade ?? properties.grade) });
+  } else if (isRiverLayerId(selection.layerId)) {
+    const source = riverSourceById(riverSourceIdOf(selection.layerId));
+    // 자료의 성격을 먼저 말한다. 실폭·하천구역·중심선은 베이스맵과 맞는 모습이 서로 다르다.
+    if (source) rows.push({ label: '자료성격', value: `${SEMANTIC_LABEL[source.semantic]} · ${SEMANTIC_ALIGNMENT_NOTE[source.semantic]}` });
+    rows.push({ label: '공급경로', value: riverState ? DELIVERY_LABEL[riverState.delivery] : MISSING });
+    rows.push({ label: '자료출처', value: orMissing(source?.sourceOrg) });
+    rows.push({ label: '하천등급', value: orMissing(river?.grade ?? properties.grade ?? properties.cat_nam) });
     rows.push({ label: '유역면적', value: river?.basin_area_km2 ? `${river.basin_area_km2} km²` : MISSING });
     rows.push({ label: '연장', value: river?.length_km ? `${river.length_km} km` : MISSING });
     rows.push({ label: '계획빈도', value: orMissing(river?.design_frequency_yr) });
@@ -116,7 +139,12 @@ export function MapPanel({ adminCode, highlightedFeatureId, initialVisible, comp
   const [hoverPoiId, setHoverPoiId] = useState<string | null>(null);
   const [layerMenuOpen, setLayerMenuOpen] = useState(false);
   const [detail, setDetail] = useState<{ district: DistrictReference | null; river: RiverReference | null }>({ district: null, river: null });
-  const [visible, setVisible] = useState<Record<string, boolean>>({ L1: true, L2: true, L3: true, 'L-FLOOD-TRACE': false, 'L-FLOOD-RISK-AREA': false, 'L-DANGEROUS-RESERVOIR': false, 'L-STORM-FLOOD-IMPROVEMENT': false, ...initialVisible });
+  const [riverStates, setRiverStates] = useState<RiverSourceState[]>([]);
+  const [visible, setVisible] = useState<Record<string, boolean>>({
+    L1: true, L3: true, 'L-FLOOD-TRACE': false, 'L-FLOOD-RISK-AREA': false, 'L-DANGEROUS-RESERVOIR': false, 'L-STORM-FLOOD-IMPROVEMENT': false,
+    ...Object.fromEntries(RIVER_LAYER_SOURCES.map((source) => [riverLayerId(source.id), source.defaultVisible])),
+    ...initialVisible,
+  });
 
   const closePopup = useCallback(() => {
     setSelection(null);
@@ -136,6 +164,7 @@ export function MapPanel({ adminCode, highlightedFeatureId, initialVisible, comp
           setDetail({ district: null, river: null });
         });
         handle.onPoiChange((points) => { if (active) setPois(points); });
+        handle.onRiverStateChange((states) => { if (active) setRiverStates(states); });
         setMapReady(true);
       })
       .catch((mapError: unknown) => setError(mapError instanceof Error ? mapError.message : '지도 초기화 실패'));
@@ -153,7 +182,7 @@ export function MapPanel({ adminCode, highlightedFeatureId, initialVisible, comp
 
   // 위험지구·하천은 계획문서 판독 참고자료(districts/rivers)를 붙여 상세 요약까지 표시한다. 결측은 정상이며 조용히 1차 요약만 남긴다.
   useEffect(() => {
-    if (!selection || (selection.layerId !== 'L1' && selection.layerId !== 'L2')) return;
+    if (!selection || (selection.layerId !== 'L1' && !isRiverLayerId(selection.layerId))) return;
     const code = str(selection.properties.admin_code) ?? adminCode;
     let alive = true;
     let pending = referenceCache.current.get(code);
@@ -188,7 +217,8 @@ export function MapPanel({ adminCode, highlightedFeatureId, initialVisible, comp
   function toggle(code: string) {
     const next = !visible[code];
     setVisible((current) => ({ ...current, [code]: next }));
-    mapRef.current?.setLayerVisible(code, next);
+    if (isRiverLayerId(code)) mapRef.current?.setRiverSourceVisible(riverSourceIdOf(code), next);
+    else mapRef.current?.setLayerVisible(code, next);
     if (selection && !next && selection.layerId === code) closePopup();
   }
   function toggleBaseMap() {
@@ -207,10 +237,13 @@ export function MapPanel({ adminCode, highlightedFeatureId, initialVisible, comp
   const district = detail.district;
   const river = detail.river;
   const title = selection ? (str(district?.district_name ?? river?.name ?? selection.properties.name) ?? selection.id ?? '선택 지점') : '';
-  const badge = selection ? (str(district?.disaster_type ?? selection.properties.disaster_type ?? selection.properties.grade) ?? LAYER_LABEL[selection.layerId] ?? '참고정보') : '';
+  const badge = selection ? (str(district?.disaster_type ?? selection.properties.disaster_type ?? selection.properties.grade) ?? layerLabel(selection.layerId) ?? '참고정보') : '';
   const badges = selection ? list(selection.properties.display_badges) : [];
   const evidence = evidenceText(district?.evidence ?? river?.profile_evidence ?? (selection ? sourceEvidence(selection.properties) : null));
-  const contextItem: AgentContextItem | null = selection && (selection.layerId === 'L1' || selection.layerId === 'L2')
+  const selectedRiverState = selection && isRiverLayerId(selection.layerId)
+    ? riverStates.find((state) => state.id === riverSourceIdOf(selection.layerId)) ?? null
+    : null;
+  const contextItem: AgentContextItem | null = selection && (selection.layerId === 'L1' || isRiverLayerId(selection.layerId))
     ? { kind: selection.layerId === 'L1' ? 'district' : 'river', id: selection.id, label: title, detail: str(district?.disaster_type ?? selection.properties.disaster_type ?? river?.grade ?? selection.properties.grade) ?? undefined, admin_code: str(selection.properties.admin_code) ?? adminCode }
     : null;
 
@@ -292,7 +325,7 @@ export function MapPanel({ adminCode, highlightedFeatureId, initialVisible, comp
             <button type="button" className="map-popup-close" aria-label="지도 정보 창 닫기" onClick={closePopup}>✕</button>
           </header>
           <div className="map-popup-body">
-            <FactList rows={facts(selection, district, river)} />
+            <FactList rows={facts(selection, district, river, selectedRiverState)} />
             {district ? <DistrictDetailSections district={district} /> : null}
             {river?.warning_reference_station ? (
               <section className="map-popup-section">
@@ -356,6 +389,34 @@ export function MapPanel({ adminCode, highlightedFeatureId, initialVisible, comp
             {PENDING_LAYERS.map((name) => (
               <li key={name}><button type="button" disabled><span>{name}</span><span className="map-layer-menu-state">후속 Provider 연결 대상</span></button></li>
             ))}
+          </ul>
+          {/* 하천은 의미가 다른 소스를 겹쳐 봐야 정합을 판단할 수 있어 별도 묶음으로 둔다.
+              칩 행에는 대표 소스 1개만 나가고, 비교·검증용 소스는 여기서 켠다. */}
+          <p className="map-layer-menu-title map-layer-menu-group">하천 소스 · 겹쳐서 정합 비교</p>
+          <ul>
+            {RIVER_LAYER_SOURCES.map((source) => {
+              const code = riverLayerId(source.id);
+              const state = riverStates.find((item) => item.id === source.id);
+              const blocked = source.status === 'unverified' || state?.delivery === 'unavailable';
+              return (
+                <li key={source.id}>
+                  <button
+                    type="button"
+                    aria-pressed={blocked ? undefined : visible[code]}
+                    disabled={blocked}
+                    title={blocked ? source.note : `${SEMANTIC_LABEL[source.semantic]} · ${SEMANTIC_ALIGNMENT_NOTE[source.semantic]}`}
+                    onClick={() => toggle(code)}
+                  >
+                    <span>{source.label}</span>
+                    <span className="map-layer-menu-state">
+                      {blocked
+                        ? (source.status === 'unverified' ? '소스 미확정' : state?.message || '표시 불가')
+                        : `${visible[code] ? '표시' : '숨김'}${state ? ` · ${DELIVERY_SHORT[state.delivery]}` : ''}`}
+                    </span>
+                  </button>
+                </li>
+              );
+            })}
           </ul>
         </div>
       ) : null}
