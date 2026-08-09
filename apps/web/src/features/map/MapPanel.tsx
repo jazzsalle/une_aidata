@@ -34,13 +34,19 @@ const core = [
   { name: '홍수위험지역 (Mock)', code: 'L-FLOOD-RISK-AREA' },
   { name: '위험저수지 (Mock)', code: 'L-DANGEROUS-RESERVOIR' },
   { name: '풍수해개선지구 (Mock)', code: 'L-STORM-FLOOD-IMPROVEMENT' },
+  // 관측소는 전국 자료다. 시범서비스 대상이 전국이고 검증만 3개 지역이라 지역별로 자르지 않는다.
+  { name: '수위관측소', code: 'L-STATION-WL' },
+  { name: '강수량관측소', code: 'L-STATION-RF' },
 ];
-const PENDING_LAYERS = ['관측소', '피해위치', '대피소'];
+const PENDING_LAYERS = ['피해위치', '대피소'];
 const LAYER_LABEL: Record<string, string> = {
   L1: '위험지구', L2: '하천', L3: '행정경계',
   FLOOD_TRACE: '침수흔적', 'L-FLOOD-TRACE': '침수흔적',
   'L-FLOOD-RISK-AREA': '홍수위험지역 (Mock)', 'L-DANGEROUS-RESERVOIR': '위험저수지 (Mock)', 'L-STORM-FLOOD-IMPROVEMENT': '풍수해개선지구 (Mock)',
+  'L-STATION-WL': '수위관측소', 'L-STATION-RF': '강수량관측소',
 };
+/** 전국 관측소 레이어(수위·강수량). 이 자료만 계획문서 판독물이 아니라 공공 API 원본이다. */
+const isStationLayer = (layerId: string) => layerId === 'L-STATION-WL' || layerId === 'L-STATION-RF';
 const layerLabel = (layerId: string) =>
   (isRiverLayerId(layerId) ? riverSourceById(riverSourceIdOf(layerId))?.label : undefined) ?? LAYER_LABEL[layerId] ?? layerId;
 /** 소스가 실제로 무엇으로 그려지고 있는지. 'WMS인 줄 알았는데 로컬 Seed였다'가 없게 팝업에 그대로 적는다. */
@@ -95,6 +101,21 @@ function facts(selection: MapFeatureSelection, district: DistrictReference | nul
     rows.push({ label: '표기 등급', value: orMissing(properties.risk_grade) });
     rows.push({ label: '관리기관', value: orMissing(properties.management_org) });
     rows.push({ label: '최근 점검', value: orMissing(properties.last_inspected_at) });
+  } else if (selection.layerId === 'L-STATION-WL' || selection.layerId === 'L-STATION-RF') {
+    // 관측값이 아니라 관측소의 '제원'이다. 그 구분을 맨 위에 적는다.
+    rows.push({ label: '자료성격', value: '관측소 제원(위치·소속)입니다. 이 화면의 수위·강우 값이 아닙니다.' });
+    rows.push({ label: '관측소코드', value: orMissing(properties.station_code) });
+    rows.push({ label: '관측소종류', value: orMissing(properties.station_type) });
+    rows.push({ label: '운영상태', value: properties.operating === false ? '폐쇄' : '운영' });
+    rows.push({ label: '관측방식', value: orMissing(properties.observation_kind) });
+    rows.push({ label: '하천', value: orMissing(properties.river_name) });
+    rows.push({ label: '수계', value: orMissing(properties.basin) });
+    rows.push({ label: '유역면적', value: properties.basin_area_km2 ? `${properties.basin_area_km2} km²` : MISSING });
+    rows.push({ label: '관리기관', value: orMissing(properties.manager) });
+    rows.push({ label: '주소', value: orMissing(properties.address) });
+    rows.push({ label: '관측개시', value: orMissing(properties.opened_at) });
+    rows.push({ label: '자료출처', value: orMissing(properties.source) });
+    rows.push({ label: '수집일', value: orMissing(properties.fetched_at) });
   } else if (selection.layerId === 'L-STORM-FLOOD-IMPROVEMENT') {
     rows.push({ label: '사업상태', value: orMissing(properties.project_status) });
     rows.push({ label: '사업기간', value: orMissing(properties.project_period) });
@@ -142,6 +163,7 @@ export function MapPanel({ adminCode, highlightedFeatureId, initialVisible, comp
   const [riverStates, setRiverStates] = useState<RiverSourceState[]>([]);
   const [visible, setVisible] = useState<Record<string, boolean>>({
     L1: true, L3: true, 'L-FLOOD-TRACE': false, 'L-FLOOD-RISK-AREA': false, 'L-DANGEROUS-RESERVOIR': false, 'L-STORM-FLOOD-IMPROVEMENT': false,
+    'L-STATION-WL': false, 'L-STATION-RF': false,
     ...Object.fromEntries(RIVER_LAYER_SOURCES.map((source) => [riverLayerId(source.id), source.defaultVisible])),
     ...initialVisible,
   });
@@ -337,12 +359,19 @@ export function MapPanel({ adminCode, highlightedFeatureId, initialVisible, comp
               </section>
             ) : null}
             {str(selection.properties.source_note) ? <p className="map-popup-source">비고 · {String(selection.properties.source_note)}</p> : null}
-            <section className="map-popup-section">
-              <h4>근거</h4>
-              <p className="map-popup-source">{evidence ?? MISSING}</p>
-            </section>
+            {/* 관측소는 계획문서 판독물도 Mock/Seed 도 아니다. '근거' 절과 면책문구를 자료성격에 맞춘다. */}
+            {isStationLayer(selection.layerId) ? null : (
+              <section className="map-popup-section">
+                <h4>근거</h4>
+                <p className="map-popup-source">{evidence ?? MISSING}</p>
+              </section>
+            )}
             {/* 3줄짜리 면책문구는 스크롤 본문 끝에 둔다. 푸터에 두면 고정 높이를 먹어 본문이 무너진다. */}
-            <p className="map-popup-disclaimer">본 요약은 관리대장·계획문서 판독 및 Mock/Seed 기반 참고 정보이며, 공식 위험등급 판정이나 피해예측이 아닙니다.</p>
+            <p className="map-popup-disclaimer">
+              {isStationLayer(selection.layerId)
+                ? '관측소 위치·소속 정보이며 관측값이 아닙니다. 수위·강우 실측값은 별도 Provider 연계를 거쳐야 표시됩니다.'
+                : '본 요약은 관리대장·계획문서 판독 및 Mock/Seed 기반 참고 정보이며, 공식 위험등급 판정이나 피해예측이 아닙니다.'}
+            </p>
           </div>
           {contextItem && onSelectFeature ? (
             <footer className="map-popup-foot">
