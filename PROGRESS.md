@@ -41,7 +41,12 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
    - 실행: `node tests/provider/provider_shadow_gate.cjs --provider kma_nowcast` (PowerShell 에서 npm 스크립트로 돌리면 bash 가 WSL 로 잡힐 수 있다 — Blockers 참고)
    - **함정 2가지**: 신규 키는 활용신청 승인 반영 전 `SERVICE_KEY_IS_NOT_REGISTERED_ERROR(30)` → 시간 두고 재시도. 기상청 발표 시각 전이면 `NO_DATA(03)` → `KMA_REQUEST_LAG_MINUTES` 를 60~70 으로 올려 재시도(코드 변경 불필요).
    - 결과 검토 → 승인1(SHADOW_TESTED) → Vercel Preview env 설정(승인2)·회귀 재통과 → SELECTABLE
-2. **hrfco_hydrology**: HRFCO Endpoint·키 + **공식 관측소 코드 확정 필수** (v0.7 규칙 4 — `official_station_code` 없으면 하네스가 HELD 처리). 하천기본계획의 Y4·AY09 같은 내부 산정지점 코드는 공식 관측소 코드가 아니다.
+2. **hrfco_hydrology** — **후보 조사 완료(2026-08-09), 상세: `docs/31_hrfco_station_candidates.md`**
+   - WAMIS 오픈API(인증키 불필요)로 전국 수위관측소 1,360개를 받아 좌표·유역면적으로 대조했다.
+   - **45190 남원 → `4005670` 남원시(동림교)** (요천, 유역 317.09 km²). 계획 지점 `Y4 남원수위표`(315.70)와 **0.44% 차이** — 사실상 같은 지점.
+   - **47190 구미 → `2011631` 구미시(도량교)** (구미천, 40.46 km²). 소권역 전수 확인 결과 **구미천 위 유일한 공식 관측소**. 다른 구미시 관측소는 전부 낙동강 본류·한천이라 이름만 보고 고르면 틀린다.
+   - **41430 의왕 → 공식 관측소 없음.** 안양천 소권역 전수 4개가 모두 의왕 하류이고, 최상류(`1018690` 111.52 km²)조차 계획 최하류 `AY00`(88.16)보다 하류다. **규칙 4 대로 비워 두고 호출하지 않는다.**
+   - 남은 확정 절차: ① 키로 HRFCO 자체 관측소 목록과 `obscd` 대조 ② `4005670` ↔ `Y4 남원수위표` 동일 지점 확인(관측소명이 '동림교'로 다름). 그 뒤 `HRFCO_STATION_MAP_JSON` 투입 → Shadow Test.
 3. **une_rag**: 외부 접근 가능한 Endpoint 확보 시 승인2(SELECTABLE) 재검토. 경로 추정 금지 — Swagger probe(`/api/v1/integrations/une-rag-probe`) 먼저(v0.7 규칙 5).
 4. **t3q 3종**: 실 Endpoint·인증 계약 확정 전까지 `promotion_hold` — Phase 8 승인 대상 아님.
 5. **공통 주의**: 키는 **로컬 셸 env 로만**. Vercel env 설정은 그 자체가 SELECTABLE 승격 행위라 승인2 이후 사용자가 직접 한다. DEFAULT 전환 금지. 상세 절차: `docs/29_provider_shadow_and_promotion_procedure.md`
