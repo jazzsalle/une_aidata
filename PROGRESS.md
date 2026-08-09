@@ -247,7 +247,7 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 - **스크립트 3종 신설**: `extract_river_layers.py`(3종 추출 · `.prj` 가드 · 중심선 dbf 832 MB 전건 파싱 회피) · `build_river_web_layers.py`(단순화·세류 제외·`river_id` 조인·라벨 생성) · `compare_river_alignment.py`(정합 측정). **형상만 옮기고 면적·하폭 등 파생 지표는 만들지 않는다**(ADR-011).
 - **부수 수정**: `.env` 의 `VITE_VWORLD_MAP_KEY==…` (등호 2개) 때문에 키 앞에 `=` 가 붙어 배경지도가 전부 실패하고 있었다. 그 문자만 제거해 일반·영상지도 정상. dev 서버 콘솔의 502 24건은 백엔드 없는 `/api/v1/*` 폴백이며 VWorld 와 무관하다.
 - **주의**: `compare_river_alignment.py` 는 L2 를 기준으로 삼으므로 이 커밋 이후로는 그대로 돌지 않는다(스크립트 안에 사유 기재).
-- **미정리**: `scripts/extract_realwidth_river.py` 는 `extract_river_layers.py` 가 완전히 대체한다(중복). 사용자 판단 대기.
+- **정리 완료(2026-08-09)**: 중복이던 `scripts/extract_realwidth_river.py` 를 삭제했다. `extract_river_layers.py` 가 3종 전부를 처리하며 기능상 완전히 대체한다(참조 코드·게이트 0건이었다).
 - 검증: typecheck·build·validate(6,931 entries)·seed·priority·contracts(OpenAPI 30/30/30 · JSON Schema 265/18)·runtime gate·fixture 18/18·conformance·spatial assets·a11y·콘솔 스모크 3종(11/11·9/9·8/8, console·pageerror·`/api`·외부도메인 전부 0)·E2E 7/7 전부 PASS.
 
 ### (배경) 2026-08-07 중단 지점 — 위 작업으로 해소됨
@@ -259,7 +259,7 @@ SHP · EPSG:5179(UTM-K) · 전국 218MB · 2025-02-21 갱신.
 
 1. **파일 확보 (사용자 작업).** 다운로드는 `/dtmk/downloadResourceFile.do?ds_id=…&fileNo=…` 이고 **로그인 세션이 필요**하다. 비로그인 호출은 200/Content-Length 0 로 빈 응답. 500MB 이상은 '선택다운로드'를 요구하지만 218MB 라 직접 받기 대상이다.
    - 2026-08-07 시도분(`국가기본도_하천중심선/`)에는 SHP 이 없고 **라온K 다운로드 관리자 설치파일(raonkSetup.exe)** 과 테이블정의서만 받아졌다. 브라우저 설정에 따라 관리자 경유로 빠지므로 실제 `.zip` 이 떨어졌는지 확인 필요. 받은 것은 **실폭하천이 아니라 하천중심선**이었다.
-2. **추출·변환.** 준비된 스크립트: `<scratchpad>/extract_realwidth_river.py` (zip 경로만 인자로 주면 됨). 전국 SHP 을 스트리밍으로 훑어 `geo.json` L3 실경계 bbox(의왕·구미·남원, 2km 여유)에 걸리는 도형만 EPSG:4326 GeoJSON 으로 뽑는다. `.prj` 를 먼저 읽어 5179 가정이 맞는지 확인하는 가드가 들어 있다.
+2. **추출·변환.** 준비된 스크립트: `scripts/extract_river_layers.py` (원본 폴더나 zip 경로를 인자로 주면 된다. 구 `extract_realwidth_river.py` 는 2026-08-09 삭제). 전국 SHP 을 스트리밍으로 훑어 `geo.json` L3 실경계 bbox(의왕·구미·남원, 2km 여유)에 걸리는 도형만 EPSG:4326 GeoJSON 으로 뽑는다. `.prj` 를 먼저 읽어 5179 가정이 맞는지 확인하는 가드가 들어 있다.
 3. **정합 비교.** 일반지도·위성영상에 얹어 기존 `lt_c_wkmstrm` 와 나란히 놓고 오프셋 수치화. 측정 스크립트도 scratchpad 에 있다(`measure_base.py`, `outline_overlay.py`). 세션이 바뀌어 scratchpad 가 사라졌으면 재작성.
 4. 더 잘 맞으면 카탈로그에 소스 추가 → `geo.json` L2 교체 검토(**Seed 변경이라 승인 대상, 별도 PR**).
 
