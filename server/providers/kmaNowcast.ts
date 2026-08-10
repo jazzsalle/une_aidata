@@ -4,10 +4,14 @@ import { env } from '../env.js';
 interface GridPoint { adminCode: string; adminName: string; nx: number; ny: number; }
 interface KmaItem { baseDate?: string; baseTime?: string; category?: string; nx?: number; ny?: number; obsrValue?: string | number; }
 
+// 격자좌표 정본은 기상청 활용가이드의 `격자_위경도(2607).xlsx` 시군구 행이다.
+// 2026-08-10 대조에서 구미(ny 97)·남원(ny 81)이 공식값과 1칸(≈5km) 어긋나 있어 맞췄다.
+// 격자가 틀려도 API 는 유효한 셀이면 정상 응답을 주므로 호출 성공만으로는 잡히지 않는다.
+// 표의 행정구역코드는 개편본(남원 5219000000)이고 여기 키는 우리 Seed 의 코드다.
 const GRID_BY_ADMIN: Record<string, GridPoint> = {
   '41430': { adminCode: '41430', adminName: '경기도 의왕시', nx: 60, ny: 122 },
-  '47190': { adminCode: '47190', adminName: '경상북도 구미시', nx: 84, ny: 97 },
-  '45190': { adminCode: '45190', adminName: '전북특별자치도 남원시', nx: 68, ny: 81 },
+  '47190': { adminCode: '47190', adminName: '경상북도 구미시', nx: 84, ny: 96 },
+  '45190': { adminCode: '45190', adminName: '전북특별자치도 남원시', nx: 68, ny: 80 },
 };
 
 const CATEGORY: Record<string, { type: string; name: string; unit: string | null }> = {

@@ -14,13 +14,77 @@
     },
     {
       "provider_id": "kma_nowcast",
-      "executed": false,
-      "status": "HELD",
-      "held_reason": "DATA_GO_KR_SERVICE_KEY 미설정 — 기상청 초단기실황을 호출하지 않고 사용자 입력·Scenario 값을 유지합니다.",
-      "checks": [],
-      "compared_with_fixture": null,
-      "network_calls": 0,
-      "executed_at": "2026-08-02T05:04:15.798Z"
+      "executed": true,
+      "status": "SHADOW_PASSED",
+      "checks": [
+        {
+          "check": "records_present",
+          "pass": true,
+          "detail": "정규화 Observation 8건"
+        },
+        {
+          "check": "official_data_true",
+          "pass": true
+        },
+        {
+          "check": "value_status_actual",
+          "pass": true
+        },
+        {
+          "check": "observed_at_present",
+          "pass": true
+        },
+        {
+          "check": "source_provider_present",
+          "pass": true,
+          "detail": "KMA_ULTRA_SRT_NCST"
+        },
+        {
+          "check": "error_timeout_warning_fallback",
+          "pass": "not_triggered",
+          "detail": "성공 응답 — 오류·Timeout 경로 미발생(fixture 게이트 KMA-ERR/TMO 케이스로 검증됨)"
+        }
+      ],
+      "compared_with_fixture": {
+        "mode": "key-set-and-type-only",
+        "note": "값 비교 아님 — fixture 대표응답 매핑 결과와 실호출 정규화 결과의 필드 구조(키 집합·타입)만 병행비교한다. 레코드는 배열 순서가 아니라 식별자로 짝지어 전건 비교한다.",
+        "live_record_count": 8,
+        "fixture_record_count": 8,
+        "matched_records": 8,
+        "live_keys": [
+          "name",
+          "observation_id",
+          "observed_at",
+          "official_data",
+          "source_provider",
+          "station_id",
+          "type",
+          "unit",
+          "value",
+          "value_status"
+        ],
+        "fixture_keys": [
+          "name",
+          "observation_id",
+          "observed_at",
+          "official_data",
+          "source_provider",
+          "station_id",
+          "type",
+          "unit",
+          "value",
+          "value_status"
+        ],
+        "missing_in_live": [],
+        "extra_in_live": [],
+        "records_only_in_fixture": [],
+        "records_only_in_live": [],
+        "type_mismatches": [],
+        "structurally_compatible": true
+      },
+      "network_calls": 1,
+      "executed_at": "2026-08-10T00:03:16.455Z",
+      "note": "SHADOW_PASSED는 SELECTABLE/DEFAULT 전환이 아님 — 승격은 승인 기반으로만 진행(docs/27 §3)."
     },
     {
       "provider_id": "une_rag",
@@ -95,5 +159,5 @@
       "note": "SHADOW_PASSED는 SELECTABLE/DEFAULT 전환이 아님 — 승격은 승인 기반으로만 진행(docs/27 §3)."
     }
   ],
-  "updated_at": "2026-08-02T06:45:23.952Z"
+  "updated_at": "2026-08-10T00:03:16.455Z"
 }

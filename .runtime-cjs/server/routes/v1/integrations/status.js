@@ -17,7 +17,7 @@ const t3qMetadata_js_1 = require("../../../providers/t3qMetadata.js");
  *  `scripts/smoke_provider_promotion_status.py` 가 실패한다. 원장을 고치면 여기도 같이 고칠 것.
  *  `validation_state` enum(`server/contracts.ts`)은 건드리지 않는다 — 계약 무변경이다. */
 exports.PROVIDER_LIFECYCLE = {
-    kma_nowcast: 'FIXTURE_VALIDATED',
+    kma_nowcast: 'SHADOW_TESTED',
     hrfco_hydrology: 'FIXTURE_VALIDATED',
     une_rag: 'SHADOW_TESTED',
     t3q_event: 'FIXTURE_VALIDATED',
