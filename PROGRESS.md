@@ -30,8 +30,9 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 
 ## In progress
 - **Phase 8** — 코드측 승격 준비는 100% 끝났다. Shadow 하네스(`npm run test:provider-shadow -- --provider <id>`), 승격 절차(`docs/29`), 승격 원장(`tests/provider/provider_promotion_status.json`)과 그 검사 게이트(`npm run test:promotion-status`)가 모두 있다.
+  - `kma_nowcast` = **SHADOW_TESTED** (승인 1 완료, 2026-08-10). 실호출 3개 지역 전부 SHADOW_PASSED(Observation 8건, fixture 8건 전건 구조 일치, 비밀정보 0건). **SELECTABLE 은 미승인** — Vercel env 설정은 그 자체가 승격이라 승인 2 이후 사용자가 직접 한다. 키 활용기간 2026-08-10~2028-08-10, 로컬 `.env` 전용.
   - `une_rag` = **SHADOW_TESTED** (승인 1 완료). SELECTABLE 은 **보류** — 내부망(사내 IP)이라 외부 시연에서 접근 불가, 당분간 Seed 검색 유지. Vercel env 에 `UNE_RAG_*` 설정 금지 상태.
-  - 나머지 5종 = **FIXTURE_VALIDATED**. t3q 3종은 실 Endpoint 미확정으로 `promotion_hold`.
+  - 나머지 4종 = **FIXTURE_VALIDATED**. t3q 3종은 실 Endpoint 미확정으로 `promotion_hold`.
   - **실제 연결된 Provider 는 없으며 배포본은 전부 Seed/Mock 동작.**
 - 승인 없이 진행 가능한 코드 작업은 현재 없다. 아래 Next steps 는 전부 사용자 조치가 선행 조건이다.
 
@@ -44,12 +45,11 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 - 없음. **GM-A-01 seed 불일치는 2026-08-07 승인으로 해소**(PR #5 머지 · `GM-A-04 구미천지구`로 참조 교체, 스모크 S8/S9 재구성으로 미존재 ID 가드 보존).
 
 ## Next steps (Phase 8 잔여 — provider별 독립 진행, 전부 사용자 조치 선행)
-1. **kma_nowcast (가장 간단, 권장 1순위)** — 이 키 하나면 그날 Shadow Test → 승인1까지 간다.
-   - 공공데이터포털에서 **기상청_단기예보((구)_동네예보) 조회서비스** 활용신청 → 마이페이지 → 오픈API → 개발계정에서 **일반 인증키(Decoding)** 확인
-   - 리포 루트 `.env` 에 `DATA_GO_KR_SERVICE_KEY=<키>` 한 줄. **키를 채팅·코드·문서에 남기지 않는다.**
-   - 실행: `node tests/provider/provider_shadow_gate.cjs --provider kma_nowcast` (PowerShell 에서 npm 스크립트로 돌리면 bash 가 WSL 로 잡힐 수 있다 — Blockers 참고)
-   - **함정 2가지**: 신규 키는 활용신청 승인 반영 전 `SERVICE_KEY_IS_NOT_REGISTERED_ERROR(30)` → 시간 두고 재시도. 기상청 발표 시각 전이면 `NO_DATA(03)` → `KMA_REQUEST_LAG_MINUTES` 를 60~70 으로 올려 재시도(코드 변경 불필요).
-   - 결과 검토 → 승인1(SHADOW_TESTED) → Vercel Preview env 설정(승인2)·회귀 재통과 → SELECTABLE
+1. ~~kma_nowcast 승인1~~ → **2026-08-10 완료.** 남은 것은 **승인 2(SELECTABLE)** 뿐이다.
+   - Vercel 프로젝트(`une-aidata-web`) env 에 `DATA_GO_KR_SERVICE_KEY` 를 넣는 순간 실경로로 전환된다 = **그 행위 자체가 SELECTABLE 승격**이라 사용자가 직접 한다(docs/29 §17-18).
+   - 넣은 뒤 회귀 재통과 + `integrations/status` 표기 확인. 되돌리려면 Vercel env 를 지우면 Seed 로 복귀한다.
+   - 새 키가 필요할 때 함정 2가지: 활용신청 승인 반영 전이면 `SERVICE_KEY_IS_NOT_REGISTERED_ERROR(30)` → 시간 두고 재시도. 발표 시각 전이면 `NO_DATA(03)` → `KMA_REQUEST_LAG_MINUTES` 를 60~70 으로 올린다.
+   - **키는 Encoding 이 아니라 Decoding 형태로 넣는다.** 코드가 `searchParams` 로 한 번 더 인코딩해서 Encoding 키를 넣으면 `%252B` 로 이중 인코딩된다.
 2. **hrfco_hydrology** — **후보 조사 완료(2026-08-09), 상세: `docs/31_hrfco_station_candidates.md`**
    - WAMIS 오픈API(인증키 불필요)로 전국 수위관측소 1,360개를 받아 좌표·유역면적으로 대조했다.
    - **45190 남원 → `4005670` 남원시(동림교)** (요천, 유역 317.09 km²). 계획 지점 `Y4 남원수위표`(315.70)와 **0.44% 차이** — 사실상 같은 지점.

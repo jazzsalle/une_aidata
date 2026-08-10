@@ -100,23 +100,65 @@ function typeOf(value) {
   if (Array.isArray(value)) return 'array';
   return typeof value;
 }
-function compareStructure(liveRecord, fixtureRecord) {
-  const live = liveRecord && typeof liveRecord === 'object' ? liveRecord : {};
-  const fixture = fixtureRecord && typeof fixtureRecord === 'object' ? fixtureRecord : {};
-  const liveKeys = Object.keys(live).sort();
-  const fixtureKeys = Object.keys(fixture).sort();
-  const missingInLive = fixtureKeys.filter((key) => !(key in live));
-  const extraInLive = liveKeys.filter((key) => !(key in fixture));
-  const typeMismatches = liveKeys
-    .filter((key) => key in fixture && typeOf(live[key]) !== typeOf(fixture[key]))
-    .map((key) => ({ key, live_type: typeOf(live[key]), fixture_type: typeOf(fixture[key]) }));
+// 레코드를 배열 순서로 짝지으면 안 된다. 기상청 실응답은 카테고리를 알파벳순으로
+// 주고(PTY 먼저, unit=null) fixture 는 다른 순서라(RN1 먼저, unit='mm'), 같은 8종을
+// 담고 있어도 인덱스 0 끼리 비교하면 서로 다른 지표를 견주게 된다. 실제로 그 때문에
+// 2026-08-09 kma_nowcast Shadow Test 가 헛되이 FAILED 로 떨어졌다.
+// 그래서 `type` 같은 안정적 식별자로 짝지어 **레코드 전건**을 비교한다. 비교 범위가
+// 1건 → 전건으로 넓어지므로 판정이 느슨해지는 것이 아니라 강해진다.
+const RECORD_IDENTITY = ['type', 'passage_id', 'station_id', 'id'];
+function identityOf(record, index) {
+  if (!record || typeof record !== 'object') return `#${index}`;
+  for (const key of RECORD_IDENTITY) {
+    if (typeof record[key] === 'string' && record[key]) return `${key}:${record[key]}`;
+  }
+  return `#${index}`;
+}
+function asRecords(value) {
+  if (Array.isArray(value)) return value.filter((row) => row && typeof row === 'object');
+  return value && typeof value === 'object' ? [value] : [];
+}
+function unionKeys(records) {
+  const keys = new Set();
+  for (const record of records) for (const key of Object.keys(record)) keys.add(key);
+  return [...keys].sort();
+}
+function compareStructure(liveInput, fixtureInput) {
+  const liveRecords = asRecords(liveInput);
+  const fixtureRecords = asRecords(fixtureInput);
+  const liveKeys = unionKeys(liveRecords);
+  const fixtureKeys = unionKeys(fixtureRecords);
+  const missingInLive = fixtureKeys.filter((key) => !liveKeys.includes(key));
+  const extraInLive = liveKeys.filter((key) => !fixtureKeys.includes(key));
+
+  const liveById = new Map(liveRecords.map((record, index) => [identityOf(record, index), record]));
+  const fixtureById = new Map(fixtureRecords.map((record, index) => [identityOf(record, index), record]));
+  const typeMismatches = [];
+  for (const [id, live] of liveById) {
+    const fixture = fixtureById.get(id);
+    if (!fixture) continue;
+    for (const key of Object.keys(live)) {
+      if (!(key in fixture)) continue;
+      if (typeOf(live[key]) !== typeOf(fixture[key])) {
+        typeMismatches.push({ record: id, key, live_type: typeOf(live[key]), fixture_type: typeOf(fixture[key]) });
+      }
+    }
+  }
+  const onlyInFixture = [...fixtureById.keys()].filter((id) => !liveById.has(id));
+  const onlyInLive = [...liveById.keys()].filter((id) => !fixtureById.has(id));
   return {
     mode: 'key-set-and-type-only',
-    note: '값 비교 아님 — fixture 대표응답 매핑 결과와 실호출 정규화 결과의 필드 구조(키 집합·타입)만 병행비교한다.',
+    note: '값 비교 아님 — fixture 대표응답 매핑 결과와 실호출 정규화 결과의 필드 구조(키 집합·타입)만 병행비교한다. 레코드는 배열 순서가 아니라 식별자로 짝지어 전건 비교한다.',
+    live_record_count: liveRecords.length,
+    fixture_record_count: fixtureRecords.length,
+    matched_records: [...liveById.keys()].filter((id) => fixtureById.has(id)).length,
     live_keys: liveKeys,
     fixture_keys: fixtureKeys,
     missing_in_live: missingInLive,
     extra_in_live: extraInLive,
+    // 짝이 없는 레코드는 실패 사유가 아니다 — 시각에 따라 응답 항목 수가 달라질 수 있다. 기록만 남긴다.
+    records_only_in_fixture: onlyInFixture,
+    records_only_in_live: onlyInLive,
     type_mismatches: typeMismatches,
     structurally_compatible: missingInLive.length === 0 && typeMismatches.length === 0,
   };
@@ -197,7 +239,7 @@ async function runKma(args) {
     ? { check: 'error_timeout_warning_fallback', pass: true, detail: '오류·Timeout이 예외 전파 없이 연계별 warning Fallback으로 수렴함' }
     : { check: 'error_timeout_warning_fallback', pass: 'not_triggered', detail: '성공 응답 — 오류·Timeout 경로 미발생(fixture 게이트 KMA-ERR/TMO 케이스로 검증됨)' });
   const fixtureMapped = kma.mapKmaFixturePayload(loadFixture('kma_nowcast', 'representative_response.json'), { adminCode: '41430' });
-  const compared = compareStructure(observations[0], fixtureMapped.observations[0]);
+  const compared = compareStructure(observations, fixtureMapped.observations);
   return { checks, compared, fallback, warning: result.warning, record_count: observations.length };
 }
 
@@ -222,7 +264,7 @@ async function runHrfco(args) {
   // fixture 비교는 표본 관측소 컨텍스트로 수행 — 실호출 결과 구조와 키 집합·타입만 비교한다.
   const sampleStation = { admin_code: '99999', official_station_code: 'SAMPLE-ST-01', official_station_name: '표본 관측지점(POC)', river_name: '표본하천' };
   const fixtureMapped = hrfco.mapHrfcoFixturePayload(loadFixture('hrfco_hydrology', 'representative_response.json'), { adminCode: '99999', station: sampleStation });
-  const compared = compareStructure(observations[0], fixtureMapped.observations[0]);
+  const compared = compareStructure(observations, fixtureMapped.observations);
   return { checks, compared, fallback, warning: result.warning, record_count: observations.length };
 }
 
@@ -251,7 +293,7 @@ async function runUneRag(args) {
     ? { check: 'error_timeout_warning_fallback', pass: true, detail: '오류·Timeout이 예외 전파 없이 연계별 warning Fallback으로 수렴함' }
     : { check: 'error_timeout_warning_fallback', pass: 'not_triggered', detail: '성공 응답 — 오류·Timeout 경로 미발생(fixture 게이트 UNERAG-ERR/TMO 케이스로 검증됨)' });
   const fixtureMapped = uneRag.mapUneRagFixturePayload(loadFixture('une_rag', 'representative_response.json'));
-  const compared = compareStructure(results[0], fixtureMapped.results[0]);
+  const compared = compareStructure(results, fixtureMapped.results);
   return { checks, compared, fallback, warning: result.warning, record_count: results.length };
 }
 
