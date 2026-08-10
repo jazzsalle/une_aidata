@@ -24,6 +24,7 @@
 6. 우선 확인지역 점수는 공식 위험등급이나 피해확률로 표현하지 않는다.
 7. 지도 Action은 존재하는 GeoJSON ID만 실행한다.
 8. 변경 후 `npm run typecheck:functions`, `python3 scripts/validate_vercel_repo.py`, `python3 scripts/smoke_priority_logic.py`를 실행한다.
+9. Seed의 행정코드는 그대로 두고, VWorld 경계·기상청 격자 같은 외부 자료와 대조할 때만 `data/reference/admin_code_map.json`으로 현행 코드로 바꾼다. 새로 들이는 지역은 처음부터 현행 코드로 만든다.
 
 
 ## v0.5 구현 규칙

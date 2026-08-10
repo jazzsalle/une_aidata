@@ -1,0 +1,65 @@
+{
+  "dataset": "admin_code_map",
+  "version": "1.0",
+  "purpose": "Seed 가 쓰는 행정코드와 현행 행정표준코드를 잇는다. **외부와 말할 때만** 변환하고 Seed 는 그대로 둔다(2026-08-10 사용자 결정).",
+  "why": "행정구역 개편으로 전북특별자치도(52)·강원특별자치도(51)가 생기면서 구 코드가 상류에서 사라졌다. VWorld LT_C_ADSIGG_INFO 실조회에서 45190·42810 은 NOT_FOUND 이고 52190·51810 만 응답한다. 기상청 격자표(격자_위경도 2607)도 개편 코드를 쓴다. 반면 우리 Seed 는 45190 을 식별자 일부로 쓰고 있어(EVT::20200801-FLOOD-45190-001 등 403건) 일괄 교체는 위험 대비 이득이 작다 — 남원은 대체물이고 실제 검증 대상은 부산·인제·영천이다.",
+  "rule": [
+    "Seed·계약의 admin_code 는 seed_admin_code 를 그대로 쓴다.",
+    "VWorld 경계 재추출·기상청 격자표 조회처럼 **외부 자료와 대조할 때만** current_admin_code 로 바꾼다.",
+    "부산·인제·영천처럼 새로 들어오는 지역은 **처음부터 current 코드로 Seed 를 만든다.** 그때는 두 값이 같아 변환이 필요 없다."
+  ],
+  "verification": {
+    "source": "VWorld 2D데이터 API LT_C_ADSIGG_INFO (attrFilter=sig_cd)",
+    "verified_at": "2026-08-10",
+    "note": "아래 current_admin_code 는 전부 실조회로 확인했다. changed=true 인 항목의 seed_admin_code 는 같은 조회에서 NOT_FOUND 였다."
+  },
+  "regions": [
+    {
+      "seed_admin_code": "41430",
+      "current_admin_code": "41430",
+      "admin_name": "경기도 의왕시",
+      "changed": false,
+      "vworld_lookup": "OK · 의왕시"
+    },
+    {
+      "seed_admin_code": "47190",
+      "current_admin_code": "47190",
+      "admin_name": "경상북도 구미시",
+      "changed": false,
+      "vworld_lookup": "OK · 구미시"
+    },
+    {
+      "seed_admin_code": "45190",
+      "current_admin_code": "52190",
+      "admin_name": "전북특별자치도 남원시",
+      "changed": true,
+      "former_admin_name": "전라북도 남원시",
+      "vworld_lookup": "45190 NOT_FOUND · 52190 OK · 남원시",
+      "note": "Seed 는 45190 을 유지한다. current_situations_seed 의 admin_name 은 이미 '전북특별자치도 남원시'로 신 표기라 이름과 코드가 섞여 있다 — 의도된 상태이며 이 표가 그 근거다."
+    }
+  ],
+  "verification_targets": {
+    "note": "실제 검증 대상 3개 지역. 계획자료 수령 시 **여기 코드로 Seed 를 만든다**(구 코드로 만들지 않는다).",
+    "regions": [
+      {
+        "current_admin_code": "51810",
+        "admin_name": "강원특별자치도 인제군",
+        "former_admin_code": "42810",
+        "vworld_lookup": "42810 NOT_FOUND · 51810 OK · 인제군"
+      },
+      {
+        "current_admin_code": "47230",
+        "admin_name": "경상북도 영천시",
+        "former_admin_code": null,
+        "vworld_lookup": "OK · 영천시"
+      },
+      {
+        "current_admin_code": null,
+        "admin_name": "부산광역시 (대상 구·군 미확정)",
+        "former_admin_code": null,
+        "vworld_lookup": "26xxx 구·군 16개 조회됨 (중구 26110 · 서구 26140 · 동구 26170 · 영도구 26200 · 부산진구 26230 · 동래구 26260 · 남구 26290 · 북구 26320 …)",
+        "note": "'부산'이 시 전체인지 특정 구·군인지 확정되지 않았다. 계획자료 수령 시 대상 구·군을 확정하고 이 항목을 채운다. **임의로 고르지 않는다.**"
+      }
+    ]
+  }
+}
