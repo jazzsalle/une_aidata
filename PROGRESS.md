@@ -27,6 +27,9 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
   - 고정 지점: `VWorldMapAdapter.CENTERS`(3개 좌표) · `geo.json` L3(3개 경계) · `current_situations_seed.json`(3개 상황) · 헤더의 `.context-select`
   - 지도 이동 자체는 좌표만 있으면 되므로 검색은 VWorld 지오코딩이나 행정경계 자료로 붙일 수 있다. **다만 상황(situation)은 seed 계약이라 지역을 늘리는 것과 검색으로 이동만 하는 것은 다른 범위다** — 착수 전에 어디까지인지 먼저 정한다.
   - 검색으로 3개 지역 밖으로 이동하면 위험지구·하천·상황이 비게 된다. "이 지역은 계획자료 미확보" 안내가 함께 필요하다. 관측소는 전국이라 그대로 보인다.
+  - **[같이 볼 것] 기상청 전국 격자표 반입.** 활용가이드의 `격자_위경도(2607).xlsx` 에 시군구 단위 격자 **256개**가 있다. 지금 `kmaNowcast.GRID_BY_ADMIN` 은 3개 지역 하드코딩이다.
+    - 걸림돌: 표는 **개편 행정구역 코드**를 쓴다(남원 `52190` 전북특별자치도, 인제 `51810` 강원특별자치도). 우리 Seed 는 구 코드 `45190` 이라 그대로 키로 못 쓴다.
+    - 갈래: (a) 구 코드 유지 + 변환표를 두거나 (b) Seed 코드 자체를 개편본으로 올리거나. **(b)는 Seed 계약 변경이라 승인 대상.** 검색창 범위와 같이 정하는 게 낫다.
 
 ## In progress
 - **Phase 8** — 코드측 승격 준비는 100% 끝났다. Shadow 하네스(`npm run test:provider-shadow -- --provider <id>`), 승격 절차(`docs/29`), 승격 원장(`tests/provider/provider_promotion_status.json`)과 그 검사 게이트(`npm run test:promotion-status`)가 모두 있다.
