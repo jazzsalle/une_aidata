@@ -72,7 +72,8 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 
 ## How to run
 - 의존성: `npm install` (Node >= 22.12.0) + `python -m pip install -r requirements.txt` + `python -m playwright install chromium`
-- 검증: `npm run validate` → `npm run test:contracts` → `npm run typecheck` → `npm run test:runtime-gate` → `npm run test:provider-conformance` → `npm run test:promotion-status`
+- 검증: `npm run validate` → `npm run test:contracts` → `npm run typecheck` → `npm run test:runtime-gate` → `npm run test:provider-conformance` → `npm run test:promotion-status` → `npm run test:reference-geojson`
+- 선택(키 있을 때): `npm run test:admin-codes` — VWorld 실조회로 행정코드 매핑표 대조. 키 없으면 SKIP·네트워크 0건
 - 콘솔 스모크 3종: `python scripts/smoke_dashboard_console.py` · `npm run test:evidence-console` · `npm run test:report-console` / E2E: `npm run test:e2e`
 - 빌드: `npm run build` / 개발: `npm run dev:web`
 - Windows: `python3` 대신 `python`, `.sh` 는 Git Bash 로 실행
