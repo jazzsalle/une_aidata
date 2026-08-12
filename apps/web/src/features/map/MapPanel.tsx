@@ -77,7 +77,10 @@ function facts(selection: MapFeatureSelection, district: DistrictReference | nul
     if (source) rows.push({ label: '자료성격', value: `${SEMANTIC_LABEL[source.semantic]} · ${SEMANTIC_ALIGNMENT_NOTE[source.semantic]}` });
     rows.push({ label: '공급경로', value: riverState ? DELIVERY_LABEL[riverState.delivery] : MISSING });
     rows.push({ label: '자료출처', value: orMissing(source?.sourceOrg) });
-    rows.push({ label: '하천등급', value: orMissing(river?.grade ?? properties.grade ?? properties.cat_nam) });
+    // 국가기본도 실폭·경계에는 등급 속성이 없어 중심선에서 공간조인해 붙였다(river_class_source).
+    // 계획문서의 하천등급(rivers.json grade)과 출처가 다르므로 붙여서 보여준다.
+    rows.push({ label: '하천등급', value: orMissing(river?.grade ?? properties.river_class ?? properties.grade ?? properties.cat_nam) });
+    if (properties.river_class_source) rows.push({ label: '등급 판정근거', value: String(properties.river_class_source) });
     rows.push({ label: '유역면적', value: river?.basin_area_km2 ? `${river.basin_area_km2} km²` : MISSING });
     rows.push({ label: '연장', value: river?.length_km ? `${river.length_km} km` : MISSING });
     rows.push({ label: '계획빈도', value: orMissing(river?.design_frequency_yr) });

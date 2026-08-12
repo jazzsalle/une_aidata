@@ -33,6 +33,9 @@ ROOT = REPO / 'apps/web/public/reference'
 # 대한민국 본토+도서 대략 범위. 재투영 실패(미터 좌표가 그대로 남는 등)를 잡는 용도다.
 KR_BBOX = (124.0, 32.5, 132.5, 39.5)
 SEMANTICS = {'channel', 'zone', 'centerline', 'label'}
+# 서비스 범위는 국가·지방·소하천 3종이다. 실폭·경계는 등급 속성이 없어 중심선에서
+# 공간조인해 붙이며, 중심선이 지나지 않으면 '등급미확인'으로 남긴다(추정하지 않는다).
+RIVER_CLASSES = {'국가하천', '지방하천', '소하천', '등급미확인'}
 RIVER_KIND_GEOM = {'TN_RIVER_BT': 'Polygon', 'TN_RIVER_BNDRY': 'Polygon',
                    'TN_RIVER_CTLN': 'LineString', 'TN_RIVER_LABEL': 'Point'}
 # 관측소 파일은 '제원'이다. 관측값이 섞여 들어오면 화면이 실측값으로 오인시킬 수 있다.
@@ -96,6 +99,10 @@ def check_rivers(path: Path, features: list, river_ids: set[str]) -> None:
             break
         if props.get('semantic') not in SEMANTICS:
             fail(f'{rel}: 허용되지 않은 semantic {props.get("semantic")}')
+            break
+        river_class = props.get('river_class')
+        if river_class and river_class not in RIVER_CLASSES:
+            fail(f'{rel}: 서비스 범위 밖 river_class {river_class} (국가·지방·소하천 3종 + 등급미확인만 허용)')
             break
         river_id = props.get('river_id')
         if river_id and river_id not in river_ids:
