@@ -35,7 +35,15 @@ RIVER_SE_LABEL = {
     'RVC001': '국가하천', 'RVC002': '지방하천', 'RVC003': '소하천',
     'RVC004': '기타하천', 'RVC005': '세류',
 }
-CENTERLINE_KEEP = {'RVC001', 'RVC002', 'RVC003', 'RVC004'}
+# 서비스가 다루는 하천은 국가·지방·소하천 3종이다(2026-08-12 사용자 확인).
+# 세류(RVC005)는 원자료의 85%를 차지해 시·군 화면에서 하천망을 덮고, 기타하천(RVC004)도 범위 밖이다.
+CENTERLINE_KEEP = {'RVC001', 'RVC002', 'RVC003'}
+# 등급 우선순위. 한 폴리곤을 여러 등급의 중심선이 지나면 상위 등급으로 본다.
+CLASS_RANK = {'RVC001': 0, 'RVC002': 1, 'RVC003': 2, 'RVC004': 3, 'RVC005': 4}
+# 실폭·하천경계에는 등급 속성이 아예 없다(테이블정의서 확인). 중심선에서 공간조인해 붙인다.
+# 중심선이 지나지 않는 폴리곤은 버리지 않고 이 값으로 남긴다 — 버리면 물길이 끊겨 보인다.
+CLASS_UNKNOWN = '등급미확인'
+GRID_CELL_M = 300.0
 MESRMTH_LABEL = {'P': '사진측량', 'F': '현황측량', 'C': '지적측량'}
 
 # 앱에 남길 속성만 고른다. 제작업체·DB등록일시는 화면에서 쓸 일이 없다.
@@ -88,6 +96,46 @@ def contains(polygon: np.ndarray, px: float, py: float) -> bool:
         return False
     xin = x[cond] + (py - y[cond]) * (x2[cond] - x[cond]) / (y2[cond] - y[cond])
     return bool((xin > px).sum() % 2 == 1)
+
+
+def class_index(admin: str) -> dict[tuple[int, int], list[tuple[float, float, int]]]:
+    """중심선 정점을 격자 버킷에 담아 둔다. 폴리곤마다 전건 대조하면 너무 느리다."""
+    path = SRC / f'TN_RIVER_CTLN_{admin}.geojson'
+    buckets: dict[tuple[int, int], list[tuple[float, float, int]]] = {}
+    if not path.exists():
+        return buckets
+    for feature in json.loads(path.read_text(encoding='utf-8'))['features']:
+        rank = CLASS_RANK.get(feature['properties'].get('RIVER_SE'))
+        if rank is None:
+            continue
+        for ring in rings_of(feature['geometry']['coordinates']):
+            arr = np.array(ring, dtype=float)
+            x, y = TO5179(arr[:, 0], arr[:, 1])
+            for px, py in zip(x, y):
+                buckets.setdefault((int(px // GRID_CELL_M), int(py // GRID_CELL_M)), []).append((px, py, rank))
+    return buckets
+
+
+def class_for(geometry, buckets) -> str | None:
+    """도형 안을 지나는 중심선 중 가장 상위 등급. 없으면 None(= 등급미확인)."""
+    best: int | None = None
+    for ring in rings_of(geometry['coordinates']):
+        arr = np.array(ring, dtype=float)
+        x, y = TO5179(arr[:, 0], arr[:, 1])
+        poly = np.column_stack([x, y])
+        gx0, gy0 = int(poly[:, 0].min() // GRID_CELL_M), int(poly[:, 1].min() // GRID_CELL_M)
+        gx1, gy1 = int(poly[:, 0].max() // GRID_CELL_M), int(poly[:, 1].max() // GRID_CELL_M)
+        for gx in range(gx0, gx1 + 1):
+            for gy in range(gy0, gy1 + 1):
+                for px, py, rank in buckets.get((gx, gy), ()):
+                    if (best is None or rank < best) and contains(poly, px, py):
+                        best = rank
+        if best == 0:
+            break
+    if best is None:
+        return None
+    inverse = {v: k for k, v in CLASS_RANK.items()}
+    return inverse[best]
 
 
 def river_id_for(geometry, marks: list[tuple[str, str, np.ndarray]]) -> tuple[str, str] | None:
@@ -195,6 +243,8 @@ def build(path: Path) -> None:
     # rivers.json 에 제원이 있는 하천만 river_id 를 붙인다(지도 클릭 → 제원 팝업, Agent highlight 용).
     marks = [(rid, name, centerline_points(admin, name))
              for rid, name in named_rivers().get(admin, [])]
+    # 실폭·하천경계는 등급 속성이 없으므로 중심선에서 공간조인해 붙인다.
+    class_buckets = class_index(admin) if layer in ('TN_RIVER_BT', 'TN_RIVER_BNDRY') else {}
 
     kept = []
     dropped_se = 0
@@ -210,6 +260,16 @@ def build(path: Path) -> None:
         slim = {k: props[k] for k in KEEP_PROPS if props.get(k) not in (None, '')}
         if props.get('RIVER_SE'):
             slim['river_class'] = RIVER_SE_LABEL.get(props['RIVER_SE'], props['RIVER_SE'])
+        elif class_buckets:
+            joined = class_for(feature['geometry'], class_buckets)
+            if joined and joined not in CENTERLINE_KEEP:
+                # 3종 밖(세류·기타하천)으로 확인된 폴리곤은 중심선과 같은 기준으로 뺀다.
+                dropped_se += 1
+                continue
+            # 등급을 만들어내지 않는다. 중심선이 지나지 않으면 '등급미확인'으로 남긴다.
+            slim['river_class'] = RIVER_SE_LABEL.get(joined, CLASS_UNKNOWN) if joined else CLASS_UNKNOWN
+            if joined:
+                slim['river_class_source'] = '중심선 공간조인'
         if props.get('MESRMTH_SE'):
             slim['survey_method'] = MESRMTH_LABEL.get(props['MESRMTH_SE'], props['MESRMTH_SE'])
         # 중심선은 이름을 갖고 있으므로 직접 대조하고, 이름이 없는 실폭·경계는 공간조인한다.
@@ -229,7 +289,14 @@ def build(path: Path) -> None:
                               ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
     before = path.stat().st_size / 1048576
     after = out.stat().st_size / 1048576
-    note = f' · 세류 제외 {dropped_se:,}건' if dropped_se else ''
+    note = f' · 3종 외 제외 {dropped_se:,}건' if dropped_se else ''
+    classes = {}
+    for row in kept:
+        value = row['properties'].get('river_class')
+        if value:
+            classes[value] = classes.get(value, 0) + 1
+    if classes:
+        note += ' · ' + ' '.join(f'{k}{v:,}' for k, v in sorted(classes.items(), key=lambda x: -x[1]))
     if tagged:
         note += f' · river_id 연결 {tagged}건'
     print(f'  {out.name}: {len(kept):,}건 · {before:.1f} MB → {after:.2f} MB '
