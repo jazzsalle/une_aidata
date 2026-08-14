@@ -5,9 +5,15 @@
 > 완료 이력을 여기에 계속 쌓으면 정작 필요한 절이 잘려 나간다(2026-08-09 실제로 그랬다).
 
 ## Last updated
-2026-08-14 — 소하천구역·전국하천표준데이터를 6개 지역(구미·의왕·남원·부산·인제·영천)으로 반입하고, 백로그였던 **지역 검색창**을 지도 전용 지역 선택기 + 하천명 검색으로 구현했다. 마우스 오버 텍스트 태그 추가.
+2026-08-14 회사 PC 세션 종료 — **다음 세션은 집 PC.** 소하천구역·전국하천표준데이터를 6개 지역(구미·의왕·남원·부산·인제·영천)으로 반입하고, 백로그였던 **지역 검색창**을 지도 전용 지역 선택기 + 하천명 검색으로 구현했다(PR #19 머지, `c52075e`). 마우스 오버 텍스트 태그 추가.
+**작업 트리는 깨끗하고 로컬 main 은 origin/main 과 같다. 미커밋 변경 없음.** 배포 반영 실확인(2026-08-14): `LSMD_SOCHUN_47230.geojson` 468 KB · `river_search_index.json` 424 KB · `RIVER_STD_POINTS_26.geojson` 21 KB 모두 HTTP 200.
 앞서: 2026-08-12 하천 등급 3종 범위 확정·실폭/경계 등급 공간조인(PR #18), kma_nowcast SHADOW_TESTED(PR #13), 하천 경합 버그(#14), 행정코드 경계면 변환표(#15), 참조 GeoJSON 게이트(#16).
 **실제 연결된 Provider 는 여전히 없다** — 배포본은 전부 Seed/Mock 이다. 아래 "진행에 필요한 것" 참고.
+
+> **집 PC 에서 가장 먼저 볼 것 → 아래 "How to run" 의 'PC 이동 후 준비' 3줄.**
+> 특히 **하천 원자료 폴더 2개는 gitignore 라 따라오지 않는다.** 앱 실행·검증에는 필요 없지만
+> (산출 GeoJSON 은 커밋돼 있다) `npm run data:rivers` 재생성만 불가하다. 재생성이 필요해지는
+> 시점은 국가기본도 SHP 수령 후이며, 그때 원자료도 함께 옮기면 된다.
 
 ## Current goal
 Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: evaluation_criteria.md Phase 8, 승격마다 사용자 승인 필요)
@@ -30,29 +36,32 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 - **시범서비스 대상은 전국이다. 검증만 부산·인제·영천이다.** 지금 의왕·구미·남원을 쓰는 건 그 3개 지역 계획자료가 아직 없어서다.
 - 따라서 새로 들이는 자료는 가능하면 **전국 단위**로 넣는다. 관측소 레이어가 첫 사례이고, 이미 부산(수위 31)·인제(19)·영천(24)을 포함한다.
 - 지역별로 잘라야 하는 자료(하천 3종 등)는 대상 지역이 확정되면 같은 스크립트로 다시 뽑는다.
-- ~~**[백로그 · 2026-08-10] 지역 선택을 별도 검색창으로 바꾼다.**~~ → **2026-08-14 해소.** 아래 고민(상황 seed 계약 vs 지도 이동)은 **지도 전용 지역 선택기**로 갈랐다 — 앱 지역(`adminCode`)·`current_situations_seed` 계약은 그대로 두고 지도만 6곳을 오간다. 계획자료가 없는 부산·인제·영천에서는 '이 지역은 하천 공간자료만 있습니다' 안내가 뜬다. 검색은 지오코딩이 아니라 전처리 색인(`river_search_index.json`)으로 붙였다.
-  - 고정 지점: `VWorldMapAdapter.CENTERS`(3개 좌표) · `geo.json` L3(3개 경계) · `current_situations_seed.json`(3개 상황) · 헤더의 `.context-select`
-  - 지도 이동 자체는 좌표만 있으면 되므로 검색은 VWorld 지오코딩이나 행정경계 자료로 붙일 수 있다. **다만 상황(situation)은 seed 계약이라 지역을 늘리는 것과 검색으로 이동만 하는 것은 다른 범위다** — 착수 전에 어디까지인지 먼저 정한다.
-  - 검색으로 3개 지역 밖으로 이동하면 위험지구·하천·상황이 비게 된다. "이 지역은 계획자료 미확보" 안내가 함께 필요하다. 관측소는 전국이라 그대로 보인다.
-  - **[같이 볼 것] 기상청 전국 격자표 반입.** 활용가이드의 `격자_위경도(2607).xlsx` 에 시군구 단위 격자 **256개**가 있다. 지금 `kmaNowcast.GRID_BY_ADMIN` 은 3개 지역 하드코딩이다.
+- ~~**[백로그 · 2026-08-10] 지역 선택을 별도 검색창으로 바꾼다.**~~ → **2026-08-14 해소(PR #19).** "지역을 늘리는 것"과 "지도만 이동하는 것"이 다른 범위라는 게 보류 사유였는데, **지도 전용 지역 선택기**로 그 둘을 갈랐다 — 앱 지역(`adminCode`)·`current_situations_seed` 계약은 그대로 두고 지도만 6곳을 오간다. 계획자료가 없는 부산·인제·영천에서는 '이 지역은 하천 공간자료만 있습니다' 안내가 뜬다. 검색은 VWorld 지오코딩이 아니라 전처리 색인(`river_search_index.json`, 1,835건·424 KB)으로 붙였다.
+  - 코드 위치: `apps/web/src/features/map/mapRegions.ts`(지역 6곳 · 프런트 단일 출처) ↔ `scripts/river_regions.py`(전처리 단일 출처). **지역을 늘릴 때 이 두 파일을 함께 고친다.**
+  - **아직 3개 지역 하드코딩으로 남아 있는 곳**: `geo.json` L3(경계 3개) · `current_situations_seed.json`(상황 3개) · 헤더 `.context-select`(앱 지역). 이건 계획자료(PDF)가 와야 풀린다 — 아래 "Pending" 4번.
+- **[열린 백로그] 기상청 전국 격자표 반입.** 활용가이드의 `격자_위경도(2607).xlsx` 에 시군구 단위 격자 **256개**가 있다. 지금 `kmaNowcast.GRID_BY_ADMIN` 은 3개 지역 하드코딩이다.
     - **행정코드 방식은 2026-08-10 확정됐다 → `data/reference/admin_code_map.json` (경계면 변환).** Seed 는 구 코드를 유지하고 외부 대조 시에만 현행 코드로 바꾼다. 격자표 반입 스크립트는 이 표를 거쳐 키를 맞추면 된다.
     - 실조회로 확인한 사실: VWorld 는 **이미 현행 코드만** 준다(`45190`·`42810` NOT_FOUND, `52190`·`51810` OK). 즉 "신 코드가 없다"가 아니라 **우리 Seed 가 낡았다.** `geo.json` L3 의 출처 문자열 `sig_cd=45190` 은 지금은 죽은 참조다.
     - 전면 마이그레이션을 택하지 않은 이유: `45190` 이 Seed·reference 33개 파일 **403건**에 있고 그중 5건은 `EVT::20200801-FLOOD-45190-001` 처럼 **식별자 일부**라 passage 71·relation 25·유사사례·보고서 참조가 함께 움직인다. 남원은 대체물이라 버려질 작업이 될 수 있다.
     - 검증: `python scripts/verify_admin_codes.py` (VWorld 실조회로 표 대조, 키 없으면 SKIP·네트워크 0건)
 
 ## In progress
-- **Phase 8** — 코드측 승격 준비는 100% 끝났다. Shadow 하네스(`npm run test:provider-shadow -- --provider <id>`), 승격 절차(`docs/29`), 승격 원장(`tests/provider/provider_promotion_status.json`)과 그 검사 게이트(`npm run test:promotion-status`)가 모두 있다.
-  - `kma_nowcast` = **SHADOW_TESTED** (승인 1 완료, 2026-08-10). 실호출 3개 지역 전부 SHADOW_PASSED(Observation 8건, fixture 8건 전건 구조 일치, 비밀정보 0건). **SELECTABLE 은 미승인** — Vercel env 설정은 그 자체가 승격이라 승인 2 이후 사용자가 직접 한다. 키 활용기간 2026-08-10~2028-08-10, 로컬 `.env` 전용.
-  - `une_rag` = **SHADOW_TESTED** (승인 1 완료). SELECTABLE 은 **보류** — 내부망(사내 IP)이라 외부 시연에서 접근 불가, 당분간 Seed 검색 유지. Vercel env 에 `UNE_RAG_*` 설정 금지 상태.
-  - 나머지 4종 = **FIXTURE_VALIDATED**. t3q 3종은 실 Endpoint 미확정으로 `promotion_hold`.
-  - **실제 연결된 Provider 는 없으며 배포본은 전부 Seed/Mock 동작.**
-- 승인 없이 진행 가능한 코드 작업은 현재 없다. 아래 Next steps 는 전부 사용자 조치가 선행 조건이다.
+**Phase 8** — 코드측 준비는 끝났다. Shadow 하네스(`npm run test:provider-shadow -- --provider <id>`) · 절차(`docs/29`) · 원장(`tests/provider/provider_promotion_status.json`) · 게이트(`npm run test:promotion-status`) 모두 있다.
+
+| Provider | 상태 | 남은 것 |
+|---|---|---|
+| `kma_nowcast` | SHADOW_TESTED (승인1 완료 08-10) | 승인2 = 사용자가 Vercel env 에 키 투입. 키 유효 ~2028-08-10, 지금은 로컬 `.env` 전용 |
+| `une_rag` | SHADOW_TESTED (승인1 완료) | SELECTABLE **보류** — 내부망이라 외부 시연 불가. Vercel env 에 `UNE_RAG_*` 설정 금지 |
+| 나머지 4종 | FIXTURE_VALIDATED | t3q 3종은 실 Endpoint 미확정 → `promotion_hold` |
+
+**실제 연결된 Provider 는 없고 배포본은 전부 Seed/Mock 이다.** 승인 없이 지금 할 수 있는 코드 작업은 **배포 URL 실검증 1건**(Next steps 0번)뿐이다.
 
 ## Pending — 데이터 수령 대기
-- **부산·인제·영천 국가기본도 하천 3종 원본 SHP**: 사용자가 올리기로 함(2026-08-14). 수령 후 `scripts/extract_river_layers.py`의 대상지역 산정을 `geo.json` L3 bbox 대신 `scripts/river_regions.py`로 바꿔 6개 지역 전부 재추출 → `build_river_web_layers.py` 재실행. 현재 그 3곳에서는 소하천구역과 하천표준데이터 지점만 나온다.
-- **타이포 스케일 확정**: 현재 크기는 상황실 원거리 시인성 전제의 잠정값(1920px 본문 17.7px). 접근성 요구가 아니라 설계 판단이며, 디자인 실험실 산출물(type scale) 수령 후 `styles.css` `:root`의 `--fs-*` clamp 5개 + 확대 브레이크포인트 루트 배율 3개만 교체하면 됨. 상세: `docs/30_design_system_handoff.md` B-7
-- **부산·인제·영천 계획자료 구조화**: 사용자가 자연재해저감 종합계획·하천기본계획 **PDF를 추후 제공** 예정. 수령 후 `data/reference/districts.json`·`rivers.json`·`geo.json`과 동일 스키마로 전사하면 지도 POI 팝업·계획·근거 패널이 그대로 동작한다(코드 변경 불필요). 현재는 의왕 41430(17지구)·구미 47190(6지구)·남원 45190(6지구) + 하천 3개(안양천·구미천·요천)만 커버.
-- 참고: 원시 xlsx(`메타데이터 참고자료(T3Q)/`)에는 전국 재해대장 115,563행·위험지구 약 6,300지구가 있으나 **위험요인 서술·임계값·근거 문서페이지·좌표가 없어** 팝업 수준의 정보를 만들 수 없다(그 정보는 저감계획 PDF 판독에서 나옴). 재해대장은 피해금액·복구비 보강용으로 조인 가능.
+- **부산·인제·영천 국가기본도 하천 3종 원본 SHP** (사용자가 올리기로 함, 2026-08-14). 현재 그 3곳에서는 소하천구역·하천표준지점만 나오고 국가기본도 하천은 레이어 메뉴에 '이 지역 자료 없음'으로 뜬다.
+  - 수령 후 절차: ① 리포 루트에 원본 폴더를 둔다(`국가기본도_*` 는 gitignore 대상) ② `scripts/extract_river_layers.py` 의 `target_regions()` 가 지금 `geo.json` L3 bbox(3개 지역)에서 범위를 얻는데, 이걸 `scripts/river_regions.py` 의 `REGIONS`(6곳)로 바꾼다 ③ `python scripts/extract_river_layers.py` → `python scripts/build_river_web_layers.py` ④ `npm run test:reference-geojson` · `npm run test:river-reference`
+  - **주의**: 새 지역 파일명은 `TN_RIVER_<종류>_<행정코드>` 규약을 지켜야 게이트를 통과한다. 부산은 행정코드가 2자리(`26`)다 — 게이트는 이미 2~5자리를 허용하고 `river_regions.py` 목록과 대조한다.
+- **부산·인제·영천 계획자료 PDF**(자연재해저감 종합계획·하천기본계획, 사용자 제공 예정): 수령 후 `districts.json`·`rivers.json`·`geo.json` 과 같은 스키마로 전사하면 지도 POI 팝업·계획·근거 패널이 **코드 변경 없이** 동작한다. 현재 커버는 의왕(17지구)·구미(6)·남원(6) + 하천 3개(안양천·구미천·요천)뿐이다. 원시 xlsx(`메타데이터 참고자료(T3Q)/`)의 재해대장 115,563행은 **위험요인·임계값·근거페이지·좌표가 없어** 팝업을 못 만든다(피해금액 보강용 조인만 가능).
+- **타이포 스케일**(디자인 실험실 산출물): 현재는 상황실 원거리 시인성 전제의 잠정값. 수령 후 `styles.css` `:root` 의 `--fs-*` clamp 5개 + 확대 브레이크포인트 배율 3개만 교체. 상세 `docs/30_design_system_handoff.md` B-7
 
 ## Pending approval
 - 없음. **GM-A-01 seed 불일치는 2026-08-07 승인으로 해소**(PR #5 머지 · `GM-A-04 구미천지구`로 참조 교체, 스모크 S8/S9 재구성으로 미존재 ID 가드 보존).
@@ -79,32 +88,46 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 
 **환경 주의(PC 이동 시)**: `.env` 는 gitignore 라 따라가지 않는다. 다른 PC 에서는 `VITE_VWORLD_MAP_KEY`·`VITE_VWORLD_SERVICE_DOMAIN`·`DATA_GO_KR_SERVICE_KEY` 를 다시 넣어야 한다. **키는 Decoding 형태로 넣는다**(Encoding 을 넣으면 이중 인코딩된다).
 
-## Next steps (Phase 8 잔여 — provider별 독립 진행, 전부 사용자 조치 선행)
+## Next steps
+
+**0. 승인 없이 지금 할 수 있는 것 — 집 PC 에서 먼저 이것부터** (2026-08-14 신설)
+   - **배포 URL 실검증**: https://une-aidata-web.vercel.app 에서 지도 하단 `하천 검색` → 지역 6곳 전환 → 소하천구역·하천표준데이터 지점 레이어 on/off → 하천명 검색 → 결과 클릭 이동을 확인한다. 로컬 vite dev 로는 전부 확인했지만 **VWorld 등록 도메인은 배포 환경에서만 실증된다**(localhost 는 VWorld 가 거절한다).
+     - 정적 파일 자체는 이미 200 응답 확인함(위 "Last updated"). 남은 건 브라우저에서 타일·벡터가 함께 뜨는지다.
+     - 부산·인제·영천에서 위험지구·우선 확인지역이 비는 것은 **정상**이다(계획자료 미확보). '이 지역은 하천 공간자료만 있습니다' 안내가 뜨는지 확인한다.
+   - 이상이 없으면 이 항목을 지우고 아래 1~5 로 넘어간다. 아래는 전부 사용자 조치가 선행 조건이다.
+
+**Phase 8 잔여 — provider별 독립 진행, 전부 사용자 조치 선행**
 1. ~~kma_nowcast 승인1~~ → **2026-08-10 완료.** 남은 것은 **승인 2(SELECTABLE)** 뿐이다.
-   - Vercel 프로젝트(`une-aidata-web`) env 에 `DATA_GO_KR_SERVICE_KEY` 를 넣는 순간 실경로로 전환된다 = **그 행위 자체가 SELECTABLE 승격**이라 사용자가 직접 한다(docs/29 §17-18).
-   - 넣은 뒤 회귀 재통과 + `integrations/status` 표기 확인. 되돌리려면 Vercel env 를 지우면 Seed 로 복귀한다.
-   - 새 키가 필요할 때 함정 2가지: 활용신청 승인 반영 전이면 `SERVICE_KEY_IS_NOT_REGISTERED_ERROR(30)` → 시간 두고 재시도. 발표 시각 전이면 `NO_DATA(03)` → `KMA_REQUEST_LAG_MINUTES` 를 60~70 으로 올린다.
-   - **키는 Encoding 이 아니라 Decoding 형태로 넣는다.** 코드가 `searchParams` 로 한 번 더 인코딩해서 Encoding 키를 넣으면 `%252B` 로 이중 인코딩된다.
-2. **hrfco_hydrology** — **후보 조사 완료(2026-08-09), 상세: `docs/31_hrfco_station_candidates.md`**
-   - WAMIS 오픈API(인증키 불필요)로 전국 수위관측소 1,360개를 받아 좌표·유역면적으로 대조했다.
-   - **45190 남원 → `4005670` 남원시(동림교)** (요천, 유역 317.09 km²). 계획 지점 `Y4 남원수위표`(315.70)와 **0.44% 차이** — 사실상 같은 지점.
-   - **47190 구미 → `2011631` 구미시(도량교)** (구미천, 40.46 km²). 소권역 전수 확인 결과 **구미천 위 유일한 공식 관측소**. 다른 구미시 관측소는 전부 낙동강 본류·한천이라 이름만 보고 고르면 틀린다.
-   - **41430 의왕 → 공식 관측소 없음.** 안양천 소권역 전수 4개가 모두 의왕 하류이고, 최상류(`1018690` 111.52 km²)조차 계획 최하류 `AY00`(88.16)보다 하류다. **규칙 4 대로 비워 두고 호출하지 않는다.**
-   - 남은 확정 절차: ① 키로 HRFCO 자체 관측소 목록과 `obscd` 대조 ② `4005670` ↔ `Y4 남원수위표` 동일 지점 확인(관측소명이 '동림교'로 다름). 그 뒤 `HRFCO_STATION_MAP_JSON` 투입 → Shadow Test.
-3. **une_rag**: 외부 접근 가능한 Endpoint 확보 시 승인2(SELECTABLE) 재검토. 경로 추정 금지 — Swagger probe(`/api/v1/integrations/une-rag-probe`) 먼저(v0.7 규칙 5).
+   - Vercel 프로젝트(`une-aidata-web`) env 에 `DATA_GO_KR_SERVICE_KEY` 를 넣는 순간 실경로로 전환된다 = **그 행위 자체가 승격**이라 사용자가 직접 한다(docs/29 §17-18). 넣은 뒤 회귀 재통과 + `integrations/status` 확인. 되돌리려면 env 를 지우면 Seed 로 복귀.
+   - 함정 3가지: 활용신청 승인 반영 전이면 `SERVICE_KEY_IS_NOT_REGISTERED_ERROR(30)` → 시간 두고 재시도 / 발표 시각 전이면 `NO_DATA(03)` → `KMA_REQUEST_LAG_MINUTES` 60~70 / **키는 Decoding 형태로** — Encoding 을 넣으면 코드가 한 번 더 인코딩해 `%252B` 가 된다.
+2. **hrfco_hydrology** — 관측소 후보 조사 완료(2026-08-09). **결론만: 남원 `4005670` · 구미 `2011631` · 의왕 없음(비워 두고 호출 안 함).** 근거·전수 대조표·주의점(구미는 이름만 보고 고르면 틀린다)은 전부 `docs/31_hrfco_station_candidates.md` 에 있다. 남은 절차 2가지: ① 키로 HRFCO 관측소 목록과 `obscd` 대조 ② `4005670` ↔ `Y4 남원수위표` 동일 지점 확인. 그 뒤 `HRFCO_STATION_MAP_JSON` 투입 → Shadow Test.
+3. **une_rag**: 외부 접근 가능한 Endpoint 확보 시 승인2 재검토. 경로 추정 금지 — Swagger probe(`/api/v1/integrations/une-rag-probe`) 먼저(v0.7 규칙 5).
 4. **t3q 3종**: 실 Endpoint·인증 계약 확정 전까지 `promotion_hold` — Phase 8 승인 대상 아님.
-5. **공통 주의**: 키는 **로컬 셸 env 로만**. Vercel env 설정은 그 자체가 SELECTABLE 승격 행위라 승인2 이후 사용자가 직접 한다. DEFAULT 전환 금지. 상세 절차: `docs/29_provider_shadow_and_promotion_procedure.md`
+5. **공통 주의**: 키는 **로컬 셸 env 로만**. Vercel env 설정은 그 자체가 SELECTABLE 승격 행위라 승인2 이후 사용자가 직접 한다. DEFAULT 전환 금지. 절차: `docs/29_provider_shadow_and_promotion_procedure.md`
 
 ## Blockers
+- **`gh` CLI 활성 계정 확인 — PR 을 만들 때 걸린다.** 이 리포는 `jazzsalle/une_aidata` 이고 `sangraedo` 계정은 READ 권한뿐이라 `gh pr create` 가 `must be a collaborator` 로 실패한다(2026-08-14 실제로 걸림). `git push` 는 자격증명이 달라 통과하므로 **push 는 되는데 PR 만 안 되는** 모습으로 나타난다. 우회: `gh auth switch --user jazzsalle` 후 `gh repo view jazzsalle/une_aidata --json viewerPermission` 이 `ADMIN` 인지 확인.
+- **작업 시작 전 `git fetch && git log --oneline HEAD..origin/main` 을 먼저 본다.** 2026-08-14 에 26 커밋 뒤처진 브랜치 위에서 작업해, 그대로 PR 을 올렸다면 PR #7~#18 이 통째로 되돌아갈 뻔했다. 회사↔집 왕복이 잦은 리포라 이게 재발하기 쉽다.
+- **Windows 의 `python3` 는 Microsoft Store 스텁일 수 있다 — 무엇을 시켜도 "Python" 한 줄만 찍고 exit 49.** PATH 에 실재하므로 `command -v` 는 통과한다. npm 스크립트의 `python3` 를 전부 `python` 으로 바꿔 실행할 것(CLAUDE.md 규칙). 2026-08-14 에 이것 때문에 **SessionStart 훅이 조용히 아무 컨텍스트도 주입하지 않고 있었다** — `load_progress.sh` 가 존재 확인만 하고 골랐기 때문. 실행 가능 여부까지 확인하도록 고쳤다.
 - **PowerShell 에서 `.sh` 게이트 실행 주의 — Phase 8 주 실행 경로에 직접 걸린다.** `npm run test:provider-shadow` = `bash scripts/run_provider_shadow_test.sh` 이고 그 `:10` 이 `rm -rf .runtime-cjs` 를 한다. bash 가 WSL 로 잡히면 `.runtime-cjs` 가 삭제된 채 재컴파일에 실패할 수 있다. 우회: Git Bash 에서 `tsc -p tsconfig.runtime.json` + `.runtime-cjs/package.json`(`{"type":"commonjs"}`) 확인 후 `node tests/provider/provider_shadow_gate.cjs --provider <id>` 직접 실행.
-- (해소됨) `jsonschema` 미설치로 `test:contracts` 절반 실행 불가 → 설치 완료. 실측 `PASS JSON Schema contracts: 265 objects / 18 schemas`.
-- (해소됨) @playwright/test 404 재발 없음 — 1.62.1 설치 완료.
+- (해소됨) `jsonschema` 미설치 · @playwright/test 404 — 둘 다 설치 완료.
 
 ## How to run
-- 의존성: `npm install` (Node >= 22.12.0) + `python -m pip install -r requirements.txt` + `python -m playwright install chromium`
-- 검증: `npm run validate` → `npm run test:contracts` → `npm run typecheck` → `npm run test:runtime-gate` → `npm run test:provider-conformance` → `npm run test:promotion-status` → `npm run test:reference-geojson`
-- 선택(키 있을 때): `npm run test:admin-codes` — VWorld 실조회로 행정코드 매핑표 대조. 키 없으면 SKIP·네트워크 0건
+
+**PC 이동 후 준비 (집 PC 에서 이 3줄부터)**
+1. `git fetch && git status` — main 이 `c52075e`(PR #19 머지) 이상인지, 미커밋 변경이 없는지 확인
+2. `npm install` + `python -m pip install -r requirements.txt` — requirements 에 **numpy·pyproj·pyshp 가 2026-08-14 추가**됐다(하천 전처리용). 이미 설치돼 있으면 넘어간다
+3. `.env` 재작성 — **gitignore 라 따라오지 않는다.** `VITE_VWORLD_MAP_KEY` · `VITE_VWORLD_SERVICE_DOMAIN` · `DATA_GO_KR_SERVICE_KEY`. **키는 Decoding 형태로 넣는다**(Encoding 을 넣으면 코드가 한 번 더 인코딩해 `%252B` 가 된다)
+
+**따라오지 않는 것 (gitignore)** — 없어도 앱 실행·검증·배포는 전부 된다
+- `.env`
+- 하천 원자료 폴더 2개: `소하천_소하천구역(연속주제)+브이월드/`(약 460 MB) · `전국하천표준데이터/`. **전처리 입력일 뿐이고 산출 GeoJSON 은 커밋돼 있다.** 없으면 `npm run data:rivers` 만 못 돌린다 — 재생성이 필요해지는 건 국가기본도 SHP 수령 후이며, 그때 원자료도 함께 옮긴다
+- `build/`(전처리 중간산출), `node_modules/`, `__pycache__/`
+
+**명령**
+- 개발: `npm run dev:web` (루트 `npm run dev` 는 `vercel dev` 라 재귀호출로 실패한다) / 빌드: `npm run build`
+- 검증: `npm run validate` → `test:contracts` → `typecheck` → `test:runtime-gate` → `test:provider-conformance` → `test:promotion-status` → `test:reference-geojson` → `test:river-reference`
 - 콘솔 스모크 3종: `python scripts/smoke_dashboard_console.py` · `npm run test:evidence-console` · `npm run test:report-console` / E2E: `npm run test:e2e`
-- 하천 참조자료 재생성: `npm run data:rivers` (원자료 폴더 2개가 리포 루트에 있어야 한다 · gitignore 대상) / 검증 `npm run test:river-reference`
-- 빌드: `npm run build` / 개발: `npm run dev:web`
-- Windows: `python3` 대신 `python`, `.sh` 는 Git Bash 로 실행
+- 하천 참조자료 재생성: `npm run data:rivers` — **원자료 폴더 2개 필요**(위 참조)
+- 선택(키 있을 때): `npm run test:admin-codes` — VWorld 실조회로 행정코드 표 대조. 키 없으면 SKIP·네트워크 0건
+- **Windows: npm 스크립트의 `python3` 는 `python` 으로 바꿔 실행**(Store 스텁 주의 — Blockers 참고), `.sh` 는 Git Bash

@@ -4,13 +4,20 @@
 
 cd "${CLAUDE_PROJECT_DIR:-$(pwd)}" || exit 0
 
-# python3 → python 순으로 인터프리터를 찾는다. 섹션 선별과 JSON 직렬화가 모두 이걸 쓴다.
+# python3 → python → py 순으로 인터프리터를 찾는다. 섹션 선별과 JSON 직렬화가 모두 이걸 쓴다.
+#
+# **존재 확인(command -v)만으로는 안 된다.** Windows 에는 `python3` 자리에 Microsoft Store
+# 설치 유도 스텁이 깔려 있는 경우가 많다(`~/AppData/Local/Microsoft/WindowsApps/python3`).
+# 이 스텁은 PATH 에 실재하므로 command -v 를 통과하지만, 무엇을 시켜도 "Python" 한 줄만 찍고
+# exit 49 로 죽는다. 그러면 이 훅 전체가 실패해 **재개 컨텍스트가 조용히 하나도 주입되지 않는다**
+# (2026-08-14 회사 PC 에서 실제로 그 상태였다). 그래서 실제로 코드가 도는지까지 확인한다.
 PY=""
-if command -v python3 >/dev/null 2>&1; then
-  PY="python3"
-elif command -v python >/dev/null 2>&1; then
-  PY="python"
-fi
+for candidate in python3 python py; do
+  if command -v "$candidate" >/dev/null 2>&1 && "$candidate" -c "pass" >/dev/null 2>&1; then
+    PY="$candidate"
+    break
+  fi
+done
 
 CONTEXT=""
 
@@ -27,8 +34,13 @@ parts=re.split(r'\n(?=## )',text)
 
 # 중요도 순. 짧고 결정적인 절(Blockers·How to run)을 앞에 둬야 예산에 밀리지 않는다.
 # 뒤로 갈수록 길고 서술적이라 잘려도 손실이 작다.
+#
+# 'Pending'(데이터 수령 대기)이 'Pending approval' 보다 앞이다. 이 프로젝트는 진행이
+# 자료 수령에 막혀 있어서, "무엇이 오면 무엇이 풀리는지"가 재개 판단에 직결된다.
+# 맨 뒤에 두면 예산에 밀려 매번 잘려 나간다(2026-08-14 실제로 그랬다).
+# 'Pending' 은 파일에 먼저 나오는 절부터 잡으므로 두 Pending 절이 각각 한 번씩 걸린다.
 ORDER=['Last updated','Current goal','Blockers','Next steps','이어서 할 일',
-       'Pending approval','How to run','In progress','Pending']
+       'Pending','Pending approval','How to run','In progress']
 BUDGET=7600      # git 상태 블록과 JSON 직렬화 여유를 남긴다
 PER_SECTION=1800 # 한 절이 예산을 독식하지 못하게 한다
 
