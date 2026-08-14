@@ -10,15 +10,15 @@ import type { FeatureLike } from 'ol/Feature';
 import type Layer from 'ol/layer/Layer';
 import type BaseLayer from 'ol/layer/Base';
 import { lineStyle, palette, pointStyle } from './mapStyles';
+import { MAP_REGIONS } from './mapRegions';
 import { createRiverLayers, type RiverLayerRegistry, type RiverSourceState } from './riverLayers';
 import { isRiverLayerId, riverLayerId } from './riverLayerSources';
 
 const DEFAULT_CENTER: [number, number] = [127.39, 35.416];
-const CENTERS: Record<string, [number, number]> = {
-  '41430': [126.968, 37.344],
-  '47190': [128.344, 36.119],
-  '45190': DEFAULT_CENTER,
-};
+// 지역 중심은 지도 전용 지역 카탈로그 한 곳에서만 정한다. 좌표를 두 군데 적어 두면 갈라진다.
+const CENTERS: Record<string, [number, number]> = Object.fromEntries(
+  MAP_REGIONS.map((region) => [region.admin, region.center]),
+);
 export type MapConnectionState = 'seed-only' | 'connecting' | 'connected' | 'error';
 export type BaseMapType = 'base' | 'satellite';
 /** 지도에서 클릭한 POI 1건. 팝업 렌더는 React가 담당하므로 화면표현 없이 원본 속성만 전달한다. */
@@ -42,10 +42,22 @@ export interface MapPoiPlacement {
   lonLat: [number, number];
   properties: Record<string, unknown>;
 }
+/** 커서가 올라간 피처 1건과 그 화면 픽셀 위치. 텍스트 태그를 커서 옆에 띄우는 데 쓴다. */
+export interface MapFeatureHover {
+  id: string;
+  layerId: string;
+  /** 지도 좌상단 기준 픽셀. */
+  x: number;
+  y: number;
+  properties: Record<string, unknown>;
+}
+
 export interface VWorldMapHandle {
   map: OlMap;
   setRegion(code: string): void;
   highlightFeature(id: string): boolean;
+  /** 검색 결과로 이동한다. 형상이 아직 안 받아진 소스도 있으므로 좌표만으로 먼저 이동시킨다. */
+  focusLonLat(lonLat: [number, number], zoom?: number): void;
   setLayerVisible(layerCode: string, visible: boolean): void;
   /** 하천 소스(실폭·중심선·비교용 Seed 등) 개별 표시 토글. */
   setRiverSourceVisible(sourceId: string, visible: boolean): void;
@@ -54,6 +66,9 @@ export interface VWorldMapHandle {
   setBaseMap(type: BaseMapType): void;
   /** 피처 클릭 구독. 빈 지도를 클릭하면 null을 전달한다. 해제 함수를 반환한다. */
   onFeatureClick(handler: (selection: MapFeatureSelection | null) => void): () => void;
+  /** 커서 아래 피처 구독(마우스 오버 텍스트 태그용). 피처가 없으면 null을 전달한다.
+   *  캔버스 벡터는 DOM 요소가 아니라 마우스 이벤트를 직접 받지 못하므로 어댑터가 대신 알려준다. */
+  onFeatureHover(handler: (hover: MapFeatureHover | null) => void): () => void;
   /** 팝업 기준좌표 지정(null이면 클릭 강조 해제). */
   setPopupAnchor(coordinate: number[] | null): void;
   /** 위험지구 POI 마커의 화면 위치 변화를 구독한다(이동·확대·레이어 토글). 해제 함수를 반환한다. */
@@ -185,8 +200,19 @@ export async function createVWorldMap(target: HTMLElement, adminCode: string, on
 
   const clickHandlers = new Set<(selection: MapFeatureSelection | null) => void>();
   const poiHandlers = new Set<(points: MapPoiPlacement[]) => void>();
+  const hoverHandlers = new Set<(hover: MapFeatureHover | null) => void>();
   let anchorCoordinate: number[] | null = null;
   let poiSignature = '';
+  let hoverSignature = '';
+
+  /** 같은 피처 위에서 커서가 조금 움직였을 뿐인데 매번 React 상태를 바꾸면 태그가 떨린다.
+   *  대상 피처가 실제로 바뀔 때만 올린다(위치는 그 시점 좌표를 쓴다). */
+  function emitHover(hover: MapFeatureHover | null) {
+    const signature = hover ? `${hover.layerId}:${hover.id}` : '';
+    if (signature === hoverSignature) return;
+    hoverSignature = signature;
+    hoverHandlers.forEach((handler) => handler(hover));
+  }
 
   /** 화면 안(여유 24/48px)에 있는 L1 점 피처만 마커 후보로 만든다.
    *  여유값은 핀이 반쯤 걸친 상태에서도 사라지지 않게 하는 폭·높이 보정이다. */
@@ -250,8 +276,17 @@ export async function createVWorldMap(target: HTMLElement, adminCode: string, on
   map.on('postrender', () => emitPoi());
   map.on('pointermove', (event) => {
     if (event.dragging) return;
-    map.getViewport().style.cursor = map.hasFeatureAtPixel(event.pixel, { hitTolerance: 6 }) ? 'pointer' : '';
+    const hit = selectionAt(event.pixel, event.coordinate);
+    map.getViewport().style.cursor = hit ? 'pointer' : '';
+    const [x, y] = event.pixel;
+    // 위험지구(L1)는 HTML 마커가 직접 호버를 받아 요약 카드를 띄운다. 여기서 또 태그를 내보내면
+    // 같은 지점에 카드와 태그가 둘 다 뜬다.
+    emitHover(hit && hit.layerId !== 'L1' && typeof x === 'number' && typeof y === 'number'
+      ? { id: hit.id, layerId: hit.layerId, x: Math.round(x), y: Math.round(y), properties: hit.properties }
+      : null);
   });
+  // 커서가 지도 밖으로 나가면 태그도 걷는다. pointermove 는 더 이상 오지 않는다.
+  map.getViewport().addEventListener('pointerleave', () => emitHover(null));
   function publish(hit: MapFeatureSelection | null) {
     clicked = hit?.id || null;
     vectors.forEach((vector) => vector.changed());
@@ -287,6 +322,7 @@ export async function createVWorldMap(target: HTMLElement, adminCode: string, on
   return {
     map,
     onFeatureClick(handler) { clickHandlers.add(handler); return () => { clickHandlers.delete(handler); }; },
+    onFeatureHover(handler) { hoverHandlers.add(handler); return () => { hoverHandlers.delete(handler); }; },
     onPoiChange(handler) { poiHandlers.add(handler); handler(collectPoi()); return () => { poiHandlers.delete(handler); }; },
     setPopupAnchor(coordinate) {
       anchorCoordinate = coordinate ? coordinate.slice(0, 2) : null;
@@ -296,6 +332,9 @@ export async function createVWorldMap(target: HTMLElement, adminCode: string, on
       // 국가기본도 하천은 지자체별 파일이라 지역이 바뀌면 자료도 바꿔야 한다.
       rivers.setRegion(code);
       map.getView().animate({ center: fromLonLat(CENTERS[code] ?? DEFAULT_CENTER), zoom: 11, duration: 350 });
+    },
+    focusLonLat(lonLat, zoom = 15) {
+      map.getView().animate({ center: fromLonLat(lonLat), zoom, duration: 350 });
     },
     highlightFeature(id) {
       // 하천은 표시 중인 소스에 따라 벡터가 숨어 있을 수 있으므로 먼저 해당 소스를 켠다.
@@ -336,6 +375,6 @@ export async function createVWorldMap(target: HTMLElement, adminCode: string, on
       if (!key) onState?.('seed-only', 'VWorld 키 미설정: 공간 Seed만 표시');
       else onState?.('connecting', `VWorld ${type === 'satellite' ? '영상' : '일반'}지도 전환 중`);
     },
-    destroy() { clickHandlers.clear(); poiHandlers.clear(); rivers.destroy(); map.setTarget(undefined); },
+    destroy() { clickHandlers.clear(); poiHandlers.clear(); hoverHandlers.clear(); rivers.destroy(); map.setTarget(undefined); },
   };
 }

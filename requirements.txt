@@ -5,3 +5,8 @@ jsonschema>=4.18
 PyYAML>=6.0
 playwright>=1.40
 Pillow>=10.0
+# 하천 공간자료 전처리(scripts/build_*_layers.py, extract_river_layers.py) 전용.
+# 검증 게이트에는 쓰이지 않으므로 스모크만 돌릴 때는 없어도 된다.
+numpy>=1.26
+pyproj>=3.6
+pyshp>=2.3

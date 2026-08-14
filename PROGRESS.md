@@ -1,8 +1,8 @@
 # PROGRESS.md — 회사↔집 인계 기록
 
 ## Last updated
-2026-08-08 집 PC — 국가기본도 하천 3종(실폭·경계·중심선) 반입. 대표 하천을 국가기본도 실폭하천으로 교체하고 기존 seed(`geo.json` L2 = VWorld 하천망)를 제거했다. 하천명(RIVER_NM)은 별도 POI 레이어로 분리.
-직전: 2026-08-07 GM-A-01 seed 불일치 해소(PR #5 머지), 2026-08-03 회사 PC UI 디자인 반영 3차·보고서 지표 표(PR #1~#4 머지).
+2026-08-14 — 소하천구역·전국하천표준데이터 반입, 지도 대상지역 6곳으로 확대(지도 전용 지역 선택기), 마우스 오버 텍스트 태그·하천명 검색 UI 추가.
+직전: 2026-08-08 국가기본도 하천 3종(실폭·경계·중심선) 반입, 2026-08-07 GM-A-01 seed 불일치 해소(PR #5 머지).
 
 ## Current goal
 Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: evaluation_criteria.md Phase 8, 승격마다 사용자 승인 필요)
@@ -14,6 +14,17 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 - **Phase 1 완료 (2026-08-02, evaluator PASS)**: npm install 성공(package-lock.json 생성, playwright 1.62.1 정상 — 404 재발 없음), validate·contracts(OpenAPI 31/31, JSON Schema 260/18)·typecheck:functions·typecheck:web·runtime-gate·provider-conformance 전부 PASS, `npm run build` 성공(apps/web/dist 산출). 계약 파일 변경 0건.
 
 ## Done this session
+- **소하천구역·전국하천표준데이터 반입 + 지도 6개 지역 확대 (2026-08-14)**: 사용자가 루트에 올린 두 원자료(`소하천_소하천구역(연속주제)+브이월드/`, `전국하천표준데이터/`)를 분석해 구미·의왕·남원·부산·인제·영천만 잘라 반입했다.
+  - **소하천구역(LSMD_CONT_UJ301)**: 시도별 SHP → `COL_ADM_SE`(시군구코드)로 정확 필터(bbox 자르기 아님) → EPSG:5186→4326 → 2 m 단순화. `apps/web/public/reference/rivers/LSMD_SOCHUN_{admin}.geojson` **1,531건**(의왕 110·구미 159·남원 454·영천 115·인제 643·부산 50, 합계 2.5 MB). 좌표계는 같은 폴더의 `_5174_`(구 측지계 Korean 1985)가 아니라 `Korea 2000 / Central Belt 2010`(EPSG:5186) 파일을 썼고, 5개 시도 표본 변환으로 착지를 실측 확인했다.
+  - **하천명은 지자체마다 들어 있는 칸이 다르다**: 영천·부산은 `ALIAS`, 구미·남원·의왕은 `ALIAS`가 '소하천구역' 같은 일반값이고 실제 이름은 `REMARK`에, 인제는 `'3-01 소재골천 소하천구역'`처럼 고시번호+이름+구분이 한 칸에 있다. `stream_name`은 이 셋에서 **읽힌 경우에만** 붙이고 못 읽으면 아예 넣지 않는다(원문은 `alias_raw`/`remark_raw`로 보존). 판독 결과 의왕 25·구미 155·남원 301·영천 112·인제 133·부산 23종.
+  - **전국하천표준데이터 마커**: 원자료 2,558건 중 **위경도 보유는 194건뿐**이고, 6개 대상지역으로 좁히면 부산 17건 + 의왕 1건 = **18건(시점·종점 마커 36개)**. 남원 352건·영천 25건은 전부 좌표 없음, 구미·인제는 레코드 자체가 0건. 사용자 결정(2026-08-14)에 따라 **좌표를 실제로 가진 건만 마커**로 만들고, 좌표 없는 409건은 `river_standard_catalog.json`에 `has_coordinate:false`로 남겨 검색 목록에서만 보인다. **지오코딩으로 좌표를 만들어 넣지 않는다** — 만들면 실측 좌표와 파생 좌표가 화면에서 구분되지 않고 `official_data=true` 표기가 사실이 아니게 된다.
+  - **지도 전용 지역 선택기**: 부산·인제·영천은 위험지구·우선 확인지역 시드가 없어 앱 지역(`adminCode`)이 될 수 없다(대시보드 목록이 통째로 빈다). 그래서 앱 지역 계약은 그대로 두고 `apps/web/src/features/map/mapRegions.ts` + 검색 패널 안의 선택기로 **지도만** 6곳을 오간다. 앱 지역이 바뀌면 지도도 따라간다. 남원은 앱 코드 45190 ↔ 공간자료 코드 52190(전북특별자치도 개편)이라 `river_regions.py`에서 두 코드를 나눠 들고 있다.
+  - **마우스 오버 텍스트 태그**: 어댑터에 `onFeatureHover` 신설(캔버스 벡터는 DOM 이 아니라 마우스 이벤트를 직접 못 받는다). 커서 옆에 '이름 + 자료구분 + 한 줄'만 띄우고 표는 클릭 팝업이 맡는다. 같은 피처 위 미세 이동에는 재발행하지 않는다(태그 떨림 방지). 지도 캔버스가 `aria-hidden`이라 태그도 `aria-hidden` — 같은 내용은 검색 목록·클릭 팝업이 접근 가능 경로로 제공한다.
+  - **하천명 검색**: 지역당 최대 3.5 MB GeoJSON을 검색마다 받지 않도록 전처리에서 `river_search_index.json`(1,835건·424 KB)을 만들고 **검색을 처음 열 때 한 번만** 받는다. 결과 클릭 시 지역 전환 → 해당 소스 켜기 → 좌표로 이동 → 자료 도착 후 형상 강조. `nav_kind`로 `actual`(원자료 좌표) / `extent`(형상 bbox 중심 = 화면이동 전용) / `none`(좌표 없음, 이동 비활성)을 구분한다.
+  - 신규 스크립트: `scripts/river_regions.py`(지역 카탈로그 단일 출처) · `build_sochun_layers.py` · `build_river_standard_points.py` · `build_river_search_index.py` · `smoke_river_reference_layers.py`. `npm run data:rivers`로 3종을 한 번에 재생성한다. 원자료 폴더 2개는 `.gitignore`에 추가(약 460 MB).
+  - 검증: `npm run typecheck:web`·`typecheck:functions`, `validate_vercel_repo`(5523 entries), `smoke_priority_logic`·`smoke_t3q_readiness`·`smoke_t3q_search_preview`, 신규 `smoke_river_reference_layers`(6개 지역) 전부 PASS. 브라우저 실측: 영천 소하천 115건 표시, 부산 마커 34개 + 팝업(호계천 시점 · 35.14054, 129.04658 · value_status=actual), 인제 643건 렌더, 검색→지역전환→강조 동작, console error 0.
+  - **미해결**: 부산·인제·영천은 국가기본도 하천 3종 원본 SHP가 로컬에 없어 추출할 수 없다(레이어 메뉴에 '이 지역 자료 없음'으로 표시). 사용자가 원본 SHP를 올리면 `extract_river_layers.py`의 대상지역을 `river_regions.py`로 바꿔 6곳 전부 재추출한다.
+
 - **GM-A-01 seed 불일치 해소 (2026-08-07, 사용자 승인 — seed 동결 해제 1건)**: 구미(47190) rank 1 `구미천 하천재해 대표지구`가 `geo.json`에 없는 `GM-A-01`을 참조해 카드 클릭 시 지도 이동 대신 비차단 안내만 뜨던 문제.
   - **택(b) 참조 ID 교체**: `GM-A-01` → **`GM-A-04`(구미천지구)**. `districts.json`에 관리대장 A.4 근거(하천재해·침수위험지구, 구미천, 원평동 964-640, No.29+00~34+83)가 있고 `geo.json`에 point가 실재해 **좌표를 만들어내지 않는다**. 택(a)(geo.json에 GM-A-01 신설)는 계획자료에 없는 좌표를 임의 생성해야 해 채택하지 않았다.
   - 변경 파일은 `data/seed/priority_areas_seed.json`과 동일 사본 `apps/web/public/seed/priority_areas_seed.json` **1줄씩**. seed의 `name`·`score`·`components`·`reasons`는 그대로 뒀다(카드 표기는 POC 서술, 지도 팝업은 GM-A-04 관리대장 표기).
@@ -162,6 +173,7 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 - 환경 주의: PowerShell에서 npm run test:provider-shadow 실행 시 bash가 WSL로 잡혀 .runtime-cjs가 깨질 수 있음 — `node tests/provider/provider_shadow_gate.cjs --provider <id>` 직접 실행 권장 (.runtime-cjs 재컴파일: Git Bash에서 `tsc -p tsconfig.runtime.json` + `.runtime-cjs/package.json`({"type":"commonjs"}) 존재 확인)
 
 ## Pending — 데이터 수령 대기
+- **부산·인제·영천 국가기본도 하천 3종 원본 SHP**: 사용자가 올리기로 함(2026-08-14). 수령 후 `scripts/extract_river_layers.py`의 대상지역 산정을 `geo.json` L3 bbox 대신 `scripts/river_regions.py`로 바꿔 6개 지역 전부 재추출 → `build_river_web_layers.py` 재실행. 현재 그 3곳에서는 소하천구역과 하천표준데이터 지점만 나온다.
 - **타이포 스케일 확정**: 현재 크기는 상황실 원거리 시인성 전제의 잠정값(1920px 본문 17.7px). 접근성 요구가 아니라 설계 판단이며, 디자인 실험실 산출물(type scale) 수령 후 `styles.css` `:root`의 `--fs-*` clamp 5개 + 확대 브레이크포인트 루트 배율 3개만 교체하면 됨. 상세: `docs/30_design_system_handoff.md` B-7
 - **부산·인제·영천 계획자료 구조화**: 사용자가 자연재해저감 종합계획·하천기본계획 **PDF를 추후 제공** 예정. 수령 후 `data/reference/districts.json`·`rivers.json`·`geo.json`과 동일 스키마로 전사하면 지도 POI 팝업·계획·근거 패널이 그대로 동작한다(코드 변경 불필요). 현재는 의왕 41430(17지구)·구미 47190(6지구)·남원 45190(6지구) + 하천 3개(안양천·구미천·요천)만 커버.
 - 참고: 원시 xlsx(`메타데이터 참고자료(T3Q)/`)에는 전국 재해대장 115,563행·위험지구 약 6,300지구가 있으나 **위험요인 서술·임계값·근거 문서페이지·좌표가 없어** 팝업 수준의 정보를 만들 수 없다(그 정보는 저감계획 PDF 판독에서 나옴). 재해대장은 피해금액·복구비 보강용으로 조인 가능.
@@ -271,5 +283,6 @@ SHP · EPSG:5179(UTM-K) · 전국 218MB · 2025-02-21 갱신.
 ## How to run
 - 의존성: `npm install` (Node >= 22.12.0) + `python -m pip install -r requirements.txt` + `python -m playwright install chromium`
 - 검증: `npm run validate` → `npm run test:contracts` → `npm run typecheck:functions` → `npm run test:runtime-gate` → `npm run test:provider-conformance`
+- 하천 참조자료: 재생성 `npm run data:rivers` (원자료 폴더 2개가 리포 루트에 있어야 한다 · gitignore 대상) / 검증 `npm run test:river-reference`
 - 빌드: `npm run build` / 개발: `npm run dev:web`
 - Windows: `python3` 대신 `python`, `.sh`는 Git Bash로 실행

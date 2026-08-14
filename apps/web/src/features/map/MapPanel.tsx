@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import 'ol/ol.css';
-import { createVWorldMap, type BaseMapType, type MapConnectionState, type MapFeatureSelection, type MapPoiPlacement, type VWorldMapHandle } from './VWorldMapAdapter';
+import { createVWorldMap, type BaseMapType, type MapConnectionState, type MapFeatureHover, type MapFeatureSelection, type MapPoiPlacement, type VWorldMapHandle } from './VWorldMapAdapter';
 import type { RiverSourceState } from './riverLayers';
 import {
   RIVER_LAYER_SOURCES, SEMANTIC_ALIGNMENT_NOTE, SEMANTIC_LABEL,
   isRiverLayerId, riverLayerId, riverSourceById, riverSourceIdOf,
 } from './riverLayerSources';
+import { DEFAULT_MAP_REGION, MAP_REGIONS, mapRegionOf } from './mapRegions';
+import { loadRiverSearchIndex, searchRivers, type RiverSearchEntry } from './riverSearchIndex';
 import { loadPlanReference } from '../../services/apiClient';
 // 위험지구 상세 렌더·표기 규칙은 '현재 판단' 상세보기 모달과 공용 컴포넌트를 재사용한다.
 import { DistrictDetailSections, FactList, MISSING, districtFactRows, evidenceText, orMissing, str, type Fact } from '../../components/DistrictDetail';
@@ -71,6 +73,30 @@ function facts(selection: MapFeatureSelection, district: DistrictReference | nul
     if (source) rows.push({ label: '자료성격', value: `${SEMANTIC_LABEL[source.semantic]} · ${SEMANTIC_ALIGNMENT_NOTE[source.semantic]}` });
     rows.push({ label: '공급경로', value: riverState ? DELIVERY_LABEL[riverState.delivery] : MISSING });
     rows.push({ label: '자료출처', value: orMissing(source?.sourceOrg) });
+    // 소하천구역·하천표준데이터는 rivers.json 의 하천 제원과 연결되지 않는다(별개 자료다).
+    // 계획서 제원 칸을 전부 '미확보'로 채우는 대신 그 자료가 실제로 가진 항목만 적는다.
+    if (source?.semantic === 'sochun') {
+      rows.push({ label: '소하천명', value: orMissing(properties.stream_name) });
+      rows.push({ label: '고시일', value: orMissing(properties.notified_on) });
+      rows.push({ label: '관리번호(MNUM)', value: orMissing(properties.MNUM) });
+      rows.push({ label: '원문 표기', value: orMissing(properties.alias_raw ?? properties.remark_raw) });
+      rows.push({ label: '행정구역', value: orMissing(properties.admin_name ?? properties.admin_code) });
+      rows.push({ label: '좌표(위도, 경도)', value: `${selection.lonLat[1].toFixed(5)}, ${selection.lonLat[0].toFixed(5)}` });
+      return rows;
+    }
+    if (source?.semantic === 'point') {
+      rows.push({ label: '하천명', value: orMissing(properties.name) });
+      rows.push({ label: '하천구분', value: orMissing(properties.river_class) });
+      rows.push({ label: '지점', value: orMissing(properties.point_role) });
+      rows.push({ label: '위치', value: orMissing(properties.location) });
+      rows.push({ label: '하천길이', value: properties.length_km ? `${String(properties.length_km)} km` : MISSING });
+      rows.push({ label: '관리기관', value: orMissing(properties.management_org) });
+      rows.push({ label: '제공기관', value: orMissing(properties.supply_org) });
+      rows.push({ label: '자료기준일', value: orMissing(properties.reference_date) });
+      rows.push({ label: '값 상태', value: '원자료 보유 위경도 (value_status=actual)' });
+      rows.push({ label: '좌표(위도, 경도)', value: `${selection.lonLat[1].toFixed(5)}, ${selection.lonLat[0].toFixed(5)}` });
+      return rows;
+    }
     rows.push({ label: '하천등급', value: orMissing(river?.grade ?? properties.grade ?? properties.cat_nam) });
     rows.push({ label: '유역면적', value: river?.basin_area_km2 ? `${river.basin_area_km2} km²` : MISSING });
     rows.push({ label: '연장', value: river?.length_km ? `${river.length_km} km` : MISSING });
@@ -107,6 +133,39 @@ function facts(selection: MapFeatureSelection, district: DistrictReference | nul
   return rows;
 }
 
+/** 마우스 오버 텍스트 태그의 내용. 형상마다 '이름 + 무슨 자료인지'까지만 적고 나머지는 클릭 팝업이 맡는다 —
+ *  커서를 따라다니는 태그에 표를 담으면 정작 가리키려던 지도를 가린다. */
+function hoverTag(hover: MapFeatureHover): { title: string; kind: string; detail: string } | null {
+  const properties = hover.properties;
+  const source = isRiverLayerId(hover.layerId) ? riverSourceById(riverSourceIdOf(hover.layerId)) : undefined;
+  if (source?.semantic === 'sochun') {
+    return {
+      // 이름이 원자료에서 읽히지 않은 구역이 있다. 그때는 이름을 지어내지 않고 자료명만 보인다.
+      title: str(properties.stream_name) ?? '이름 미상 소하천구역',
+      kind: '소하천구역',
+      detail: [str(properties.notified_on) && `고시 ${String(properties.notified_on)}`, str(properties.alias_raw)].filter(Boolean).join(' · '),
+    };
+  }
+  if (source?.semantic === 'point') {
+    return {
+      title: str(properties.name) ?? '하천표준데이터 지점',
+      kind: `하천표준데이터 ${str(properties.point_role) ?? ''}`.trim(),
+      detail: [str(properties.river_class), str(properties.location)].filter(Boolean).join(' · '),
+    };
+  }
+  if (source) {
+    const name = str(properties.RIVER_NM) ?? str(properties.river_name) ?? str(properties.name);
+    return {
+      title: name ?? source.label,
+      kind: SEMANTIC_LABEL[source.semantic],
+      detail: [str(properties.river_class), str(properties.admin_code)].filter(Boolean).join(' · '),
+    };
+  }
+  const name = str(properties.name) ?? str(properties.district_name) ?? hover.id;
+  if (!name) return null;
+  return { title: name, kind: layerLabel(hover.layerId), detail: str(properties.location) ?? str(properties.admin_name) ?? '' };
+}
+
 /** POI 마커 1개(Figma `location_icon`, 38×48.857 프레임). 상시 라벨은 붙이지 않는다 —
  *  지역명은 호버 요약 카드가 맡는다. 상시 라벨은 좁은 지도에서 서로와 팝업을 침범한다.
  *
@@ -138,6 +197,16 @@ export function MapPanel({ adminCode, highlightedFeatureId, initialVisible, comp
   const [pois, setPois] = useState<MapPoiPlacement[]>([]);
   const [hoverPoiId, setHoverPoiId] = useState<string | null>(null);
   const [layerMenuOpen, setLayerMenuOpen] = useState(false);
+  // 지도가 보고 있는 지역. 앱 지역(adminCode)과 별개로 움직인다 — 부산·인제·영천은 위험지구
+  // 시드가 없어 앱 지역이 될 수 없지만 하천 공간자료는 있다. 앱 지역이 바뀌면 지도도 따라간다.
+  const [region, setRegion] = useState(() => (mapRegionOf(adminCode) ? adminCode : DEFAULT_MAP_REGION));
+  const [hover, setHover] = useState<MapFeatureHover | null>(null);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [query, setQuery] = useState('');
+  const [searchIndex, setSearchIndex] = useState<RiverSearchEntry[] | null>(null);
+  const [searchError, setSearchError] = useState<string | null>(null);
+  // 검색 결과로 이동할 때, 해당 지역 GeoJSON 이 아직 안 받아졌을 수 있다. 받아진 뒤 한 번 더 강조한다.
+  const [pendingHighlight, setPendingHighlight] = useState<string | null>(null);
   const [detail, setDetail] = useState<{ district: DistrictReference | null; river: RiverReference | null }>({ district: null, river: null });
   const [riverStates, setRiverStates] = useState<RiverSourceState[]>([]);
   const [visible, setVisible] = useState<Record<string, boolean>>({
@@ -165,13 +234,16 @@ export function MapPanel({ adminCode, highlightedFeatureId, initialVisible, comp
         });
         handle.onPoiChange((points) => { if (active) setPois(points); });
         handle.onRiverStateChange((states) => { if (active) setRiverStates(states); });
+        handle.onFeatureHover((point) => { if (active) setHover(point); });
         setMapReady(true);
       })
       .catch((mapError: unknown) => setError(mapError instanceof Error ? mapError.message : '지도 초기화 실패'));
     return () => { active = false; mapRef.current?.destroy(); mapRef.current = null; };
   }, []);
 
-  useEffect(() => { mapRef.current?.setRegion(adminCode); closePopup(); setHoverPoiId(null); }, [adminCode, closePopup]);
+  // 앱 지역이 바뀌면 지도도 그 지역으로 돌아간다(지도에서만 다른 지역을 보고 있었더라도).
+  useEffect(() => { if (mapRegionOf(adminCode)) setRegion(adminCode); }, [adminCode]);
+  useEffect(() => { mapRef.current?.setRegion(region); closePopup(); setHoverPoiId(null); setHover(null); }, [region, closePopup]);
   useEffect(() => {
     if (!highlightedFeatureId) { setHighlightNotice(null); return; }
     if (!mapReady || !mapRef.current) return;
@@ -184,6 +256,9 @@ export function MapPanel({ adminCode, highlightedFeatureId, initialVisible, comp
   useEffect(() => {
     if (!selection || (selection.layerId !== 'L1' && !isRiverLayerId(selection.layerId))) return;
     const code = str(selection.properties.admin_code) ?? adminCode;
+    // 계획문서 판독 참고자료는 위험지구 시드가 있는 3개 지역에만 있다. 나머지 지역에서 요청하면
+    // 매번 404 를 받고 캐시를 지우는 왕복만 생긴다 — 그 자료가 없는 것이 정상인 지역이다.
+    if (!mapRegionOf(code)?.hasPlanSeed) { setDetail({ district: null, river: null }); return; }
     let alive = true;
     let pending = referenceCache.current.get(code);
     if (!pending) { pending = loadPlanReference(code); referenceCache.current.set(code, pending); }
@@ -201,6 +276,22 @@ export function MapPanel({ adminCode, highlightedFeatureId, initialVisible, comp
       .catch(() => { referenceCache.current.delete(code); if (alive) setDetail({ district: null, river: null }); });
     return () => { alive = false; };
   }, [selection, adminCode]);
+
+  // 검색 색인은 검색을 처음 열 때만 받는다(약 420 KB). 초기 지도 로드에 얹지 않는다.
+  useEffect(() => {
+    if (!searchOpen || searchIndex) return;
+    let alive = true;
+    loadRiverSearchIndex()
+      .then((entries) => { if (alive) { setSearchIndex(entries); setSearchError(null); } })
+      .catch(() => { if (alive) setSearchError('하천 검색 색인을 불러오지 못했습니다. 지도 조작은 계속 사용할 수 있습니다.'); });
+    return () => { alive = false; };
+  }, [searchOpen, searchIndex]);
+
+  // 검색 결과의 형상은 해당 소스 파일을 받은 뒤에야 존재한다. 자료가 도착할 때마다 한 번씩 시도한다.
+  useEffect(() => {
+    if (!pendingHighlight || !mapReady) return;
+    if (mapRef.current?.highlightFeature(pendingHighlight)) setPendingHighlight(null);
+  }, [pendingHighlight, mapReady, riverStates]);
 
   useEffect(() => {
     if (!selection) return;
@@ -224,6 +315,20 @@ export function MapPanel({ adminCode, highlightedFeatureId, initialVisible, comp
     else mapRef.current?.setLayerVisible(code, next);
     if (selection && !next && selection.layerId === code) closePopup();
   }
+  /** 검색 결과 1건으로 이동한다. 지역·레이어를 먼저 맞추고, 좌표로 이동한 뒤 형상 강조를 예약한다. */
+  function gotoSearchResult(entry: RiverSearchEntry) {
+    if (!entry.nav) return;
+    if (entry.admin !== region) setRegion(entry.admin);
+    const code = riverLayerId(entry.source_id);
+    if (!visible[code]) {
+      setVisible((current) => ({ ...current, [code]: true }));
+      mapRef.current?.setRiverSourceVisible(entry.source_id, true);
+    }
+    // 형상은 아직 안 받아졌을 수 있으므로 좌표로 먼저 옮긴다. 강조는 자료가 도착하면 붙는다.
+    mapRef.current?.focusLonLat(entry.nav, entry.nav_kind === 'actual' ? 16 : 15);
+    setPendingHighlight(entry.feature_id || null);
+  }
+
   function toggleBaseMap() {
     const next: BaseMapType = baseMap === 'base' ? 'satellite' : 'base';
     setBaseMap(next);
@@ -262,6 +367,12 @@ export function MapPanel({ adminCode, highlightedFeatureId, initialVisible, comp
   }, [hoverPoi, priorityAreas]);
 
   const activeLayerCount = core.filter((item) => visible[item.code]).length;
+  const currentRegion = mapRegionOf(region);
+  const results = useMemo(
+    () => (searchIndex ? searchRivers(searchIndex, query, region) : []),
+    [searchIndex, query, region],
+  );
+  const tag = hover ? hoverTag(hover) : null;
 
   return (
     <section className={`map-panel ${compact ? 'compact' : ''}`} aria-labelledby="map-title" aria-describedby="map-accessible-summary">
@@ -292,6 +403,16 @@ export function MapPanel({ adminCode, highlightedFeatureId, initialVisible, comp
         );
       }) : null}
 
+      {/* 커서를 따라다니는 텍스트 태그. 지도 캔버스는 aria-hidden 이라 이 태그도 보조기술에 노출하지
+          않는다 — 같은 내용을 검색 목록과 클릭 팝업이 접근 가능한 경로로 이미 제공한다. */}
+      {tag ? (
+        <div className="map-hover-tag" style={{ left: hover?.x, top: hover?.y }} aria-hidden="true">
+          <span className="map-hover-tag-title">{tag.title}</span>
+          <span className="map-hover-tag-kind">{tag.kind}</span>
+          {tag.detail ? <span className="map-hover-tag-detail">{tag.detail}</span> : null}
+        </div>
+      ) : null}
+
       {/* 상단 좌측 띠 · 연결상태 필(고정 폭, 말줄임 금지) */}
       <div className={`map-connection ${status.state}`} role="status"><span className="status-dot" aria-hidden="true" />{status.message}</div>
       {error ? <div className="map-error" role="alert">{error}</div> : null}
@@ -307,6 +428,68 @@ export function MapPanel({ adminCode, highlightedFeatureId, initialVisible, comp
       <div className="map-basemap-switch">
         <button type="button" aria-pressed={baseMap === 'satellite'} onClick={toggleBaseMap}>영상지도</button>
       </div>
+
+      {/* 좌하단 · 하천 검색과 지도 지역 이동.
+          지역 선택기를 여기에 두는 이유는 대상지역 6곳 중 3곳(부산·인제·영천)이 앱 지역이 될 수
+          없기 때문이다 — 위험지구·우선 확인지역 시드가 없어 대시보드 목록이 통째로 비게 된다.
+          지도 안에서만 이동시키면 하천 자료는 보면서 나머지 화면은 그대로 유지된다. */}
+      {searchOpen ? (
+        <div className="map-search-panel" id="map-search-panel">
+          <div className="map-search-region">
+            <label htmlFor="map-region-select">지도 지역</label>
+            <select id="map-region-select" value={region} onChange={(event) => setRegion(event.target.value)}>
+              {MAP_REGIONS.map((item) => (
+                <option key={item.admin} value={item.admin}>{item.name}{item.hasPlanSeed ? '' : ' (하천자료만)'}</option>
+              ))}
+            </select>
+          </div>
+          {currentRegion && !currentRegion.hasPlanSeed ? (
+            <p className="map-search-note" role="status">이 지역은 하천 공간자료만 있습니다. 위험지구·우선 확인지역은 {mapRegionOf(adminCode)?.name ?? '앱에서 선택한 지역'} 기준으로 유지됩니다.</p>
+          ) : null}
+          <div className="map-search-field">
+            <label htmlFor="map-river-search">하천명 검색</label>
+            <input
+              id="map-river-search"
+              type="search"
+              value={query}
+              placeholder="예: 요천, 안양천, 신기천"
+              autoComplete="off"
+              onChange={(event) => setQuery(event.target.value)}
+            />
+          </div>
+          {searchError ? <p className="map-search-note" role="alert">{searchError}</p> : null}
+          {!searchIndex && !searchError ? <p className="map-search-note" role="status">검색 색인 받는 중</p> : null}
+          {searchIndex && query.trim() ? (
+            <>
+              <p className="map-search-count" role="status" aria-live="polite">{results.length ? `${results.length}건${results.length >= 40 ? ' (상위 40건)' : ''}` : '일치하는 하천이 없습니다.'}</p>
+              <ul className="map-search-results">
+                {results.map((entry) => {
+                  const other = entry.admin !== region;
+                  return (
+                    <li key={`${entry.source_id}:${entry.admin}:${entry.feature_id || entry.name}:${entry.kind}`}>
+                      <button
+                        type="button"
+                        disabled={!entry.nav}
+                        // 좌표가 없는 건은 '왜 못 가는지'를 말한다. 조용히 비활성화하면 고장으로 읽힌다.
+                        title={entry.nav ? undefined : entry.no_coordinate_reason ?? '지도로 이동할 좌표가 없습니다.'}
+                        onClick={() => gotoSearchResult(entry)}
+                      >
+                        <span className="map-search-name">{entry.name}</span>
+                        <span className="map-search-meta">
+                          {entry.kind}
+                          {other ? ` · ${mapRegionOf(entry.admin)?.short ?? entry.admin}` : ''}
+                          {entry.nav ? '' : ' · 좌표 없음'}
+                        </span>
+                        {entry.detail ? <span className="map-search-detail">{entry.detail}</span> : null}
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </>
+          ) : null}
+        </div>
+      ) : null}
 
       {/* 상단 우측 띠(클릭 시) · 상세 팝업. 오버레이가 없는 우측에 두어 연결상태·레이어 칩을 덮지 않는다. */}
       {selection ? (
@@ -374,6 +557,10 @@ export function MapPanel({ adminCode, highlightedFeatureId, initialVisible, comp
           {core.map((item) => <button key={item.code} type="button" className={`chip ${visible[item.code] ? 'active' : ''}`} aria-pressed={visible[item.code]} onClick={() => toggle(item.code)}>{item.name}</button>)}
           {PENDING_LAYERS.map((name) => <button key={name} type="button" className="chip" disabled title="후속 Provider 연결 대상">{name}</button>)}
         </div>
+        {/* 검색 진입점은 칩 클리핑 밖에 둔다. 칩 행 안에 넣으면 지역·레이어에 따라 잘려 사라진다. */}
+        <button type="button" className="map-layer-count" aria-expanded={searchOpen} aria-controls="map-search-panel" onClick={() => setSearchOpen((open) => !open)}>
+          하천 검색
+        </button>
         <button type="button" className="map-layer-count" aria-expanded={layerMenuOpen} aria-controls="map-layer-menu" onClick={() => setLayerMenuOpen((open) => !open)}>
           레이어 {activeLayerCount}
         </button>

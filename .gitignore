@@ -20,6 +20,10 @@ obj/
 .DS_Store
 Thumbs.db
 
+# python
+__pycache__/
+*.pyc
+
 # runtime
 logs/
 artifacts/
@@ -37,3 +41,7 @@ playwright-report/
 *.shx
 *.prj
 build/
+# 소하천구역(연속주제) 시도별 zip 약 460 MB, 전국하천표준데이터 원본. 전처리 입력이므로 추적하지 않는다.
+# 산출물은 apps/web/public/reference/rivers/ 아래에 있고 scripts/build_sochun_layers.py 등으로 재생성한다.
+소하천_소하천구역*/
+전국하천표준데이터/
