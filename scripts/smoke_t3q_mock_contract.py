@@ -1,9 +1,9 @@
 import json,re
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
-events=json.loads((ROOT/'data/seed/t3q_mock_event_master_seed.json').read_text())['events']
-passages=json.loads((ROOT/'data/seed/t3q_mock_passages_seed.json').read_text())['passages']
-relations=json.loads((ROOT/'data/seed/t3q_mock_ontology_relations_seed.json').read_text())['relations']
+events=json.loads((ROOT/'data/seed/t3q_mock_event_master_seed.json').read_text(encoding='utf-8'))['events']
+passages=json.loads((ROOT/'data/seed/t3q_mock_passages_seed.json').read_text(encoding='utf-8'))['passages']
+relations=json.loads((ROOT/'data/seed/t3q_mock_ontology_relations_seed.json').read_text(encoding='utf-8'))['relations']
 assert len(events)==15 and len(passages)==73 and len(relations)==73
 ids={e['event_id'] for e in events}
 assert all(re.match(r'^EVT::\d{8}-[A-Z_]+-\d{5}-\d{3}$',e['event_id']) for e in events)

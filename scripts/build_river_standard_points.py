@@ -123,7 +123,7 @@ def main() -> int:
                 'admin_code': region.admin,
                 'admin_name': region.name,
                 'source_layer': 'RIVER_STANDARD',
-                'semantic': 'river-standard-point',
+                'semantic': 'point',
                 'provider': PROVIDER,
                 'official_data': True,
                 'value_status': 'actual',

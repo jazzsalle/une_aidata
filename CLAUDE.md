@@ -24,6 +24,7 @@
 6. 우선 확인지역 점수는 공식 위험등급이나 피해확률로 표현하지 않는다.
 7. 지도 Action은 존재하는 GeoJSON ID만 실행한다.
 8. 변경 후 `npm run typecheck:functions`, `python3 scripts/validate_vercel_repo.py`, `python3 scripts/smoke_priority_logic.py`를 실행한다.
+9. Seed의 행정코드는 그대로 두고, VWorld 경계·기상청 격자 같은 외부 자료와 대조할 때만 `data/reference/admin_code_map.json`으로 현행 코드로 바꾼다. 새로 들이는 지역은 처음부터 현행 코드로 만든다.
 
 
 ## v0.5 구현 규칙
@@ -43,17 +44,6 @@
 - KWCAG 2.2/WCAG 2.2 AA와 `tests/accessibility/multi-page-a11y-checklist.md`를 Definition of Done에 포함한다.
 
 
-## v0.5 다음 개발 우선순위
-
-1. Vercel Preview에서 `/`, `/evidence`, `/report` 직접 URL·새로고침·뒤로가기 검증
-2. 신규 VWorld 키를 적용한 3개 지역 지도·레이어 실검증
-3. 공공 기상·수문 API 최소 실연계
-4. UNE RAG Swagger 로그인·검색·Citation 실매핑
-5. 근거 페이지 Event·영상·침수흔적·피해위치 지도 동기화
-6. 보고서 초안 자동반영 및 오류검증
-7. axe·키보드·화면낭독기·Reflow E2E
-
-
 ## v0.7 통합검증 규칙
 
 1. VWorld 키·공공 API 키·UNE RAG 인증정보를 코드 또는 문서에 하드코딩하지 않는다.
@@ -65,21 +55,12 @@
 7. 실제 연계 실패는 서비스 전체 오류가 아니라 연계별 Fallback으로 처리한다.
 
 
-## v0.7 홍수영상 Seed 타일 반영
-- PRE: 사건 시작일 -12일
-- EVENT: 재난 시작~종료 +2일 이내
-- POST: 재난 종료일 +12일
-- 위성영상·수계마스크 각 3개, 총 6개 256×256 PNG를 `/evidence`에 독립 카드로 표시
-- VWorld 베이스맵은 2D이며 위성 타일 오버레이 금지
-- 대상지역 외·공식자료 아님·EVENT 생성 Seed·쓰리디랩스 교체 예정 상태 고정
-
-
 ## v0.7 홍수 위성영상·수계마스크 규칙
 - PRE: `event_start_at - 12 days` 기준.
 - EVENT: `event_start_at <= acquired_at <= event_end_at + 2 days`.
 - POST: EVENT와 중복되지 않도록 `event_end_at + 12 days` 기준.
-- 위성영상과 수계마스크는 `/evidence`에서 256×256 독립 타일로 표시하고 VWorld 2D 지도에는 오버레이하지 않는다.
-- 현재 표본은 부산·인제·영천 대상자료가 아니며 `official_data=false`, `data_status=mock`, `shared_demo=true`를 유지한다.
+- 위성영상·수계마스크 각 3개, 총 6개 256×256 PNG를 `/evidence`에 독립 카드로 표시하고 VWorld 2D 지도에는 오버레이하지 않는다.
+- 현재 표본은 부산·인제·영천 대상자료가 아니며 `official_data=false`, `data_status=mock`, `shared_demo=true`와 쓰리디랩스 교체 예정 상태를 유지한다.
 - EVENT 자료는 PRE/POST 첨부자료에서 생성한 Seed이므로 실제 관측자료로 설명하지 않는다.
 
 

@@ -3,17 +3,26 @@
   "record": "provider-promotion-status",
   "source_version": "1.5.1-provider-fixture-gate",
   "ladder": "DRAFT -> FIXTURE_VALIDATED -> SHADOW_TESTED -> SELECTABLE -> DEFAULT",
-  "note": "Phase 8은 승인 기반 단계 승격만 허용하며 DEFAULT 전환은 범위 밖이다. provider_contracts_seed.json의 current=mock은 불변. 이 파일에 API 키·비밀값을 기록하지 않는다. 절차는 docs/29_provider_shadow_and_promotion_procedure.md 참조. 현황: une_rag=SHADOW_TESTED(SELECTABLE 보류), 나머지 FIXTURE_VALIDATED.",
+  "note": "Phase 8은 승인 기반 단계 승격만 허용하며 DEFAULT 전환은 범위 밖이다. provider_contracts_seed.json의 current=mock은 불변. 이 파일에 API 키·비밀값을 기록하지 않는다. 절차는 docs/29_provider_shadow_and_promotion_procedure.md 참조. 현황: kma_nowcast·une_rag=SHADOW_TESTED(둘 다 SELECTABLE 미승인), 나머지 FIXTURE_VALIDATED.",
   "providers": [
     {
       "provider_id": "kma_nowcast",
-      "lifecycle": "FIXTURE_VALIDATED",
+      "lifecycle": "SHADOW_TESTED",
       "promotion_hold": false,
       "hold_reason": null,
       "prerequisites": [
-        "DATA_GO_KR_SERVICE_KEY(로컬 셸 env)"
+        "완료: DATA_GO_KR_SERVICE_KEY 확보 (활용기간 2026-08-10~2028-08-10, 로컬 셸 env 전용)",
+        "완료: Shadow Test SHADOW_PASSED — 의왕·구미·남원 3개 지역 실호출, Observation 8건, official_data=true/value_status=actual, fixture 8건 전건 구조 일치, 비밀정보 0건",
+        "SELECTABLE 조건: Vercel env 에 DATA_GO_KR_SERVICE_KEY 설정(승인 2, 사용자가 직접) + 회귀 재통과"
       ],
-      "approvals": []
+      "approvals": [
+        {
+          "step": "SHADOW_TESTED",
+          "approved_by": "user",
+          "approved_at": "2026-08-10",
+          "evidence": "tests/provider/provider_shadow_test_result.json (kma_nowcast, network_calls 1, records 8, structurally_compatible true)"
+        }
+      ]
     },
     {
       "provider_id": "hrfco_hydrology",

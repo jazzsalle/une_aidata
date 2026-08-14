@@ -302,6 +302,39 @@ def main() -> int:
 
             steps.run('S12 상세보기 모달 열기·동일 상세 확인·Esc 닫기·초점 복귀', step_priority_detail_modal)
 
+            def step_basemap_aria_pressed() -> None:
+                """베이스맵 토글의 aria-pressed 전이.
+
+                인계문서 D-4-2(585행)가 이 속성을 계약으로 고정하는데 어느 게이트도 보지
+                않았다. 실제로 구현 중 한 번 사라졌다가 사후 검토에서 되살아난 항목이다.
+                """
+                button = page.locator('.map-basemap-switch button').first
+                button.wait_for(state='visible')
+                if button.get_attribute('aria-pressed') != 'false':
+                    raise AssertionError(f'초기 베이스맵 aria-pressed 가 false 가 아닙니다: {button.get_attribute("aria-pressed")}')
+                button.click()
+                page.wait_for_function(
+                    'document.querySelector(".map-basemap-switch button")?.getAttribute("aria-pressed") === "true"')
+                button.click()
+                page.wait_for_function(
+                    'document.querySelector(".map-basemap-switch button")?.getAttribute("aria-pressed") === "false"')
+                # 레이어 칩도 같은 방식으로 눌림 상태를 표현한다.
+                # 후속 Provider 자리표시자(관측소·피해위치·대피소)는 disabled 이고 토글이 아니므로
+                # aria-pressed 를 갖지 않는 것이 맞다 — 켤 수 있는 칩만 본다.
+                chips = page.locator('.map-layer-chips button.chip:not([disabled])')
+                total = chips.count()
+                if total < 1:
+                    raise AssertionError('켤 수 있는 레이어 칩이 없습니다')
+                for index in range(total):
+                    if chips.nth(index).get_attribute('aria-pressed') not in ('true', 'false'):
+                        raise AssertionError(f'레이어 칩 {index}({chips.nth(index).inner_text()}) 에 aria-pressed 가 없습니다')
+                disabled = page.locator('.map-layer-chips button.chip[disabled]')
+                for index in range(disabled.count()):
+                    if disabled.nth(index).get_attribute('aria-pressed') is not None:
+                        raise AssertionError(f'자리표시자 칩({disabled.nth(index).inner_text()})에 aria-pressed 가 있습니다 — 토글이 아닙니다')
+
+            steps.run('S13 베이스맵 aria-pressed 전이(false→true→false)·레이어 칩 aria-pressed', step_basemap_aria_pressed)
+
             page.wait_for_timeout(1000)  # 잔여 비동기 콘솔 메시지 수집 여유
             browser.close()
     except Exception as error:

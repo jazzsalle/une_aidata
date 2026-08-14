@@ -147,7 +147,7 @@ def build(region) -> dict:
             'admin_code': region.admin,
             'sgg_code': (record.record['COL_ADM_SE'] or '').strip(),
             'source_layer': 'LSMD_CONT_UJ301',
-            'semantic': 'sochun-zone',
+            'semantic': 'sochun',
         }
         name = stream_name_of(alias) or stream_name_of(remark)
         if name:

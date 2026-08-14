@@ -217,7 +217,11 @@ export function createRiverLayers({ features, styleContext, key, adminCode }: Cr
         dataProjection: 'EPSG:4326',
         featureProjection: 'EPSG:3857',
       }) as Feature[];
+      // 받아 둔 것은 지역이 바뀌었어도 캐시에 남긴다. 되돌아올 때 다시 받지 않는다.
       cache.set(cacheKey, parsed);
+      // 큰 파일(남원 중심선 3.5MB)을 받는 사이 사용자가 지역을 바꿨을 수 있다.
+      // 그때 그리면 이전 지역 형상이 새 지도에 남는다. 응답이 늦은 요청은 버린다.
+      if (region !== code) return;
       layer.getSource()?.clear();
       layer.getSource()?.addFeatures(parsed);
       loadedRegion.set(source.id, code);
@@ -225,6 +229,8 @@ export function createRiverLayers({ features, styleContext, key, adminCode }: Cr
       messages.set(source.id, countMessage(source, parsed.length));
       layer.setVisible(Boolean(wanted.get(source.id)));
     } catch {
+      // 지역이 이미 바뀐 요청의 실패는 현재 화면 상태로 보고하지 않는다.
+      if (region !== code) return;
       // 이 지역 자료가 없을 수 있다(대상 3개 지자체만 반입했다). 지도를 막지 않는다.
       layer.getSource()?.clear();
       layer.setVisible(false);
