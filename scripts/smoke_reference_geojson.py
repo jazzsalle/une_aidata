@@ -28,16 +28,27 @@ except Exception:
     pass
 
 REPO = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from river_regions import REGIONS  # noqa: E402  대상지역 행정코드의 단일 출처
+
 ROOT = REPO / 'apps/web/public/reference'
 
 # 대한민국 본토+도서 대략 범위. 재투영 실패(미터 좌표가 그대로 남는 등)를 잡는 용도다.
 KR_BBOX = (124.0, 32.5, 132.5, 39.5)
-SEMANTICS = {'channel', 'zone', 'centerline', 'label'}
+SEMANTICS = {'channel', 'zone', 'centerline', 'label', 'sochun', 'point'}
+# 행정코드는 5자리가 기본이지만 부산은 광역시 전체(26)를 한 단위로 쓴다 —
+# 북구(26320)만 잡으면 소하천 자료가 0건이라 구 단위로는 표시할 것이 없다.
+TARGET_ADMIN = {region.admin for region in REGIONS}
 # 서비스 범위는 국가·지방·소하천 3종이다. 실폭·경계는 등급 속성이 없어 중심선에서
 # 공간조인해 붙이며, 중심선이 지나지 않으면 '등급미확인'으로 남긴다(추정하지 않는다).
 RIVER_CLASSES = {'국가하천', '지방하천', '소하천', '등급미확인'}
 RIVER_KIND_GEOM = {'TN_RIVER_BT': 'Polygon', 'TN_RIVER_BNDRY': 'Polygon',
-                   'TN_RIVER_CTLN': 'LineString', 'TN_RIVER_LABEL': 'Point'}
+                   'TN_RIVER_CTLN': 'LineString', 'TN_RIVER_LABEL': 'Point',
+                   # 소하천구역(국토교통부 연속주제)과 전국하천표준데이터 지점. 국가기본도와 계보가 다르다.
+                   'LSMD_SOCHUN': 'Polygon', 'RIVER_STD_POINTS': 'Point'}
+# 전국하천표준데이터는 원자료가 위경도를 거의 갖고 있지 않다(전국 2,558건 중 194건).
+# 대상지역에 좌표 보유 건이 0인 것은 정상이므로 빈 파일을 실패로 보지 않는다.
+ALLOW_EMPTY = {'RIVER_STD_POINTS'}
 # 관측소 파일은 '제원'이다. 관측값이 섞여 들어오면 화면이 실측값으로 오인시킬 수 있다.
 OBSERVATION_LIKE = {'value', 'observed_at', 'water_level', 'rainfall', 'obsrValue', 'value_status'}
 
@@ -77,14 +88,18 @@ def check_common(path: Path, features: list) -> None:
 
 def check_rivers(path: Path, features: list, river_ids: set[str]) -> None:
     rel = path.relative_to(REPO)
-    match = re.fullmatch(r'(TN_RIVER_[A-Z]+)_(\d{5})', path.stem)
+    match = re.fullmatch(r'(TN_RIVER_[A-Z]+|LSMD_SOCHUN|RIVER_STD_POINTS)_(\d{2,5})', path.stem)
     if not match:
-        fail(f'{rel}: 파일명이 TN_RIVER_<종류>_<행정코드5> 형식이 아니다')
+        fail(f'{rel}: 파일명이 <자료종류>_<행정코드> 형식이 아니다 '
+             f'(허용: TN_RIVER_BT/BNDRY/CTLN/LABEL · LSMD_SOCHUN · RIVER_STD_POINTS)')
         return
     kind, admin = match.groups()
     expected = RIVER_KIND_GEOM.get(kind)
     if expected is None:
         fail(f'{rel}: 알 수 없는 하천 자료 종류 {kind}')
+        return
+    if admin not in TARGET_ADMIN:
+        fail(f'{rel}: 대상지역이 아닌 행정코드 {admin} — scripts/river_regions.py 의 목록과 맞춰라')
         return
 
     names: dict[str, int] = {}
@@ -114,6 +129,20 @@ def check_rivers(path: Path, features: list, river_ids: set[str]) -> None:
                 fail(f'{rel}: 하천명 레이어인데 RIVER_NM 이 없는 피처가 있다')
                 break
             names[name] = names.get(name, 0) + 1
+        if kind == 'RIVER_STD_POINTS':
+            # 이 마커는 원자료가 실제로 보유한 위경도만 담는다. 지오코딩으로 만든 좌표가
+            # 섞이면 실측값과 구분되지 않으므로 실제 연계값 표기를 강제한다.
+            if props.get('official_data') is not True or props.get('value_status') != 'actual':
+                fail(f'{rel}: 실제 연계값 표기가 없다 ({feature.get("id")}) — '
+                     'official_data=true · value_status=actual 이어야 한다')
+                break
+            missing = [key for key in ('name', 'point_role', 'provider', 'reference_date') if not props.get(key)]
+            if missing:
+                fail(f'{rel}: 필수 속성 누락 {missing} ({feature.get("id")})')
+                break
+        if kind == 'LSMD_SOCHUN' and props.get('source_layer') != 'LSMD_CONT_UJ301':
+            fail(f'{rel}: source_layer 가 LSMD_CONT_UJ301 이 아니다 ({props.get("source_layer")})')
+            break
 
     duplicated = [n for n, c in names.items() if c > 1]
     if duplicated:
@@ -173,7 +202,8 @@ def main() -> int:
             continue
         features = payload.get('features') or []
         if not features:
-            fail(f'{path.relative_to(REPO)}: 피처가 0건이다')
+            if not any(path.stem.startswith(prefix) for prefix in ALLOW_EMPTY):
+                fail(f'{path.relative_to(REPO)}: 피처가 0건이다')
             continue
         total += len(features)
         check_common(path, features)

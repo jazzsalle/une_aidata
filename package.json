@@ -45,7 +45,9 @@
     "test:admin-codes": "python3 scripts/verify_admin_codes.py",
     "test:schema-contracts": "python3 scripts/validate_json_schema_contracts.py",
     "test:openapi-contracts": "python3 scripts/validate_openapi_contracts.py",
-    "test:contracts": "npm run test:openapi-contracts && npm run test:schema-contracts"
+    "test:contracts": "npm run test:openapi-contracts && npm run test:schema-contracts",
+    "data:rivers": "python3 scripts/build_sochun_layers.py && python3 scripts/build_river_standard_points.py && python3 scripts/build_river_search_index.py",
+    "test:river-reference": "python3 scripts/smoke_river_reference_layers.py"
   },
   "engines": {
     "node": ">=22.12.0"

@@ -5,9 +5,9 @@
 > 완료 이력을 여기에 계속 쌓으면 정작 필요한 절이 잘려 나간다(2026-08-09 실제로 그랬다).
 
 ## Last updated
-2026-08-12 집 PC 세션 종료 — 하천 등급(국가·지방·소하천 3종) 범위를 확정하고 실폭·경계에 공간조인으로 등급을 부여했다(PR #18).
-**다음 세션은 회사 PC.** 개발 완료가 아니며 진행 가능한 코드작업은 소진 상태다 — 아래 "진행에 필요한 것" 참고.
-앞서: kma_nowcast SHADOW_TESTED(PR #13), 하천 경합 버그(#14), 행정코드 경계면 변환표(#15), 참조 GeoJSON 게이트(#16).
+2026-08-14 — 소하천구역·전국하천표준데이터를 6개 지역(구미·의왕·남원·부산·인제·영천)으로 반입하고, 백로그였던 **지역 검색창**을 지도 전용 지역 선택기 + 하천명 검색으로 구현했다. 마우스 오버 텍스트 태그 추가.
+앞서: 2026-08-12 하천 등급 3종 범위 확정·실폭/경계 등급 공간조인(PR #18), kma_nowcast SHADOW_TESTED(PR #13), 하천 경합 버그(#14), 행정코드 경계면 변환표(#15), 참조 GeoJSON 게이트(#16).
+**실제 연결된 Provider 는 여전히 없다** — 배포본은 전부 Seed/Mock 이다. 아래 "진행에 필요한 것" 참고.
 
 ## Current goal
 Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: evaluation_criteria.md Phase 8, 승격마다 사용자 승인 필요)
@@ -19,6 +19,7 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 - **2026-08-08** 국가기본도 하천 3종(실폭·경계·중심선) 반입 + 하천명 POI 레이어, 기존 seed(`geo.json` L2) 제거(PR #6) / 인계문서 잔여 버그 4건 + 검증 게이트 3건(PR #7)
 - **2026-08-09** 중복 추출 스크립트 삭제(PR #8), `/doctor` 정리(PR #9), HRFCO 관측소 코드 후보 조사(PR #10), **전국 관측소 레이어**(PR #11, 수위 1,352 · 강수 820)
 - **2026-08-10~11** kma_nowcast **SHADOW_TESTED**(PR #13, 격자좌표 2건 수정 포함) · 하천 지연로딩 경합 버그(PR #14) · 행정코드 경계면 변환표(PR #15) · 참조 GeoJSON 게이트(PR #16)
+- **2026-08-14** 소하천구역(LSMD_CONT_UJ301)·전국하천표준데이터를 대상 6개 지역으로 반입(소하천 1,531건 · 표준지점 마커 36개), 지도 전용 지역 선택기·마우스 오버 텍스트 태그·하천명 검색 신설 — 백로그였던 '지역 선택 검색창' 건 해소
 - **배포**: https://une-aidata-web.vercel.app (GitHub main 자동 배포)
 
 ## 서비스 범위 (2026-08-09 · 08-12 사용자 확인)
@@ -29,7 +30,7 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 - **시범서비스 대상은 전국이다. 검증만 부산·인제·영천이다.** 지금 의왕·구미·남원을 쓰는 건 그 3개 지역 계획자료가 아직 없어서다.
 - 따라서 새로 들이는 자료는 가능하면 **전국 단위**로 넣는다. 관측소 레이어가 첫 사례이고, 이미 부산(수위 31)·인제(19)·영천(24)을 포함한다.
 - 지역별로 잘라야 하는 자료(하천 3종 등)는 대상 지역이 확정되면 같은 스크립트로 다시 뽑는다.
-- **[백로그 · 2026-08-10 사용자 방향] 지역 선택을 별도 검색창으로 바꾼다.** 관측소는 전국이 깔렸는데 지도는 여전히 3개 지역만 오간다. 지금은 착수하지 않는다.
+- ~~**[백로그 · 2026-08-10] 지역 선택을 별도 검색창으로 바꾼다.**~~ → **2026-08-14 해소.** 아래 고민(상황 seed 계약 vs 지도 이동)은 **지도 전용 지역 선택기**로 갈랐다 — 앱 지역(`adminCode`)·`current_situations_seed` 계약은 그대로 두고 지도만 6곳을 오간다. 계획자료가 없는 부산·인제·영천에서는 '이 지역은 하천 공간자료만 있습니다' 안내가 뜬다. 검색은 지오코딩이 아니라 전처리 색인(`river_search_index.json`)으로 붙였다.
   - 고정 지점: `VWorldMapAdapter.CENTERS`(3개 좌표) · `geo.json` L3(3개 경계) · `current_situations_seed.json`(3개 상황) · 헤더의 `.context-select`
   - 지도 이동 자체는 좌표만 있으면 되므로 검색은 VWorld 지오코딩이나 행정경계 자료로 붙일 수 있다. **다만 상황(situation)은 seed 계약이라 지역을 늘리는 것과 검색으로 이동만 하는 것은 다른 범위다** — 착수 전에 어디까지인지 먼저 정한다.
   - 검색으로 3개 지역 밖으로 이동하면 위험지구·하천·상황이 비게 된다. "이 지역은 계획자료 미확보" 안내가 함께 필요하다. 관측소는 전국이라 그대로 보인다.
@@ -48,6 +49,7 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 - 승인 없이 진행 가능한 코드 작업은 현재 없다. 아래 Next steps 는 전부 사용자 조치가 선행 조건이다.
 
 ## Pending — 데이터 수령 대기
+- **부산·인제·영천 국가기본도 하천 3종 원본 SHP**: 사용자가 올리기로 함(2026-08-14). 수령 후 `scripts/extract_river_layers.py`의 대상지역 산정을 `geo.json` L3 bbox 대신 `scripts/river_regions.py`로 바꿔 6개 지역 전부 재추출 → `build_river_web_layers.py` 재실행. 현재 그 3곳에서는 소하천구역과 하천표준데이터 지점만 나온다.
 - **타이포 스케일 확정**: 현재 크기는 상황실 원거리 시인성 전제의 잠정값(1920px 본문 17.7px). 접근성 요구가 아니라 설계 판단이며, 디자인 실험실 산출물(type scale) 수령 후 `styles.css` `:root`의 `--fs-*` clamp 5개 + 확대 브레이크포인트 루트 배율 3개만 교체하면 됨. 상세: `docs/30_design_system_handoff.md` B-7
 - **부산·인제·영천 계획자료 구조화**: 사용자가 자연재해저감 종합계획·하천기본계획 **PDF를 추후 제공** 예정. 수령 후 `data/reference/districts.json`·`rivers.json`·`geo.json`과 동일 스키마로 전사하면 지도 POI 팝업·계획·근거 패널이 그대로 동작한다(코드 변경 불필요). 현재는 의왕 41430(17지구)·구미 47190(6지구)·남원 45190(6지구) + 하천 3개(안양천·구미천·요천)만 커버.
 - 참고: 원시 xlsx(`메타데이터 참고자료(T3Q)/`)에는 전국 재해대장 115,563행·위험지구 약 6,300지구가 있으나 **위험요인 서술·임계값·근거 문서페이지·좌표가 없어** 팝업 수준의 정보를 만들 수 없다(그 정보는 저감계획 PDF 판독에서 나옴). 재해대장은 피해금액·복구비 보강용으로 조인 가능.
@@ -103,5 +105,6 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 - 검증: `npm run validate` → `npm run test:contracts` → `npm run typecheck` → `npm run test:runtime-gate` → `npm run test:provider-conformance` → `npm run test:promotion-status` → `npm run test:reference-geojson`
 - 선택(키 있을 때): `npm run test:admin-codes` — VWorld 실조회로 행정코드 매핑표 대조. 키 없으면 SKIP·네트워크 0건
 - 콘솔 스모크 3종: `python scripts/smoke_dashboard_console.py` · `npm run test:evidence-console` · `npm run test:report-console` / E2E: `npm run test:e2e`
+- 하천 참조자료 재생성: `npm run data:rivers` (원자료 폴더 2개가 리포 루트에 있어야 한다 · gitignore 대상) / 검증 `npm run test:river-reference`
 - 빌드: `npm run build` / 개발: `npm run dev:web`
 - Windows: `python3` 대신 `python`, `.sh` 는 Git Bash 로 실행

@@ -6,7 +6,7 @@ import VectorSource from 'ol/source/Vector';
 import type BaseLayer from 'ol/layer/Base';
 import type Feature from 'ol/Feature';
 import type { FeatureLike } from 'ol/Feature';
-import { labelStyle, lineStyle, palette } from './mapStyles';
+import { labelStyle, lineStyle, palette, pointStyle } from './mapStyles';
 import {
   RIVER_LAYER_SOURCES,
   riverDataUrl,
@@ -59,6 +59,11 @@ function styleForRiver(source: RiverLayerSource, feature: FeatureLike, context: 
     if (!text) return [];
     const ink = active ? tone.activeLine : (context.satellite ? satelliteColor : color);
     return labelStyle(text, ink, tone.casing, ink);
+  }
+  // 하천표준데이터 지점은 형상이 없는 좌표 1개다. 선 스타일을 주면 아무것도 그려지지 않는다.
+  if (source.semantic === 'point') {
+    return pointStyle(active ? 9 : 6, active ? tone.activeLine : (context.satellite ? satelliteColor : color),
+      active ? tone.activeCasing : tone.casing, '#ffffff');
   }
   if (active) return lineStyle(tone.activeLine, tone.activeCasing, width + 1.6, tone.activeFill, dash);
   return lineStyle(context.satellite ? satelliteColor : color, tone.casing, width, context.satellite ? satelliteFill : fill, dash);
@@ -162,6 +167,13 @@ export function createRiverLayers({ features, styleContext, key, adminCode }: Cr
   const loadedRegion = new Map<string, string>();
   const inflight = new Set<string>();
 
+  /** 상태 칸 문구. 0건은 실패가 아니라 '이 지역 원자료에 그런 자료가 없다'는 사실이므로 구분해 적는다 —
+   *  하천표준데이터는 좌표 결측이 기본 상태라 0건이 자주 나온다. */
+  function countMessage(source: RiverLayerSource, count: number) {
+    const name = source.datasetShort ?? '자료';
+    return count ? `${name} · ${count.toLocaleString('ko-KR')}건` : `${name} · 이 지역 해당 자료 없음`;
+  }
+
   function buildRemoteVector(source: RiverLayerSource, visible: boolean) {
     const layer = new VectorLayer({
       properties: { layerId: riverLayerId(source.id), riverSourceId: source.id },
@@ -188,7 +200,7 @@ export function createRiverLayers({ features, styleContext, key, adminCode }: Cr
       layer.getSource()?.addFeatures(cached);
       loadedRegion.set(source.id, code);
       delivery.set(source.id, 'geojson');
-      messages.set(source.id, `국가기본도 · ${cached.length.toLocaleString('ko-KR')}건`);
+      messages.set(source.id, countMessage(source, cached.length));
       // 표시 여부는 그 사이 바뀌었을 수 있다. 받은 시점의 요청 상태를 그대로 반영한다.
       layer.setVisible(Boolean(wanted.get(source.id)));
       emit();
@@ -214,7 +226,7 @@ export function createRiverLayers({ features, styleContext, key, adminCode }: Cr
       layer.getSource()?.addFeatures(parsed);
       loadedRegion.set(source.id, code);
       delivery.set(source.id, 'geojson');
-      messages.set(source.id, `국가기본도 · ${parsed.length.toLocaleString('ko-KR')}건`);
+      messages.set(source.id, countMessage(source, parsed.length));
       layer.setVisible(Boolean(wanted.get(source.id)));
     } catch {
       // 지역이 이미 바뀐 요청의 실패는 현재 화면 상태로 보고하지 않는다.
