@@ -17,6 +17,15 @@
 (한강처럼 긴 하천에서는 물길 위가 아닐 수 있다) 화면에 위치값으로 표시하면 안 된다.
 목록에서 하천을 고르면 `bbox` 에 맞춰 지도를 움직이는 용도다.
 
+`label_point` 는 **지도에 하천명을 찍을 자리**다. nav 와 달리 그 좌표에 글자가 그려져
+'이 하천이 여기다'를 눈으로 주장하므로 bbox 중심을 쓰지 않는다 — 굽은 하천에서는 bbox 중심이
+옆 하천 위에 떨어져 **A천 위에 B천 이름이 찍힌다.** 가장 큰 링의 내부점을 계산해 넣는다
+(PostGIS·shapely 의 representative_point 와 같은 방식: 무게중심이 안에 있으면 그것,
+아니면 무게중심 높이에서 가장 넓은 내부 구간의 중점).
+
+**형상은 반입하지 않는다**의 뜻: 선·면 지오메트리를 클라이언트에 싣지 않는다. 하천당 표기용
+파생점 1개는 예외이며 `label_point_kind` 로 파생임을 남긴다.
+
 하천명은 식별자가 아니다. 지방하천 3,783건의 이름이 2,681종뿐이라(대곡천 13곳, 금산천 11곳)
 **코드(RIVCD_2)로만 가른다.**
 """
@@ -61,6 +70,60 @@ def read_shapefile(stem: Path):
     )
 
 
+def ring_area(ring) -> float:
+    total = 0.0
+    for i in range(len(ring) - 1):
+        total += ring[i][0] * ring[i + 1][1] - ring[i + 1][0] * ring[i][1]
+    return abs(total) / 2
+
+
+def point_in_ring(x: float, y: float, ring) -> bool:
+    inside = False
+    for i in range(len(ring) - 1):
+        x1, y1 = ring[i]
+        x2, y2 = ring[i + 1]
+        if (y1 > y) != (y2 > y) and x < x1 + (y - y1) * (x2 - x1) / (y2 - y1):
+            inside = not inside
+    return inside
+
+
+def interior_point(shape):
+    """가장 큰 링 안쪽의 한 점. 라벨을 찍어도 되는 자리다.
+
+    무게중심이 링 안에 있으면 그것을 쓰고, 굽은 하천이라 밖으로 나가면 무게중심 높이에서
+    링과 만나는 지점을 모아 **가장 넓은 내부 구간의 중점**을 쓴다. bbox 중심은 쓰지 않는다 —
+    옆 하천 위에 이름이 찍힐 수 있다.
+    """
+    points = shape.points
+    bounds = list(shape.parts) + [len(points)]
+    rings = [points[bounds[i]:bounds[i + 1]] for i in range(len(shape.parts))]
+    ring = max((r for r in rings if len(r) >= 4), key=ring_area, default=None)
+    if not ring:
+        box = shape.bbox
+        return ((box[0] + box[2]) / 2, (box[1] + box[3]) / 2)
+
+    cx = sum(pt[0] for pt in ring[:-1]) / (len(ring) - 1)
+    cy = sum(pt[1] for pt in ring[:-1]) / (len(ring) - 1)
+    if point_in_ring(cx, cy, ring):
+        return (cx, cy)
+
+    crossings = []
+    for i in range(len(ring) - 1):
+        x1, y1 = ring[i]
+        x2, y2 = ring[i + 1]
+        if (y1 > cy) != (y2 > cy):
+            crossings.append(x1 + (cy - y1) * (x2 - x1) / (y2 - y1))
+    crossings.sort()
+    best = None
+    for i in range(0, len(crossings) - 1, 2):
+        span = crossings[i + 1] - crossings[i]
+        if best is None or span > best[0]:
+            best = (span, (crossings[i] + crossings[i + 1]) / 2)
+    if best:
+        return (best[1], cy)
+    return (cx, cy)
+
+
 def collect(stem: Path, river_class: str, clas2: str) -> list[dict]:
     reader = read_shapefile(stem)
     rows = []
@@ -71,6 +134,8 @@ def collect(stem: Path, river_class: str, clas2: str) -> list[dict]:
         box = record.shape.bbox
         lon1, lat1 = TO4326(box[0], box[1])
         lon2, lat2 = TO4326(box[2], box[3])
+        label_x, label_y = interior_point(record.shape)
+        label_lon, label_lat = TO4326(label_x, label_y)
         rows.append({
             'river_code': str(fields.get('RIVCD_2') or '').strip(),
             'river_name': (fields.get('RIVNM_2') or '').strip(),
@@ -79,6 +144,8 @@ def collect(stem: Path, river_class: str, clas2: str) -> list[dict]:
                      round(lon2, PRECISION), round(lat2, PRECISION)],
             'nav': [round((lon1 + lon2) / 2, PRECISION), round((lat1 + lat2) / 2, PRECISION)],
             'nav_kind': 'extent',
+            'label_point': [round(label_lon, PRECISION), round(label_lat, PRECISION)],
+            'label_point_kind': 'derived_interior',
         })
     return rows
 
@@ -105,7 +172,12 @@ def main() -> int:
         'built_by': 'scripts/build_river_network_catalog.py',
         'note': ('형상은 반입하지 않는다 — 국가·지방하천의 면 형상은 국가기본도 하천경계·실폭이 갖고 있고, '
                  '이 파일은 그 폴리곤에 붙일 코드·이름·등급의 정본이다. '
-                 'bbox 와 nav 는 화면 이동 전용이며 nav 는 bbox 중심이라 자료가 가진 좌표가 아니다.'),
+                 '형상 반입 금지는 선·면 지오메트리를 클라이언트에 싣지 않는다는 뜻이며, '
+                 '하천당 표기용 파생점 1개(label_point)는 예외로 두고 파생임을 함께 남긴다.'),
+        'point_fields': {
+            'nav': 'bbox 중심 · 화면 이동 전용 · 자료가 가진 좌표가 아니다',
+            'label_point': '가장 큰 링의 내부점 · 지도에 하천명을 찍는 자리 · 파생값(label_point_kind)',
+        },
         'key': 'river_code (RIVCD_2). 하천명은 중복이 있어 식별자로 쓰지 않는다.',
         'counts': {'국가하천': sum(1 for r in rows if r['river_class'] == '국가하천'),
                    '지방하천': sum(1 for r in rows if r['river_class'] == '지방하천')},

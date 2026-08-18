@@ -6,7 +6,10 @@ import VectorSource from 'ol/source/Vector';
 import type BaseLayer from 'ol/layer/Base';
 import type Feature from 'ol/Feature';
 import type { FeatureLike } from 'ol/Feature';
-import { lineStyle, palette } from './mapStyles';
+import Feature_ from 'ol/Feature';
+import Point from 'ol/geom/Point';
+import { fromLonLat } from 'ol/proj';
+import { labelStyle, lineStyle, palette } from './mapStyles';
 import {
   RIVER_LAYER_SOURCES,
   riverDataUrl,
@@ -45,7 +48,49 @@ export interface RiverLayerRegistry {
 
 interface StyleContext { selected: string | null; clicked: string | null; satellite: boolean }
 
-function styleForRiver(source: RiverLayerSource, feature: FeatureLike, context: StyleContext) {
+/** 하천망도 카탈로그(JSON)를 라벨 점 피처로 바꾼다. 형상은 담겨 있지 않다 — 하천당 점 1개다. */
+/** 하천명이 보이기 시작하는 해상도 상한(EPSG:3857 m/px). 값이 클수록 넓게 볼 때부터 보인다.
+ *  줌 11 ≈ 76 · 줌 13 ≈ 19 · 줌 15 ≈ 4.8 m/px 이다. 등급이 높을수록 일찍 보인다. */
+const LABEL_MAX_RESOLUTION: Record<string, number> = {
+  국가하천: 160,   // 도 단위로 넓게 봐도 보인다
+  지방하천: 45,    // 시·군 전체가 화면에 들어오는 정도
+  소하천: 10,      // 읍·면 단위로 확대했을 때
+};
+/** 등급을 모르는 피처는 소하천과 같게 본다 — 넓게 볼 때 이름으로 화면을 덮지 않는다. */
+const labelMaxResolution = (riverClass: string) => LABEL_MAX_RESOLUTION[riverClass] ?? LABEL_MAX_RESOLUTION['소하천'] ?? 6;
+
+function catalogLabels(payload: { rivers?: Array<Record<string, unknown>> }): Feature[] {
+  return (payload.rivers ?? [])
+    .filter((river) => Array.isArray(river.label_point) && river.river_name)
+    .map((river) => {
+      const [lon, lat] = river.label_point as [number, number];
+      const feature = new Feature_({ geometry: new Point(fromLonLat([lon, lat])) });
+      feature.setId(`RIVERNET:${String(river.river_code)}`);
+      feature.setProperties({
+        river_code: river.river_code,
+        river_name: river.river_name,
+        river_class: river.river_class,
+        label_point_kind: river.label_point_kind,
+      }, true);
+      return feature as unknown as Feature;
+    });
+}
+
+/** 이름별로 가장 큰 조각 하나에만 라벨 표시를 남긴다. 같은 이름이 여러 번 찍히는 것을 막는다. */
+function markLabelAnchors(features: Feature[]): void {
+  const largest = new Map<string, { feature: Feature; area: number }>();
+  for (const feature of features) {
+    const name = String(feature.get('stream_name') ?? '');
+    if (!name) continue;
+    const geometry = feature.getGeometry() as { getArea?: () => number } | null;
+    const area = geometry?.getArea?.() ?? 0;
+    const current = largest.get(name);
+    if (!current || area > current.area) largest.set(name, { feature, area });
+  }
+  for (const { feature } of largest.values()) feature.set('label_anchor', true, true);
+}
+
+function styleForRiver(source: RiverLayerSource, feature: FeatureLike, context: StyleContext, resolution = 0) {
   const { color, satelliteColor, width, fill, satelliteFill, dash } = source.style;
   const id = String(feature.getId() ?? feature.get('id') ?? '');
   // Agent·보고서는 하천을 rivers.json 의 river_id(RIV-YC 등)로 가리킨다. 국가기본도 피처는
@@ -54,6 +99,33 @@ function styleForRiver(source: RiverLayerSource, feature: FeatureLike, context: 
   const marks = [context.selected, context.clicked];
   const active = (Boolean(id) && marks.includes(id)) || (Boolean(riverId) && marks.includes(riverId));
   const tone = palette(context.satellite);
+  // 하천명은 점 1개에 글자만 그린다. 형상이 아니므로 선·면 스타일을 주지 않는다.
+  if (source.semantic === 'label') {
+    const text = String(feature.get('river_name') ?? feature.get('RIVER_NM') ?? '');
+    // 전국 3,856개를 한꺼번에 찍으면 지도가 글자로 덮인다. 넓게 볼 때는 국가하천만 두고,
+    // 지방하천은 시·군이 화면에 들어올 만큼 확대했을 때부터 보인다(EPSG:3857 m/px 기준).
+    if (!text || resolution > labelMaxResolution(String(feature.get('river_class') ?? ''))) return [];
+    const ink = active ? tone.activeLine : (context.satellite ? satelliteColor : color);
+    return labelStyle(text, ink, tone.casing, ink);
+  }
+  // 소하천구역은 한 하천이 여러 조각으로 들어온다(전국 평균 5.7조각). 조각마다 이름을 찍으면
+  // 같은 이름이 수십 번 겹치므로, 이름별 대표 조각 하나에만 폴리곤 내부점 위로 글자를 얹는다.
+  if (source.semantic === 'sochun' && feature.get('label_anchor') && resolution <= labelMaxResolution('소하천')) {
+    const text = String(feature.get('stream_name') ?? '');
+    const geometry = feature.getGeometry() as { getInteriorPoint?: () => unknown; getInteriorPoints?: () => unknown } | null;
+    const anchor = geometry?.getInteriorPoint?.() ?? geometry?.getInteriorPoints?.();
+    const ink = active ? tone.activeLine : (context.satellite ? satelliteColor : color);
+    const [label] = labelStyle(text, ink, tone.casing, ink);
+    const [shape] = active
+      ? lineStyle(tone.activeLine, tone.activeCasing, width + 1.6, tone.activeFill, dash)
+      : lineStyle(context.satellite ? satelliteColor : color, tone.casing, width, context.satellite ? satelliteFill : fill, dash);
+    if (text && anchor && label && shape) {
+      // 라벨은 폴리곤 안쪽 한 점에만 얹는다. 점 표식(circle)은 빼고 글자만 남긴다.
+      label.setGeometry(anchor as never);
+      label.setImage(null as never);
+      return [shape, label];
+    }
+  }
   if (active) return lineStyle(tone.activeLine, tone.activeCasing, width + 1.6, tone.activeFill, dash);
   return lineStyle(context.satellite ? satelliteColor : color, tone.casing, width, context.satellite ? satelliteFill : fill, dash);
 }
@@ -140,7 +212,7 @@ export function createRiverLayers({ features, styleContext, key, adminCode }: Cr
       properties: { layerId: riverLayerId(source.id), riverSourceId: source.id },
       source: new VectorSource({ features: picked }),
       visible,
-      style: (feature) => styleForRiver(source, feature, styleContext()),
+      style: (feature, resolution) => styleForRiver(source, feature, styleContext(), resolution),
     });
     vectorLayers.set(source.id, layer);
     layers.push(layer);
@@ -167,7 +239,9 @@ export function createRiverLayers({ features, styleContext, key, adminCode }: Cr
       properties: { layerId: riverLayerId(source.id), riverSourceId: source.id },
       source: new VectorSource(),
       visible,
-      style: (feature) => styleForRiver(source, feature, styleContext()),
+      // 라벨은 겹치면 서로를 못 읽게 한다. declutter 로 겹치는 글자를 OpenLayers 가 감춘다.
+      declutter: source.semantic === 'label' || source.semantic === 'sochun',
+      style: (feature, resolution) => styleForRiver(source, feature, styleContext(), resolution),
     });
     vectorLayers.set(source.id, layer);
     layers.push(layer);
@@ -201,10 +275,14 @@ export function createRiverLayers({ features, styleContext, key, adminCode }: Cr
     try {
       const response = await fetch(riverDataUrl(template, code), { cache: 'force-cache' });
       if (!response.ok) throw new Error(String(response.status));
-      const parsed = format.readFeatures(await response.json(), {
-        dataProjection: 'EPSG:4326',
-        featureProjection: 'EPSG:3857',
-      }) as Feature[];
+      const payload = await response.json();
+      const parsed = source.semantic === 'label'
+        ? catalogLabels(payload)
+        : format.readFeatures(payload, {
+            dataProjection: 'EPSG:4326',
+            featureProjection: 'EPSG:3857',
+          }) as Feature[];
+      if (source.semantic === 'sochun') markLabelAnchors(parsed);
       // 받아 둔 것은 지역이 바뀌었어도 캐시에 남긴다. 되돌아올 때 다시 받지 않는다.
       cache.set(cacheKey, parsed);
       // 큰 파일을 받는 사이 사용자가 지역을 바꿨을 수 있다.

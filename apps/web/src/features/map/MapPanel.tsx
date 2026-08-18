@@ -17,6 +17,8 @@ import type { AgentContextItem } from '../../types/uiContext';
 
 interface Props {
   adminCode: string;
+  /** 상단에서 고른 시군구. 주면 이 값이 지도 지역이 된다(앱 지역과 별개로 움직인다). */
+  mapRegion?: string;
   highlightedFeatureId?: string | null;
   initialVisible?: Partial<Record<string, boolean>>;
   compact?: boolean;
@@ -186,7 +188,7 @@ function PoiPin() {
   );
 }
 
-export function MapPanel({ adminCode, highlightedFeatureId, initialVisible, compact = false, priorityAreas, onSelectFeature }: Props) {
+export function MapPanel({ adminCode, mapRegion, highlightedFeatureId, initialVisible, compact = false, priorityAreas, onSelectFeature }: Props) {
   const ref = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<VWorldMapHandle | null>(null);
   const popupRef = useRef<HTMLDivElement | null>(null);
@@ -258,8 +260,8 @@ export function MapPanel({ adminCode, highlightedFeatureId, initialVisible, comp
     return () => { alive = false; };
   }, []);
 
-  // 앱 지역이 바뀌면 지도도 그 지역으로 돌아간다(지도에서만 다른 지역을 보고 있었더라도).
-  useEffect(() => { setRegion(dataCodeOfApp(adminCode)); }, [adminCode]);
+  // 상단에서 지역을 바꾸면 지도가 따라간다. 상단 값이 없을 때만 앱 지역을 따른다.
+  useEffect(() => { setRegion(mapRegion ?? dataCodeOfApp(adminCode)); }, [mapRegion, adminCode]);
   useEffect(() => {
     mapRef.current?.setRegion(region, mapRegionIn(regions, region)?.center);
     closePopup(); setHoverPoiId(null); setHover(null);

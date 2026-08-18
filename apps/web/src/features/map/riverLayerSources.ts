@@ -18,7 +18,7 @@
  *  URL·레이어명이 확정되지 않은 소스는 **빈 문자열로 두고 `unverified` 로 남긴다.**
  *  추정한 경로를 채워 넣으면 그 순간부터 그것이 확인된 사실처럼 읽힌다. */
 
-export type RiverSemantic = 'channel' | 'zone' | 'sochun';
+export type RiverSemantic = 'channel' | 'zone' | 'sochun' | 'label';
 export type RiverSourceKind = 'wms' | 'geojson' | 'wfs';
 /** active: 표시 대상 · legacy: 비교용으로만 남긴 기존 소스 · unverified: 경로/승인 미확정이라 켤 수 없음 */
 export type RiverSourceStatus = 'active' | 'legacy' | 'unverified';
@@ -86,6 +86,7 @@ export const SEMANTIC_LABEL: Record<RiverSemantic, string> = {
   channel: '실폭(물길)',
   zone: '법정 하천구역',
   sochun: '소하천구역',
+  label: '하천명',
 };
 
 /** 각 의미가 베이스맵과 어떻게 보이는 것이 정상인지. 팝업·토글 설명에 쓴다 —
@@ -94,6 +95,7 @@ export const SEMANTIC_ALIGNMENT_NOTE: Record<RiverSemantic, string> = {
   channel: '항공영상의 수면과 겹치는 것이 정상입니다.',
   zone: '제방·둔치를 포함하므로 항공영상의 물길보다 넓게 표시되는 것이 정상입니다.',
   sochun: '소하천정비법상 고시된 소하천구역입니다. 국가·지방하천과 별개 자료이므로 국가기본도 하천과 겹치지 않는 것이 정상입니다.',
+  label: '하천명 표기점. 하천 형상이 아니라 이름을 찍는 자리다',
 };
 
 // 2026-08-08: 기존 `seed-wkmstrm`(geo.json L2 = VWorld LT_C_WKMSTRM)을 목록에서 제거했다.
@@ -157,6 +159,25 @@ export const RIVER_LAYER_SOURCES: RiverLayerSource[] = [
     datasetShort: '국가기본도',
     // river.go.kr 의 '법정 하천구역'과 같은 자료가 아니다. 국가기본도가 도시하는 하천경계다.
     note: '국가기본도 하천경계(폴리곤). 제방·둔치를 포함하므로 실폭보다 넓다. RIMGIS 의 법정 하천구역과는 다른 자료이므로 법정 경계로 인용하지 않는다.',
+  },
+  {
+    id: 'river-network-label',
+    label: '하천명 (국가·지방하천)',
+    semantic: 'label',
+    kind: 'geojson',
+    status: 'active',
+    sourceOrg: '국가수자원관리종합시스템 하천망도 (하천명·등급)',
+    url: '',
+    layerName: '',
+    styleName: '',
+    projection: 'EPSG:3857',
+    requiresVWorldKey: false,
+    defaultVisible: true,
+    style: { color: '#0d47a1', satelliteColor: '#82b1ff', width: 1 },
+    // 형상 파일이 아니라 카탈로그(JSON)를 읽는다. 좌표는 하천당 라벨점 1개다.
+    dataUrlTemplate: '/reference/rivers/river_network_catalog.json',
+    datasetShort: '하천명',
+    note: '국가·지방하천 3,856건의 하천명. 형상이 아니라 하천마다 라벨점 1개이며, 그 점은 하천망도 폴리곤의 내부점을 전처리에서 계산한 파생값이다(label_point_kind=derived_interior). 소하천 이름은 소하천구역 레이어가 직접 그린다.',
   },
   {
     id: 'lsmd-sochun',
