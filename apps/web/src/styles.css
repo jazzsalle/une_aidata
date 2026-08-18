@@ -1799,3 +1799,13 @@ button.context-add-button:hover { background: var(--surface-panel-blue); }
   .plan-district-toggle, .plan-district-detail, .plan-river-card { padding-left: var(--sp-3); padding-right: var(--sp-3); }
   .plan-district-card > .context-add-button { margin-left: var(--sp-3); margin-right: var(--sp-3); }
 }
+
+/* 하천 탭 — 이 시군구의 국가·지방·소하천 목록. 이름을 누르면 지도가 그 하천으로 이동한다. */
+.river-tab{display:flex;flex-direction:column;gap:10px}
+.river-tab .panel-tabs.compact{margin:0}
+.river-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.river-list button{width:100%;text-align:left;border:1px solid var(--border-panel-blue);background:var(--c-surface);border-radius:8px;padding:9px 11px;display:flex;flex-direction:column;gap:2px;color:var(--c-text)}
+.river-list button:hover:not(:disabled){border-color:var(--c-brand);background:var(--surface-panel-blue)}
+.river-list button:disabled{opacity:.55}
+.river-list strong{font-size:var(--fs-sm);line-height:var(--lh-sm)}
+.river-list small{font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--c-text-muted)}

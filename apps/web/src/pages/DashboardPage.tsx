@@ -12,6 +12,8 @@ import { PanelResizer, useResizableLeftPanel } from '../components/PanelResizer'
 interface Props {
   /** 지도가 보고 있는 시군구코드. 상황과 별개로 움직인다. */
   mapRegion: string;
+  focusTarget: { key: string; lonLat: [number, number]; zoom?: number } | null;
+  onFocusMap(lonLat: [number, number], zoom?: number): void;
   situation: CurrentSituation | null;
   priorities: PriorityAreaResult | null;
   procedures: ProcedureStep[];
@@ -35,8 +37,8 @@ export function DashboardPage(props: Props) {
       <div className="dashboard-grid" ref={leftPanel.gridRef} style={leftPanel.style}>
         <SituationAgentPanel situation={props.situation} onSituationCreated={props.onSituationCreated} onAgentResponse={props.onAgentResponse} contextItems={props.agentContext} onRemoveContext={props.onRemoveContext} />
         <PanelResizer control={leftPanel} />
-        <MapPanel adminCode={props.situation?.admin_code ?? '45190'} mapRegion={props.mapRegion} highlightedFeatureId={props.highlightedFeature} priorityAreas={props.priorities?.areas} onSelectFeature={props.onAddContext} />
-        <InsightPanel priorities={props.priorities} procedures={props.procedures} similarEvents={props.events} selectedEventId={props.selectedEventId} onHighlight={props.onHighlight} onSelectEvent={props.onSelectEvent} adminCode={props.situation?.admin_code ?? null} onAddContext={props.onAddContext} />
+        <MapPanel adminCode={props.situation?.admin_code ?? '45190'} mapRegion={props.mapRegion} focusTarget={props.focusTarget} highlightedFeatureId={props.highlightedFeature} priorityAreas={props.priorities?.areas} onSelectFeature={props.onAddContext} />
+        <InsightPanel mapRegion={props.mapRegion} onFocusMap={props.onFocusMap} priorities={props.priorities} procedures={props.procedures} similarEvents={props.events} selectedEventId={props.selectedEventId} onHighlight={props.onHighlight} onSelectEvent={props.onSelectEvent} adminCode={props.situation?.admin_code ?? null} onAddContext={props.onAddContext} />
       </div>
       <IntegrationStatusPanel />
       <T3qReadinessPanel adminCode={props.situation?.admin_code} />

@@ -19,6 +19,8 @@ interface Props {
   adminCode: string;
   /** 상단에서 고른 시군구. 주면 이 값이 지도 지역이 된다(앱 지역과 별개로 움직인다). */
   mapRegion?: string;
+  /** 바깥(하천 목록 등)에서 지도를 옮길 때 쓴다. key 가 바뀔 때만 움직인다. */
+  focusTarget?: { key: string; lonLat: [number, number]; zoom?: number } | null;
   highlightedFeatureId?: string | null;
   initialVisible?: Partial<Record<string, boolean>>;
   compact?: boolean;
@@ -188,7 +190,7 @@ function PoiPin() {
   );
 }
 
-export function MapPanel({ adminCode, mapRegion, highlightedFeatureId, initialVisible, compact = false, priorityAreas, onSelectFeature }: Props) {
+export function MapPanel({ adminCode, mapRegion, focusTarget, highlightedFeatureId, initialVisible, compact = false, priorityAreas, onSelectFeature }: Props) {
   const ref = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<VWorldMapHandle | null>(null);
   const popupRef = useRef<HTMLDivElement | null>(null);
@@ -262,6 +264,11 @@ export function MapPanel({ adminCode, mapRegion, highlightedFeatureId, initialVi
 
   // 상단에서 지역을 바꾸면 지도가 따라간다. 상단 값이 없을 때만 앱 지역을 따른다.
   useEffect(() => { setRegion(mapRegion ?? dataCodeOfApp(adminCode)); }, [mapRegion, adminCode]);
+  // 하천 목록에서 고른 하천으로 이동. 좌표는 파생값(형상 bbox 중심)이라 화면에 값으로 쓰지 않는다.
+  useEffect(() => {
+    if (!focusTarget || !mapReady) return;
+    mapRef.current?.focusLonLat(focusTarget.lonLat, focusTarget.zoom ?? 13);
+  }, [focusTarget?.key, mapReady]);
   useEffect(() => {
     mapRef.current?.setRegion(region, mapRegionIn(regions, region)?.center);
     closePopup(); setHoverPoiId(null); setHover(null);

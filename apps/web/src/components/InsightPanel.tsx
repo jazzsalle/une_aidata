@@ -7,6 +7,8 @@ import { DistrictDetailSections, districtFactRows } from './DistrictDetail';
 import type { PriorityArea, PriorityAreaResult, ProcedureStep, SimilarEvent } from '../types/contracts';
 import type { DistrictReference, PlanReference, ReferenceEvidence, RiverReference, RiverStation } from '../types/planReference';
 import type { AgentContextItem } from '../types/uiContext';
+import { type NetworkRiver, loadNetworkRivers, riversInRegion } from '../features/map/riverCatalog';
+import { type RiverSearchEntry, loadRiverSearchIndex } from '../features/map/riverSearchIndex';
 
 interface Props {
   priorities: PriorityAreaResult | null;
@@ -17,12 +19,21 @@ interface Props {
   onSelectEvent(id: string): void;
   /** 계획·근거 탭이 조회할 행정구역. 미배선이면 '계획자료 미확보' 안내만 표시한다. */
   adminCode?: string | null;
+  /** 하천 탭이 보여줄 시군구. 지도가 보고 있는 지역이며 앱 지역과 별개로 움직인다. */
+  mapRegion?: string;
+  /** 하천 목록에서 고른 하천으로 지도를 옮긴다. 미연결이면 이동 버튼을 렌더하지 않는다. */
+  onFocusMap?(lonLat: [number, number], zoom?: number): void;
   /** 선택 대상을 AI 질의 컨텍스트로 넘기는 배선. 미연결이면 버튼을 렌더하지 않는다. */
   onAddContext?(item: AgentContextItem): void;
 }
 
-const tabs=['현재 판단','유사사례','대응절차','계획·근거'] as const;
+// 하천 탭은 맨 뒤에 둔다. 앞의 4개는 기존 순서를 그대로 유지한다 —
+// 콘솔 스모크가 탭을 인덱스로 지목하고 있어 순서를 바꾸면 검증이 통째로 어긋난다.
+const tabs=['현재 판단','유사사례','대응절차','계획·근거','하천'] as const;
 type Tab=(typeof tabs)[number];
+/** 하천 탭의 등급 구분. 서비스가 다루는 3종이며 원자료의 등급 표기를 그대로 쓴다. */
+const riverClasses=['국가하천','지방하천','소하천'] as const;
+type RiverClass=(typeof riverClasses)[number];
 const MISSING='미확보';
 const ALL_TYPES='전체';
 
@@ -99,8 +110,22 @@ function FactList({rows,className='plan-fact-list'}:{rows:Array<{label:string;va
   return <dl className={className}>{rows.map(row=><div key={row.label}><dt>{row.label}</dt><dd>{row.value}</dd></div>)}</dl>;
 }
 
-export function InsightPanel({priorities,procedures,similarEvents,selectedEventId,onHighlight,onSelectEvent,adminCode,onAddContext}:Props){
+export function InsightPanel(props:Props){
+  const {priorities,procedures,similarEvents,selectedEventId,onHighlight,onSelectEvent,adminCode,onAddContext}=props;
   const [tab,setTab]=useState<Tab>('현재 판단');
+  // 하천 탭. 목록은 탭을 처음 열 때만 받는다(카탈로그 1.4 MB · 검색색인 5.9 MB, gzip 로 훨씬 작다).
+  const [riverClass,setRiverClass]=useState<RiverClass>('국가하천');
+  const [networkRivers,setNetworkRivers]=useState<NetworkRiver[]|null>(null);
+  const [sochunEntries,setSochunEntries]=useState<RiverSearchEntry[]|null>(null);
+  const [riverError,setRiverError]=useState<string|null>(null);
+  useEffect(()=>{
+    if(tab!=='하천')return;
+    let alive=true;
+    Promise.all([loadNetworkRivers(),loadRiverSearchIndex()])
+      .then(([rivers,entries])=>{if(alive){setNetworkRivers(rivers);setSochunEntries(entries);setRiverError(null);}})
+      .catch(()=>{if(alive)setRiverError('하천 목록을 불러오지 못했습니다.');});
+    return ()=>{alive=false;};
+  },[tab]);
   const [plan,setPlan]=useState<PlanReference|null>(null);
   const [planState,setPlanState]=useState<'idle'|'loading'|'ready'|'error'>('idle');
   const [typeFilter,setTypeFilter]=useState<string>(ALL_TYPES);
@@ -149,6 +174,22 @@ export function InsightPanel({priorities,procedures,similarEvents,selectedEventI
   const damageDescription=str(damage.description);
   const damageRows=damageQuantities(damage);
   const quantitiesStatus=str(damage.quantities_status);
+
+  const region=props.mapRegion??'';
+  const riverRows=useMemo(()=>{
+    if(riverClass==='소하천'){
+      // 소하천은 검색색인이 이미 '시군구+하천명' 단위로 묶어 둔 것을 그대로 쓴다.
+      return (sochunEntries??[])
+        .filter(entry=>entry.scope==='region'&&entry.admin===region)
+        .map(entry=>({key:entry.feature_id||entry.name,name:entry.name,detail:entry.detail,nav:entry.nav}))
+        .sort((a,b)=>a.name.localeCompare(b.name,'ko-KR'));
+    }
+    return riversInRegion(networkRivers??[],region)
+      .filter(river=>river.river_class===riverClass)
+      .map(river=>({key:river.river_code,name:river.river_name,detail:`하천코드 ${river.river_code}`,nav:river.nav}))
+      .sort((a,b)=>a.name.localeCompare(b.name,'ko-KR'));
+  },[riverClass,networkRivers,sochunEntries,region]);
+  const riverLoaded=networkRivers!==null&&sochunEntries!==null;
 
   return <aside className="right-panel">
     <div className="panel-tabs compact" role="tablist" aria-label="판단 정보" onKeyDown={e=>moveTabFocus<Tab>(e,tabs,tab,setTab,'insight-tab')}>
@@ -242,6 +283,24 @@ export function InsightPanel({priorities,procedures,similarEvents,selectedEventI
       </div>}
 
       {tab==='대응절차'&&procedures.slice(0,8).map(step=><article className="procedure-card" key={step.procedure_id}><small>{step.stage_name} · 잠정 참고</small><strong>{step.sequence}. {step.action_title}</strong><p>{step.action_description}</p><div className="badge-row"><span>대상지 공식 아님</span><span>담당자 확인 필요</span></div></article>)}
+
+      {tab==='하천'&&<div className="river-tab">
+        <div className="notice-card"><strong>이 시군구의 하천</strong><p>국가·지방하천은 하천망도(국가수자원관리종합시스템), 소하천은 소하천구역(연속주제도) 기준입니다. 이름을 누르면 지도가 그 하천으로 이동합니다.</p></div>
+        <div className="panel-tabs compact" role="tablist" aria-label="하천 등급" onKeyDown={e=>moveTabFocus<RiverClass>(e,riverClasses,riverClass,setRiverClass,'river-class-tab')}>
+          {riverClasses.map((item,index)=><button key={item} id={`river-class-tab-${index}`} role="tab" aria-selected={riverClass===item} tabIndex={riverClass===item?0:-1} type="button" className={riverClass===item?'active':''} onClick={()=>setRiverClass(item)}>{item}</button>)}
+        </div>
+        {riverError?<p className="inline-error" role="alert">{riverError}</p>:null}
+        {!riverLoaded&&!riverError?<p className="plan-status" role="status">하천 목록을 불러오는 중입니다.</p>:null}
+        {riverLoaded?<p className="plan-status" role="status" aria-live="polite">{riverRows.length?`${riverRows.length.toLocaleString('ko-KR')}건`:'이 시군구에는 해당 등급의 하천 자료가 없습니다.'}</p>:null}
+        <ul className="river-list">
+          {riverRows.map(row=><li key={row.key}>
+            <button type="button" disabled={!row.nav||!props.onFocusMap} onClick={()=>{if(row.nav)props.onFocusMap?.(row.nav,13);}}>
+              <strong>{row.name}</strong>
+              <small>{row.detail}</small>
+            </button>
+          </li>)}
+        </ul>
+      </div>}
 
       {tab==='계획·근거'&&<div className="evidence-list plan-reference">
         <div className="notice-card warning"><strong>계획문서 판독 참고정보</strong><p>자연재해저감 종합계획·하천기본계획을 판독한 값이며 공식 위험등급 판정·피해예측이 아닙니다. 원문과 담당자 확인이 필요합니다.</p></div>
