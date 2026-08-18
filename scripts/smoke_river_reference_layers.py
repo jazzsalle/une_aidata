@@ -101,11 +101,19 @@ def main() -> int:
                 fail(f'LSMD_SOCHUN_{code}: stream_name 에 일반값 "{name}" 이 들어갔다.')
                 break
     # 시드가 있는 지역은 지도 자료도 반드시 있어야 한다 — 없으면 대시보드가 빈 지도를 연다.
+    # 남원은 앱 시드코드(45190)와 공간자료 코드(52190)가 다르다. 지도는 자료 코드로 파일을
+    # 찾으므로 파일이 앱 코드로 남아 있으면 그 지역에서 하천이 통째로 안 뜬다(실제로 그랬다).
+    data_code = {'45190': '52190'}
     for region in REGIONS:
-        if region.admin in {'26', '45190'}:
-            continue  # 부산 광역 합본·남원 앱코드는 시군구 단위 반입으로 대체됐다
-        if not (DIR / f'LSMD_SOCHUN_{region.admin}.geojson').exists():
-            fail(f'대상지역 {region.name}({region.admin}) 의 소하천구역 파일이 없다.')
+        if region.admin == '26':
+            continue  # 부산 광역 합본은 구·군 단위 반입으로 대체됐다
+        code = data_code.get(region.admin, region.admin)
+        if not (DIR / f'LSMD_SOCHUN_{code}.geojson').exists():
+            fail(f'대상지역 {region.name}({code}) 의 소하천구역 파일이 없다.')
+        for kind in ('TN_RIVER_BNDRY', 'TN_RIVER_BT'):
+            stale = DIR / f'{kind}_{region.admin}.geojson'
+            if code != region.admin and stale.exists():
+                fail(f'{stale.name}: 앱 코드로 남아 있다. 지도는 {code} 로 찾으므로 파일명을 바꿔야 한다.')
 
     index_path = DIR / 'river_search_index.json'
     if not index_path.exists():
