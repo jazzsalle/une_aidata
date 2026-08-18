@@ -1,0 +1,2263 @@
+{
+ "dataset": "river_region_catalog",
+ "built_by": "scripts/build_sochun_layers.py",
+ "note": "지도 지역 선택기가 쓰는 목록이다. 소하천구역 자료가 있는 시군구만 담는다. center 는 형상 bbox 중심이라 자료가 가진 좌표가 아니며 화면 이동 전용이다.",
+ "regions": [
+  {
+   "code": "51150",
+   "sido": "강원특별자치도",
+   "sgg": "강릉시",
+   "sochun_count": 809,
+   "sochun_named": 808,
+   "center": [
+    128.835501,
+    37.716504
+   ],
+   "size_kb": 807
+  },
+  {
+   "code": "51820",
+   "sido": "강원특별자치도",
+   "sgg": "고성군",
+   "sochun_count": 186,
+   "sochun_named": 185,
+   "center": [
+    128.463832,
+    38.391906
+   ],
+   "size_kb": 228
+  },
+  {
+   "code": "51170",
+   "sido": "강원특별자치도",
+   "sgg": "동해시",
+   "sochun_count": 207,
+   "sochun_named": 168,
+   "center": [
+    129.077213,
+    37.523063
+   ],
+   "size_kb": 189
+  },
+  {
+   "code": "51230",
+   "sido": "강원특별자치도",
+   "sgg": "삼척시",
+   "sochun_count": 1322,
+   "sochun_named": 1322,
+   "center": [
+    129.106213,
+    37.280152
+   ],
+   "size_kb": 1267
+  },
+  {
+   "code": "51210",
+   "sido": "강원특별자치도",
+   "sgg": "속초시",
+   "sochun_count": 44,
+   "sochun_named": 0,
+   "center": [
+    128.54224,
+    38.183924
+   ],
+   "size_kb": 98
+  },
+  {
+   "code": "51800",
+   "sido": "강원특별자치도",
+   "sgg": "양구군",
+   "sochun_count": 382,
+   "sochun_named": 382,
+   "center": [
+    128.01354,
+    38.174137
+   ],
+   "size_kb": 590
+  },
+  {
+   "code": "51830",
+   "sido": "강원특별자치도",
+   "sgg": "양양군",
+   "sochun_count": 169,
+   "sochun_named": 166,
+   "center": [
+    128.670831,
+    38.031779
+   ],
+   "size_kb": 168
+  },
+  {
+   "code": "51750",
+   "sido": "강원특별자치도",
+   "sgg": "영월군",
+   "sochun_count": 800,
+   "sochun_named": 770,
+   "center": [
+    128.496517,
+    37.237871
+   ],
+   "size_kb": 939
+  },
+  {
+   "code": "51130",
+   "sido": "강원특별자치도",
+   "sgg": "원주시",
+   "sochun_count": 208,
+   "sochun_named": 206,
+   "center": [
+    127.978844,
+    37.322333
+   ],
+   "size_kb": 506
+  },
+  {
+   "code": "51810",
+   "sido": "강원특별자치도",
+   "sgg": "인제군",
+   "sochun_count": 643,
+   "sochun_named": 600,
+   "center": [
+    128.248635,
+    38.037532
+   ],
+   "size_kb": 753
+  },
+  {
+   "code": "51770",
+   "sido": "강원특별자치도",
+   "sgg": "정선군",
+   "sochun_count": 884,
+   "sochun_named": 883,
+   "center": [
+    128.761173,
+    37.366146
+   ],
+   "size_kb": 953
+  },
+  {
+   "code": "51780",
+   "sido": "강원특별자치도",
+   "sgg": "철원군",
+   "sochun_count": 512,
+   "sochun_named": 511,
+   "center": [
+    127.340331,
+    38.212086
+   ],
+   "size_kb": 540
+  },
+  {
+   "code": "51110",
+   "sido": "강원특별자치도",
+   "sgg": "춘천시",
+   "sochun_count": 1744,
+   "sochun_named": 1717,
+   "center": [
+    127.748805,
+    37.872107
+   ],
+   "size_kb": 1589
+  },
+  {
+   "code": "51190",
+   "sido": "강원특별자치도",
+   "sgg": "태백시",
+   "sochun_count": 491,
+   "sochun_named": 480,
+   "center": [
+    128.973881,
+    37.205304
+   ],
+   "size_kb": 412
+  },
+  {
+   "code": "51760",
+   "sido": "강원특별자치도",
+   "sgg": "평창군",
+   "sochun_count": 1098,
+   "sochun_named": 1096,
+   "center": [
+    128.502103,
+    37.518467
+   ],
+   "size_kb": 1091
+  },
+  {
+   "code": "51720",
+   "sido": "강원특별자치도",
+   "sgg": "홍천군",
+   "sochun_count": 1470,
+   "sochun_named": 1460,
+   "center": [
+    128.027789,
+    37.751815
+   ],
+   "size_kb": 1809
+  },
+  {
+   "code": "51790",
+   "sido": "강원특별자치도",
+   "sgg": "화천군",
+   "sochun_count": 412,
+   "sochun_named": 412,
+   "center": [
+    127.664173,
+    38.130355
+   ],
+   "size_kb": 600
+  },
+  {
+   "code": "51730",
+   "sido": "강원특별자치도",
+   "sgg": "횡성군",
+   "sochun_count": 1278,
+   "sochun_named": 1276,
+   "center": [
+    128.034193,
+    37.492864
+   ],
+   "size_kb": 1258
+  },
+  {
+   "code": "41820",
+   "sido": "경기도",
+   "sgg": "가평군",
+   "sochun_count": 103,
+   "sochun_named": 103,
+   "center": [
+    127.44497,
+    37.782207
+   ],
+   "size_kb": 288
+  },
+  {
+   "code": "41280",
+   "sido": "경기도",
+   "sgg": "고양시",
+   "sochun_count": 470,
+   "sochun_named": 470,
+   "center": [
+    126.82572,
+    37.66026
+   ],
+   "size_kb": 394
+  },
+  {
+   "code": "41290",
+   "sido": "경기도",
+   "sgg": "과천시",
+   "sochun_count": 12,
+   "sochun_named": 12,
+   "center": [
+    127.003734,
+    37.435214
+   ],
+   "size_kb": 23
+  },
+  {
+   "code": "41610",
+   "sido": "경기도",
+   "sgg": "광주시",
+   "sochun_count": 1066,
+   "sochun_named": 2,
+   "center": [
+    127.287833,
+    37.401798
+   ],
+   "size_kb": 744
+  },
+  {
+   "code": "41310",
+   "sido": "경기도",
+   "sgg": "구리시",
+   "sochun_count": 59,
+   "sochun_named": 58,
+   "center": [
+    127.13216,
+    37.599447
+   ],
+   "size_kb": 56
+  },
+  {
+   "code": "41410",
+   "sido": "경기도",
+   "sgg": "군포시",
+   "sochun_count": 50,
+   "sochun_named": 0,
+   "center": [
+    126.922669,
+    37.330281
+   ],
+   "size_kb": 39
+  },
+  {
+   "code": "41570",
+   "sido": "경기도",
+   "sgg": "김포시",
+   "sochun_count": 44,
+   "sochun_named": 43,
+   "center": [
+    126.66104,
+    37.677068
+   ],
+   "size_kb": 113
+  },
+  {
+   "code": "41360",
+   "sido": "경기도",
+   "sgg": "남양주시",
+   "sochun_count": 148,
+   "sochun_named": 147,
+   "center": [
+    127.236801,
+    37.648003
+   ],
+   "size_kb": 344
+  },
+  {
+   "code": "41250",
+   "sido": "경기도",
+   "sgg": "동두천시",
+   "sochun_count": 39,
+   "sochun_named": 39,
+   "center": [
+    127.076897,
+    37.921191
+   ],
+   "size_kb": 101
+  },
+  {
+   "code": "41190",
+   "sido": "경기도",
+   "sgg": "부천시",
+   "sochun_count": 32,
+   "sochun_named": 32,
+   "center": [
+    126.796081,
+    37.509667
+   ],
+   "size_kb": 36
+  },
+  {
+   "code": "41130",
+   "sido": "경기도",
+   "sgg": "성남시",
+   "sochun_count": 99,
+   "sochun_named": 99,
+   "center": [
+    127.109343,
+    37.41078
+   ],
+   "size_kb": 99
+  },
+  {
+   "code": "41110",
+   "sido": "경기도",
+   "sgg": "수원시",
+   "sochun_count": 38,
+   "sochun_named": 25,
+   "center": [
+    126.996341,
+    37.284833
+   ],
+   "size_kb": 69
+  },
+  {
+   "code": "41390",
+   "sido": "경기도",
+   "sgg": "시흥시",
+   "sochun_count": 62,
+   "sochun_named": 58,
+   "center": [
+    126.781024,
+    37.388855
+   ],
+   "size_kb": 130
+  },
+  {
+   "code": "41270",
+   "sido": "경기도",
+   "sgg": "안산시",
+   "sochun_count": 26,
+   "sochun_named": 24,
+   "center": [
+    126.745908,
+    37.302459
+   ],
+   "size_kb": 101
+  },
+  {
+   "code": "41550",
+   "sido": "경기도",
+   "sgg": "안성시",
+   "sochun_count": 464,
+   "sochun_named": 441,
+   "center": [
+    127.309945,
+    37.021816
+   ],
+   "size_kb": 499
+  },
+  {
+   "code": "41170",
+   "sido": "경기도",
+   "sgg": "안양시",
+   "sochun_count": 5,
+   "sochun_named": 0,
+   "center": [
+    126.891248,
+    37.394854
+   ],
+   "size_kb": 6
+  },
+  {
+   "code": "41630",
+   "sido": "경기도",
+   "sgg": "양주시",
+   "sochun_count": 1094,
+   "sochun_named": 1094,
+   "center": [
+    127.012007,
+    37.803606
+   ],
+   "size_kb": 787
+  },
+  {
+   "code": "41830",
+   "sido": "경기도",
+   "sgg": "양평군",
+   "sochun_count": 153,
+   "sochun_named": 153,
+   "center": [
+    127.568653,
+    37.509532
+   ],
+   "size_kb": 448
+  },
+  {
+   "code": "41670",
+   "sido": "경기도",
+   "sgg": "여주시",
+   "sochun_count": 978,
+   "sochun_named": 976,
+   "center": [
+    127.593065,
+    37.296623
+   ],
+   "size_kb": 1099
+  },
+  {
+   "code": "41800",
+   "sido": "경기도",
+   "sgg": "연천군",
+   "sochun_count": 665,
+   "sochun_named": 661,
+   "center": [
+    126.987484,
+    38.085653
+   ],
+   "size_kb": 652
+  },
+  {
+   "code": "41370",
+   "sido": "경기도",
+   "sgg": "오산시",
+   "sochun_count": 15,
+   "sochun_named": 14,
+   "center": [
+    127.044642,
+    37.169725
+   ],
+   "size_kb": 31
+  },
+  {
+   "code": "41460",
+   "sido": "경기도",
+   "sgg": "용인시",
+   "sochun_count": 154,
+   "sochun_named": 153,
+   "center": [
+    127.226534,
+    37.228528
+   ],
+   "size_kb": 391
+  },
+  {
+   "code": "41430",
+   "sido": "경기도",
+   "sgg": "의왕시",
+   "sochun_count": 110,
+   "sochun_named": 108,
+   "center": [
+    126.979245,
+    37.352154
+   ],
+   "size_kb": 102
+  },
+  {
+   "code": "41150",
+   "sido": "경기도",
+   "sgg": "의정부시",
+   "sochun_count": 132,
+   "sochun_named": 131,
+   "center": [
+    127.068722,
+    37.734009
+   ],
+   "size_kb": 163
+  },
+  {
+   "code": "41500",
+   "sido": "경기도",
+   "sgg": "이천시",
+   "sochun_count": 678,
+   "sochun_named": 677,
+   "center": [
+    127.485762,
+    37.195937
+   ],
+   "size_kb": 596
+  },
+  {
+   "code": "41480",
+   "sido": "경기도",
+   "sgg": "파주시",
+   "sochun_count": 218,
+   "sochun_named": 218,
+   "center": [
+    126.841282,
+    37.862532
+   ],
+   "size_kb": 309
+  },
+  {
+   "code": "41220",
+   "sido": "경기도",
+   "sgg": "평택시",
+   "sochun_count": 140,
+   "sochun_named": 137,
+   "center": [
+    127.026514,
+    37.042457
+   ],
+   "size_kb": 126
+  },
+  {
+   "code": "41650",
+   "sido": "경기도",
+   "sgg": "포천시",
+   "sochun_count": 3807,
+   "sochun_named": 3772,
+   "center": [
+    127.24579,
+    37.967693
+   ],
+   "size_kb": 2455
+  },
+  {
+   "code": "41450",
+   "sido": "경기도",
+   "sgg": "하남시",
+   "sochun_count": 65,
+   "sochun_named": 48,
+   "center": [
+    127.214383,
+    37.514077
+   ],
+   "size_kb": 101
+  },
+  {
+   "code": "41590",
+   "sido": "경기도",
+   "sgg": "화성시",
+   "sochun_count": 1275,
+   "sochun_named": 1256,
+   "center": [
+    126.907779,
+    37.156954
+   ],
+   "size_kb": 1020
+  },
+  {
+   "code": "48310",
+   "sido": "경상남도",
+   "sgg": "거제시",
+   "sochun_count": 145,
+   "sochun_named": 16,
+   "center": [
+    128.596416,
+    34.874821
+   ],
+   "size_kb": 277
+  },
+  {
+   "code": "48880",
+   "sido": "경상남도",
+   "sgg": "거창군",
+   "sochun_count": 195,
+   "sochun_named": 195,
+   "center": [
+    127.89587,
+    35.703846
+   ],
+   "size_kb": 529
+  },
+  {
+   "code": "48820",
+   "sido": "경상남도",
+   "sgg": "고성군",
+   "sochun_count": 285,
+   "sochun_named": 276,
+   "center": [
+    128.297732,
+    35.012205
+   ],
+   "size_kb": 610
+  },
+  {
+   "code": "48250",
+   "sido": "경상남도",
+   "sgg": "김해시",
+   "sochun_count": 25,
+   "sochun_named": 1,
+   "center": [
+    128.85098,
+    35.269622
+   ],
+   "size_kb": 243
+  },
+  {
+   "code": "48840",
+   "sido": "경상남도",
+   "sgg": "남해군",
+   "sochun_count": 1129,
+   "sochun_named": 1127,
+   "center": [
+    127.936426,
+    34.827201
+   ],
+   "size_kb": 910
+  },
+  {
+   "code": "48270",
+   "sido": "경상남도",
+   "sgg": "밀양시",
+   "sochun_count": 1176,
+   "sochun_named": 1151,
+   "center": [
+    128.776046,
+    35.493206
+   ],
+   "size_kb": 854
+  },
+  {
+   "code": "48240",
+   "sido": "경상남도",
+   "sgg": "사천시",
+   "sochun_count": 990,
+   "sochun_named": 966,
+   "center": [
+    128.030992,
+    35.042407
+   ],
+   "size_kb": 838
+  },
+  {
+   "code": "48860",
+   "sido": "경상남도",
+   "sgg": "산청군",
+   "sochun_count": 2007,
+   "sochun_named": 2007,
+   "center": [
+    127.90572,
+    35.386685
+   ],
+   "size_kb": 1614
+  },
+  {
+   "code": "48330",
+   "sido": "경상남도",
+   "sgg": "양산시",
+   "sochun_count": 58,
+   "sochun_named": 46,
+   "center": [
+    129.038525,
+    35.404345
+   ],
+   "size_kb": 128
+  },
+  {
+   "code": "48720",
+   "sido": "경상남도",
+   "sgg": "의령군",
+   "sochun_count": 161,
+   "sochun_named": 160,
+   "center": [
+    128.256413,
+    35.3847
+   ],
+   "size_kb": 315
+  },
+  {
+   "code": "48170",
+   "sido": "경상남도",
+   "sgg": "진주시",
+   "sochun_count": 163,
+   "sochun_named": 163,
+   "center": [
+    128.125094,
+    35.196533
+   ],
+   "size_kb": 325
+  },
+  {
+   "code": "48740",
+   "sido": "경상남도",
+   "sgg": "창녕군",
+   "sochun_count": 129,
+   "sochun_named": 126,
+   "center": [
+    128.50965,
+    35.520148
+   ],
+   "size_kb": 246
+  },
+  {
+   "code": "48120",
+   "sido": "경상남도",
+   "sgg": "창원시",
+   "sochun_count": 456,
+   "sochun_named": 298,
+   "center": [
+    128.598107,
+    35.219334
+   ],
+   "size_kb": 620
+  },
+  {
+   "code": "48220",
+   "sido": "경상남도",
+   "sgg": "통영시",
+   "sochun_count": 130,
+   "sochun_named": 48,
+   "center": [
+    128.341237,
+    34.79684
+   ],
+   "size_kb": 232
+  },
+  {
+   "code": "48850",
+   "sido": "경상남도",
+   "sgg": "하동군",
+   "sochun_count": 694,
+   "sochun_named": 694,
+   "center": [
+    127.774736,
+    35.119709
+   ],
+   "size_kb": 679
+  },
+  {
+   "code": "48730",
+   "sido": "경상남도",
+   "sgg": "함안군",
+   "sochun_count": 119,
+   "sochun_named": 119,
+   "center": [
+    128.423968,
+    35.276094
+   ],
+   "size_kb": 280
+  },
+  {
+   "code": "48870",
+   "sido": "경상남도",
+   "sgg": "함양군",
+   "sochun_count": 694,
+   "sochun_named": 685,
+   "center": [
+    127.735114,
+    35.552588
+   ],
+   "size_kb": 711
+  },
+  {
+   "code": "48890",
+   "sido": "경상남도",
+   "sgg": "합천군",
+   "sochun_count": 532,
+   "sochun_named": 531,
+   "center": [
+    128.159545,
+    35.597362
+   ],
+   "size_kb": 1099
+  },
+  {
+   "code": "47290",
+   "sido": "경상북도",
+   "sgg": "경산시",
+   "sochun_count": 72,
+   "sochun_named": 71,
+   "center": [
+    128.829545,
+    35.852618
+   ],
+   "size_kb": 288
+  },
+  {
+   "code": "47130",
+   "sido": "경상북도",
+   "sgg": "경주시",
+   "sochun_count": 2137,
+   "sochun_named": 2058,
+   "center": [
+    129.246168,
+    35.860126
+   ],
+   "size_kb": 2155
+  },
+  {
+   "code": "47830",
+   "sido": "경상북도",
+   "sgg": "고령군",
+   "sochun_count": 136,
+   "sochun_named": 136,
+   "center": [
+    128.306384,
+    35.733357
+   ],
+   "size_kb": 363
+  },
+  {
+   "code": "47190",
+   "sido": "경상북도",
+   "sgg": "구미시",
+   "sochun_count": 159,
+   "sochun_named": 157,
+   "center": [
+    128.348142,
+    36.211226
+   ],
+   "size_kb": 347
+  },
+  {
+   "code": "47150",
+   "sido": "경상북도",
+   "sgg": "김천시",
+   "sochun_count": 1861,
+   "sochun_named": 1860,
+   "center": [
+    128.097719,
+    36.049028
+   ],
+   "size_kb": 1727
+  },
+  {
+   "code": "47280",
+   "sido": "경상북도",
+   "sgg": "문경시",
+   "sochun_count": 2095,
+   "sochun_named": 186,
+   "center": [
+    128.143787,
+    36.686614
+   ],
+   "size_kb": 1711
+  },
+  {
+   "code": "47920",
+   "sido": "경상북도",
+   "sgg": "봉화군",
+   "sochun_count": 2751,
+   "sochun_named": 2751,
+   "center": [
+    128.902214,
+    36.918073
+   ],
+   "size_kb": 2441
+  },
+  {
+   "code": "47250",
+   "sido": "경상북도",
+   "sgg": "상주시",
+   "sochun_count": 1365,
+   "sochun_named": 1365,
+   "center": [
+    128.058966,
+    36.455838
+   ],
+   "size_kb": 1161
+  },
+  {
+   "code": "47840",
+   "sido": "경상북도",
+   "sgg": "성주군",
+   "sochun_count": 125,
+   "sochun_named": 125,
+   "center": [
+    128.225992,
+    35.915248
+   ],
+   "size_kb": 464
+  },
+  {
+   "code": "47170",
+   "sido": "경상북도",
+   "sgg": "안동시",
+   "sochun_count": 115,
+   "sochun_named": 114,
+   "center": [
+    128.719729,
+    36.584314
+   ],
+   "size_kb": 459
+  },
+  {
+   "code": "47770",
+   "sido": "경상북도",
+   "sgg": "영덕군",
+   "sochun_count": 638,
+   "sochun_named": 638,
+   "center": [
+    129.297329,
+    36.468609
+   ],
+   "size_kb": 654
+  },
+  {
+   "code": "47760",
+   "sido": "경상북도",
+   "sgg": "영양군",
+   "sochun_count": 772,
+   "sochun_named": 772,
+   "center": [
+    129.143443,
+    36.678391
+   ],
+   "size_kb": 600
+  },
+  {
+   "code": "47210",
+   "sido": "경상북도",
+   "sgg": "영주시",
+   "sochun_count": 2054,
+   "sochun_named": 2052,
+   "center": [
+    128.597537,
+    36.87701
+   ],
+   "size_kb": 1632
+  },
+  {
+   "code": "47230",
+   "sido": "경상북도",
+   "sgg": "영천시",
+   "sochun_count": 115,
+   "sochun_named": 114,
+   "center": [
+    128.92575,
+    35.999676
+   ],
+   "size_kb": 468
+  },
+  {
+   "code": "47900",
+   "sido": "경상북도",
+   "sgg": "예천군",
+   "sochun_count": 1498,
+   "sochun_named": 1498,
+   "center": [
+    128.432903,
+    36.64985
+   ],
+   "size_kb": 1208
+  },
+  {
+   "code": "47940",
+   "sido": "경상북도",
+   "sgg": "울릉군",
+   "sochun_count": 10,
+   "sochun_named": 10,
+   "center": [
+    130.859868,
+    37.501921
+   ],
+   "size_kb": 31
+  },
+  {
+   "code": "47930",
+   "sido": "경상북도",
+   "sgg": "울진군",
+   "sochun_count": 293,
+   "sochun_named": 293,
+   "center": [
+    129.28319,
+    36.890609
+   ],
+   "size_kb": 514
+  },
+  {
+   "code": "47730",
+   "sido": "경상북도",
+   "sgg": "의성군",
+   "sochun_count": 1585,
+   "sochun_named": 1585,
+   "center": [
+    128.588362,
+    36.364348
+   ],
+   "size_kb": 1719
+  },
+  {
+   "code": "47820",
+   "sido": "경상북도",
+   "sgg": "청도군",
+   "sochun_count": 268,
+   "sochun_named": 268,
+   "center": [
+    128.766831,
+    35.694215
+   ],
+   "size_kb": 541
+  },
+  {
+   "code": "47750",
+   "sido": "경상북도",
+   "sgg": "청송군",
+   "sochun_count": 1665,
+   "sochun_named": 1657,
+   "center": [
+    129.058356,
+    36.383739
+   ],
+   "size_kb": 1573
+  },
+  {
+   "code": "47850",
+   "sido": "경상북도",
+   "sgg": "칠곡군",
+   "sochun_count": 933,
+   "sochun_named": 933,
+   "center": [
+    128.462395,
+    36.007659
+   ],
+   "size_kb": 731
+  },
+  {
+   "code": "47110",
+   "sido": "경상북도",
+   "sgg": "포항시",
+   "sochun_count": 1977,
+   "sochun_named": 1969,
+   "center": [
+    129.294574,
+    36.05352
+   ],
+   "size_kb": 1749
+  },
+  {
+   "code": "27720",
+   "sido": "대구광역시",
+   "sgg": "군위군",
+   "sochun_count": 946,
+   "sochun_named": 944,
+   "center": [
+    128.655365,
+    36.179974
+   ],
+   "size_kb": 803
+  },
+  {
+   "code": "27290",
+   "sido": "대구광역시",
+   "sgg": "달서구",
+   "sochun_count": 1,
+   "sochun_named": 1,
+   "center": [
+    128.551488,
+    35.791747
+   ],
+   "size_kb": 2
+  },
+  {
+   "code": "27710",
+   "sido": "대구광역시",
+   "sgg": "달성군",
+   "sochun_count": 356,
+   "sochun_named": 353,
+   "center": [
+    128.522672,
+    35.785902
+   ],
+   "size_kb": 432
+  },
+  {
+   "code": "27140",
+   "sido": "대구광역시",
+   "sgg": "동구",
+   "sochun_count": 11,
+   "sochun_named": 11,
+   "center": [
+    128.693997,
+    35.932039
+   ],
+   "size_kb": 31
+  },
+  {
+   "code": "27230",
+   "sido": "대구광역시",
+   "sgg": "북구",
+   "sochun_count": 20,
+   "sochun_named": 8,
+   "center": [
+    128.570473,
+    35.932917
+   ],
+   "size_kb": 31
+  },
+  {
+   "code": "30230",
+   "sido": "대전광역시",
+   "sgg": "대덕구",
+   "sochun_count": 4,
+   "sochun_named": 4,
+   "center": [
+    127.422082,
+    36.422692
+   ],
+   "size_kb": 11
+  },
+  {
+   "code": "30110",
+   "sido": "대전광역시",
+   "sgg": "동구",
+   "sochun_count": 47,
+   "sochun_named": 43,
+   "center": [
+    127.474343,
+    36.309447
+   ],
+   "size_kb": 118
+  },
+  {
+   "code": "30170",
+   "sido": "대전광역시",
+   "sgg": "서구",
+   "sochun_count": 92,
+   "sochun_named": 0,
+   "center": [
+    127.322396,
+    36.257922
+   ],
+   "size_kb": 96
+  },
+  {
+   "code": "30200",
+   "sido": "대전광역시",
+   "sgg": "유성구",
+   "sochun_count": 34,
+   "sochun_named": 34,
+   "center": [
+    127.319664,
+    36.369538
+   ],
+   "size_kb": 83
+  },
+  {
+   "code": "30140",
+   "sido": "대전광역시",
+   "sgg": "중구",
+   "sochun_count": 56,
+   "sochun_named": 19,
+   "center": [
+    127.408867,
+    36.249584
+   ],
+   "size_kb": 56
+  },
+  {
+   "code": "26710",
+   "sido": "부산광역시",
+   "sgg": "기장군",
+   "sochun_count": 37,
+   "sochun_named": 20,
+   "center": [
+    129.205235,
+    35.287092
+   ],
+   "size_kb": 95
+  },
+  {
+   "code": "26290",
+   "sido": "부산광역시",
+   "sgg": "남구",
+   "sochun_count": 1,
+   "sochun_named": 0,
+   "center": [
+    129.101501,
+    35.129353
+   ],
+   "size_kb": 1
+  },
+  {
+   "code": "26530",
+   "sido": "부산광역시",
+   "sgg": "사상구",
+   "sochun_count": 7,
+   "sochun_named": 7,
+   "center": [
+    128.994357,
+    35.162419
+   ],
+   "size_kb": 10
+  },
+  {
+   "code": "26140",
+   "sido": "부산광역시",
+   "sgg": "서구",
+   "sochun_count": 1,
+   "sochun_named": 1,
+   "center": [
+    129.007339,
+    35.131414
+   ],
+   "size_kb": 2
+  },
+  {
+   "code": "26350",
+   "sido": "부산광역시",
+   "sgg": "해운대구",
+   "sochun_count": 4,
+   "sochun_named": 4,
+   "center": [
+    129.127787,
+    35.203264
+   ],
+   "size_kb": 4
+  },
+  {
+   "code": "11305",
+   "sido": "서울특별시",
+   "sgg": "강북구",
+   "sochun_count": 2,
+   "sochun_named": 0,
+   "center": [
+    127.008015,
+    37.66765
+   ],
+   "size_kb": 4
+  },
+  {
+   "code": "11500",
+   "sido": "서울특별시",
+   "sgg": "강서구",
+   "sochun_count": 1,
+   "sochun_named": 0,
+   "center": [
+    126.769314,
+    37.550967
+   ],
+   "size_kb": 1
+  },
+  {
+   "code": "11650",
+   "sido": "서울특별시",
+   "sgg": "서초구",
+   "sochun_count": 15,
+   "sochun_named": 0,
+   "center": [
+    127.049642,
+    37.457287
+   ],
+   "size_kb": 23
+  },
+  {
+   "code": "11710",
+   "sido": "서울특별시",
+   "sgg": "송파구",
+   "sochun_count": 1,
+   "sochun_named": 1,
+   "center": [
+    127.161593,
+    37.488652
+   ],
+   "size_kb": 2
+  },
+  {
+   "code": "11380",
+   "sido": "서울특별시",
+   "sgg": "은평구",
+   "sochun_count": 1,
+   "sochun_named": 1,
+   "center": [
+    126.941888,
+    37.64404
+   ],
+   "size_kb": 3
+  },
+  {
+   "code": "11110",
+   "sido": "서울특별시",
+   "sgg": "종로구",
+   "sochun_count": 2,
+   "sochun_named": 0,
+   "center": [
+    126.966837,
+    37.61037
+   ],
+   "size_kb": 10
+  },
+  {
+   "code": "36110",
+   "sido": "세종특별자치시",
+   "sgg": "세종시",
+   "sochun_count": 237,
+   "sochun_named": 237,
+   "center": [
+    127.271655,
+    36.567025
+   ],
+   "size_kb": 370
+  },
+  {
+   "code": "31140",
+   "sido": "울산광역시",
+   "sgg": "남구",
+   "sochun_count": 3,
+   "sochun_named": 2,
+   "center": [
+    129.29869,
+    35.521135
+   ],
+   "size_kb": 7
+  },
+  {
+   "code": "31170",
+   "sido": "울산광역시",
+   "sgg": "동구",
+   "sochun_count": 3,
+   "sochun_named": 0,
+   "center": [
+    129.434845,
+    35.548653
+   ],
+   "size_kb": 5
+  },
+  {
+   "code": "31200",
+   "sido": "울산광역시",
+   "sgg": "북구",
+   "sochun_count": 49,
+   "sochun_named": 22,
+   "center": [
+    129.378799,
+    35.614924
+   ],
+   "size_kb": 65
+  },
+  {
+   "code": "31710",
+   "sido": "울산광역시",
+   "sgg": "울주군",
+   "sochun_count": 90,
+   "sochun_named": 60,
+   "center": [
+    129.169635,
+    35.536284
+   ],
+   "size_kb": 177
+  },
+  {
+   "code": "31110",
+   "sido": "울산광역시",
+   "sgg": "중구",
+   "sochun_count": 34,
+   "sochun_named": 34,
+   "center": [
+    129.306898,
+    35.570538
+   ],
+   "size_kb": 23
+  },
+  {
+   "code": "28710",
+   "sido": "인천광역시",
+   "sgg": "강화군",
+   "sochun_count": 20,
+   "sochun_named": 18,
+   "center": [
+    126.42463,
+    37.685081
+   ],
+   "size_kb": 39
+  },
+  {
+   "code": "28290",
+   "sido": "인천광역시",
+   "sgg": "검단구",
+   "sochun_count": 77,
+   "sochun_named": 7,
+   "center": [
+    126.674886,
+    37.604307
+   ],
+   "size_kb": 46
+  },
+  {
+   "code": "28245",
+   "sido": "인천광역시",
+   "sgg": "계양구",
+   "sochun_count": 72,
+   "sochun_named": 71,
+   "center": [
+    126.720394,
+    37.550512
+   ],
+   "size_kb": 53
+  },
+  {
+   "code": "28200",
+   "sido": "인천광역시",
+   "sgg": "남동구",
+   "sochun_count": 4,
+   "sochun_named": 4,
+   "center": [
+    126.740052,
+    37.435424
+   ],
+   "size_kb": 5
+  },
+  {
+   "code": "28237",
+   "sido": "인천광역시",
+   "sgg": "부평구",
+   "sochun_count": 1,
+   "sochun_named": 1,
+   "center": [
+    126.720572,
+    37.500924
+   ],
+   "size_kb": 1
+  },
+  {
+   "code": "28275",
+   "sido": "인천광역시",
+   "sgg": "서해구",
+   "sochun_count": 3,
+   "sochun_named": 1,
+   "center": [
+    126.68942,
+    37.565099
+   ],
+   "size_kb": 2
+  },
+  {
+   "code": "28155",
+   "sido": "인천광역시",
+   "sgg": "영종구",
+   "sochun_count": 17,
+   "sochun_named": 16,
+   "center": [
+    126.52978,
+    37.500098
+   ],
+   "size_kb": 16
+  },
+  {
+   "code": "28720",
+   "sido": "인천광역시",
+   "sgg": "옹진군",
+   "sochun_count": 144,
+   "sochun_named": 87,
+   "center": [
+    125.554975,
+    37.576589
+   ],
+   "size_kb": 186
+  },
+  {
+   "code": "46810",
+   "sido": "전남광주통합특별시",
+   "sgg": "강진군",
+   "sochun_count": 1178,
+   "sochun_named": 1178,
+   "center": [
+    126.774663,
+    34.622626
+   ],
+   "size_kb": 893
+  },
+  {
+   "code": "46770",
+   "sido": "전남광주통합특별시",
+   "sgg": "고흥군",
+   "sochun_count": 3575,
+   "sochun_named": 3575,
+   "center": [
+    127.312111,
+    34.619786
+   ],
+   "size_kb": 2828
+  },
+  {
+   "code": "46720",
+   "sido": "전남광주통합특별시",
+   "sgg": "곡성군",
+   "sochun_count": 1360,
+   "sochun_named": 1356,
+   "center": [
+    127.250109,
+    35.206592
+   ],
+   "size_kb": 1145
+  },
+  {
+   "code": "29200",
+   "sido": "전남광주통합특별시",
+   "sgg": "광산구",
+   "sochun_count": 39,
+   "sochun_named": 0,
+   "center": [
+    126.7397,
+    35.154252
+   ],
+   "size_kb": 69
+  },
+  {
+   "code": "46230",
+   "sido": "전남광주통합특별시",
+   "sgg": "광양시",
+   "sochun_count": 1431,
+   "sochun_named": 718,
+   "center": [
+    127.658648,
+    35.039806
+   ],
+   "size_kb": 1251
+  },
+  {
+   "code": "46730",
+   "sido": "전남광주통합특별시",
+   "sgg": "구례군",
+   "sochun_count": 438,
+   "sochun_named": 438,
+   "center": [
+    127.495536,
+    35.24135
+   ],
+   "size_kb": 413
+  },
+  {
+   "code": "46170",
+   "sido": "전남광주통합특별시",
+   "sgg": "나주시",
+   "sochun_count": 390,
+   "sochun_named": 390,
+   "center": [
+    126.713904,
+    34.991805
+   ],
+   "size_kb": 461
+  },
+  {
+   "code": "46710",
+   "sido": "전남광주통합특별시",
+   "sgg": "담양군",
+   "sochun_count": 1169,
+   "sochun_named": 1169,
+   "center": [
+    126.982473,
+    35.289687
+   ],
+   "size_kb": 981
+  },
+  {
+   "code": "29110",
+   "sido": "전남광주통합특별시",
+   "sgg": "동구",
+   "sochun_count": 6,
+   "sochun_named": 6,
+   "center": [
+    126.946001,
+    35.108827
+   ],
+   "size_kb": 19
+  },
+  {
+   "code": "46110",
+   "sido": "전남광주통합특별시",
+   "sgg": "목포시",
+   "sochun_count": 6,
+   "sochun_named": 0,
+   "center": [
+    126.386671,
+    34.791327
+   ],
+   "size_kb": 10
+  },
+  {
+   "code": "46780",
+   "sido": "전남광주통합특별시",
+   "sgg": "보성군",
+   "sochun_count": 3162,
+   "sochun_named": 3162,
+   "center": [
+    127.196726,
+    34.804685
+   ],
+   "size_kb": 2605
+  },
+  {
+   "code": "29170",
+   "sido": "전남광주통합특별시",
+   "sgg": "북구",
+   "sochun_count": 2,
+   "sochun_named": 0,
+   "center": [
+    126.955837,
+    35.21003
+   ],
+   "size_kb": 16
+  },
+  {
+   "code": "46910",
+   "sido": "전남광주통합특별시",
+   "sgg": "신안군",
+   "sochun_count": 304,
+   "sochun_named": 298,
+   "center": [
+    125.877081,
+    34.827203
+   ],
+   "size_kb": 306
+  },
+  {
+   "code": "46130",
+   "sido": "전남광주통합특별시",
+   "sgg": "여수시",
+   "sochun_count": 169,
+   "sochun_named": 161,
+   "center": [
+    127.660166,
+    34.692387
+   ],
+   "size_kb": 340
+  },
+  {
+   "code": "46870",
+   "sido": "전남광주통합특별시",
+   "sgg": "영광군",
+   "sochun_count": 2704,
+   "sochun_named": 2704,
+   "center": [
+    126.320414,
+    35.297004
+   ],
+   "size_kb": 1846
+  },
+  {
+   "code": "46830",
+   "sido": "전남광주통합특별시",
+   "sgg": "영암군",
+   "sochun_count": 1218,
+   "sochun_named": 1216,
+   "center": [
+    126.658491,
+    34.805983
+   ],
+   "size_kb": 996
+  },
+  {
+   "code": "46890",
+   "sido": "전남광주통합특별시",
+   "sgg": "완도군",
+   "sochun_count": 538,
+   "sochun_named": 538,
+   "center": [
+    126.788891,
+    34.287139
+   ],
+   "size_kb": 514
+  },
+  {
+   "code": "46880",
+   "sido": "전남광주통합특별시",
+   "sgg": "장성군",
+   "sochun_count": 1437,
+   "sochun_named": 1436,
+   "center": [
+    126.77354,
+    35.327389
+   ],
+   "size_kb": 1115
+  },
+  {
+   "code": "46800",
+   "sido": "전남광주통합특별시",
+   "sgg": "장흥군",
+   "sochun_count": 214,
+   "sochun_named": 213,
+   "center": [
+    126.915155,
+    34.654128
+   ],
+   "size_kb": 558
+  },
+  {
+   "code": "46900",
+   "sido": "전남광주통합특별시",
+   "sgg": "진도군",
+   "sochun_count": 492,
+   "sochun_named": 492,
+   "center": [
+    126.194537,
+    34.430487
+   ],
+   "size_kb": 405
+  },
+  {
+   "code": "46860",
+   "sido": "전남광주통합특별시",
+   "sgg": "함평군",
+   "sochun_count": 2001,
+   "sochun_named": 2001,
+   "center": [
+    126.514184,
+    35.106744
+   ],
+   "size_kb": 1646
+  },
+  {
+   "code": "46820",
+   "sido": "전남광주통합특별시",
+   "sgg": "해남군",
+   "sochun_count": 3013,
+   "sochun_named": 3013,
+   "center": [
+    126.484214,
+    34.525508
+   ],
+   "size_kb": 2247
+  },
+  {
+   "code": "46790",
+   "sido": "전남광주통합특별시",
+   "sgg": "화순군",
+   "sochun_count": 440,
+   "sochun_named": 440,
+   "center": [
+    127.007351,
+    35.017447
+   ],
+   "size_kb": 890
+  },
+  {
+   "code": "52790",
+   "sido": "전북특별자치도",
+   "sgg": "고창군",
+   "sochun_count": 1116,
+   "sochun_named": 1116,
+   "center": [
+    126.615175,
+    35.438434
+   ],
+   "size_kb": 898
+  },
+  {
+   "code": "52130",
+   "sido": "전북특별자치도",
+   "sgg": "군산시",
+   "sochun_count": 22,
+   "sochun_named": 22,
+   "center": [
+    126.807922,
+    35.990786
+   ],
+   "size_kb": 42
+  },
+  {
+   "code": "52210",
+   "sido": "전북특별자치도",
+   "sgg": "김제시",
+   "sochun_count": 386,
+   "sochun_named": 386,
+   "center": [
+    126.95797,
+    35.776106
+   ],
+   "size_kb": 330
+  },
+  {
+   "code": "52190",
+   "sido": "전북특별자치도",
+   "sgg": "남원시",
+   "sochun_count": 454,
+   "sochun_named": 454,
+   "center": [
+    127.417768,
+    35.431833
+   ],
+   "size_kb": 710
+  },
+  {
+   "code": "52730",
+   "sido": "전북특별자치도",
+   "sgg": "무주군",
+   "sochun_count": 347,
+   "sochun_named": 347,
+   "center": [
+    127.71939,
+    35.928342
+   ],
+   "size_kb": 861
+  },
+  {
+   "code": "52800",
+   "sido": "전북특별자치도",
+   "sgg": "부안군",
+   "sochun_count": 98,
+   "sochun_named": 98,
+   "center": [
+    126.530769,
+    35.657594
+   ],
+   "size_kb": 184
+  },
+  {
+   "code": "52770",
+   "sido": "전북특별자치도",
+   "sgg": "순창군",
+   "sochun_count": 212,
+   "sochun_named": 212,
+   "center": [
+    127.094879,
+    35.430083
+   ],
+   "size_kb": 450
+  },
+  {
+   "code": "52710",
+   "sido": "전북특별자치도",
+   "sgg": "완주군",
+   "sochun_count": 2102,
+   "sochun_named": 2102,
+   "center": [
+    127.195347,
+    35.874736
+   ],
+   "size_kb": 1871
+  },
+  {
+   "code": "52140",
+   "sido": "전북특별자치도",
+   "sgg": "익산시",
+   "sochun_count": 122,
+   "sochun_named": 120,
+   "center": [
+    126.995358,
+    36.034745
+   ],
+   "size_kb": 374
+  },
+  {
+   "code": "52750",
+   "sido": "전북특별자치도",
+   "sgg": "임실군",
+   "sochun_count": 1963,
+   "sochun_named": 1962,
+   "center": [
+    127.247225,
+    35.611097
+   ],
+   "size_kb": 1531
+  },
+  {
+   "code": "52740",
+   "sido": "전북특별자치도",
+   "sgg": "장수군",
+   "sochun_count": 833,
+   "sochun_named": 833,
+   "center": [
+    127.508578,
+    35.657253
+   ],
+   "size_kb": 793
+  },
+  {
+   "code": "52110",
+   "sido": "전북특별자치도",
+   "sgg": "전주시",
+   "sochun_count": 5,
+   "sochun_named": 3,
+   "center": [
+    127.128437,
+    35.803787
+   ],
+   "size_kb": 15
+  },
+  {
+   "code": "52180",
+   "sido": "전북특별자치도",
+   "sgg": "정읍시",
+   "sochun_count": 1813,
+   "sochun_named": 1813,
+   "center": [
+    126.921838,
+    35.60915
+   ],
+   "size_kb": 1421
+  },
+  {
+   "code": "52720",
+   "sido": "전북특별자치도",
+   "sgg": "진안군",
+   "sochun_count": 2108,
+   "sochun_named": 2107,
+   "center": [
+    127.452589,
+    35.829072
+   ],
+   "size_kb": 1815
+  },
+  {
+   "code": "50130",
+   "sido": "제주특별자치도",
+   "sgg": "서귀포시",
+   "sochun_count": 399,
+   "sochun_named": 373,
+   "center": [
+    126.541959,
+    33.340699
+   ],
+   "size_kb": 438
+  },
+  {
+   "code": "50110",
+   "sido": "제주특별자치도",
+   "sgg": "제주시",
+   "sochun_count": 80,
+   "sochun_named": 21,
+   "center": [
+    126.480384,
+    33.623648
+   ],
+   "size_kb": 258
+  },
+  {
+   "code": "44250",
+   "sido": "충청남도",
+   "sgg": "계룡시",
+   "sochun_count": 107,
+   "sochun_named": 107,
+   "center": [
+    127.231072,
+    36.287565
+   ],
+   "size_kb": 81
+  },
+  {
+   "code": "44150",
+   "sido": "충청남도",
+   "sgg": "공주시",
+   "sochun_count": 530,
+   "sochun_named": 530,
+   "center": [
+    127.085771,
+    36.476591
+   ],
+   "size_kb": 954
+  },
+  {
+   "code": "44710",
+   "sido": "충청남도",
+   "sgg": "금산군",
+   "sochun_count": 214,
+   "sochun_named": 214,
+   "center": [
+    127.46652,
+    36.125134
+   ],
+   "size_kb": 385
+  },
+  {
+   "code": "44230",
+   "sido": "충청남도",
+   "sgg": "논산시",
+   "sochun_count": 141,
+   "sochun_named": 140,
+   "center": [
+    127.168055,
+    36.201308
+   ],
+   "size_kb": 289
+  },
+  {
+   "code": "44270",
+   "sido": "충청남도",
+   "sgg": "당진시",
+   "sochun_count": 579,
+   "sochun_named": 578,
+   "center": [
+    126.641646,
+    36.897981
+   ],
+   "size_kb": 510
+  },
+  {
+   "code": "44180",
+   "sido": "충청남도",
+   "sgg": "보령시",
+   "sochun_count": 1535,
+   "sochun_named": 1533,
+   "center": [
+    126.606099,
+    36.345162
+   ],
+   "size_kb": 1116
+  },
+  {
+   "code": "44760",
+   "sido": "충청남도",
+   "sgg": "부여군",
+   "sochun_count": 871,
+   "sochun_named": 870,
+   "center": [
+    126.877634,
+    36.230188
+   ],
+   "size_kb": 692
+  },
+  {
+   "code": "44210",
+   "sido": "충청남도",
+   "sgg": "서산시",
+   "sochun_count": 1449,
+   "sochun_named": 1444,
+   "center": [
+    126.494081,
+    36.819205
+   ],
+   "size_kb": 1071
+  },
+  {
+   "code": "44770",
+   "sido": "충청남도",
+   "sgg": "서천군",
+   "sochun_count": 72,
+   "sochun_named": 72,
+   "center": [
+    126.682726,
+    36.106755
+   ],
+   "size_kb": 144
+  },
+  {
+   "code": "44200",
+   "sido": "충청남도",
+   "sgg": "아산시",
+   "sochun_count": 760,
+   "sochun_named": 760,
+   "center": [
+    126.981627,
+    36.795308
+   ],
+   "size_kb": 645
+  },
+  {
+   "code": "44810",
+   "sido": "충청남도",
+   "sgg": "예산군",
+   "sochun_count": 1566,
+   "sochun_named": 1558,
+   "center": [
+    126.775642,
+    36.665514
+   ],
+   "size_kb": 1077
+  },
+  {
+   "code": "44130",
+   "sido": "충청남도",
+   "sgg": "천안시",
+   "sochun_count": 1981,
+   "sochun_named": 1981,
+   "center": [
+    127.201909,
+    36.803063
+   ],
+   "size_kb": 1539
+  },
+  {
+   "code": "44790",
+   "sido": "충청남도",
+   "sgg": "청양군",
+   "sochun_count": 2073,
+   "sochun_named": 2071,
+   "center": [
+    126.855152,
+    36.449215
+   ],
+   "size_kb": 1452
+  },
+  {
+   "code": "44825",
+   "sido": "충청남도",
+   "sgg": "태안군",
+   "sochun_count": 931,
+   "sochun_named": 931,
+   "center": [
+    126.28798,
+    36.665856
+   ],
+   "size_kb": 771
+  },
+  {
+   "code": "44800",
+   "sido": "충청남도",
+   "sgg": "홍성군",
+   "sochun_count": 196,
+   "sochun_named": 195,
+   "center": [
+    126.622489,
+    36.570082
+   ],
+   "size_kb": 336
+  },
+  {
+   "code": "43760",
+   "sido": "충청북도",
+   "sgg": "괴산군",
+   "sochun_count": 533,
+   "sochun_named": 533,
+   "center": [
+    127.83881,
+    36.779417
+   ],
+   "size_kb": 1485
+  },
+  {
+   "code": "43800",
+   "sido": "충청북도",
+   "sgg": "단양군",
+   "sochun_count": 123,
+   "sochun_named": 123,
+   "center": [
+    128.417077,
+    36.991578
+   ],
+   "size_kb": 385
+  },
+  {
+   "code": "43720",
+   "sido": "충청북도",
+   "sgg": "보은군",
+   "sochun_count": 1367,
+   "sochun_named": 1367,
+   "center": [
+    127.703491,
+    36.489524
+   ],
+   "size_kb": 1146
+  },
+  {
+   "code": "43740",
+   "sido": "충청북도",
+   "sgg": "영동군",
+   "sochun_count": 1471,
+   "sochun_named": 1469,
+   "center": [
+    127.83338,
+    36.162943
+   ],
+   "size_kb": 1362
+  },
+  {
+   "code": "43730",
+   "sido": "충청북도",
+   "sgg": "옥천군",
+   "sochun_count": 177,
+   "sochun_named": 177,
+   "center": [
+    127.685295,
+    36.309694
+   ],
+   "size_kb": 454
+  },
+  {
+   "code": "43770",
+   "sido": "충청북도",
+   "sgg": "음성군",
+   "sochun_count": 1574,
+   "sochun_named": 1574,
+   "center": [
+    127.624991,
+    36.995996
+   ],
+   "size_kb": 1339
+  },
+  {
+   "code": "43150",
+   "sido": "충청북도",
+   "sgg": "제천시",
+   "sochun_count": 408,
+   "sochun_named": 394,
+   "center": [
+    128.125957,
+    37.051471
+   ],
+   "size_kb": 766
+  },
+  {
+   "code": "43745",
+   "sido": "충청북도",
+   "sgg": "증평군",
+   "sochun_count": 109,
+   "sochun_named": 109,
+   "center": [
+    127.59325,
+    36.793833
+   ],
+   "size_kb": 111
+  },
+  {
+   "code": "43750",
+   "sido": "충청북도",
+   "sgg": "진천군",
+   "sochun_count": 1350,
+   "sochun_named": 1350,
+   "center": [
+    127.434019,
+    36.875513
+   ],
+   "size_kb": 1156
+  },
+  {
+   "code": "43110",
+   "sido": "충청북도",
+   "sgg": "청주시",
+   "sochun_count": 173,
+   "sochun_named": 173,
+   "center": [
+    127.524103,
+    36.609431
+   ],
+   "size_kb": 527
+  },
+  {
+   "code": "43130",
+   "sido": "충청북도",
+   "sgg": "충주시",
+   "sochun_count": 157,
+   "sochun_named": 157,
+   "center": [
+    127.864631,
+    37.02805
+   ],
+   "size_kb": 144
+  }
+ ]
+}

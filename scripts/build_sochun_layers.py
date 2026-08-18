@@ -1,7 +1,12 @@
 """소하천구역(연속주제) SHP 에서 대상 6개 지역만 잘라 EPSG:4326 GeoJSON 으로 반입한다.
 
     입력  GIS_data/소하천_소하천구역(연속주제)+브이월드/LSMD_CONT_UJ301_{시도}.zip
-    출력  apps/web/public/reference/rivers/LSMD_SOCHUN_{admin}.geojson
+    출력  apps/web/public/reference/rivers/LSMD_SOCHUN_{시군구코드}.geojson  (전국 188개)
+          apps/web/public/reference/rivers/river_region_catalog.json      (지역 선택기용 목록)
+
+**전국 시군구 단위로 낸다.** 파일명의 코드는 원자료 `COL_ADM_SE`(현행 행정표준코드)이고,
+지도는 고른 시군구 파일 하나만 받는다(중앙값 424 KB · 최대 3.6 MB). 대상지역 6곳만 반입하던
+때와 달리 시드가 없는 시군구도 하천은 볼 수 있다.
 
 원자료는 국토교통부 연속지적 계열 배포본이고 좌표계는 **EPSG:5186(Korea 2000 / Central Belt 2010)**
 이다. 같은 폴더의 `_5174_` 파일은 구 측지계(Korean 1985)라 쓰지 않는다 — 데이텀 변환이 한 단계
@@ -30,7 +35,7 @@ import shapefile
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from build_river_web_layers import rdp  # noqa: E402  단순화 알고리즘은 국가기본도 반입과 같은 것을 쓴다.
-from river_regions import REGIONS, matches_sgg  # noqa: E402
+from river_regions import REGIONS  # noqa: E402  대상지역 6곳은 중심좌표 표기에만 쓴다.
 
 from source_data import REPO, SOCHUN_ZONE_DIR, require  # noqa: E402
 
@@ -155,68 +160,136 @@ def build_geometry(shape):
     return {'type': 'MultiPolygon', 'coordinates': polygons}
 
 
-def build(region) -> dict:
-    reader = read_shapefile(region.province_file)
-    features = []
-    named = 0
+def sgg_names() -> dict:
+    """시군구코드 → (시도, 시군구). data/reference/sgg_code_map.json 이 정본이다."""
+    path = REPO / 'data' / 'reference' / 'sgg_code_map.json'
+    payload = json.loads(require(path, '시군구 코드표').read_text(encoding='utf-8'))
+    names: dict = {}
+    for entry in payload['entries']:
+        for code in entry['codes']:
+            # 한 코드가 여러 시군구에 걸리는 일은 없다(코드표가 그렇게 만들어졌다).
+            names.setdefault(code, (entry['sido'], entry['sgg']))
+    return names
+
+
+def feature_of(record, index: int, code: str):
+    """폴리곤 1건 → GeoJSON Feature. 이름을 못 읽으면 붙이지 않는다(지어내지 않는다)."""
+    geometry = build_geometry(record.shape)
+    if not geometry:
+        return None, False
+    alias = (record.record['ALIAS'] or '').strip()
+    remark = (record.record['REMARK'] or '').strip()
+    mnum = (record.record['MNUM'] or '').strip()
+    props = {
+        'MNUM': mnum,
+        'admin_code': code,
+        'sgg_code': code,
+        'source_layer': 'LSMD_CONT_UJ301',
+        'semantic': 'sochun',
+    }
+    name = stream_name_of(alias) or stream_name_of(remark)
+    if name:
+        props['stream_name'] = name
+    if alias:
+        props['alias_raw'] = alias
+    if remark and remark != alias:
+        props['remark_raw'] = remark
+    notice = (record.record['NTFDATE'] or '').strip()
+    if len(notice) == 8 and notice.isdigit():
+        props['notified_on'] = f'{notice[:4]}-{notice[4:6]}-{notice[6:]}'
+    return {
+        'type': 'Feature',
+        'id': f'SOCHUN:{code}:{mnum or index}',
+        'properties': props,
+        'geometry': geometry,
+    }, bool(name)
+
+
+def bbox_center(features) -> tuple | None:
     lons: list[float] = []
     lats: list[float] = []
-    for index, record in enumerate(reader.iterShapeRecords()):
-        if not matches_sgg(region, record.record['COL_ADM_SE']):
-            continue
-        geometry = build_geometry(record.shape)
-        if not geometry:
-            continue
-        alias = (record.record['ALIAS'] or '').strip()
-        remark = (record.record['REMARK'] or '').strip()
-        mnum = (record.record['MNUM'] or '').strip()
-        props = {
-            'MNUM': mnum,
-            'admin_code': region.admin,
-            'sgg_code': (record.record['COL_ADM_SE'] or '').strip(),
-            'source_layer': 'LSMD_CONT_UJ301',
-            'semantic': 'sochun',
-        }
-        name = stream_name_of(alias) or stream_name_of(remark)
-        if name:
-            props['stream_name'] = name
-            named += 1
-        if alias:
-            props['alias_raw'] = alias
-        if remark and remark != alias:
-            props['remark_raw'] = remark
-        notice = (record.record['NTFDATE'] or '').strip()
-        if len(notice) == 8 and notice.isdigit():
-            props['notified_on'] = f'{notice[:4]}-{notice[4:6]}-{notice[6:]}'
-        for ring in geometry['coordinates'] if geometry['type'] == 'Polygon' else [r for poly in geometry['coordinates'] for r in poly]:
+    for feature in features:
+        geometry = feature['geometry']
+        rings = (geometry['coordinates'] if geometry['type'] == 'Polygon'
+                 else [r for poly in geometry['coordinates'] for r in poly])
+        for ring in rings:
             for lon, lat in ring:
                 lons.append(lon)
                 lats.append(lat)
-        features.append({
-            'type': 'Feature',
-            'id': f'SOCHUN:{region.admin}:{mnum or index}',
-            'properties': props,
-            'geometry': geometry,
-        })
+    if not lons:
+        return None
+    return (round((min(lons) + max(lons)) / 2, 6), round((min(lats) + max(lats)) / 2, 6))
+
+
+def build_province(province: str, names: dict) -> list[dict]:
+    """시도 zip 하나를 읽어 시군구별 파일로 가른다."""
+    reader = read_shapefile(province)
+    grouped: dict = {}
+    named: dict = {}
+    for index, record in enumerate(reader.iterShapeRecords()):
+        code = (record.record['COL_ADM_SE'] or '').strip()
+        if not code:
+            continue
+        feature, has_name = feature_of(record, index, code)
+        if feature is None:
+            continue
+        grouped.setdefault(code, []).append(feature)
+        named[code] = named.get(code, 0) + (1 if has_name else 0)
 
     DEST.mkdir(parents=True, exist_ok=True)
-    out = DEST / f'LSMD_SOCHUN_{region.admin}.geojson'
-    out.write_text(json.dumps({'type': 'FeatureCollection', 'features': features},
-                              ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
-    center = ((min(lons) + max(lons)) / 2, (min(lats) + max(lats)) / 2) if lons else None
-    print(f'  {out.name}: {len(features):,}건 · 하천명 판독 {named:,}건 · {out.stat().st_size // 1024:,} KB'
-          + (f' · bbox중심 ({center[0]:.3f}, {center[1]:.3f})' if center else ''))
-    return {'admin': region.admin, 'count': len(features), 'named': named, 'center': center}
+    rows = []
+    for code, features in sorted(grouped.items()):
+        out = DEST / f'LSMD_SOCHUN_{code}.geojson'
+        out.write_text(json.dumps({'type': 'FeatureCollection', 'features': features},
+                                  ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
+        sido, sgg = names.get(code, (None, None))
+        rows.append({
+            'code': code,
+            'sido': sido,
+            'sgg': sgg,
+            'sochun_count': len(features),
+            'sochun_named': named.get(code, 0),
+            'center': bbox_center(features),
+            'size_kb': round(out.stat().st_size / 1024),
+        })
+    total = sum(r['sochun_count'] for r in rows)
+    print(f'  {province:12s} 시군구 {len(rows):3d} · 폴리곤 {total:7,} · '
+          f'{sum(r["size_kb"] for r in rows) / 1024:6.1f} MB')
+    return rows
 
 
 def main() -> int:
     only = set(sys.argv[1:])
-    print(f'소하천구역 반입 · {SRC_CRS} → EPSG:4326 · 단순화 {TOLERANCE_M} m · 좌표 {PRECISION}자리')
-    for region in REGIONS:
-        if only and region.admin not in only:
+    print(f'소하천구역 전국 반입 · {SRC_CRS} → EPSG:4326 · 단순화 {TOLERANCE_M} m · 좌표 {PRECISION}자리')
+    names = sgg_names()
+    provinces = sorted({region.province_file for region in REGIONS} |
+                       {path.stem[len('LSMD_CONT_UJ301_'):] for path in SRC_DIR.glob('LSMD_CONT_UJ301_*.zip')
+                        if not path.stem[len('LSMD_CONT_UJ301_'):].startswith('5174_')})
+    rows: list[dict] = []
+    for province in provinces:
+        if only and province not in only:
             continue
-        print(f'{region.name} ({region.admin})')
-        build(region)
+        rows.extend(build_province(province, names))
+
+    unknown = [r for r in rows if not r['sgg']]
+    if unknown:
+        # 코드표에 없는 시군구코드는 화면에 이름을 못 붙인다. 조용히 넘기지 않는다.
+        print(f'  주의 코드표에 없는 시군구코드 {len(unknown)}개: {[r["code"] for r in unknown]}')
+
+    catalog = DEST / 'river_region_catalog.json'
+    catalog.write_text(json.dumps({
+        'dataset': 'river_region_catalog',
+        'built_by': 'scripts/build_sochun_layers.py',
+        'note': ('지도 지역 선택기가 쓰는 목록이다. 소하천구역 자료가 있는 시군구만 담는다. '
+                 'center 는 형상 bbox 중심이라 자료가 가진 좌표가 아니며 화면 이동 전용이다.'),
+        'regions': sorted(rows, key=lambda r: (r['sido'] or '', r['sgg'] or '', r['code'])),
+    }, ensure_ascii=False, indent=1), encoding='utf-8')
+
+    total = sum(r['sochun_count'] for r in rows)
+    named = sum(r['sochun_named'] for r in rows)
+    size = sum(r['size_kb'] for r in rows) / 1024
+    print(f'\n시군구 {len(rows)}개 · 폴리곤 {total:,} · 하천명 {named:,} ({named / max(1, total) * 100:.1f}%) · {size:,.0f} MB')
+    print(f'{catalog.name}: {catalog.stat().st_size / 1024:,.0f} KB')
     return 0
 
 

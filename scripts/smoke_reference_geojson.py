@@ -38,7 +38,14 @@ KR_BBOX = (124.0, 32.5, 132.5, 39.5)
 SEMANTICS = {'channel', 'zone', 'sochun'}
 # 행정코드는 5자리가 기본이지만 부산은 광역시 전체(26)를 한 단위로 쓴다 —
 # 북구(26320)만 잡으면 소하천 자료가 0건이라 구 단위로는 표시할 것이 없다.
-TARGET_ADMIN = {region.admin for region in REGIONS}
+# 소하천구역은 전국 시군구 단위로 반입한다. 허용 코드는 행정표준코드 표에서 받는다 —
+# 대상지역 목록(REGIONS)은 시드가 있는 곳을 가리키는 것이지 반입 범위가 아니다.
+def _sgg_codes() -> set:
+    payload = json.loads((REPO / 'data' / 'reference' / 'sgg_code_map.json').read_text(encoding='utf-8'))
+    return {code for entry in payload['entries'] for code in entry['codes']}
+
+
+TARGET_ADMIN = _sgg_codes() | {region.admin for region in REGIONS}
 # 서비스 범위는 국가·지방·소하천 3종이다. 실폭·경계는 등급 속성이 없어 중심선에서
 # 공간조인해 붙이며, 중심선이 지나지 않으면 '등급미확인'으로 남긴다(추정하지 않는다).
 RIVER_CLASSES = {'국가하천', '지방하천', '소하천', '등급미확인'}

@@ -6,7 +6,7 @@ import {
   RIVER_LAYER_SOURCES, SEMANTIC_ALIGNMENT_NOTE, SEMANTIC_LABEL,
   isRiverLayerId, riverLayerId, riverSourceById, riverSourceIdOf,
 } from './riverLayerSources';
-import { DEFAULT_MAP_REGION, MAP_REGIONS, mapRegionOf } from './mapRegions';
+import { DEFAULT_MAP_REGION, type MapRegion, dataCodeOfApp, groupBySido, loadMapRegions, mapRegionIn } from './mapRegions';
 import { loadRiverSearchIndex, searchRivers, type RiverSearchEntry } from './riverSearchIndex';
 import { loadPlanReference } from '../../services/apiClient';
 // 위험지구 상세 렌더·표기 규칙은 '현재 판단' 상세보기 모달과 공용 컴포넌트를 재사용한다.
@@ -203,7 +203,11 @@ export function MapPanel({ adminCode, highlightedFeatureId, initialVisible, comp
   const [layerMenuOpen, setLayerMenuOpen] = useState(false);
   // 지도가 보고 있는 지역. 앱 지역(adminCode)과 별개로 움직인다 — 부산·인제·영천은 위험지구
   // 시드가 없어 앱 지역이 될 수 없지만 하천 공간자료는 있다. 앱 지역이 바뀌면 지도도 따라간다.
-  const [region, setRegion] = useState(() => (mapRegionOf(adminCode) ? adminCode : DEFAULT_MAP_REGION));
+  const [region, setRegion] = useState(() => dataCodeOfApp(adminCode));
+  // 지역 목록은 전국 시군구다(전처리가 만든 river_region_catalog.json). 받아 오기 전에도
+  // 지도는 초기 지역으로 동작하므로, 목록이 없다고 화면을 막지 않는다.
+  const [regions, setRegions] = useState<MapRegion[]>([]);
+  const [regionError, setRegionError] = useState<string | null>(null);
   const [hover, setHover] = useState<MapFeatureHover | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState('');
@@ -246,9 +250,20 @@ export function MapPanel({ adminCode, highlightedFeatureId, initialVisible, comp
     return () => { active = false; mapRef.current?.destroy(); mapRef.current = null; };
   }, []);
 
+  useEffect(() => {
+    let alive = true;
+    loadMapRegions()
+      .then((list) => { if (alive) { setRegions(list); setRegionError(null); } })
+      .catch(() => { if (alive) setRegionError('지역 목록을 받지 못했습니다. 새로고침 후 다시 시도하세요.'); });
+    return () => { alive = false; };
+  }, []);
+
   // 앱 지역이 바뀌면 지도도 그 지역으로 돌아간다(지도에서만 다른 지역을 보고 있었더라도).
-  useEffect(() => { if (mapRegionOf(adminCode)) setRegion(adminCode); }, [adminCode]);
-  useEffect(() => { mapRef.current?.setRegion(region); closePopup(); setHoverPoiId(null); setHover(null); }, [region, closePopup]);
+  useEffect(() => { setRegion(dataCodeOfApp(adminCode)); }, [adminCode]);
+  useEffect(() => {
+    mapRef.current?.setRegion(region, mapRegionIn(regions, region)?.center);
+    closePopup(); setHoverPoiId(null); setHover(null);
+  }, [region, regions, closePopup]);
   useEffect(() => {
     if (!highlightedFeatureId) { setHighlightNotice(null); return; }
     if (!mapReady || !mapRef.current) return;
@@ -263,7 +278,7 @@ export function MapPanel({ adminCode, highlightedFeatureId, initialVisible, comp
     const code = str(selection.properties.admin_code) ?? adminCode;
     // 계획문서 판독 참고자료는 위험지구 시드가 있는 3개 지역에만 있다. 나머지 지역에서 요청하면
     // 매번 404 를 받고 캐시를 지우는 왕복만 생긴다 — 그 자료가 없는 것이 정상인 지역이다.
-    if (!mapRegionOf(code)?.hasPlanSeed) { setDetail({ district: null, river: null }); return; }
+    if (!mapRegionIn(regions, code)?.hasPlanSeed) { setDetail({ district: null, river: null }); return; }
     let alive = true;
     let pending = referenceCache.current.get(code);
     if (!pending) { pending = loadPlanReference(code); referenceCache.current.set(code, pending); }
@@ -323,15 +338,18 @@ export function MapPanel({ adminCode, highlightedFeatureId, initialVisible, comp
   /** 검색 결과 1건으로 이동한다. 지역·레이어를 먼저 맞추고, 좌표로 이동한 뒤 형상 강조를 예약한다. */
   function gotoSearchResult(entry: RiverSearchEntry) {
     if (!entry.nav) return;
-    if (entry.admin !== region) setRegion(entry.admin);
-    const code = riverLayerId(entry.source_id);
-    if (!visible[code]) {
+    // 국가·지방하천은 여러 시군구에 걸쳐 있어 한 지역에 배정하지 않았다. 지역을 바꾸지 않고
+    // 위치로만 움직인다 — 바꾸면 보고 있던 시군구 자료가 통째로 갈린다.
+    if (entry.scope === 'region' && entry.admin !== region) setRegion(entry.admin);
+    // 국가·지방하천은 전용 레이어가 없다(형상을 반입하지 않는다). 켤 소스가 있을 때만 켠다.
+    const code = riverSourceById(entry.source_id) ? riverLayerId(entry.source_id) : '';
+    if (code && !visible[code]) {
       setVisible((current) => ({ ...current, [code]: true }));
       mapRef.current?.setRiverSourceVisible(entry.source_id, true);
     }
     // 형상은 아직 안 받아졌을 수 있으므로 좌표로 먼저 옮긴다. 강조는 자료가 도착하면 붙는다.
     mapRef.current?.focusLonLat(entry.nav, entry.nav_kind === 'actual' ? 16 : 15);
-    setPendingHighlight(entry.feature_id || null);
+    setPendingHighlight(entry.scope === 'region' ? entry.feature_id || null : null);
   }
 
   function toggleBaseMap() {
@@ -372,11 +390,18 @@ export function MapPanel({ adminCode, highlightedFeatureId, initialVisible, comp
   }, [hoverPoi, priorityAreas]);
 
   const activeLayerCount = core.filter((item) => visible[item.code]).length;
-  const currentRegion = mapRegionOf(region);
-  const results = useMemo(
-    () => (searchIndex ? searchRivers(searchIndex, query, region) : []),
+  const currentRegion = mapRegionIn(regions, region);
+  const sidoList = useMemo(() => groupBySido(regions), [regions]);
+  const currentSido = currentRegion?.sido ?? sidoList[0]?.[0] ?? '';
+  const sggList = useMemo(
+    () => sidoList.find(([sido]) => sido === currentSido)?.[1] ?? [],
+    [sidoList, currentSido],
+  );
+  const search = useMemo(
+    () => (searchIndex ? searchRivers(searchIndex, query, region) : { items: [], total: 0 }),
     [searchIndex, query, region],
   );
+  const results = search.items;
   const tag = hover ? hoverTag(hover) : null;
 
   return (
@@ -441,15 +466,34 @@ export function MapPanel({ adminCode, highlightedFeatureId, initialVisible, comp
       {searchOpen ? (
         <div className="map-search-panel" id="map-search-panel">
           <div className="map-search-region">
-            <label htmlFor="map-region-select">지도 지역</label>
-            <select id="map-region-select" value={region} onChange={(event) => setRegion(event.target.value)}>
-              {MAP_REGIONS.map((item) => (
-                <option key={item.admin} value={item.admin}>{item.name}{item.hasPlanSeed ? '' : ' (하천자료만)'}</option>
+            <label htmlFor="map-sido-select">시도</label>
+            <select
+              id="map-sido-select"
+              value={currentSido}
+              disabled={!regions.length}
+              onChange={(event) => {
+                // 시도를 바꾸면 그 시도의 첫 시군구로 옮긴다. 빈 상태로 두면 지도가 어디를 보는지 알 수 없다.
+                const first = sidoList.find(([sido]) => sido === event.target.value)?.[1]?.[0];
+                if (first) setRegion(first.admin);
+              }}
+            >
+              {sidoList.map(([sido]) => <option key={sido} value={sido}>{sido}</option>)}
+            </select>
+            <label htmlFor="map-region-select">시군구</label>
+            <select
+              id="map-region-select"
+              value={region}
+              disabled={!regions.length}
+              onChange={(event) => setRegion(event.target.value)}
+            >
+              {sggList.map((item) => (
+                <option key={item.admin} value={item.admin}>{item.sgg}{item.hasPlanSeed ? '' : ' (하천자료만)'}</option>
               ))}
             </select>
           </div>
+          {regionError ? <p className="map-search-note" role="status">{regionError}</p> : null}
           {currentRegion && !currentRegion.hasPlanSeed ? (
-            <p className="map-search-note" role="status">이 지역은 하천 공간자료만 있습니다. 위험지구·우선 확인지역은 {mapRegionOf(adminCode)?.name ?? '앱에서 선택한 지역'} 기준으로 유지됩니다.</p>
+            <p className="map-search-note" role="status">이 지역은 하천 공간자료만 있습니다. 위험지구·우선 확인지역은 {mapRegionIn(regions, dataCodeOfApp(adminCode))?.name ?? '앱에서 선택한 지역'} 기준으로 유지됩니다.</p>
           ) : null}
           <div className="map-search-field">
             <label htmlFor="map-river-search">하천명 검색</label>
@@ -466,10 +510,10 @@ export function MapPanel({ adminCode, highlightedFeatureId, initialVisible, comp
           {!searchIndex && !searchError ? <p className="map-search-note" role="status">검색 색인 받는 중</p> : null}
           {searchIndex && query.trim() ? (
             <>
-              <p className="map-search-count" role="status" aria-live="polite">{results.length ? `${results.length}건${results.length >= 40 ? ' (상위 40건)' : ''}` : '일치하는 하천이 없습니다.'}</p>
+              <p className="map-search-count" role="status" aria-live="polite">{search.total ? `${search.total.toLocaleString('ko-KR')}건${search.total > results.length ? ` (상위 ${results.length}건 표시)` : ''}` : '일치하는 하천이 없습니다.'}</p>
               <ul className="map-search-results">
                 {results.map((entry) => {
-                  const other = entry.admin !== region;
+                  const other = entry.scope === 'region' && entry.admin !== region;
                   return (
                     <li key={`${entry.source_id}:${entry.admin}:${entry.feature_id || entry.name}:${entry.kind}`}>
                       <button
@@ -482,7 +526,7 @@ export function MapPanel({ adminCode, highlightedFeatureId, initialVisible, comp
                         <span className="map-search-name">{entry.name}</span>
                         <span className="map-search-meta">
                           {entry.kind}
-                          {other ? ` · ${mapRegionOf(entry.admin)?.short ?? entry.admin}` : ''}
+                          {other ? ` · ${mapRegionIn(regions, entry.admin)?.short ?? entry.admin}` : ''}
                           {entry.nav ? '' : ' · 좌표 없음'}
                         </span>
                         {entry.detail ? <span className="map-search-detail">{entry.detail}</span> : null}
