@@ -18,7 +18,7 @@
  *  URL·레이어명이 확정되지 않은 소스는 **빈 문자열로 두고 `unverified` 로 남긴다.**
  *  추정한 경로를 채워 넣으면 그 순간부터 그것이 확인된 사실처럼 읽힌다. */
 
-export type RiverSemantic = 'channel' | 'zone' | 'centerline' | 'label' | 'sochun' | 'network';
+export type RiverSemantic = 'channel' | 'zone' | 'centerline' | 'label' | 'sochun';
 export type RiverSourceKind = 'wms' | 'geojson' | 'wfs';
 /** active: 표시 대상 · legacy: 비교용으로만 남긴 기존 소스 · unverified: 경로/승인 미확정이라 켤 수 없음 */
 export type RiverSourceStatus = 'active' | 'legacy' | 'unverified';
@@ -43,8 +43,6 @@ export interface RiverGeoJsonPick {
 /** 지자체별로 파일이 나뉜 소스의 URL 틀. `{admin}` 자리에 행정코드가 들어간다.
  *  전국 자료를 지자체 단위로 잘라 둔 것이라 지역을 바꾸면 다시 받아야 한다. */
 export const RIVER_DATA_URL_TOKEN = '{admin}';
-/** 전국 단위 자료는 URL 에 지역 토큰이 없다. 지역을 바꿔도 한 번만 받으면 된다. */
-export const isNationwideTemplate = (template: string) => !template.includes(RIVER_DATA_URL_TOKEN);
 export const riverDataUrl = (template: string, adminCode: string) =>
   template.replace(RIVER_DATA_URL_TOKEN, adminCode);
 
@@ -90,7 +88,6 @@ export const SEMANTIC_LABEL: Record<RiverSemantic, string> = {
   centerline: '중심선',
   label: '하천명',
   sochun: '소하천구역',
-  network: '하천망도',
 };
 
 /** 각 의미가 베이스맵과 어떻게 보이는 것이 정상인지. 팝업·토글 설명에 쓴다 —
@@ -101,7 +98,6 @@ export const SEMANTIC_ALIGNMENT_NOTE: Record<RiverSemantic, string> = {
   centerline: '물길 한가운데를 지나는 것이 정상입니다.',
   label: '하천명은 중심선 자료의 RIVER_NM 이며, 하천마다 대표점 한 곳에만 표시합니다.',
   sochun: '소하천정비법상 고시된 소하천구역입니다. 국가·지방하천과 별개 자료이므로 국가기본도 하천과 겹치지 않는 것이 정상입니다.',
-  network: '하천 구역면. 국가·지방하천의 법정 구역 형상이라 실폭보다 넓다',
 };
 
 // 2026-08-08: 기존 `seed-wkmstrm`(geo.json L2 = VWorld LT_C_WKMSTRM)을 목록에서 제거했다.
@@ -249,44 +245,6 @@ export const RIVER_LAYER_SOURCES: RiverLayerSource[] = [
   // --- 소하천구역(연속주제) · 전국하천표준데이터 (2026-08-14 반입) ---------------
   //  이 둘만 대상 6개 지역 전체를 덮는다. 국가기본도 하천 3종은 원본 SHP 를 확보한
   //  의왕·구미·남원 3곳만 있으므로, 부산·인제·영천에서는 '이 지역 자료 없음'으로 남는다.
-  {
-    id: 'river-network-national',
-    label: '국가하천 (하천망도)',
-    semantic: 'network',
-    kind: 'geojson',
-    status: 'active',
-    sourceOrg: '국가수자원관리종합시스템 하천망도 (국가하천)',
-    url: '',
-    layerName: '',
-    styleName: '',
-    projection: 'EPSG:3857',
-    requiresVWorldKey: false,
-    defaultVisible: false,
-    style: { color: '#1565c0', satelliteColor: '#64b5f6', width: 2, fill: 'rgba(21,101,192,.14)', satelliteFill: 'rgba(100,181,246,.22)' },
-    dataUrlTemplate: '/reference/rivers/RIVER_NETWORK_NATIONAL.geojson',
-    datasetShort: '국가하천',
-    // 전에 쓰던 전국하천표준데이터는 국가하천이 33건뿐이었다. 이 자료가 73건 전수다.
-    note: '국가하천 73건 전수(하천망도). 하천코드(RIVCD_2)가 유일 식별자이고 하천명은 중복이 없다. 시군구로 자르지 않은 전국 한 파일이라 처음 켤 때 4.7 MB 를 받는다.',
-  },
-  {
-    id: 'river-network-local',
-    label: '지방하천 (하천망도)',
-    semantic: 'network',
-    kind: 'geojson',
-    status: 'active',
-    sourceOrg: '국가수자원관리종합시스템 하천망도 (지방하천)',
-    url: '',
-    layerName: '',
-    styleName: '',
-    projection: 'EPSG:3857',
-    requiresVWorldKey: false,
-    defaultVisible: false,
-    style: { color: '#00796b', satelliteColor: '#4db6ac', width: 1.6, fill: 'rgba(0,121,107,.12)', satelliteFill: 'rgba(77,182,172,.2)' },
-    dataUrlTemplate: '/reference/rivers/RIVER_NETWORK_LOCAL.geojson',
-    datasetShort: '지방하천',
-    // 하천명이 겹치는 곳이 많다(대곡천 13곳). 이름으로 조인하면 틀린다.
-    note: '지방하천 3,783건 전수(하천망도). 하천명은 2,681종뿐이라 중복이 있고, 하천코드(RIVCD_2)로 가려야 한다. 전국 한 파일이라 처음 켤 때 23.8 MB 를 받는다.',
-  },
   {
     id: 'lsmd-sochun',
     label: '소하천구역',

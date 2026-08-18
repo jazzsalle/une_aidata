@@ -35,7 +35,7 @@ ROOT = REPO / 'apps/web/public/reference'
 
 # 대한민국 본토+도서 대략 범위. 재투영 실패(미터 좌표가 그대로 남는 등)를 잡는 용도다.
 KR_BBOX = (124.0, 32.5, 132.5, 39.5)
-SEMANTICS = {'channel', 'zone', 'centerline', 'label', 'sochun', 'network'}
+SEMANTICS = {'channel', 'zone', 'centerline', 'label', 'sochun'}
 # 행정코드는 5자리가 기본이지만 부산은 광역시 전체(26)를 한 단위로 쓴다 —
 # 북구(26320)만 잡으면 소하천 자료가 0건이라 구 단위로는 표시할 것이 없다.
 TARGET_ADMIN = {region.admin for region in REGIONS}
@@ -46,12 +46,9 @@ RIVER_KIND_GEOM = {'TN_RIVER_BT': 'Polygon', 'TN_RIVER_BNDRY': 'Polygon',
                    'TN_RIVER_CTLN': 'LineString', 'TN_RIVER_CTLN_MINOR': 'LineString',
                    'TN_RIVER_LABEL': 'Point',
                    # 소하천구역(국토교통부 연속주제). 국가기본도와 계보가 다르다.
-                   'LSMD_SOCHUN': 'Polygon',
-                   # 하천망도(국가수자원관리종합시스템). 국가·지방하천의 정본이며 전국 한 파일씩이다 —
-                   # 하천 하나가 여러 시군구에 걸쳐 있어 자르면 원자료에 없는 경계선을 만들게 된다.
-                   'RIVER_NETWORK_NATIONAL': 'Polygon', 'RIVER_NETWORK_LOCAL': 'Polygon'}
-#: 행정코드 접미가 없는 전국 단위 자료.
-NATIONWIDE_KINDS = {'RIVER_NETWORK_NATIONAL', 'RIVER_NETWORK_LOCAL'}
+                   'LSMD_SOCHUN': 'Polygon'}
+#: 행정코드 접미가 없는 전국 단위 자료. 지금은 없다(하천망도는 형상을 반입하지 않는다).
+NATIONWIDE_KINDS: set[str] = set()
 ALLOW_EMPTY: set[str] = set()
 # 관측소 파일은 '제원'이다. 관측값이 섞여 들어오면 화면이 실측값으로 오인시킬 수 있다.
 OBSERVATION_LIKE = {'value', 'observed_at', 'water_level', 'rainfall', 'obsrValue', 'value_status'}
@@ -120,10 +117,6 @@ def check_rivers(path: Path, features: list, river_ids: set[str]) -> None:
             break
         if admin is not None and props.get('admin_code') != admin:
             fail(f'{rel}: 파일명 행정코드 {admin} 와 속성 admin_code {props.get("admin_code")} 가 다르다')
-            break
-        if kind in NATIONWIDE_KINDS and not props.get('river_code'):
-            # 하천명은 중복이 있으므로(대곡천 13곳) 코드가 식별자다. 없으면 조인할 수 없다.
-            fail(f'{rel}: 하천코드(river_code)가 없는 피처가 있다 ({feature.get("id")})')
             break
         if props.get('semantic') not in SEMANTICS:
             fail(f'{rel}: 허용되지 않은 semantic {props.get("semantic")}')
