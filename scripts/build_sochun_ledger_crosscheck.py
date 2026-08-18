@@ -217,10 +217,15 @@ def read_province(path: Path) -> list:
 # ---------------------------------------------------------------- 시군구 코드표
 
 def load_official_map():
+    """정본 코드표를 (시도, 시군구) → 코드집합 으로 돌려준다.
+
+    한 시군구가 코드를 여럿 갖는다 — 자치구가 있는 시는 시 코드와 구 코드를, 개편을 겪은
+    시군구는 현행 코드와 종전 코드를 함께 갖는다. 자세한 규칙은 코드표의 `rule` 에 있다.
+    """
     if not OFFICIAL_MAP.exists():
         return None
     payload = json.loads(OFFICIAL_MAP.read_text(encoding='utf-8'))
-    return {(e['sido'], e['sgg']): e['code'] for e in payload['entries']}
+    return {(e['sido'], e['sgg']): set(e['codes']) for e in payload['entries']}
 
 
 def derive_map(ledger_names, shp_names):
@@ -273,6 +278,9 @@ def main() -> int:
     ledger = read_ledger()
     print(f'  목록 {len(ledger):,}행')
 
+    official = load_official_map()
+    by_name = official or {}
+
     zips = province_zips()
     polygons: list = []
     for province, path in zips:
@@ -302,21 +310,20 @@ def main() -> int:
     for row in ledger:
         ledger_names_by_sido[row.get('sido')][row.get('sgg')].add(normalize(row.get('name')))
 
-    official = load_official_map()
     OUT.mkdir(parents=True, exist_ok=True)
     if official:
-        sgg_map = official
-        map_source = f'{OFFICIAL_MAP.name} (정본)'
+        map_source = f'{OFFICIAL_MAP.name} (정본 · 행정구역 자료)'
     else:
-        sgg_map, detail = derive_map(ledger_names_by_sido, shp_names_by_sido)
+        derived, detail = derive_map(ledger_names_by_sido, shp_names_by_sido)
+        by_name = {key: {code} for key, code in derived.items()}
         (OUT / 'sgg_code_map_derived.json').write_text(json.dumps({
             'dataset': 'sgg_code_map_derived',
             'derivation': 'name_overlap',
-            'warning': '행정표준코드 정본이 아니다. data/reference/sgg_code_map.json 이 생기면 그쪽이 우선한다.',
+            'warning': '행정구역 정본이 아니다. data/reference/sgg_code_map.json 이 있으면 그쪽이 우선한다.',
             'entries': detail,
         }, ensure_ascii=False, indent=1), encoding='utf-8')
         map_source = 'sgg_code_map_derived.json (파생 · 하천명 중첩)'
-    print(f'  시군구 코드표: {map_source} · 성립 {len(sgg_map):,}쌍')
+    print(f'  시군구 코드표: {map_source} · 항목 {len(by_name):,}')
 
     # 같은 시도 안에서 한 이름이 여러 시군구에 등재됐는지 (동명 경고용)
     sgg_per_name = defaultdict(set)
@@ -325,27 +332,30 @@ def main() -> int:
 
     status_count = Counter()
     summary = defaultdict(Counter)
+    codes_by_sgg: dict = {}
     matched_pairs = set()
     out_rows = []
     for row in ledger:
         sido, sgg = row.get('sido'), row.get('sgg')
         name = normalize(row.get('name'))
-        code = sgg_map.get((sido, sgg))
+        home_codes = set(by_name.get((sido, sgg), ()))
+        codes_by_sgg[(sido, sgg)] = home_codes
         status = basis = ''
         polys: list = []
-        if not code:
+        if not home_codes:
             status = '코드미상'
-        elif name in names_by_code.get(code, set()):
+        elif any(name in names_by_code.get(code, set()) for code in home_codes):
             status, basis = '보유', '시군구코드+명칭'
-            polys = polys_by_code_name[(code, name)]
-            matched_pairs.add((code, name))
+            for code in sorted(home_codes):
+                polys.extend(polys_by_code_name.get((code, name), ()))
+                matched_pairs.add((code, name))
         else:
-            # 같은 시도의 다른 코드에 동명이 있는가 → 형상 거리로 경계 걸침만 가른다.
-            home = polys_by_code.get(code, [])
+            # 같은 시도의 다른 시군구에 동명이 있는가 → 형상 거리로 경계 걸침만 가른다.
+            home = [point for code in home_codes for point in polys_by_code.get(code, ())]
             nearest = None
             nearest_polys: list = []
             for other_code in shp_names_by_sido.get(sido, {}):
-                if other_code == code or (other_code, name) not in polys_by_code_name:
+                if other_code in home_codes or (other_code, name) not in polys_by_code_name:
                     continue
                 candidates = polys_by_code_name[(other_code, name)]
                 for candidate in candidates:
@@ -365,7 +375,7 @@ def main() -> int:
 
         sources = sorted({p['name_source'] for p in polys if p['name_source']})
         out_rows.append({
-            'sido': sido, 'sgg': sgg, 'sgg_code': code or '',
+            'sido': sido, 'sgg': sgg, 'sgg_code': ';'.join(sorted(home_codes)),
             'stream_name': row.get('name', ''), 'stream_name_norm': name,
             'sugye': row.get('sugye', ''), 'length_m': row.get('length_m', ''),
             'basin_km2': row.get('basin_km2', ''), 'start_addr': (row.get('start_addr') or '').strip(),
@@ -387,13 +397,15 @@ def main() -> int:
         writer.writerow(['sido', 'sgg', 'sgg_code', '목록개소', '보유', '경계걸침_후보', '미보유', '코드미상',
                          'SHP하천수', 'SHP무명폴리곤'])
         for (sido, sgg), counts in sorted(summary.items(), key=lambda kv: (kv[0][0] or '', kv[0][1] or '')):
-            code = sgg_map.get((sido, sgg))
-            writer.writerow([sido, sgg, code or '', sum(counts.values()),
+            codes = codes_by_sgg.get((sido, sgg), set())
+            writer.writerow([sido, sgg, ';'.join(sorted(codes)), sum(counts.values()),
                              counts['보유'], counts['경계걸침_후보'], counts['미보유'], counts['코드미상'],
-                             len(names_by_code.get(code, ())) if code else '',
-                             nameless_by_code.get(code, 0) if code else ''])
+                             len({name for code in codes for name in names_by_code.get(code, ())}),
+                             sum(nameless_by_code.get(code, 0) for code in codes)])
 
-    code_to_sgg = {code: (sido, sgg) for (sido, sgg), code in sgg_map.items()}
+    # 코드 → 시군구 역방향. 한 시군구가 코드를 여럿 가질 수 있으므로 코드마다 풀어 담는다.
+    code_to_sgg = {code: (sido, sgg)
+                   for (sido, sgg), codes in codes_by_sgg.items() for code in codes}
     with (OUT / 'unmatched_shp.csv').open('w', encoding='utf-8-sig', newline='') as handle:
         writer = csv.writer(handle)
         writer.writerow(['sgg_code', 'sido', 'sgg', 'kind', 'stream_name', 'polygon_count', 'sample_mnum'])

@@ -48,3 +48,6 @@ build/
 # 행안부 NDMS 소하천 전체 목록(소하천대장 xlsx). 대조 검증 입력이며 산출물은 build/sochun/ 이다.
 소하천 전체 목록/
 anlysis/
+# 국가데이터처 법정동 연계정보 CSV(79 MB)와 행정동 경계 SHP(130 MB). 전처리 입력이며
+# 산출물 data/reference/sgg_code_map.json 은 커밋한다(scripts/build_sgg_code_map.py 로 재생성).
+행정구역/
