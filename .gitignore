@@ -45,3 +45,6 @@ build/
 # 산출물은 apps/web/public/reference/rivers/ 아래에 있고 scripts/build_sochun_layers.py 등으로 재생성한다.
 소하천_소하천구역*/
 전국하천표준데이터/
+# 행안부 NDMS 소하천 전체 목록(소하천대장 xlsx). 대조 검증 입력이며 산출물은 build/sochun/ 이다.
+소하천 전체 목록/
+anlysis/

@@ -47,7 +47,8 @@
     "test:openapi-contracts": "python3 scripts/validate_openapi_contracts.py",
     "test:contracts": "npm run test:openapi-contracts && npm run test:schema-contracts",
     "data:rivers": "python3 scripts/build_sochun_layers.py && python3 scripts/build_river_standard_points.py && python3 scripts/build_river_search_index.py",
-    "test:river-reference": "python3 scripts/smoke_river_reference_layers.py"
+    "test:river-reference": "python3 scripts/smoke_river_reference_layers.py",
+    "data:sochun-crosscheck": "python3 scripts/build_sochun_ledger_crosscheck.py"
   },
   "engines": {
     "node": ">=22.12.0"

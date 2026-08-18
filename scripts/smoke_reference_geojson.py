@@ -43,7 +43,8 @@ TARGET_ADMIN = {region.admin for region in REGIONS}
 # 공간조인해 붙이며, 중심선이 지나지 않으면 '등급미확인'으로 남긴다(추정하지 않는다).
 RIVER_CLASSES = {'국가하천', '지방하천', '소하천', '등급미확인'}
 RIVER_KIND_GEOM = {'TN_RIVER_BT': 'Polygon', 'TN_RIVER_BNDRY': 'Polygon',
-                   'TN_RIVER_CTLN': 'LineString', 'TN_RIVER_LABEL': 'Point',
+                   'TN_RIVER_CTLN': 'LineString', 'TN_RIVER_CTLN_MINOR': 'LineString',
+                   'TN_RIVER_LABEL': 'Point',
                    # 소하천구역(국토교통부 연속주제)과 전국하천표준데이터 지점. 국가기본도와 계보가 다르다.
                    'LSMD_SOCHUN': 'Polygon', 'RIVER_STD_POINTS': 'Point'}
 # 전국하천표준데이터는 원자료가 위경도를 거의 갖고 있지 않다(전국 2,558건 중 194건).
@@ -88,10 +89,12 @@ def check_common(path: Path, features: list) -> None:
 
 def check_rivers(path: Path, features: list, river_ids: set[str]) -> None:
     rel = path.relative_to(REPO)
-    match = re.fullmatch(r'(TN_RIVER_[A-Z]+|LSMD_SOCHUN|RIVER_STD_POINTS)_(\d{2,5})', path.stem)
+    # TN_RIVER_CTLN_MINOR 처럼 자료종류에 밑줄이 들어가므로 종류를 열거로 받는다.
+    kinds = '|'.join(sorted(RIVER_KIND_GEOM, key=len, reverse=True))
+    match = re.fullmatch(rf'({kinds})_(\d{{2,5}})', path.stem)
     if not match:
         fail(f'{rel}: 파일명이 <자료종류>_<행정코드> 형식이 아니다 '
-             f'(허용: TN_RIVER_BT/BNDRY/CTLN/LABEL · LSMD_SOCHUN · RIVER_STD_POINTS)')
+             f'(허용: {", ".join(sorted(RIVER_KIND_GEOM))})')
         return
     kind, admin = match.groups()
     expected = RIVER_KIND_GEOM.get(kind)

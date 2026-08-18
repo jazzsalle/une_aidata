@@ -8,9 +8,12 @@
 더 붙고 그만큼 어긋날 여지가 생긴다. 실측으로 5186 가정을 확인했다(기장 129.222/35.272,
 의왕 126.956/37.317, 구미 128.175/36.255, 남원 127.419/35.435, 인제 128.287/38.040).
 
-**이름을 만들어내지 않는다.** `ALIAS` 는 지자체마다 품질이 달라서, 영천·인제는 실제 소하천명이
-들어 있지만 남원·구미·의왕·부산은 대부분 '소하천구역' 같은 일반값이다. 아래 규칙으로 실제 하천명이
-읽히는 경우에만 `stream_name` 을 붙이고, 나머지는 붙이지 않는다. 원문은 `alias_raw` 로 항상 남긴다.
+**이름을 만들어내지 않는다.** 원자료에는 소하천명 전용 필드가 없고 `ALIAS`(별칭)·`REMARK`(비고)
+자유기술에 섞여 온다. 전국 116,758 폴리곤 기준으로 이름이 `REMARK` 에만 있는 것이 62.4%,
+둘 다 4.1%+29.0%, 어디에도 없는 것이 4.5% 다 — `ALIAS` 는 '소하천예정지' 47,768건처럼 일반값이
+대부분이라 그것만 보면 3분의 2를 잃는다. 그래서 `ALIAS` 를 먼저 보고 실패하면 `REMARK` 를 본다.
+아래 규칙으로 실제 하천명이 읽히는 경우에만 `stream_name` 을 붙이고, 나머지는 붙이지 않는다.
+원문은 `alias_raw`·`remark_raw` 로 항상 남긴다.
 """
 from __future__ import annotations
 
@@ -42,18 +45,44 @@ TOLERANCE_M = 2.0
 
 # `ALIAS`/`REMARK` 에서 하천명이 아닌 부분. 이 낱말만 남으면 이름이 없는 것으로 본다.
 GENERIC = ('소하천구역', '소하천예정지', '소하천', '구역', '예정지')
+# '천'으로 끝나지만 하천명이 아닌 값. 폐천 계열을 그대로 두면 포천시 '기존폐천' 1,383건처럼
+# 서로 다른 구역이 하천 하나로 뭉쳐 보인다. NDMS 소하천 전체 목록에 같은 이름이 등재돼 있지
+# 않은 것만 넣는다 — '구하천'은 전북 완주군·남원시에 실제로 등재된 하천명이라 넣지 않는다.
+BLOCK = frozenset({'하천', '폐천', '기존폐천', '신생폐천', '소하천'})
 # 인제는 '3-01 소재골천 소하천구역' 처럼 고시번호 + 하천명 + 구분 형태로 들어온다.
 NOTICE_NO = re.compile(r'^\s*\d+\s*-\s*\d+\s*')
+# '운수천(001-2)' 처럼 하천명 뒤에 붙는 고시 일련번호.
+SERIAL_IN_PAREN = re.compile(r'\(\s*\d{1,4}(?:-\d{1,4})?\s*\)')
+# '큰터골천 예정지03' 의 뒤쪽.
+PLANNED_SUFFIX = re.compile(r'예정지\s*\d*')
+# 소하천명은 '…천'(드물게 '…강')으로 끝난다.
+NAME_SHAPE = re.compile(r'[가-힣A-Za-z0-9]{1,12}(?:천|강|川)')
+# '웅곡천_무을면', '소하천(운수천)' 처럼 구분자로 이어 붙여 오는 경우가 많다.
+SPLIT = re.compile(r'[()\[\]_/,\s]+')
 
 
 def stream_name_of(alias: str) -> str:
-    """원문에서 실제 하천명이 읽힐 때만 돌려준다. 못 읽으면 빈 문자열이며 추정하지 않는다."""
-    text = NOTICE_NO.sub('', (alias or '').strip())
-    for word in GENERIC:
-        text = text.replace(word, ' ')
-    text = ' '.join(text.split())
-    # 소하천명은 '…천'으로 끝난다. 그 형태가 아니면 이름으로 인정하지 않는다.
-    return text if text.endswith('천') and len(text) >= 2 else ''
+    """원문에서 실제 하천명이 읽힐 때만 돌려준다. 못 읽으면 빈 문자열이며 추정하지 않는다.
+
+    원문은 '웅곡천_무을면', '운수천(001-2)', '소하천(운수천)', '골말1천_소하천예정지' 처럼
+    하천명 앞뒤로 고시번호·행정구역·구분이 붙어 온다. 붙어 있는 것을 떼어낼 뿐 없는 이름을
+    만들지 않는다 — 떼어낸 뒤에도 하천명 형태가 아니면 빈 문자열이다.
+    """
+    text = SERIAL_IN_PAREN.sub(' ', (alias or '').strip())
+    text = NOTICE_NO.sub('', text)
+    text = PLANNED_SUFFIX.sub(' ', text)
+    text = text.replace('소하천정비법_', ' ')
+    candidates = [
+        part for part in SPLIT.split(text)
+        if part and part not in GENERIC and part not in BLOCK and NAME_SHAPE.fullmatch(part)
+    ]
+    if candidates:
+        # '소하천(운수천)' 처럼 조각이 여럿 남으면 가장 긴 것이 하천명이다.
+        return max(candidates, key=len)
+    found = NAME_SHAPE.search(text)
+    if found and found.group(0) not in GENERIC and found.group(0) not in BLOCK:
+        return found.group(0)
+    return ''
 
 
 def read_shapefile(province: str):

@@ -203,7 +203,26 @@ export const RIVER_LAYER_SOURCES: RiverLayerSource[] = [
     dataUrlTemplate: `/reference/rivers/TN_RIVER_CTLN_${RIVER_DATA_URL_TOKEN}.geojson`,
     datasetShort: '국가기본도',
     // 원자료는 세류(RVC005)가 85% 를 차지해 시·군 지도에서는 하천망을 읽을 수 없다.
-    note: '국가기본도 하천중심선. 하천명(RIVER_NM)을 가진 유일한 자료다. 국가·지방·소·기타하천만 담았고 세류(RVC005)는 제외했다 — 원자료에서 세류가 85% 를 차지해 시·군 단위 화면에서는 하천망이 묻힌다.',
+    note: '국가기본도 하천중심선. 하천명(RIVER_NM)을 가진 유일한 자료다. 국가·지방·소·기타하천만 담았고 세류(RVC005)는 제외했다 — 원자료에서 세류가 85% 를 차지해 시·군 단위 화면에서는 하천망이 묻힌다. 이름 없는 소하천 중심선은 아래 별도 레이어로 갈라 두었다.',
+  },
+  {
+    id: 'ngii-centerline-minor',
+    label: '무명 소하천 중심선 (국가기본도)',
+    semantic: 'centerline',
+    kind: 'geojson',
+    status: 'active',
+    sourceOrg: '국토지리정보원 국가기본도 (TN_RIVER_CTLN · 무명 소하천)',
+    url: '',
+    layerName: '',
+    styleName: '',
+    projection: 'EPSG:3857',
+    requiresVWorldKey: false,
+    defaultVisible: false,
+    style: { color: '#4dd0e1', satelliteColor: '#84ffff', width: 1.2, dash: [4, 4] },
+    dataUrlTemplate: `/reference/rivers/TN_RIVER_CTLN_MINOR_${RIVER_DATA_URL_TOKEN}.geojson`,
+    datasetShort: '국가기본도',
+    // 실측: 남원 4,781건·구미 4,741건·의왕 785건이 전부 RIVER_NM 이 비어 있다.
+    note: '국가기본도 중심선 중 하천명이 비어 있는 소하천. 이름이 없어 검색으로 찾아갈 수 없고 참조자료 용량의 20% 를 쓰기 때문에 기본 비표시로 갈라 두었다. 소하천의 이름은 소하천구역(LSMD_CONT_UJ301) 레이어가 갖고 있다.',
   },
   {
     id: 'ngii-river-name',

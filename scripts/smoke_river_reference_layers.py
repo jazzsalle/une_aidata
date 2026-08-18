@@ -24,7 +24,14 @@ REPO = Path(__file__).resolve().parent.parent
 DIR = REPO / 'apps' / 'web' / 'public' / 'reference' / 'rivers'
 
 KOREA_BBOX = (124.0, 33.0, 132.0, 39.0)
-GENERIC_NAMES = {'소하천구역', '소하천예정지', '소하천', '구역', '예정지'}
+# stream_name 으로 새면 안 되는 값. 앞의 5개는 구분 라벨이고, 뒤의 4개는 '천'으로 끝나지만
+# 하천명이 아닌 폐천 계열이다(포천시 '기존폐천' 1,383건 등). NDMS 소하천 전체 목록에 등재되지
+# 않은 것만 넣는다 — scripts/build_sochun_layers.py 의 GENERIC + BLOCK 과 같은 뜻이며,
+# 게이트는 검사 대상 모듈을 import 하지 않으므로 여기에 따로 적는다.
+GENERIC_NAMES = {
+    '소하천구역', '소하천예정지', '소하천', '구역', '예정지',
+    '하천', '폐천', '기존폐천', '신생폐천',
+}
 failures: list[str] = []
 
 
