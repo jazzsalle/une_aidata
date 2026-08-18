@@ -6,7 +6,7 @@ import VectorSource from 'ol/source/Vector';
 import type BaseLayer from 'ol/layer/Base';
 import type Feature from 'ol/Feature';
 import type { FeatureLike } from 'ol/Feature';
-import { labelStyle, lineStyle, palette, pointStyle } from './mapStyles';
+import { lineStyle, palette } from './mapStyles';
 import {
   RIVER_LAYER_SOURCES,
   riverDataUrl,
@@ -54,12 +54,6 @@ function styleForRiver(source: RiverLayerSource, feature: FeatureLike, context: 
   const marks = [context.selected, context.clicked];
   const active = (Boolean(id) && marks.includes(id)) || (Boolean(riverId) && marks.includes(riverId));
   const tone = palette(context.satellite);
-  if (source.semantic === 'label') {
-    const text = String(feature.get('RIVER_NM') ?? '');
-    if (!text) return [];
-    const ink = active ? tone.activeLine : (context.satellite ? satelliteColor : color);
-    return labelStyle(text, ink, tone.casing, ink);
-  }
   if (active) return lineStyle(tone.activeLine, tone.activeCasing, width + 1.6, tone.activeFill, dash);
   return lineStyle(context.satellite ? satelliteColor : color, tone.casing, width, context.satellite ? satelliteFill : fill, dash);
 }

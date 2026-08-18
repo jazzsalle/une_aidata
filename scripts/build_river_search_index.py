@@ -1,6 +1,7 @@
 """지도 하천 검색용 색인을 만든다. 반입이 끝난 GeoJSON 들에서 이름만 모은다.
 
-    입력  apps/web/public/reference/rivers/{LSMD_SOCHUN,TN_RIVER_LABEL}_{admin}.geojson
+    입력  apps/web/public/reference/rivers/LSMD_SOCHUN_{admin}.geojson
+          apps/web/public/reference/rivers/river_network_catalog.json
     출력  apps/web/public/reference/rivers/river_search_index.json
 
 검색할 때마다 지역별 GeoJSON(최대 3.5 MB)을 받게 하지 않으려고 만든다. 색인에는 이름과
@@ -65,15 +66,6 @@ def main() -> int:
                 'admin': region.admin, 'feature_id': feature['id'],
                 'nav': bbox_center(feature['geometry']), 'nav_kind': 'extent',
                 'detail': feature['properties'].get('notified_on', ''),
-            })
-
-        for feature in load(DIR / f'TN_RIVER_LABEL_{region.admin}.geojson'):
-            entries.append({
-                'name': feature['properties']['RIVER_NM'], 'kind': '국가기본도 하천',
-                'source_id': 'ngii-centerline', 'admin': region.admin,
-                'feature_id': feature['id'],
-                'nav': feature['geometry']['coordinates'], 'nav_kind': 'actual',
-                'detail': feature['properties'].get('river_class', ''),
             })
 
     out = DIR / 'river_search_index.json'

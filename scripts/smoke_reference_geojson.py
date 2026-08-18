@@ -35,16 +35,16 @@ ROOT = REPO / 'apps/web/public/reference'
 
 # 대한민국 본토+도서 대략 범위. 재투영 실패(미터 좌표가 그대로 남는 등)를 잡는 용도다.
 KR_BBOX = (124.0, 32.5, 132.5, 39.5)
-SEMANTICS = {'channel', 'zone', 'centerline', 'label', 'sochun'}
+SEMANTICS = {'channel', 'zone', 'sochun'}
 # 행정코드는 5자리가 기본이지만 부산은 광역시 전체(26)를 한 단위로 쓴다 —
 # 북구(26320)만 잡으면 소하천 자료가 0건이라 구 단위로는 표시할 것이 없다.
 TARGET_ADMIN = {region.admin for region in REGIONS}
 # 서비스 범위는 국가·지방·소하천 3종이다. 실폭·경계는 등급 속성이 없어 중심선에서
 # 공간조인해 붙이며, 중심선이 지나지 않으면 '등급미확인'으로 남긴다(추정하지 않는다).
 RIVER_CLASSES = {'국가하천', '지방하천', '소하천', '등급미확인'}
+# 중심선(TN_RIVER_CTLN)은 반입하지 않는다 — 등급·하천명·하천코드를 경계·실폭에 붙이는
+# 전처리 원천으로만 쓴다(322만 건이고 형상을 따로 보여줄 이유가 없다).
 RIVER_KIND_GEOM = {'TN_RIVER_BT': 'Polygon', 'TN_RIVER_BNDRY': 'Polygon',
-                   'TN_RIVER_CTLN': 'LineString', 'TN_RIVER_CTLN_MINOR': 'LineString',
-                   'TN_RIVER_LABEL': 'Point',
                    # 소하천구역(국토교통부 연속주제). 국가기본도와 계보가 다르다.
                    'LSMD_SOCHUN': 'Polygon'}
 #: 행정코드 접미가 없는 전국 단위 자료. 지금은 없다(하천망도는 형상을 반입하지 않는다).
@@ -129,12 +129,6 @@ def check_rivers(path: Path, features: list, river_ids: set[str]) -> None:
         if river_id and river_id not in river_ids:
             fail(f'{rel}: rivers.json 에 없는 river_id {river_id}')
             break
-        if kind == 'TN_RIVER_LABEL':
-            name = props.get('RIVER_NM')
-            if not name:
-                fail(f'{rel}: 하천명 레이어인데 RIVER_NM 이 없는 피처가 있다')
-                break
-            names[name] = names.get(name, 0) + 1
         if kind == 'LSMD_SOCHUN' and props.get('source_layer') != 'LSMD_CONT_UJ301':
             fail(f'{rel}: source_layer 가 LSMD_CONT_UJ301 이 아니다 ({props.get("source_layer")})')
             break
