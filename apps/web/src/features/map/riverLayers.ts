@@ -9,6 +9,7 @@ import type { FeatureLike } from 'ol/Feature';
 import { labelStyle, lineStyle, palette, pointStyle } from './mapStyles';
 import {
   RIVER_LAYER_SOURCES,
+  isNationwideTemplate,
   riverDataUrl,
   riverLayerId,
   type RiverLayerSource,
@@ -184,15 +185,17 @@ export function createRiverLayers({ features, styleContext, key, adminCode }: Cr
     const template = source.dataUrlTemplate;
     const layer = vectorLayers.get(source.id);
     if (!template || !layer) return;
-    if (loadedRegion.get(source.id) === code) return;
-    const cacheKey = `${source.id}:${code}`;
+    // 전국 자료는 지역이 바뀌어도 같은 파일이다. 지역별로 다시 받지 않도록 키를 고정한다.
+    const scope = isNationwideTemplate(template) ? '*' : code;
+    if (loadedRegion.get(source.id) === scope) return;
+    const cacheKey = `${source.id}:${scope}`;
     if (inflight.has(cacheKey)) return;
 
     const cached = cache.get(cacheKey);
     if (cached) {
       layer.getSource()?.clear();
       layer.getSource()?.addFeatures(cached);
-      loadedRegion.set(source.id, code);
+      loadedRegion.set(source.id, scope);
       delivery.set(source.id, 'geojson');
       messages.set(source.id, countMessage(source, cached.length));
       // 표시 여부는 그 사이 바뀌었을 수 있다. 받은 시점의 요청 상태를 그대로 반영한다.
@@ -213,18 +216,19 @@ export function createRiverLayers({ features, styleContext, key, adminCode }: Cr
       }) as Feature[];
       // 받아 둔 것은 지역이 바뀌었어도 캐시에 남긴다. 되돌아올 때 다시 받지 않는다.
       cache.set(cacheKey, parsed);
-      // 큰 파일(남원 중심선 3.5MB)을 받는 사이 사용자가 지역을 바꿨을 수 있다.
-      // 그때 그리면 이전 지역 형상이 새 지도에 남는다. 응답이 늦은 요청은 버린다.
-      if (region !== code) return;
+      // 큰 파일을 받는 사이 사용자가 지역을 바꿨을 수 있다. 그때 그리면 이전 지역 형상이
+      // 새 지도에 남는다. 응답이 늦은 요청은 버린다 — 단 전국 자료는 지역과 무관하므로 살린다
+      // (지방하천 23.8 MB 는 받는 동안 지역이 바뀌기 쉬운데, 버리면 켜도 빈 채로 남는다).
+      if (scope !== '*' && region !== code) return;
       layer.getSource()?.clear();
       layer.getSource()?.addFeatures(parsed);
-      loadedRegion.set(source.id, code);
+      loadedRegion.set(source.id, scope);
       delivery.set(source.id, 'geojson');
       messages.set(source.id, countMessage(source, parsed.length));
       layer.setVisible(Boolean(wanted.get(source.id)));
     } catch {
       // 지역이 이미 바뀐 요청의 실패는 현재 화면 상태로 보고하지 않는다.
-      if (region !== code) return;
+      if (scope !== '*' && region !== code) return;
       // 이 지역 자료가 없을 수 있다(대상 3개 지자체만 반입했다). 지도를 막지 않는다.
       layer.getSource()?.clear();
       layer.setVisible(false);
@@ -319,6 +323,8 @@ export function createRiverLayers({ features, styleContext, key, adminCode }: Cr
       region = code;
       for (const source of RIVER_LAYER_SOURCES) {
         if (!source.dataUrlTemplate) continue;
+        // 전국 자료는 지역과 무관하다. 치우면 다시 받아야 하므로 그대로 둔다.
+        if (isNationwideTemplate(source.dataUrlTemplate)) continue;
         // 지역이 바뀌면 이전 지역 형상은 즉시 치운다. 켜져 있는 소스만 새로 받는다.
         loadedRegion.delete(source.id);
         vectorLayers.get(source.id)?.getSource()?.clear();
