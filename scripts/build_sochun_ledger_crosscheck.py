@@ -6,6 +6,7 @@
     출력  build/sochun/crosscheck_rows.csv        목록 한 행 = 대조표 한 행
           build/sochun/crosscheck_summary.csv     시군구별 요약
           build/sochun/unmatched_shp.csv          목록에 대응이 없는 SHP 쪽
+          build/sochun/crosscheck_report.md       docs/32 가 인용하는 수치 표 (생성물)
           build/sochun/sgg_code_map_derived.json  정본이 없을 때 쓴 파생 코드표
 
 **이 산출물은 검증용이고 앱에 반입하지 않는다.** `npm run data:rivers` 파이프라인에 넣지 않는 이유다.
@@ -273,6 +274,74 @@ def km_between(a, b) -> float:
     return math.hypot((a[0] - b[0]) * 88.9, (a[1] - b[1]) * 111.0)
 
 
+def write_report(path: Path, *, out_rows: list, polygons: list, status_count: Counter,
+                 summary: dict, unmatched_names: list, nameless_by_code: Counter) -> None:
+    """docs/32 가 옮겨 적던 표를 생성한다.
+
+    문서에 손으로 적어 둔 수치는 원자료가 갱신되면 조용히 낡는다 — 실제로 그렇게 어긋났다.
+    집계는 main() 이 이미 갖고 있는 값을 그대로 쓰고 여기서는 표로 옮기기만 한다.
+    """
+    total = len(out_rows)
+    lines = [
+        '# 소하천 대조 결과 리포트',
+        '',
+        '`scripts/build_sochun_ledger_crosscheck.py` 가 생성한다. **손으로 고치지 않는다.**',
+        '`docs/32_sochun_ledger_mapping.md` 의 수치는 이 파일과 맞춰야 한다.',
+        '',
+        '## 판정 결과',
+        '',
+        '| 상태 | 행 | 비율 |',
+        '|---|---:|---:|',
+    ]
+    for status in ('보유', '경계걸침_후보', '미보유', '코드미상'):
+        count = status_count[status]
+        lines.append(f'| `{status}` | {count:,} | {count / total * 100:.1f}% |')
+    lines += [f'| **합계** | **{total:,}** | 100.0% |', '']
+
+    by_sido: dict = defaultdict(Counter)
+    for (sido, _), counts in summary.items():
+        by_sido[sido].update(counts)
+    lines += ['## 시도별', '', '| 시도 | 목록 | 보유 | 보유율 | 미보유 | 코드미상 |',
+              '|---|---:|---:|---:|---:|---:|']
+    for sido, counts in sorted(by_sido.items(), key=lambda kv: -sum(kv[1].values())):
+        rows = sum(counts.values())
+        lines.append(f'| {sido} | {rows:,} | {counts["보유"]:,} | {counts["보유"] / rows * 100:.1f}% '
+                     f'| {counts["미보유"]:,} | {counts["코드미상"]:,} |')
+    lines.append('')
+
+    source_count = Counter(row['name_source'] or '없음' for row in polygons)
+    lines += ['## SHP 폴리곤의 하천명이 들어 있던 칸', '',
+              '| 이름이 있는 칸 | 폴리곤 | 비율 |', '|---|---:|---:|']
+    for key, label in (('REMARK', '`REMARK` 에만'), ('BOTH', '둘 다'),
+                       ('ALIAS', '`ALIAS` 에만'), ('없음', '없음')):
+        count = source_count[key]
+        lines.append(f'| {label} | {count:,} | {count / len(polygons) * 100:.1f}% |')
+    named = len(polygons) - source_count['없음']
+    lines += ['', f'이름을 얻은 폴리곤 **{named:,} / {len(polygons):,} '
+                  f'({named / len(polygons) * 100:.1f}%)**', '']
+
+    held = Counter(row['shp_name_source'] for row in out_rows if row['shp_status'] == '보유')
+    lines += ['## `보유` 행의 이름 출처', '', '| 출처 | 행 |', '|---|---:|']
+    for key in ('REMARK', 'BOTH', 'ALIAS'):
+        lines.append(f'| `{key}` | {held[key]:,} |')
+    lines.append('')
+
+    unmatched_polygons = sum(count for _, count in unmatched_names)
+    nameless_polygons = sum(nameless_by_code.values())
+    lines += [
+        '## `unmatched_shp.csv` — SHP 쪽에서 목록에 닿지 못한 것',
+        '',
+        '판정 단위는 **시군구 + 하천명** 이다. 전국 단위가 아니다.',
+        '',
+        '| kind | 행 | 폴리곤 |',
+        '|---|---:|---:|',
+        f'| `목록에 없는 하천명` | {len(unmatched_names):,} | {unmatched_polygons:,} |',
+        f'| `이름 없는 폴리곤` | {len(nameless_by_code):,} (시군구코드 단위) | {nameless_polygons:,} |',
+        '',
+    ]
+    path.write_text('\n'.join(lines) + '\n', encoding='utf-8')
+
+
 def main() -> int:
     print('NDMS 소하천 전체 목록 <-> 소하천구역 SHP 대조')
     ledger = read_ledger()
@@ -406,6 +475,7 @@ def main() -> int:
     # 코드 → 시군구 역방향. 한 시군구가 코드를 여럿 가질 수 있으므로 코드마다 풀어 담는다.
     code_to_sgg = {code: (sido, sgg)
                    for (sido, sgg), codes in codes_by_sgg.items() for code in codes}
+    unmatched_names = []
     with (OUT / 'unmatched_shp.csv').open('w', encoding='utf-8-sig', newline='') as handle:
         writer = csv.writer(handle)
         writer.writerow(['sgg_code', 'sido', 'sgg', 'kind', 'stream_name', 'polygon_count', 'sample_mnum'])
@@ -413,6 +483,7 @@ def main() -> int:
             if (code, name) in matched_pairs:
                 continue
             sido, sgg = code_to_sgg.get(code, ('', ''))
+            unmatched_names.append(((code, name), len(items)))
             writer.writerow([code, sido, sgg, '목록에 없는 하천명', name, len(items), items[0]['mnum']])
         for code, count in sorted(nameless_by_code.items()):
             sido, sgg = code_to_sgg.get(code, ('', ''))
@@ -426,20 +497,25 @@ def main() -> int:
     print(f'  SHP 이름 회수 {named:,} / {len(polygons):,} ({named / len(polygons) * 100:.1f}%)'
           f' · 시군구+명칭 고유 {len(polys_by_code_name):,}')
 
+    write_report(OUT / 'crosscheck_report.md', out_rows=out_rows, polygons=polygons,
+                 status_count=status_count, summary=summary,
+                 unmatched_names=unmatched_names, nameless_by_code=nameless_by_code)
+
     # 검산 — 합계가 어긋나면 조용히 넘어가지 않는다.
     problems = []
     if sum(status_count.values()) != total:
         problems.append(f'상태 합계 {sum(status_count.values())} != 목록 {total}')
     if status_count['보유'] / total < 0.70:
         problems.append(f'보유 비율 {status_count["보유"] / total:.1%} 가 70% 미만이다 - 코드표를 확인하라.')
-    for name in ('crosscheck_rows.csv', 'crosscheck_summary.csv', 'unmatched_shp.csv'):
+    for name in ('crosscheck_rows.csv', 'crosscheck_summary.csv', 'unmatched_shp.csv',
+                 'crosscheck_report.md'):
         if not (OUT / name).exists():
             problems.append(f'{name} 가 생성되지 않았다.')
     if problems:
         for problem in problems:
             print(f'FAIL {problem}')
         return 1
-    print('PASS 소하천 대조표: build/sochun/ 에 CSV 3개')
+    print('PASS 소하천 대조표: build/sochun/ 에 CSV 3개 + crosscheck_report.md')
     return 0
 
 
