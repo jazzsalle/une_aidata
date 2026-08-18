@@ -1,6 +1,6 @@
 """소하천구역(연속주제) SHP 에서 대상 6개 지역만 잘라 EPSG:4326 GeoJSON 으로 반입한다.
 
-    입력  소하천_소하천구역(연속주제)+브이월드/LSMD_CONT_UJ301_{시도}.zip
+    입력  GIS_data/소하천_소하천구역(연속주제)+브이월드/LSMD_CONT_UJ301_{시도}.zip
     출력  apps/web/public/reference/rivers/LSMD_SOCHUN_{admin}.geojson
 
 원자료는 국토교통부 연속지적 계열 배포본이고 좌표계는 **EPSG:5186(Korea 2000 / Central Belt 2010)**
@@ -32,8 +32,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from build_river_web_layers import rdp  # noqa: E402  단순화 알고리즘은 국가기본도 반입과 같은 것을 쓴다.
 from river_regions import REGIONS, matches_sgg  # noqa: E402
 
-REPO = Path(__file__).resolve().parent.parent
-SRC_DIR = REPO / '소하천_소하천구역(연속주제)+브이월드'
+from source_data import REPO, SOCHUN_ZONE_DIR, require  # noqa: E402
+
+SRC_DIR = SOCHUN_ZONE_DIR
 DEST = REPO / 'apps' / 'web' / 'public' / 'reference' / 'rivers'
 
 SRC_CRS = 'EPSG:5186'
@@ -86,9 +87,7 @@ def stream_name_of(alias: str) -> str:
 
 
 def read_shapefile(province: str):
-    path = SRC_DIR / f'LSMD_CONT_UJ301_{province}.zip'
-    if not path.exists():
-        raise FileNotFoundError(f'{path} 가 없다. 소하천 원자료 폴더를 확인하라.')
+    path = require(SRC_DIR / f'LSMD_CONT_UJ301_{province}.zip', f'소하천구역 {province}')
     archive = zipfile.ZipFile(path)
     member: dict[str, str] = {}
     for info in archive.infolist():

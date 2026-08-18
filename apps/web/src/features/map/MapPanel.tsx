@@ -79,7 +79,7 @@ function facts(selection: MapFeatureSelection, district: DistrictReference | nul
     if (source) rows.push({ label: '자료성격', value: `${SEMANTIC_LABEL[source.semantic]} · ${SEMANTIC_ALIGNMENT_NOTE[source.semantic]}` });
     rows.push({ label: '공급경로', value: riverState ? DELIVERY_LABEL[riverState.delivery] : MISSING });
     rows.push({ label: '자료출처', value: orMissing(source?.sourceOrg) });
-    // 소하천구역·하천표준데이터는 rivers.json 의 하천 제원과 연결되지 않는다(별개 자료다).
+    // 소하천구역은 rivers.json 의 하천 제원과 연결되지 않는다(별개 자료다).
     // 계획서 제원 칸을 전부 '미확보'로 채우는 대신 그 자료가 실제로 가진 항목만 적는다.
     if (source?.semantic === 'sochun') {
       rows.push({ label: '소하천명', value: orMissing(properties.stream_name) });
@@ -87,19 +87,6 @@ function facts(selection: MapFeatureSelection, district: DistrictReference | nul
       rows.push({ label: '관리번호(MNUM)', value: orMissing(properties.MNUM) });
       rows.push({ label: '원문 표기', value: orMissing(properties.alias_raw ?? properties.remark_raw) });
       rows.push({ label: '행정구역', value: orMissing(properties.admin_name ?? properties.admin_code) });
-      rows.push({ label: '좌표(위도, 경도)', value: `${selection.lonLat[1].toFixed(5)}, ${selection.lonLat[0].toFixed(5)}` });
-      return rows;
-    }
-    if (source?.semantic === 'point') {
-      rows.push({ label: '하천명', value: orMissing(properties.name) });
-      rows.push({ label: '하천구분', value: orMissing(properties.river_class) });
-      rows.push({ label: '지점', value: orMissing(properties.point_role) });
-      rows.push({ label: '위치', value: orMissing(properties.location) });
-      rows.push({ label: '하천길이', value: properties.length_km ? `${String(properties.length_km)} km` : MISSING });
-      rows.push({ label: '관리기관', value: orMissing(properties.management_org) });
-      rows.push({ label: '제공기관', value: orMissing(properties.supply_org) });
-      rows.push({ label: '자료기준일', value: orMissing(properties.reference_date) });
-      rows.push({ label: '값 상태', value: '원자료 보유 위경도 (value_status=actual)' });
       rows.push({ label: '좌표(위도, 경도)', value: `${selection.lonLat[1].toFixed(5)}, ${selection.lonLat[0].toFixed(5)}` });
       return rows;
     }
@@ -168,13 +155,6 @@ function hoverTag(hover: MapFeatureHover): { title: string; kind: string; detail
       title: str(properties.stream_name) ?? '이름 미상 소하천구역',
       kind: '소하천구역',
       detail: [str(properties.notified_on) && `고시 ${String(properties.notified_on)}`, str(properties.alias_raw)].filter(Boolean).join(' · '),
-    };
-  }
-  if (source?.semantic === 'point') {
-    return {
-      title: str(properties.name) ?? '하천표준데이터 지점',
-      kind: `하천표준데이터 ${str(properties.point_role) ?? ''}`.trim(),
-      detail: [str(properties.river_class), str(properties.location)].filter(Boolean).join(' · '),
     };
   }
   if (source) {

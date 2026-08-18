@@ -1,7 +1,6 @@
 """지도 하천 검색용 색인을 만든다. 반입이 끝난 GeoJSON 들에서 이름만 모은다.
 
-    입력  apps/web/public/reference/rivers/{LSMD_SOCHUN,RIVER_STD_POINTS,TN_RIVER_LABEL}_{admin}.geojson
-          apps/web/public/reference/rivers/river_standard_catalog.json
+    입력  apps/web/public/reference/rivers/{LSMD_SOCHUN,TN_RIVER_LABEL}_{admin}.geojson
     출력  apps/web/public/reference/rivers/river_search_index.json
 
 검색할 때마다 지역별 GeoJSON(최대 3.5 MB)을 받게 하지 않으려고 만든다. 색인에는 이름과
@@ -9,8 +8,7 @@
 
 `nav`(경도, 위도)는 **화면 이동 전용 좌표**다. 폴리곤 자료에서는 형상 bbox 의 중심이라
 자료가 가진 값이 아니다. 그래서 `nav_kind` 로 그 좌표가 실측인지 화면이동용인지 구분해 둔다 —
-화면에 위치값으로 표시하면 안 되는 좌표다. 좌표가 아예 없는 하천표준데이터 레코드는
-`nav` 없이 넣어 목록에는 나오되 지도 이동은 막는다.
+화면에 위치값으로 표시하면 안 되는 좌표다.
 """
 from __future__ import annotations
 
@@ -56,9 +54,6 @@ def load(path: Path):
 
 def main() -> int:
     entries = []
-    catalog = json.loads((DIR / 'river_standard_catalog.json').read_text(encoding='utf-8'))
-    catalog_by_admin = {block['admin_code']: block['rivers'] for block in catalog['regions']}
-
     for region in REGIONS:
         for feature in load(DIR / f'LSMD_SOCHUN_{region.admin}.geojson'):
             name = feature['properties'].get('stream_name')
@@ -72,16 +67,6 @@ def main() -> int:
                 'detail': feature['properties'].get('notified_on', ''),
             })
 
-        for feature in load(DIR / f'RIVER_STD_POINTS_{region.admin}.geojson'):
-            props = feature['properties']
-            entries.append({
-                'name': props['name'], 'kind': f"하천표준데이터 {props['point_role']}",
-                'source_id': 'river-standard-point', 'admin': region.admin,
-                'feature_id': feature['id'],
-                'nav': feature['geometry']['coordinates'], 'nav_kind': 'actual',
-                'detail': props.get('location', ''),
-            })
-
         for feature in load(DIR / f'TN_RIVER_LABEL_{region.admin}.geojson'):
             entries.append({
                 'name': feature['properties']['RIVER_NM'], 'kind': '국가기본도 하천',
@@ -89,18 +74,6 @@ def main() -> int:
                 'feature_id': feature['id'],
                 'nav': feature['geometry']['coordinates'], 'nav_kind': 'actual',
                 'detail': feature['properties'].get('river_class', ''),
-            })
-
-        # 좌표가 없어 마커를 만들 수 없는 표준데이터. 검색 결과에는 남기되 지도 이동은 막는다.
-        for row in catalog_by_admin.get(region.admin, []):
-            if row['has_coordinate']:
-                continue
-            entries.append({
-                'name': row['name'], 'kind': f"하천표준데이터 ({row['river_class']})",
-                'source_id': 'river-standard-point', 'admin': region.admin,
-                'feature_id': '', 'nav': None, 'nav_kind': 'none',
-                'detail': row.get('start_point', ''),
-                'no_coordinate_reason': '원자료에 위경도가 없습니다.',
             })
 
     out = DIR / 'river_search_index.json'

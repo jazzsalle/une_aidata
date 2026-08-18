@@ -1,6 +1,6 @@
 """행정표준코드에서 시군구 코드표를 만든다. 소하천 대조표의 조인 축이 되는 표다.
 
-    입력  행정구역/행정표준코드시스템_법정동 코드(브이월드)_260813갱신/LSCT_LAWDCD.zip
+    입력  GIS_data/행정구역/행정표준코드시스템_법정동 코드(브이월드)_260813갱신/LSCT_LAWDCD.zip
     출력  data/reference/sgg_code_map.json
 
 NDMS 소하천 전체 목록에는 시군구 **이름**만 있고, 소하천구역 SHP 에는 시군구 **코드**만 있다.
@@ -38,8 +38,9 @@ import zipfile
 from collections import defaultdict
 from pathlib import Path
 
-REPO = Path(__file__).resolve().parent.parent
-SRC = REPO / '행정구역' / '행정표준코드시스템_법정동 코드(브이월드)_260813갱신' / 'LSCT_LAWDCD.zip'
+from source_data import LAWD_CODE_ZIP, REPO, require  # noqa: E402
+
+SRC = LAWD_CODE_ZIP
 MEMBER = 'LSCT_LAWDCD.csv'
 OUT = REPO / 'data' / 'reference' / 'sgg_code_map.json'
 
@@ -48,9 +49,7 @@ GU_IN_CITY = re.compile(r'^(.+?시)\s*[가-힣]+구$')
 
 
 def read_codes() -> list[dict]:
-    if not SRC.exists():
-        raise FileNotFoundError(f'{SRC} 가 없다. 행정표준코드 법정동코드 자료를 두어야 한다.')
-    text = zipfile.ZipFile(SRC).read(MEMBER).decode('cp949')
+    text = zipfile.ZipFile(require(SRC, '행정표준코드 법정동코드')).read(MEMBER).decode('cp949')
     return list(csv.DictReader(io.StringIO(text)))
 
 

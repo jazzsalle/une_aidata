@@ -1,7 +1,7 @@
 """행안부 NDMS 소하천 전체 목록을 기준으로 소하천구역 SHP 보유 여부를 행 단위로 판정한다.
 
-    입력  소하천 전체 목록/소하천대장_20260814_좌표추가.xlsx      (행안부 NDMS 사업단 제공)
-          소하천_소하천구역(연속주제)+브이월드/LSMD_CONT_UJ301_{시도}.zip  (17개 시도, _5174_ 제외)
+    입력  GIS_data/소하천 전체 목록/소하천대장_20260814_좌표추가.xlsx   (행안부 NDMS 사업단)
+          GIS_data/소하천_소하천구역(연속주제)+브이월드/LSMD_CONT_UJ301_{시도}.zip (17개 시도)
           data/reference/sgg_code_map.json                    (있으면 정본, 없으면 아래 파생표)
     출력  build/sochun/crosscheck_rows.csv        목록 한 행 = 대조표 한 행
           build/sochun/crosscheck_summary.csv     시군구별 요약
@@ -41,9 +41,10 @@ import shapefile
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from build_sochun_layers import EXPECTED_PRJ, SRC_CRS, stream_name_of  # noqa: E402
 
-REPO = Path(__file__).resolve().parent.parent
-LEDGER = REPO / '소하천 전체 목록' / '소하천대장_20260814_좌표추가.xlsx'
-SRC_DIR = REPO / '소하천_소하천구역(연속주제)+브이월드'
+from source_data import REPO, SOCHUN_LEDGER, SOCHUN_ZONE_DIR, require  # noqa: E402
+
+LEDGER = SOCHUN_LEDGER
+SRC_DIR = SOCHUN_ZONE_DIR
 OFFICIAL_MAP = REPO / 'data' / 'reference' / 'sgg_code_map.json'
 OUT = REPO / 'build' / 'sochun'
 
@@ -78,9 +79,7 @@ def normalize(name: str) -> str:
 
 def read_ledger() -> list[dict]:
     """xlsx 를 표준 라이브러리만으로 읽는다. openpyxl·pandas 를 requirements 에 새로 넣지 않는다."""
-    if not LEDGER.exists():
-        raise FileNotFoundError(f'{LEDGER} 가 없다. 행안부 NDMS 소하천 전체 목록을 두어야 한다.')
-    archive = zipfile.ZipFile(LEDGER)
+    archive = zipfile.ZipFile(require(LEDGER, 'NDMS 소하천 전체 목록'))
 
     shared: list[str] = []
     if 'xl/sharedStrings.xml' in archive.namelist():

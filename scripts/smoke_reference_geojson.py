@@ -45,11 +45,9 @@ RIVER_CLASSES = {'국가하천', '지방하천', '소하천', '등급미확인'}
 RIVER_KIND_GEOM = {'TN_RIVER_BT': 'Polygon', 'TN_RIVER_BNDRY': 'Polygon',
                    'TN_RIVER_CTLN': 'LineString', 'TN_RIVER_CTLN_MINOR': 'LineString',
                    'TN_RIVER_LABEL': 'Point',
-                   # 소하천구역(국토교통부 연속주제)과 전국하천표준데이터 지점. 국가기본도와 계보가 다르다.
-                   'LSMD_SOCHUN': 'Polygon', 'RIVER_STD_POINTS': 'Point'}
-# 전국하천표준데이터는 원자료가 위경도를 거의 갖고 있지 않다(전국 2,558건 중 194건).
-# 대상지역에 좌표 보유 건이 0인 것은 정상이므로 빈 파일을 실패로 보지 않는다.
-ALLOW_EMPTY = {'RIVER_STD_POINTS'}
+                   # 소하천구역(국토교통부 연속주제). 국가기본도와 계보가 다르다.
+                   'LSMD_SOCHUN': 'Polygon'}
+ALLOW_EMPTY: set[str] = set()
 # 관측소 파일은 '제원'이다. 관측값이 섞여 들어오면 화면이 실측값으로 오인시킬 수 있다.
 OBSERVATION_LIKE = {'value', 'observed_at', 'water_level', 'rainfall', 'obsrValue', 'value_status'}
 
@@ -132,17 +130,6 @@ def check_rivers(path: Path, features: list, river_ids: set[str]) -> None:
                 fail(f'{rel}: 하천명 레이어인데 RIVER_NM 이 없는 피처가 있다')
                 break
             names[name] = names.get(name, 0) + 1
-        if kind == 'RIVER_STD_POINTS':
-            # 이 마커는 원자료가 실제로 보유한 위경도만 담는다. 지오코딩으로 만든 좌표가
-            # 섞이면 실측값과 구분되지 않으므로 실제 연계값 표기를 강제한다.
-            if props.get('official_data') is not True or props.get('value_status') != 'actual':
-                fail(f'{rel}: 실제 연계값 표기가 없다 ({feature.get("id")}) — '
-                     'official_data=true · value_status=actual 이어야 한다')
-                break
-            missing = [key for key in ('name', 'point_role', 'provider', 'reference_date') if not props.get(key)]
-            if missing:
-                fail(f'{rel}: 필수 속성 누락 {missing} ({feature.get("id")})')
-                break
         if kind == 'LSMD_SOCHUN' and props.get('source_layer') != 'LSMD_CONT_UJ301':
             fail(f'{rel}: source_layer 가 LSMD_CONT_UJ301 이 아니다 ({props.get("source_layer")})')
             break

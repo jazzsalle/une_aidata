@@ -18,7 +18,7 @@
  *  URL·레이어명이 확정되지 않은 소스는 **빈 문자열로 두고 `unverified` 로 남긴다.**
  *  추정한 경로를 채워 넣으면 그 순간부터 그것이 확인된 사실처럼 읽힌다. */
 
-export type RiverSemantic = 'channel' | 'zone' | 'centerline' | 'label' | 'sochun' | 'point';
+export type RiverSemantic = 'channel' | 'zone' | 'centerline' | 'label' | 'sochun';
 export type RiverSourceKind = 'wms' | 'geojson' | 'wfs';
 /** active: 표시 대상 · legacy: 비교용으로만 남긴 기존 소스 · unverified: 경로/승인 미확정이라 켤 수 없음 */
 export type RiverSourceStatus = 'active' | 'legacy' | 'unverified';
@@ -88,7 +88,6 @@ export const SEMANTIC_LABEL: Record<RiverSemantic, string> = {
   centerline: '중심선',
   label: '하천명',
   sochun: '소하천구역',
-  point: '하천 지점(마커)',
 };
 
 /** 각 의미가 베이스맵과 어떻게 보이는 것이 정상인지. 팝업·토글 설명에 쓴다 —
@@ -99,7 +98,6 @@ export const SEMANTIC_ALIGNMENT_NOTE: Record<RiverSemantic, string> = {
   centerline: '물길 한가운데를 지나는 것이 정상입니다.',
   label: '하천명은 중심선 자료의 RIVER_NM 이며, 하천마다 대표점 한 곳에만 표시합니다.',
   sochun: '소하천정비법상 고시된 소하천구역입니다. 국가·지방하천과 별개 자료이므로 국가기본도 하천과 겹치지 않는 것이 정상입니다.',
-  point: '전국하천표준데이터가 실제로 보유한 시점·종점 위경도입니다. 좌표가 없는 하천은 마커가 없고 검색 목록에만 나옵니다.',
 };
 
 // 2026-08-08: 기존 `seed-wkmstrm`(geo.json L2 = VWorld LT_C_WKMSTRM)을 목록에서 제거했다.
@@ -266,25 +264,6 @@ export const RIVER_LAYER_SOURCES: RiverLayerSource[] = [
     // 하천명은 지자체마다 ALIAS/REMARK 중 어디에 들어 있는지가 다르다. 전처리가 읽어낸 것만 stream_name 으로 붙어 있고
     // 읽히지 않은 건에는 아예 없다 — 이름을 추정해 채우지 않았다.
     note: '소하천정비법상 고시 소하천구역(폴리곤). 원본 EPSG:5186 을 4326 으로 재투영하고 2 m 단순화했다. 대상 6개 지역 1,531건(의왕 110·구미 159·남원 454·영천 115·인제 643·부산 50). 하천명(stream_name)은 원문 ALIAS/REMARK 에서 읽힌 건에만 있다.',
-  },
-  {
-    id: 'river-standard-point',
-    label: '하천표준데이터 지점',
-    semantic: 'point',
-    kind: 'geojson',
-    status: 'active',
-    sourceOrg: '공공데이터포털 전국하천표준데이터',
-    url: '',
-    layerName: '',
-    styleName: '',
-    projection: 'EPSG:3857',
-    requiresVWorldKey: false,
-    defaultVisible: false,
-    style: { color: '#c62828', satelliteColor: '#ff5252', width: 1 },
-    dataUrlTemplate: `/reference/rivers/RIVER_STD_POINTS_${RIVER_DATA_URL_TOKEN}.geojson`,
-    datasetShort: '표준데이터 지점',
-    // 좌표 결측이 이 자료의 기본 상태다. 마커가 적은 것은 오류가 아니라 원자료가 그런 것이다.
-    note: '전국하천표준데이터의 시점·종점 위경도 마커. 원자료 2,558건 중 좌표 보유는 194건뿐이고, 대상 6개 지역에서는 부산 17건·의왕 1건 = 18건(마커 36개)뿐이다. 좌표가 없는 409건은 마커를 만들지 않고 검색 목록에서 확인한다 — 주소를 지오코딩해 좌표를 만들지 않는다.',
   },
   {
     id: 'river-zone',

@@ -39,7 +39,7 @@ from datetime import date
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_LEDGER = ROOT / '메타데이터 참고자료(T3Q)' / '20260708_2010~2025재해대장보고서_New.xlsx'
+DEFAULT_LEDGER = ROOT / 'GIS_data' / '메타데이터 참고자료(T3Q)' / '20260708_2010~2025재해대장보고서_New.xlsx'
 SEED_PATH = ROOT / 'data/seed/damage_recovery_events_seed.json'
 PUBLIC_SEED_PATH = ROOT / 'apps/web/public/seed/damage_recovery_events_seed.json'
 

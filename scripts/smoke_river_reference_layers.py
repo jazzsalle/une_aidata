@@ -86,33 +86,6 @@ def main() -> int:
                 fail(f'LSMD_SOCHUN_{region.admin}: stream_name 에 일반값 "{name}" 이 들어갔다.')
                 break
 
-        points = check_collection(DIR / f'RIVER_STD_POINTS_{region.admin}.geojson', {'Point'})
-        for feature in points:
-            props = feature['properties']
-            missing = [key for key in ('name', 'point_role', 'provider', 'reference_date') if not props.get(key)]
-            if missing:
-                fail(f'RIVER_STD_POINTS_{region.admin}: 필수 속성 누락 {missing} ({feature.get("id")})')
-                break
-            if props.get('official_data') is not True or props.get('value_status') != 'actual':
-                fail(f'RIVER_STD_POINTS_{region.admin}: 실제 연계값 표기가 없다 ({feature.get("id")}). '
-                     'official_data=true · value_status=actual 이어야 한다.')
-                break
-
-    catalog_path = DIR / 'river_standard_catalog.json'
-    if not catalog_path.exists():
-        fail('river_standard_catalog.json 이 없다.')
-    else:
-        catalog = json.loads(catalog_path.read_text(encoding='utf-8'))
-        codes = {block['admin_code'] for block in catalog['regions']}
-        expected = {region.admin for region in REGIONS}
-        if codes != expected:
-            fail(f'river_standard_catalog.json: 지역 구성이 다르다 {sorted(codes)} != {sorted(expected)}')
-        for block in catalog['regions']:
-            for row in block['rivers']:
-                if row['has_coordinate'] != bool(row.get('points')):
-                    fail(f'river_standard_catalog.json: has_coordinate 와 points 가 어긋난다 ({row.get("name")})')
-                    break
-
     index_path = DIR / 'river_search_index.json'
     if not index_path.exists():
         fail('river_search_index.json 이 없다.')

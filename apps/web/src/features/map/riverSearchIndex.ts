@@ -6,7 +6,7 @@
 
 export interface RiverSearchEntry {
   name: string;
-  /** 사람이 읽는 자료 구분('소하천구역', '하천표준데이터 시점', '국가기본도 하천' 등). */
+  /** 사람이 읽는 자료 구분('소하천구역', '국가기본도 하천' 등). */
   kind: string;
   /** 결과를 클릭했을 때 켜야 할 하천 소스 id. */
   source_id: string;
