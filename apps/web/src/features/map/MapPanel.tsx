@@ -37,9 +37,8 @@ const core = [
   { name: '위험지구', code: 'L1' },
   { name: '행정경계', code: 'L3' },
   { name: '침수흔적', code: 'L-FLOOD-TRACE' },
-  { name: '홍수위험지역 (Mock)', code: 'L-FLOOD-RISK-AREA' },
-  { name: '위험저수지 (Mock)', code: 'L-DANGEROUS-RESERVOIR' },
-  { name: '풍수해개선지구 (Mock)', code: 'L-STORM-FLOOD-IMPROVEMENT' },
+  // 홍수위험지역·위험저수지·풍수해개선지구 mock 은 2026-08-19 지도에서 뺐다. 실제 Geometry·속성 계약
+  // 전 임의 표출하지 않는다는 규칙(v1.0·v1.1)대로 시드·API 계약만 두고 화면에는 올리지 않는다.
   // 관측소는 전국 자료다. 시범서비스 대상이 전국이고 검증만 3개 지역이라 지역별로 자르지 않는다.
   { name: '수위관측소', code: 'L-STATION-WL' },
   { name: '강수량관측소', code: 'L-STATION-RF' },
@@ -48,7 +47,6 @@ const PENDING_LAYERS = ['피해위치', '대피소'];
 const LAYER_LABEL: Record<string, string> = {
   L1: '위험지구', L2: '하천', L3: '행정경계',
   FLOOD_TRACE: '침수흔적', 'L-FLOOD-TRACE': '침수흔적',
-  'L-FLOOD-RISK-AREA': '홍수위험지역 (Mock)', 'L-DANGEROUS-RESERVOIR': '위험저수지 (Mock)', 'L-STORM-FLOOD-IMPROVEMENT': '풍수해개선지구 (Mock)',
   'L-STATION-WL': '수위관측소', 'L-STATION-RF': '강수량관측소',
 };
 /** 전국 관측소 레이어(수위·강수량). 이 자료만 계획문서 판독물이 아니라 공공 API 원본이다. */
@@ -108,32 +106,16 @@ function facts(selection: MapFeatureSelection, district: DistrictReference | nul
     rows.push({ label: '행정코드', value: orMissing(properties.admin_code) });
     rows.push({ label: '경계자료', value: orMissing(properties.source) });
   } else if (selection.layerId === 'L-FLOOD-TRACE' || selection.layerId === 'FLOOD_TRACE') {
-    if (properties.data_status === 'actual') {
-      // 행안부 침수흔적도(실자료). 원자료 필드를 그대로 보여 준다 — 등급(1~6)의 뜻은 명세를 받기 전까지 값 그대로다.
-      rows.push({ label: '재난명', value: orMissing(properties.disaster_name) });
-      rows.push({ label: '침수 기간', value: properties.occurred_at ? `${properties.occurred_at}${properties.ended_at && properties.ended_at !== properties.occurred_at ? ` ~ ${properties.ended_at}` : ''}` : MISSING });
-      rows.push({ label: '침수 원인', value: orMissing(properties.cause_detail) });
-      rows.push({ label: '침수심', value: properties.flood_depth_m != null ? `${properties.flood_depth_m} m` : MISSING });
-      rows.push({ label: '침수면적', value: properties.flood_area_m2 != null ? `${Number(properties.flood_area_m2).toLocaleString()} m²` : MISSING });
-      rows.push({ label: '등급(원자료 FLDN_GRD)', value: orMissing(properties.flood_grade) });
-      rows.push({ label: '자료상태', value: '실자료 · 행안부 침수흔적도' });
-      rows.push({ label: '출처', value: orMissing(properties.source) });
-      rows.push({ label: '수집시각', value: orMissing(properties.collected_at) });
-    } else {
-      rows.push({ label: '발생일', value: orMissing(properties.occurred_at) });
-      rows.push({ label: '연계 사건', value: orMissing(properties.event_id) });
-      rows.push({ label: '자료상태', value: orMissing(properties.data_status) });
-    }
-  } else if (selection.layerId === 'L-FLOOD-RISK-AREA') {
-    rows.push({ label: '표기 등급', value: orMissing(properties.risk_grade) });
-    rows.push({ label: '관련 하천', value: orMissing(properties.river_name) });
-    rows.push({ label: '작성근거', value: orMissing(properties.basis) });
-    rows.push({ label: '기준일', value: orMissing(properties.reference_date) });
-  } else if (selection.layerId === 'L-DANGEROUS-RESERVOIR') {
-    rows.push({ label: '시설유형', value: orMissing(properties.facility_type) });
-    rows.push({ label: '표기 등급', value: orMissing(properties.risk_grade) });
-    rows.push({ label: '관리기관', value: orMissing(properties.management_org) });
-    rows.push({ label: '최근 점검', value: orMissing(properties.last_inspected_at) });
+    // 행안부 침수흔적도(실자료). 원자료 필드를 그대로 보여 준다 — 등급(1~6)의 뜻은 명세를 받기 전까지 값 그대로다.
+    rows.push({ label: '재난명', value: orMissing(properties.disaster_name) });
+    rows.push({ label: '침수 기간', value: properties.occurred_at ? `${properties.occurred_at}${properties.ended_at && properties.ended_at !== properties.occurred_at ? ` ~ ${properties.ended_at}` : ''}` : MISSING });
+    rows.push({ label: '침수 원인', value: orMissing(properties.cause_detail) });
+    rows.push({ label: '침수심', value: properties.flood_depth_m != null ? `${properties.flood_depth_m} m` : MISSING });
+    rows.push({ label: '침수면적', value: properties.flood_area_m2 != null ? `${Number(properties.flood_area_m2).toLocaleString()} m²` : MISSING });
+    rows.push({ label: '등급(원자료 FLDN_GRD)', value: orMissing(properties.flood_grade) });
+    rows.push({ label: '자료상태', value: '실자료 · 행안부 침수흔적도' });
+    rows.push({ label: '출처', value: orMissing(properties.source) });
+    rows.push({ label: '수집시각', value: orMissing(properties.collected_at) });
   } else if (selection.layerId === 'L-STATION-WL' || selection.layerId === 'L-STATION-RF') {
     // 관측값이 아니라 관측소의 '제원'이다. 그 구분을 맨 위에 적는다.
     rows.push({ label: '자료성격', value: '관측소 제원(위치·소속)입니다. 이 화면의 수위·강우 값이 아닙니다.' });
@@ -149,10 +131,6 @@ function facts(selection: MapFeatureSelection, district: DistrictReference | nul
     rows.push({ label: '관측개시', value: orMissing(properties.opened_at) });
     rows.push({ label: '자료출처', value: orMissing(properties.source) });
     rows.push({ label: '수집일', value: orMissing(properties.fetched_at) });
-  } else if (selection.layerId === 'L-STORM-FLOOD-IMPROVEMENT') {
-    rows.push({ label: '사업상태', value: orMissing(properties.project_status) });
-    rows.push({ label: '사업기간', value: orMissing(properties.project_period) });
-    rows.push({ label: '대책요약', value: orMissing(properties.mitigation_summary) });
   } else {
     rows.push({ label: '위치', value: orMissing(properties.location ?? properties.admin_name) });
   }
@@ -235,7 +213,7 @@ export function MapPanel({ adminCode, mapRegion, focusTarget, highlightedFeature
   const [detail, setDetail] = useState<{ district: DistrictReference | null; river: RiverReference | null }>({ district: null, river: null });
   const [riverStates, setRiverStates] = useState<RiverSourceState[]>([]);
   const [visible, setVisible] = useState<Record<string, boolean>>({
-    L1: true, L3: true, 'L-FLOOD-TRACE': false, 'L-FLOOD-RISK-AREA': false, 'L-DANGEROUS-RESERVOIR': false, 'L-STORM-FLOOD-IMPROVEMENT': false,
+    L1: true, L3: true, 'L-FLOOD-TRACE': false,
     'L-STATION-WL': false, 'L-STATION-RF': false,
     ...Object.fromEntries(RIVER_LAYER_SOURCES.map((source) => [riverLayerId(source.id), source.defaultVisible])),
     ...initialVisible,
