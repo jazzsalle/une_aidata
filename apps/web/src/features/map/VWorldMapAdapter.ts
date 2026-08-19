@@ -58,7 +58,9 @@ export interface MapFeatureHover {
 
 export interface VWorldMapHandle {
   map: OlMap;
-  setRegion(code: string, center?: [number, number]): void;
+  /** fitBoundary=false 면 경계를 받아 그리되 화면은 맞추지 않는다 — 검색 결과의 하천 조각으로 맞출 때 쓴다.
+   *  둘 다 fit 하면 뒤에 끝나는 경계 fit 이 하천 fit 을 덮는다. */
+  setRegion(code: string, center?: [number, number], fitBoundary?: boolean): void;
   highlightFeature(id: string): boolean;
   /** 검색 결과로 이동한다. 형상이 아직 안 받아진 소스도 있으므로 좌표만으로 먼저 이동시킨다. */
   focusLonLat(lonLat: [number, number], zoom?: number): void;
@@ -191,7 +193,7 @@ export async function createVWorldMap(target: HTMLElement, adminCode: string, on
   const seedBoundaryCodes = new Set(raw.filter((feature) => String(feature.get('layer')) === 'L3').map((feature) => dataCodeOfApp(String(feature.get('admin_code') ?? ''))));
   const loadedBoundaries = new Set<string>(seedBoundaryCodes);
   let boundaryRequest = 0;
-  async function showAdminBoundary(code: string): Promise<boolean> {
+  async function showAdminBoundary(code: string, fit = true): Promise<boolean> {
     const source = sources.get('L3');
     if (!source) return false;
     const request = ++boundaryRequest;
@@ -223,7 +225,7 @@ export async function createVWorldMap(target: HTMLElement, adminCode: string, on
       if (!acc) return [box[0], box[1], box[2], box[3]];
       return [Math.min(acc[0], box[0]), Math.min(acc[1], box[1]), Math.max(acc[2], box[2]), Math.max(acc[3], box[3])];
     }, null);
-    if (extent) map.getView().fit(extent, { padding: [40, 40, 40, 40], maxZoom: 14, duration: 350 });
+    if (extent && fit) map.getView().fit(extent, { padding: [40, 40, 40, 40], maxZoom: 14, duration: 350 });
     return Boolean(extent);
   }
   // 행안부 침수흔적도(실자료)는 시군구별 파일(FLOOD_TRACE_{코드})이라 지역이 바뀔 때 받아 침수흔적
@@ -404,10 +406,11 @@ export async function createVWorldMap(target: HTMLElement, adminCode: string, on
       anchorCoordinate = coordinate ? coordinate.slice(0, 2) : null;
       if (!coordinate && clicked) { clicked = null; vectors.forEach((vector) => vector.changed()); rivers.redraw(); }
     },
-    setRegion(code, moveTo) {
+    setRegion(code, moveTo, fitBoundary = true) {
       // 하천자료는 시군구별 파일이라 지역이 바뀌면 자료도 바꿔야 한다.
       rivers.setRegion(code);
       void showOfficialFloodTraces(code);
+      if (!fitBoundary) { void showAdminBoundary(code, false); return; }
       // 시드 3곳은 예전처럼 중심·줌 11 로 간다(그 화면에 맞춰 시연이 짜여 있다). 그 밖은 경계를
       // 받아 그 범위에 맞춘다 — 여기서 먼저 animate 를 걸면 뒤따르는 fit 과 서로 끊어 어느 쪽도
       // 끝까지 가지 못한다. 경계를 못 받으면(파일 없음) 그때 중심으로 간다.
@@ -433,7 +436,9 @@ export async function createVWorldMap(target: HTMLElement, adminCode: string, on
       // 국가·지방하천은 형상을 안 들여오므로, 지금 지도에 실린 시군구의 국가기본도 경계·실폭 중
       // 같은 하천코드를 가진 조각들로 맞춘다 — 전국 bbox 중심으로 가면 강남구에서 한강을 찾았는데
       // 경기 광주 산속으로 간다.
-      const riverCode = id.startsWith('RIVERCODE:') ? id.slice('RIVERCODE:'.length) : '';
+      // 'RIVERCODE:1000010#3' 처럼 꼬리표(#n)가 붙을 수 있다 — 같은 하천을 연달아 가리켜도 React 상태가
+      // 바뀌게 하려는 것이다. 하천코드만 본다.
+      const riverCode = id.startsWith('RIVERCODE:') ? id.slice('RIVERCODE:'.length).split('#')[0] : '';
       for (const source of [...sources.values(), ...rivers.featureSources()]) {
         // 국가기본도 하천은 한 하천이 여러 폴리곤으로 나뉜다(요천 5개). river_id 로 가리키면
         // 그 하천에 속한 조각 전부를 잡아 합친 범위로 맞춘다 — 한 조각만 잡으면 엉뚱하게 확대된다.

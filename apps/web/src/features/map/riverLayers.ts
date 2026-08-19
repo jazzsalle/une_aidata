@@ -127,7 +127,7 @@ function styleForRiver(source: RiverLayerSource, feature: FeatureLike, context: 
   // 자체 id 를 쓰므로 전처리에서 붙인 river_id 로도 선택 상태를 판정한다.
   const riverId = String(feature.get('river_id') ?? '');
   const riverCodeMark = `RIVERCODE:${String(feature.get('river_code') ?? '')}`;
-  const marks = [context.selected, context.clicked];
+  const marks = [context.selected, context.clicked].map((mark) => (mark && mark.startsWith('RIVERCODE:') ? mark.split('#')[0] : mark));
   const active = (Boolean(id) && marks.includes(id)) || (Boolean(riverId) && marks.includes(riverId))
     || (Boolean(feature.get('river_code')) && marks.includes(riverCodeMark));
   const tone = palette(context.satellite);
