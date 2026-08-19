@@ -285,12 +285,16 @@ def load_dongs():
             legal = (row.get('법정동코드') or '').strip()
             if len(legal) == 10 and legal.isdigit():
                 adm_to_sgg.setdefault((row.get('행정구역코드') or '').strip(), legal[:5])
+    # 층위와 기준일을 소하천구역 쪽에 맞춘다. 두 가지를 함께 처리한다.
+    #   구 → 시 : 법정동코드 앞 5자리는 자치구가 있는 시에서 구 코드다(성남시 → 분당구 41135).
+    #             소하천구역 원자료는 시 코드(41130)를 쓰므로 parent_code 로 올린다.
+    #   별칭 → 대표 : 같은 시군구가 개편 전후 코드를 둘 다 가질 때 하나로 모은다.
+    # 이걸 안 하면 지도가 성남시를 골랐을 때 소하천만 보이고 경계·실폭은 파일을 못 찾는다.
     payload = json.loads(require(SGG_MAP, '시군구 코드표').read_text(encoding='utf-8'))
     promote: dict = {}
     for entry in payload['entries']:
-        primary = sorted(entry['codes'])[0]
         for code in entry['codes']:
-            promote[code] = primary
+            promote[code] = entry['primary_code']
 
     reader = shapefile.Reader(str(DONG_SHP), encoding='cp949')
     dongs = []

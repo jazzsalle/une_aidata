@@ -92,7 +92,8 @@ def build(rows: list[dict]):
         owner = next(iter(owners))
         by_name[owner].add(old_code)
     add_rollup()
-    return by_name, ambiguous
+    current |= {code for codes in by_name.values() for code in codes if code in current}
+    return by_name, ambiguous, current
 
 
 def main() -> int:
@@ -100,14 +101,37 @@ def main() -> int:
     live = sum(1 for r in rows if not (r.get('DEL_DT') or '').strip())
     print(f'행정표준코드 법정동코드: {len(rows):,}행 (유효 {live:,} · 폐지 {len(rows) - live:,})')
 
-    by_name, ambiguous = build(rows)
+    by_name, ambiguous, current = build(rows)
     codes = {code for values in by_name.values() for code in values}
     print(f'  시군구 항목 {len(by_name):,} · 코드 {len(codes):,}')
     for row in ambiguous:
         print(f"  승계 미정 {row['code']}: {' / '.join(row['claimed_by'])}")
 
-    entries = [{'sido': sido, 'sgg': sgg, 'codes': sorted(values)}
-               for (sido, sgg), values in sorted(by_name.items())]
+    # 자치구가 있는 시의 구 항목에는 그 시의 코드를 함께 적는다. 자료마다 층위가 달라서
+    # (소하천구역은 성남시 41130, 국가기본도는 분당구 41135) 한쪽으로 맞출 때 이 값이 필요하다.
+    # 광역시 자치구(서울 광진구 11215 등)는 시 항목이 없으므로 parent_code 가 붙지 않는다.
+    parents = {}
+    for (sido, sgg), values in by_name.items():
+        match = GU_IN_CITY.match(sgg)
+        if not match:
+            continue
+        city = by_name.get((sido, match.group(1)))
+        if city:
+            parents[(sido, sgg)] = sorted(city & current or city)[0]
+
+    # 파일명·admin_code 를 맞출 때 쓸 대표 코드를 미리 정해 둔다. 고르는 쪽마다 규칙이 달라지면
+    # 같은 시군구가 레이어별로 다른 코드에 앉아 지도에서 한쪽만 보인다(2026-08-19 실제로 그랬다).
+    #   구가 있는 시의 구 항목  → 시 코드(parent_code). 소하천구역이 시 단위라 그쪽에 맞춘다.
+    #   그 밖                    → 현행 코드. 정렬만으로 고르면 강원(42800 양구 → 51800)처럼
+    #                              종전 코드가 앞서는 곳에서 옛 코드가 대표가 된다.
+    entries = []
+    for (sido, sgg), values in sorted(by_name.items()):
+        entry = {'sido': sido, 'sgg': sgg, 'codes': sorted(values)}
+        parent = parents.get((sido, sgg))
+        if parent:
+            entry['parent_code'] = parent
+        entry['primary_code'] = parent or sorted(values & current or values)[0]
+        entries.append(entry)
     OUT.write_text(json.dumps({
         'dataset': 'sgg_code_map',
         'version': '2.0',
@@ -122,6 +146,8 @@ def main() -> int:
             '자치구가 있는 시는 구 코드와 시 코드를 함께 갖는다 — SHP 의 COL_ADM_SE 가 시 단위이기 때문이다.',
             '종전 코드는 지금 다른 시군구가 쓰고 있지 않을 때만 담는다(OLD_LAWDCD 기준).',
             '승계가 갈린 종전 코드는 ambiguous_old_codes 로 빼 두고 표에 넣지 않는다.',
+            'parent_code 는 자치구가 있는 시의 구 항목에만 붙는다 — 자료마다 시/구 층위가 달라 맞출 때 쓴다.',
+            'primary_code 는 파일명·admin_code 를 맞출 대표 코드다. 구는 시 코드, 그 밖은 현행 코드다.',
             '풀리지 않는 시군구는 넣지 않는다 — 대조표가 코드미상으로 남긴다.',
         ],
         'note': (

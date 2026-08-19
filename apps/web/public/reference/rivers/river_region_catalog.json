@@ -69,17 +69,6 @@
    "realwidth_count": 33
   },
   {
-   "code": "42800",
-   "sido": "강원특별자치도",
-   "sgg": "양구군",
-   "center": [
-    127.996145,
-    38.1
-   ],
-   "boundary_count": 606,
-   "realwidth_count": 65
-  },
-  {
    "code": "51800",
    "sido": "강원특별자치도",
    "sgg": "양구군",
@@ -88,7 +77,9 @@
     38.174137
    ],
    "sochun_count": 382,
-   "sochun_named": 382
+   "sochun_named": 382,
+   "boundary_count": 606,
+   "realwidth_count": 65
   },
   {
    "code": "51830",
@@ -268,40 +259,9 @@
     37.66026
    ],
    "sochun_count": 470,
-   "sochun_named": 470
-  },
-  {
-   "code": "41281",
-   "sido": "경기도",
-   "sgg": "고양시 덕양구",
-   "center": [
-    126.864475,
-    37.65626
-   ],
-   "boundary_count": 560,
-   "realwidth_count": 191
-  },
-  {
-   "code": "41285",
-   "sido": "경기도",
-   "sgg": "고양시 일산동구",
-   "center": [
-    126.79614,
-    37.68455
-   ],
-   "boundary_count": 103,
-   "realwidth_count": 47
-  },
-  {
-   "code": "41287",
-   "sido": "경기도",
-   "sgg": "고양시 일산서구",
-   "center": [
-    126.742955,
-    37.670315
-   ],
-   "boundary_count": 20,
-   "realwidth_count": 7
+   "sochun_named": 470,
+   "boundary_count": 683,
+   "realwidth_count": 245
   },
   {
    "code": "41290",
@@ -414,40 +374,9 @@
     37.509667
    ],
    "sochun_count": 32,
-   "sochun_named": 32
-  },
-  {
-   "code": "41194",
-   "sido": "경기도",
-   "sgg": "부천시 소사구",
-   "center": [
-    126.788645,
-    37.47728
-   ],
-   "boundary_count": 4,
-   "realwidth_count": 1
-  },
-  {
-   "code": "41196",
-   "sido": "경기도",
-   "sgg": "부천시 오정구",
-   "center": [
-    126.78681,
-    37.53002
-   ],
-   "boundary_count": 34,
-   "realwidth_count": 4
-  },
-  {
-   "code": "41192",
-   "sido": "경기도",
-   "sgg": "부천시 원미구",
-   "center": [
-    126.779765,
-    37.50183
-   ],
-   "boundary_count": 15,
-   "realwidth_count": 10
+   "sochun_named": 32,
+   "boundary_count": 53,
+   "realwidth_count": 15
   },
   {
    "code": "41130",
@@ -458,40 +387,9 @@
     37.41078
    ],
    "sochun_count": 99,
-   "sochun_named": 99
-  },
-  {
-   "code": "41135",
-   "sido": "경기도",
-   "sgg": "성남시 분당구",
-   "center": [
-    127.1031,
-    37.37865
-   ],
-   "boundary_count": 148,
-   "realwidth_count": 51
-  },
-  {
-   "code": "41131",
-   "sido": "경기도",
-   "sgg": "성남시 수정구",
-   "center": [
-    127.10206,
-    37.43586
-   ],
-   "boundary_count": 71,
-   "realwidth_count": 25
-  },
-  {
-   "code": "41133",
-   "sido": "경기도",
-   "sgg": "성남시 중원구",
-   "center": [
-    127.15191,
-    37.43856
-   ],
-   "boundary_count": 24,
-   "realwidth_count": 8
+   "sochun_named": 99,
+   "boundary_count": 243,
+   "realwidth_count": 84
   },
   {
    "code": "41110",
@@ -502,51 +400,9 @@
     37.284833
    ],
    "sochun_count": 38,
-   "sochun_named": 25
-  },
-  {
-   "code": "41113",
-   "sido": "경기도",
-   "sgg": "수원시 권선구",
-   "center": [
-    126.990145,
-    37.26409
-   ],
-   "boundary_count": 95,
-   "realwidth_count": 23
-  },
-  {
-   "code": "41117",
-   "sido": "경기도",
-   "sgg": "수원시 영통구",
-   "center": [
-    127.0573,
-    37.27272
-   ],
-   "boundary_count": 42,
-   "realwidth_count": 15
-  },
-  {
-   "code": "41111",
-   "sido": "경기도",
-   "sgg": "수원시 장안구",
-   "center": [
-    127.00123,
-    37.317855
-   ],
-   "boundary_count": 85,
-   "realwidth_count": 35
-  },
-  {
-   "code": "41115",
-   "sido": "경기도",
-   "sgg": "수원시 팔달구",
-   "center": [
-    127.0075,
-    37.2822
-   ],
-   "boundary_count": 3,
-   "realwidth_count": 1
+   "sochun_named": 25,
+   "boundary_count": 225,
+   "realwidth_count": 74
   },
   {
    "code": "41390",
@@ -570,29 +426,9 @@
     37.302459
    ],
    "sochun_count": 26,
-   "sochun_named": 24
-  },
-  {
-   "code": "41273",
-   "sido": "경기도",
-   "sgg": "안산시 단원구",
-   "center": [
-    126.701555,
-    37.278215
-   ],
-   "boundary_count": 164,
-   "realwidth_count": 67
-  },
-  {
-   "code": "41271",
-   "sido": "경기도",
-   "sgg": "안산시 상록구",
-   "center": [
-    126.87384,
-    37.318485
-   ],
-   "boundary_count": 63,
-   "realwidth_count": 18
+   "sochun_named": 24,
+   "boundary_count": 227,
+   "realwidth_count": 85
   },
   {
    "code": "41550",
@@ -616,29 +452,9 @@
     37.394854
    ],
    "sochun_count": 5,
-   "sochun_named": 0
-  },
-  {
-   "code": "41173",
-   "sido": "경기도",
-   "sgg": "안양시 동안구",
-   "center": [
-    126.95899,
-    37.39286
-   ],
-   "boundary_count": 25,
-   "realwidth_count": 9
-  },
-  {
-   "code": "41171",
-   "sido": "경기도",
-   "sgg": "안양시 만안구",
-   "center": [
-    126.914375,
-    37.40074
-   ],
-   "boundary_count": 113,
-   "realwidth_count": 50
+   "sochun_named": 0,
+   "boundary_count": 138,
+   "realwidth_count": 59
   },
   {
    "code": "41630",
@@ -714,40 +530,9 @@
     37.228528
    ],
    "sochun_count": 154,
-   "sochun_named": 153
-  },
-  {
-   "code": "41463",
-   "sido": "경기도",
-   "sgg": "용인시 기흥구",
-   "center": [
-    127.119215,
-    37.271025
-   ],
-   "boundary_count": 159,
-   "realwidth_count": 51
-  },
-  {
-   "code": "41465",
-   "sido": "경기도",
-   "sgg": "용인시 수지구",
-   "center": [
-    127.081485,
-    37.33288
-   ],
-   "boundary_count": 61,
-   "realwidth_count": 6
-  },
-  {
-   "code": "41461",
-   "sido": "경기도",
-   "sgg": "용인시 처인구",
-   "center": [
-    127.266205,
-    37.22173
-   ],
-   "boundary_count": 695,
-   "realwidth_count": 90
+   "sochun_named": 153,
+   "boundary_count": 915,
+   "realwidth_count": 147
   },
   {
    "code": "41430",
@@ -1018,62 +803,9 @@
     35.219334
    ],
    "sochun_count": 456,
-   "sochun_named": 298
-  },
-  {
-   "code": "48125",
-   "sido": "경상남도",
-   "sgg": "창원시 마산합포구",
-   "center": [
-    128.484215,
-    35.139165
-   ],
-   "boundary_count": 612,
-   "realwidth_count": 182
-  },
-  {
-   "code": "48127",
-   "sido": "경상남도",
-   "sgg": "창원시 마산회원구",
-   "center": [
-    128.54255,
-    35.227345
-   ],
-   "boundary_count": 173,
-   "realwidth_count": 51
-  },
-  {
-   "code": "48123",
-   "sido": "경상남도",
-   "sgg": "창원시 성산구",
-   "center": [
-    128.673585,
-    35.20053
-   ],
-   "boundary_count": 169,
-   "realwidth_count": 53
-  },
-  {
-   "code": "48121",
-   "sido": "경상남도",
-   "sgg": "창원시 의창구",
-   "center": [
-    128.661945,
-    35.30791
-   ],
-   "boundary_count": 687,
-   "realwidth_count": 160
-  },
-  {
-   "code": "48129",
-   "sido": "경상남도",
-   "sgg": "창원시 진해구",
-   "center": [
-    128.748975,
-    35.118005
-   ],
-   "boundary_count": 164,
-   "realwidth_count": 82
+   "sochun_named": 298,
+   "boundary_count": 1805,
+   "realwidth_count": 528
   },
   {
    "code": "48220",
@@ -1422,29 +1154,9 @@
     36.05352
    ],
    "sochun_count": 1977,
-   "sochun_named": 1969
-  },
-  {
-   "code": "47111",
-   "sido": "경상북도",
-   "sgg": "포항시 남구",
-   "center": [
-    129.42853,
-    35.961345
-   ],
-   "boundary_count": 400,
-   "realwidth_count": 142
-  },
-  {
-   "code": "47113",
-   "sido": "경상북도",
-   "sgg": "포항시 북구",
-   "center": [
-    129.22033,
-    36.1794
-   ],
-   "boundary_count": 722,
-   "realwidth_count": 153
+   "sochun_named": 1969,
+   "boundary_count": 1122,
+   "realwidth_count": 295
   },
   {
    "code": "27720",
@@ -2300,36 +2012,16 @@
    "sido": "전남광주통합특별시",
    "sgg": "강진군",
    "center": [
-    126.772275,
-    34.617005
-   ],
-   "boundary_count": 731,
-   "realwidth_count": 132
-  },
-  {
-   "code": "46810",
-   "sido": "전남광주통합특별시",
-   "sgg": "강진군",
-   "center": [
     126.774663,
     34.622626
    ],
    "sochun_count": 1178,
-   "sochun_named": 1178
+   "sochun_named": 1178,
+   "boundary_count": 731,
+   "realwidth_count": 132
   },
   {
    "code": "12740",
-   "sido": "전남광주통합특별시",
-   "sgg": "고흥군",
-   "center": [
-    127.310845,
-    34.61043
-   ],
-   "boundary_count": 2217,
-   "realwidth_count": 320
-  },
-  {
-   "code": "46770",
    "sido": "전남광주통합특별시",
    "sgg": "고흥군",
    "center": [
@@ -2337,21 +2029,12 @@
     34.619786
    ],
    "sochun_count": 3575,
-   "sochun_named": 3575
+   "sochun_named": 3575,
+   "boundary_count": 2217,
+   "realwidth_count": 320
   },
   {
    "code": "12720",
-   "sido": "전남광주통합특별시",
-   "sgg": "곡성군",
-   "center": [
-    127.24875,
-    35.20833
-   ],
-   "boundary_count": 617,
-   "realwidth_count": 128
-  },
-  {
-   "code": "46720",
    "sido": "전남광주통합특별시",
    "sgg": "곡성군",
    "center": [
@@ -2359,21 +2042,12 @@
     35.206592
    ],
    "sochun_count": 1360,
-   "sochun_named": 1356
+   "sochun_named": 1356,
+   "boundary_count": 617,
+   "realwidth_count": 128
   },
   {
    "code": "12330",
-   "sido": "전남광주통합특별시",
-   "sgg": "광산구",
-   "center": [
-    126.75399,
-    35.16201
-   ],
-   "boundary_count": 472,
-   "realwidth_count": 156
-  },
-  {
-   "code": "29200",
    "sido": "전남광주통합특별시",
    "sgg": "광산구",
    "center": [
@@ -2381,21 +2055,12 @@
     35.154252
    ],
    "sochun_count": 39,
-   "sochun_named": 0
+   "sochun_named": 0,
+   "boundary_count": 472,
+   "realwidth_count": 156
   },
   {
    "code": "12190",
-   "sido": "전남광주통합특별시",
-   "sgg": "광양시",
-   "center": [
-    127.663395,
-    35.044045
-   ],
-   "boundary_count": 638,
-   "realwidth_count": 142
-  },
-  {
-   "code": "46230",
    "sido": "전남광주통합특별시",
    "sgg": "광양시",
    "center": [
@@ -2403,21 +2068,12 @@
     35.039806
    ],
    "sochun_count": 1431,
-   "sochun_named": 718
+   "sochun_named": 718,
+   "boundary_count": 638,
+   "realwidth_count": 142
   },
   {
    "code": "12730",
-   "sido": "전남광주통합특별시",
-   "sgg": "구례군",
-   "center": [
-    127.49413,
-    35.232425
-   ],
-   "boundary_count": 470,
-   "realwidth_count": 95
-  },
-  {
-   "code": "46730",
    "sido": "전남광주통합특별시",
    "sgg": "구례군",
    "center": [
@@ -2425,21 +2081,12 @@
     35.24135
    ],
    "sochun_count": 438,
-   "sochun_named": 438
+   "sochun_named": 438,
+   "boundary_count": 470,
+   "realwidth_count": 95
   },
   {
    "code": "12170",
-   "sido": "전남광주통합특별시",
-   "sgg": "나주시",
-   "center": [
-    126.70134,
-    34.986845
-   ],
-   "boundary_count": 893,
-   "realwidth_count": 205
-  },
-  {
-   "code": "46170",
    "sido": "전남광주통합특별시",
    "sgg": "나주시",
    "center": [
@@ -2447,7 +2094,9 @@
     34.991805
    ],
    "sochun_count": 390,
-   "sochun_named": 390
+   "sochun_named": 390,
+   "boundary_count": 893,
+   "realwidth_count": 205
   },
   {
    "code": "12270",
@@ -2465,36 +2114,16 @@
    "sido": "전남광주통합특별시",
    "sgg": "담양군",
    "center": [
-    126.986245,
-    35.28991
-   ],
-   "boundary_count": 574,
-   "realwidth_count": 120
-  },
-  {
-   "code": "46710",
-   "sido": "전남광주통합특별시",
-   "sgg": "담양군",
-   "center": [
     126.982473,
     35.289687
    ],
    "sochun_count": 1169,
-   "sochun_named": 1169
+   "sochun_named": 1169,
+   "boundary_count": 574,
+   "realwidth_count": 120
   },
   {
    "code": "12210",
-   "sido": "전남광주통합특별시",
-   "sgg": "동구",
-   "center": [
-    126.94719,
-    35.11158
-   ],
-   "boundary_count": 54,
-   "realwidth_count": 21
-  },
-  {
-   "code": "29110",
    "sido": "전남광주통합특별시",
    "sgg": "동구",
    "center": [
@@ -2502,21 +2131,12 @@
     35.108827
    ],
    "sochun_count": 6,
-   "sochun_named": 6
+   "sochun_named": 6,
+   "boundary_count": 54,
+   "realwidth_count": 21
   },
   {
    "code": "12110",
-   "sido": "전남광주통합특별시",
-   "sgg": "목포시",
-   "center": [
-    126.38672,
-    34.80387
-   ],
-   "boundary_count": 57,
-   "realwidth_count": 17
-  },
-  {
-   "code": "46110",
    "sido": "전남광주통합특별시",
    "sgg": "목포시",
    "center": [
@@ -2524,7 +2144,9 @@
     34.791327
    ],
    "sochun_count": 6,
-   "sochun_named": 0
+   "sochun_named": 0,
+   "boundary_count": 57,
+   "realwidth_count": 17
   },
   {
    "code": "12810",
@@ -2542,36 +2164,16 @@
    "sido": "전남광주통합특별시",
    "sgg": "보성군",
    "center": [
-    127.218615,
-    34.82357
-   ],
-   "boundary_count": 975,
-   "realwidth_count": 168
-  },
-  {
-   "code": "46780",
-   "sido": "전남광주통합특별시",
-   "sgg": "보성군",
-   "center": [
     127.196726,
     34.804685
    ],
    "sochun_count": 3162,
-   "sochun_named": 3162
+   "sochun_named": 3162,
+   "boundary_count": 975,
+   "realwidth_count": 168
   },
   {
    "code": "12300",
-   "sido": "전남광주통합특별시",
-   "sgg": "북구",
-   "center": [
-    126.925285,
-    35.20542
-   ],
-   "boundary_count": 96,
-   "realwidth_count": 37
-  },
-  {
-   "code": "29170",
    "sido": "전남광주통합특별시",
    "sgg": "북구",
    "center": [
@@ -2579,7 +2181,9 @@
     35.21003
    ],
    "sochun_count": 2,
-   "sochun_named": 0
+   "sochun_named": 0,
+   "boundary_count": 96,
+   "realwidth_count": 37
   },
   {
    "code": "12240",
@@ -2608,36 +2212,16 @@
    "sido": "전남광주통합특별시",
    "sgg": "신안군",
    "center": [
-    125.83356,
-    34.76569
-   ],
-   "boundary_count": 3696,
-   "realwidth_count": 829
-  },
-  {
-   "code": "46910",
-   "sido": "전남광주통합특별시",
-   "sgg": "신안군",
-   "center": [
     125.877081,
     34.827203
    ],
    "sochun_count": 304,
-   "sochun_named": 298
+   "sochun_named": 298,
+   "boundary_count": 3696,
+   "realwidth_count": 829
   },
   {
    "code": "12130",
-   "sido": "전남광주통합특별시",
-   "sgg": "여수시",
-   "center": [
-    127.520925,
-    34.561795
-   ],
-   "boundary_count": 526,
-   "realwidth_count": 187
-  },
-  {
-   "code": "46130",
    "sido": "전남광주통합특별시",
    "sgg": "여수시",
    "center": [
@@ -2645,21 +2229,12 @@
     34.692387
    ],
    "sochun_count": 169,
-   "sochun_named": 161
+   "sochun_named": 161,
+   "boundary_count": 526,
+   "realwidth_count": 187
   },
   {
    "code": "12830",
-   "sido": "전남광주통합특별시",
-   "sgg": "영광군",
-   "center": [
-    126.327555,
-    35.296785
-   ],
-   "boundary_count": 1241,
-   "realwidth_count": 284
-  },
-  {
-   "code": "46870",
    "sido": "전남광주통합특별시",
    "sgg": "영광군",
    "center": [
@@ -2667,21 +2242,12 @@
     35.297004
    ],
    "sochun_count": 2704,
-   "sochun_named": 2704
+   "sochun_named": 2704,
+   "boundary_count": 1241,
+   "realwidth_count": 284
   },
   {
    "code": "12800",
-   "sido": "전남광주통합특별시",
-   "sgg": "영암군",
-   "center": [
-    126.61903,
-    34.800955
-   ],
-   "boundary_count": 1182,
-   "realwidth_count": 178
-  },
-  {
-   "code": "46830",
    "sido": "전남광주통합특별시",
    "sgg": "영암군",
    "center": [
@@ -2689,21 +2255,12 @@
     34.805983
    ],
    "sochun_count": 1218,
-   "sochun_named": 1216
+   "sochun_named": 1216,
+   "boundary_count": 1182,
+   "realwidth_count": 178
   },
   {
    "code": "12850",
-   "sido": "전남광주통합특별시",
-   "sgg": "완도군",
-   "center": [
-    126.79649,
-    34.288535
-   ],
-   "boundary_count": 328,
-   "realwidth_count": 127
-  },
-  {
-   "code": "46890",
    "sido": "전남광주통합특별시",
    "sgg": "완도군",
    "center": [
@@ -2711,21 +2268,12 @@
     34.287139
    ],
    "sochun_count": 538,
-   "sochun_named": 538
+   "sochun_named": 538,
+   "boundary_count": 328,
+   "realwidth_count": 127
   },
   {
    "code": "12840",
-   "sido": "전남광주통합특별시",
-   "sgg": "장성군",
-   "center": [
-    126.758845,
-    35.325825
-   ],
-   "boundary_count": 686,
-   "realwidth_count": 187
-  },
-  {
-   "code": "46880",
    "sido": "전남광주통합특별시",
    "sgg": "장성군",
    "center": [
@@ -2733,21 +2281,12 @@
     35.327389
    ],
    "sochun_count": 1437,
-   "sochun_named": 1436
+   "sochun_named": 1436,
+   "boundary_count": 686,
+   "realwidth_count": 187
   },
   {
    "code": "12770",
-   "sido": "전남광주통합특별시",
-   "sgg": "장흥군",
-   "center": [
-    126.916065,
-    34.65187
-   ],
-   "boundary_count": 1017,
-   "realwidth_count": 193
-  },
-  {
-   "code": "46800",
    "sido": "전남광주통합특별시",
    "sgg": "장흥군",
    "center": [
@@ -2755,21 +2294,12 @@
     34.654128
    ],
    "sochun_count": 214,
-   "sochun_named": 213
+   "sochun_named": 213,
+   "boundary_count": 1017,
+   "realwidth_count": 193
   },
   {
    "code": "12860",
-   "sido": "전남광주통합특별시",
-   "sgg": "진도군",
-   "center": [
-    126.14049,
-    34.406555
-   ],
-   "boundary_count": 593,
-   "realwidth_count": 144
-  },
-  {
-   "code": "46900",
    "sido": "전남광주통합특별시",
    "sgg": "진도군",
    "center": [
@@ -2777,21 +2307,12 @@
     34.430487
    ],
    "sochun_count": 492,
-   "sochun_named": 492
+   "sochun_named": 492,
+   "boundary_count": 593,
+   "realwidth_count": 144
   },
   {
    "code": "12820",
-   "sido": "전남광주통합특별시",
-   "sgg": "함평군",
-   "center": [
-    126.51665,
-    35.09748
-   ],
-   "boundary_count": 588,
-   "realwidth_count": 96
-  },
-  {
-   "code": "46860",
    "sido": "전남광주통합특별시",
    "sgg": "함평군",
    "center": [
@@ -2799,21 +2320,12 @@
     35.106744
    ],
    "sochun_count": 2001,
-   "sochun_named": 2001
+   "sochun_named": 2001,
+   "boundary_count": 588,
+   "realwidth_count": 96
   },
   {
    "code": "12790",
-   "sido": "전남광주통합특별시",
-   "sgg": "해남군",
-   "center": [
-    126.492755,
-    34.52535
-   ],
-   "boundary_count": 2356,
-   "realwidth_count": 364
-  },
-  {
-   "code": "46820",
    "sido": "전남광주통합특별시",
    "sgg": "해남군",
    "center": [
@@ -2821,21 +2333,12 @@
     34.525508
    ],
    "sochun_count": 3013,
-   "sochun_named": 3013
+   "sochun_named": 3013,
+   "boundary_count": 2356,
+   "realwidth_count": 364
   },
   {
    "code": "12760",
-   "sido": "전남광주통합특별시",
-   "sgg": "화순군",
-   "center": [
-    127.009335,
-    35.019515
-   ],
-   "boundary_count": 1087,
-   "realwidth_count": 255
-  },
-  {
-   "code": "46790",
    "sido": "전남광주통합특별시",
    "sgg": "화순군",
    "center": [
@@ -2843,7 +2346,9 @@
     35.017447
    ],
    "sochun_count": 440,
-   "sochun_named": 440
+   "sochun_named": 440,
+   "boundary_count": 1087,
+   "realwidth_count": 255
   },
   {
    "code": "52790",
@@ -2997,29 +2502,9 @@
     35.803787
    ],
    "sochun_count": 5,
-   "sochun_named": 3
-  },
-  {
-   "code": "52113",
-   "sido": "전북특별자치도",
-   "sgg": "전주시 덕진구",
-   "center": [
-    127.11109,
-    35.85964
-   ],
-   "boundary_count": 256,
-   "realwidth_count": 111
-  },
-  {
-   "code": "52111",
-   "sido": "전북특별자치도",
-   "sgg": "전주시 완산구",
-   "center": [
-    127.129825,
-    35.79615
-   ],
-   "boundary_count": 93,
-   "realwidth_count": 19
+   "sochun_named": 3,
+   "boundary_count": 349,
+   "realwidth_count": 130
   },
   {
    "code": "52180",
@@ -3225,29 +2710,9 @@
     36.803063
    ],
    "sochun_count": 1981,
-   "sochun_named": 1981
-  },
-  {
-   "code": "44131",
-   "sido": "충청남도",
-   "sgg": "천안시 동남구",
-   "center": [
-    127.220845,
-    36.762935
-   ],
-   "boundary_count": 524,
-   "realwidth_count": 101
-  },
-  {
-   "code": "44133",
-   "sido": "충청남도",
-   "sgg": "천안시 서북구",
-   "center": [
-    127.17359,
-    36.877675
-   ],
-   "boundary_count": 225,
-   "realwidth_count": 49
+   "sochun_named": 1981,
+   "boundary_count": 749,
+   "realwidth_count": 150
   },
   {
    "code": "44790",
@@ -3414,51 +2879,9 @@
     36.609431
    ],
    "sochun_count": 173,
-   "sochun_named": 173
-  },
-  {
-   "code": "43111",
-   "sido": "충청북도",
-   "sgg": "청주시 상당구",
-   "center": [
-    127.612295,
-    36.56192
-   ],
-   "boundary_count": 738,
-   "realwidth_count": 183
-  },
-  {
-   "code": "43112",
-   "sido": "충청북도",
-   "sgg": "청주시 서원구",
-   "center": [
-    127.43413,
-    36.55405
-   ],
-   "boundary_count": 182,
-   "realwidth_count": 49
-  },
-  {
-   "code": "43114",
-   "sido": "충청북도",
-   "sgg": "청주시 청원구",
-   "center": [
-    127.464165,
-    36.71512
-   ],
-   "boundary_count": 364,
-   "realwidth_count": 105
-  },
-  {
-   "code": "43113",
-   "sido": "충청북도",
-   "sgg": "청주시 흥덕구",
-   "center": [
-    127.37391,
-    36.64731
-   ],
-   "boundary_count": 342,
-   "realwidth_count": 70
+   "sochun_named": 173,
+   "boundary_count": 1626,
+   "realwidth_count": 407
   },
   {
    "code": "43130",

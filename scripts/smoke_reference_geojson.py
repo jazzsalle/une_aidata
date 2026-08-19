@@ -46,6 +46,25 @@ def _sgg_codes() -> set:
 
 
 TARGET_ADMIN = _sgg_codes() | {region.admin for region in REGIONS}
+
+
+def _alias_codes() -> dict:
+    """별칭 코드 → 대표 코드. 자료마다 시/구 층위와 개편 기준일이 달라 코드가 갈린다.
+
+    갈린 채로 두면 지도가 그 시군구를 골랐을 때 한쪽 레이어만 보인다(2026-08-19 실제로 그랬다 —
+    성남시를 고르면 소하천구역만 뜨고 하천경계·실폭은 분당구·수정구·중원구로 흩어져 있었다).
+    """
+    payload = json.loads((REPO / 'data' / 'reference' / 'sgg_code_map.json').read_text(encoding='utf-8'))
+    table: dict = {}
+    for entry in payload['entries']:
+        primary = entry['primary_code']
+        for code in entry['codes']:
+            if code != primary:
+                table[code] = primary
+    return table
+
+
+ALIAS_ADMIN = _alias_codes()
 # 서비스 범위는 국가·지방·소하천 3종이다. 실폭·경계는 등급 속성이 없어 중심선에서
 # 공간조인해 붙이며, 중심선이 지나지 않으면 '등급미확인'으로 남긴다(추정하지 않는다).
 RIVER_CLASSES = {'국가하천', '지방하천', '소하천', '등급미확인'}
@@ -113,6 +132,11 @@ def check_rivers(path: Path, features: list, river_ids: set[str]) -> None:
         return
     if admin is not None and admin not in TARGET_ADMIN:
         fail(f'{rel}: 대상지역이 아닌 행정코드 {admin} — scripts/river_regions.py 의 목록과 맞춰라')
+        return
+    if admin is not None and admin in ALIAS_ADMIN:
+        fail(f'{rel}: 대표 코드가 아닌 행정코드다. {ALIAS_ADMIN[admin]} 로 맞춰야 '
+             f'같은 시군구의 다른 하천 레이어와 함께 뜬다 '
+             f'(scripts/normalize_river_region_codes.py · merge_ngii_city_regions.py)')
         return
 
     names: dict[str, int] = {}
