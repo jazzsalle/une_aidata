@@ -106,22 +106,12 @@ function styleFor(feature: FeatureLike, context: StyleContext) {
     const tone = rain ? (sat ? '#b0bec5' : '#607d8b') : (sat ? '#40c4ff' : '#0277bd');
     return pointStyle(active ? 8 : 4, active ? activeLine : idle ? (sat ? '#78909c' : '#9e9e9e') : tone, active ? activeCasing : casing, '#ffffff');
   }
-  if (layer === 'L-DANGEROUS-RESERVOIR') {
-    return pointStyle(active ? 10 : 7, active ? activeLine : sat ? '#00e676' : '#00897b', active ? activeCasing : casing, '#ffffff');
-  }
   if (layer === 'L1' || feature.getGeometry()?.getType() === 'Point') {
     return pointStyle(active ? 10 : 6, active ? activeLine : sat ? '#ffea00' : 'rgba(220,76,70,.9)', active ? activeCasing : casing, '#ffffff');
   }
-  if (layer === 'FLOOD_TRACE' && feature.get('data_status') === 'actual') {
-    // 행안부 침수흔적도(실자료). POC mock 시드와 한눈에 갈리도록 실선·다른 색으로 그린다.
-    // 시군구에 수천 건이 깔리는 곳(영등포 3,463)이 있어 채움을 옅게 둔다.
+  if (layer === 'FLOOD_TRACE') {
+    // 행안부 침수흔적도(실자료). 시군구에 수천 건이 깔리는 곳(영등포 3,463)이 있어 채움을 옅게 둔다.
     return lineStyle(active ? activeLine : sat ? '#80deea' : '#00838f', active ? activeCasing : casing, active ? 3.5 : 1.4, active ? (sat ? 'rgba(255,45,149,.28)' : 'rgba(255,152,0,.25)') : sat ? 'rgba(128,222,234,.28)' : 'rgba(0,131,143,.22)');
-  }
-  if (layer === 'FLOOD_TRACE' || layer === 'L-FLOOD-RISK-AREA') {
-    return lineStyle(active ? activeLine : sat ? '#ff9e2c' : '#1e88e5', active ? activeCasing : casing, active ? 4 : 2.4, active ? (sat ? 'rgba(255,45,149,.28)' : 'rgba(255,152,0,.25)') : sat ? 'rgba(255,158,44,.26)' : 'rgba(30,136,229,.22)', [8, 4]);
-  }
-  if (layer === 'L-STORM-FLOOD-IMPROVEMENT') {
-    return lineStyle(active ? activeLine : sat ? '#d18cff' : '#7b1fa2', active ? activeCasing : casing, active ? 4 : 2.4, active ? (sat ? 'rgba(255,45,149,.22)' : 'rgba(255,152,0,.18)') : sat ? 'rgba(209,140,255,.2)' : 'rgba(123,31,162,.12)', [5, 4]);
   }
   // 하천(L2)은 여기서 그리지 않는다. 소스별로 나뉘어 riverLayers 가 전담한다.
   const base = sat ? '#ffffff' : provisional ? '#9b6b32' : '#1769aa';
@@ -129,7 +119,7 @@ function styleFor(feature: FeatureLike, context: StyleContext) {
 }
 
 // 배경(행정경계 등) 위에 겹친 POI를 먼저 잡도록 레이어 우선순위를 둔다.
-const HIT_PRIORITY: Record<string, number> = { L1: 0, 'L-DANGEROUS-RESERVOIR': 0, 'L-STATION-WL': 0, 'L-STATION-RF': 0, FLOOD_TRACE: 1, 'L-FLOOD-TRACE': 1, 'L-FLOOD-RISK-AREA': 1, 'L-STORM-FLOOD-IMPROVEMENT': 1, L2: 2, L3: 3 };
+const HIT_PRIORITY: Record<string, number> = { L1: 0, 'L-STATION-WL': 0, 'L-STATION-RF': 0, FLOOD_TRACE: 1, 'L-FLOOD-TRACE': 1, L2: 2, L3: 3 };
 // 하천 소스는 여러 개가 겹쳐 있어도 기존 L2와 같은 순위로 다룬다(위험지구·침수흔적보다 뒤, 행정경계보다 앞).
 const hitRank = (layerId: string) => (isRiverLayerId(layerId) ? 2 : HIT_PRIORITY[layerId] ?? 2);
 
@@ -162,7 +152,11 @@ export async function createVWorldMap(target: HTMLElement, adminCode: string, on
     onState?.('seed-only', 'VWorld 키 미설정: 공간 Seed만 표시');
   }
 
-  const [geoResponse, floodResponse, floodRiskResponse, reservoirResponse, improvementResponse] = await Promise.all([fetch('/seed/geo.json'), fetch('/seed/flood_traces_seed.geojson'), fetch('/seed/mock_flood_risk_areas.geojson'), fetch('/seed/mock_dangerous_reservoirs.geojson'), fetch('/seed/mock_storm_flood_improvement_districts.geojson')]);
+  // 지도는 시드 geo.json(위험지구 L1 · 행정경계 L3 3곳)만 받는다. 침수흔적은 행안부 실자료를 지역별로
+  // 받고(아래 showOfficialFloodTraces), POC mock 시드(침수흔적 3건 · 홍수위험지역 · 위험저수지 ·
+  // 풍수해개선지구)는 2026-08-19 지도에서 뺐다 — 실자료가 들어온 자리에 mock 이 같이 보이면
+  // 어느 것이 진짜인지 화면이 말하지 못한다. 시드 파일·API·계약은 T3Q 연계 자리라 그대로 둔다.
+  const geoResponse = await fetch('/seed/geo.json');
   if (!geoResponse.ok) throw new Error(`GeoJSON 로드 실패: ${geoResponse.status}`);
   const raw = new GeoJSON().readFeatures(await geoResponse.json(), { dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857' });
   raw.forEach((feature) => {
@@ -231,17 +225,20 @@ export async function createVWorldMap(target: HTMLElement, adminCode: string, on
     return Boolean(extent);
   }
   // 행안부 침수흔적도(실자료)는 시군구별 파일(FLOOD_TRACE_{코드})이라 지역이 바뀔 때 받아 침수흔적
-  // 소스에 얹는다. mock 시드 3건은 그대로 두고 실자료만 지역에 따라 갈아 끼운다 — 두 자료는
-  // data_status(mock/actual)로 갈린다. 파일이 없는 시군구(184곳 밖)는 조용히 넘어간다.
-  const officialFloodLoaded = new Set<string>();
+  // 소스에 얹는다. 파일이 없는 시군구(184곳 밖)는 조용히 넘어간다 — 레이어가 비어 있는 것이 맞다.
+  {
+    const source = new VectorSource();
+    const layer = new VectorLayer({ properties: { layerId: 'L-FLOOD-TRACE' }, source, visible: false, style: (feature) => styleFor(feature, styleContext()) });
+    sources.set('L-FLOOD-TRACE', source);
+    vectors.set('L-FLOOD-TRACE', layer);
+    mapLayers.push(layer);
+  }
   let officialFloodRequest = 0;
   async function showOfficialFloodTraces(code: string) {
     const source = sources.get('L-FLOOD-TRACE');
     if (!source) return;
     const request = ++officialFloodRequest;
-    // 이전 지역의 실자료를 걷어낸다(mock 시드는 남긴다).
-    source.getFeatures().filter((feature) => feature.get('data_status') === 'actual').forEach((feature) => source.removeFeature(feature));
-    officialFloodLoaded.clear();
+    source.clear();
     try {
       const response = await fetch(dataUrl(`/reference/flood/FLOOD_TRACE_${code}.geojson`), { cache: 'force-cache' });
       if (!response.ok) return;
@@ -253,28 +250,9 @@ export async function createVWorldMap(target: HTMLElement, adminCode: string, on
         if (id) feature.setId(String(id));
       });
       source.addFeatures(features);
-      officialFloodLoaded.add(code);
-    } catch { /* 자료 없음 · 네트워크 실패는 화면 오류가 아니다. mock 시드로 남는다. */ }
-  }
-  if (floodResponse.ok) {
-    const floodFeatures = new GeoJSON().readFeatures(await floodResponse.json(), { dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857' });
-    floodFeatures.forEach((feature) => {
-      feature.set('layer', 'FLOOD_TRACE');
-      const id = feature.get('trace_id') ?? feature.get('id');
-      if (id) feature.setId(String(id));
-    });
-    const source = new VectorSource({ features: floodFeatures });
-    const layer = new VectorLayer({ properties: { layerId: 'L-FLOOD-TRACE' }, source, visible: false, style: (feature) => styleFor(feature, styleContext()) });
-    sources.set('L-FLOOD-TRACE', source);
-    vectors.set('L-FLOOD-TRACE', layer);
-    mapLayers.push(layer);
+    } catch { /* 자료 없음 · 네트워크 실패는 화면 오류가 아니다. 레이어가 비어 있다. */ }
   }
 
-  const mockLayerResponses:Array<[string,Response]>=[
-    ['L-FLOOD-RISK-AREA',floodRiskResponse],
-    ['L-DANGEROUS-RESERVOIR',reservoirResponse],
-    ['L-STORM-FLOOD-IMPROVEMENT',improvementResponse],
-  ];
   // 전국 관측소(수위·강수량). 시범서비스 대상은 전국이고 검증만 3개 지역이므로
   // 지역별로 자르지 않고 전국 파일 하나를 쓴다. 기본은 꺼져 있고, OpenLayers 는
   // url 소스를 **레이어가 처음 그려질 때** 받으므로 켜기 전에는 요청이 나가지 않는다.
@@ -290,14 +268,6 @@ export async function createVWorldMap(target: HTMLElement, adminCode: string, on
     mapLayers.push(layer);
   }
 
-  for(const [layerId,response] of mockLayerResponses){
-    if(!response.ok) continue;
-    const features=new GeoJSON().readFeatures(await response.json(),{dataProjection:'EPSG:4326',featureProjection:'EPSG:3857'});
-    features.forEach(feature=>{feature.set('layer',layerId);feature.set('provisional',true);const id=feature.get('feature_id')??feature.get('id');if(id)feature.setId(String(id));});
-    const source=new VectorSource({features});
-    const layer=new VectorLayer({properties:{layerId},source,visible:false,style:(feature)=>styleFor(feature,styleContext())});
-    sources.set(layerId,source);vectors.set(layerId,layer);mapLayers.push(layer);
-  }
 
   const center = SEED_CENTERS[dataCodeOfApp(adminCode)] ?? SEED_CENTERS[DEFAULT_MAP_REGION] ?? DEFAULT_CENTER;
   const map = new OlMap({ target, layers: mapLayers, view: new View({ center: fromLonLat(center), zoom: 11 }), controls: [] });

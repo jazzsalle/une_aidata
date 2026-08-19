@@ -103,24 +103,10 @@ export const SEMANTIC_ALIGNMENT_NOTE: Record<RiverSemantic, string> = {
 // 벗어났고, 같은 지점에서 국가기본도 실폭하천은 물가선을 그대로 따라갔다.
 // 두 자료의 정점 거리는 요천 중앙값 11.7 m · 안양천 13.1 m 였다.
 export const RIVER_LAYER_SOURCES: RiverLayerSource[] = [
-  {
-    id: 'vworld-wms-wkmstrm',
-    label: '실폭하천 (VWorld WMS 직결)',
-    semantic: 'channel',
-    kind: 'wms',
-    status: 'unverified',
-    sourceOrg: '한강홍수통제소 / VWorld',
-    url: 'https://api.vworld.kr/req/wms',
-    layerName: 'lt_c_wkmstrm',
-    styleName: 'lt_c_wkmstrm',
-    projection: 'EPSG:3857',
-    requiresVWorldKey: true,
-    defaultVisible: false,
-    style: { color: '#d81b60', satelliteColor: '#ff2d95', width: 2, dash: [6, 4] },
-    geojson: { property: 'layer', value: 'L2' },
-    // 서버 응답 자체는 정상(HTTP 200, image/png)이지만 브라우저에서는 쓸 수 없다.
-    note: 'VWorld WMS 는 Access-Control-Allow-Origin 을 보내지 않아(WMTS 는 보낸다) OpenLayers 10 의 fetch 기반 이미지 로더에서 ORB 로 차단된다. 키·등록도메인 문제가 아니라 VWorld 서버 설정 문제다. 서버측 프록시를 두면 우회되지만, 렌더되는 형상이 seed-wkmstrm 과 동일하므로 정합 개선 효과는 없다. DOMAIN 은 등록 서비스 URL 이어야 하며 localhost 는 거절된다(VITE_VWORLD_SERVICE_DOMAIN 참고).',
-  },
+  // 'vworld-wms-wkmstrm'(실폭하천 VWorld WMS 직결)은 2026-08-19 목록에서 뺐다. VWorld WMS 가
+  // Access-Control-Allow-Origin 을 보내지 않아 브라우저에서 쓸 수 없고(ORB 차단 · 서버 프록시로
+  // 우회해도 형상이 seed-wkmstrm 과 같아 정합 개선이 없다), 국가기본도 실폭하천이 그 자리를 맡는다.
+  // kind='wms' 처리 코드는 남겨 둔다 — 다른 WMS 소스가 들어올 수 있다.
   {
     id: 'ngii-realwidth',
     label: '실폭하천 (국가기본도)',
