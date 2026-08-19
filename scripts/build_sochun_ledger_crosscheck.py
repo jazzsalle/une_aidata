@@ -3,10 +3,10 @@
     입력  GIS_data/소하천 전체 목록/소하천대장_20260814_좌표추가.xlsx   (행안부 NDMS 사업단)
           GIS_data/소하천_소하천구역(연속주제)+브이월드/LSMD_CONT_UJ301_{시도}.zip (17개 시도)
           data/reference/sgg_code_map.json                    (있으면 정본, 없으면 아래 파생표)
-    출력  build/sochun/crosscheck_rows.csv        목록 한 행 = 대조표 한 행
-          build/sochun/crosscheck_summary.csv     시군구별 요약
-          build/sochun/unmatched_shp.csv          목록에 대응이 없는 SHP 쪽
-          build/sochun/crosscheck_report.md       docs/32 가 인용하는 수치 표 (생성물)
+    출력  build/sochun/소하천_대조표_전체.csv        목록 한 행 = 대조표 한 행. **매핑 정본**
+          build/sochun/소하천_대조표_시군구요약.csv   시군구별 요약
+          build/sochun/소하천_주제도_미대응.csv       목록에 대응이 없는 주제도 쪽
+          build/sochun/소하천_대조_결과보고.md        docs/32 가 인용하는 수치 표 (생성물)
           build/sochun/sgg_code_map_derived.json  정본이 없을 때 쓴 파생 코드표
 
 **이 산출물은 검증용이고 앱에 반입하지 않는다.** `npm run data:rivers` 파이프라인에 넣지 않는 이유다.
@@ -47,6 +47,12 @@ LEDGER = SOCHUN_LEDGER
 SRC_DIR = SOCHUN_ZONE_DIR
 OFFICIAL_MAP = REPO / 'data' / 'reference' / 'sgg_code_map.json'
 OUT = REPO / 'build' / 'sochun'
+# 데이터 구축측·T3Q 에 파일 그대로 넘기는 산출물이다. 받는 쪽이 열어 보고 바로 읽을 수 있도록
+# 파일명과 열이름을 한글로 둔다.
+ROWS_CSV = '소하천_대조표_전체.csv'
+SUMMARY_CSV = '소하천_대조표_시군구요약.csv'
+UNMATCHED_CSV = '소하천_주제도_미대응.csv'
+REPORT_MD = '소하천_대조_결과보고.md'
 
 TO4326 = pyproj.Transformer.from_crs(SRC_CRS, 'EPSG:4326', always_xy=True).transform
 
@@ -319,7 +325,7 @@ def write_report(path: Path, *, out_rows: list, polygons: list, status_count: Co
     lines += ['', f'이름을 얻은 폴리곤 **{named:,} / {len(polygons):,} '
                   f'({named / len(polygons) * 100:.1f}%)**', '']
 
-    held = Counter(row['shp_name_source'] for row in out_rows if row['shp_status'] == '보유')
+    held = Counter(row['주제도_이름출처'] for row in out_rows if row['대조결과'] == '보유')
     lines += ['## `보유` 행의 이름 출처', '', '| 출처 | 행 |', '|---|---:|']
     for key in ('REMARK', 'BOTH', 'ALIAS'):
         lines.append(f'| `{key}` | {held[key]:,} |')
@@ -328,11 +334,11 @@ def write_report(path: Path, *, out_rows: list, polygons: list, status_count: Co
     unmatched_polygons = sum(count for _, count in unmatched_names)
     nameless_polygons = sum(nameless_by_code.values())
     lines += [
-        '## `unmatched_shp.csv` — SHP 쪽에서 목록에 닿지 못한 것',
+        f'## `{UNMATCHED_CSV}` — 주제도 쪽에서 목록에 닿지 못한 것',
         '',
         '판정 단위는 **시군구 + 하천명** 이다. 전국 단위가 아니다.',
         '',
-        '| kind | 행 | 폴리곤 |',
+        '| 구분 | 행 | 폴리곤 |',
         '|---|---:|---:|',
         f'| `목록에 없는 하천명` | {len(unmatched_names):,} | {unmatched_polygons:,} |',
         f'| `이름 없는 폴리곤` | {len(nameless_by_code):,} (시군구코드 단위) | {nameless_polygons:,} |',
@@ -443,27 +449,28 @@ def main() -> int:
 
         sources = sorted({p['name_source'] for p in polys if p['name_source']})
         out_rows.append({
-            'sido': sido, 'sgg': sgg, 'sgg_code': ';'.join(sorted(home_codes)),
-            'stream_name': row.get('name', ''), 'stream_name_norm': name,
-            'sugye': row.get('sugye', ''), 'length_m': row.get('length_m', ''),
-            'basin_km2': row.get('basin_km2', ''), 'start_addr': (row.get('start_addr') or '').strip(),
-            'shp_status': status,
-            'shp_polygon_count': len(polys),
-            'shp_mnum_list': ';'.join(p['mnum'] for p in polys[:5]),
-            'shp_name_source': 'BOTH' if len(sources) > 1 else (sources[0] if sources else ''),
-            'homonym_warning': 'Y' if len(sgg_per_name[(sido, name)]) > 1 else '',
-            'match_basis': basis or '-',
+            # 앞의 아홉 칸은 NDMS 목록에서 온 것, 뒤의 여섯 칸은 대조로 붙인 것이다.
+            '시도': sido, '시군구': sgg, '시군구코드': ';'.join(sorted(home_codes)),
+            '소하천명': row.get('name', ''), '소하천명_정규화': name,
+            '수계': row.get('sugye', ''), '연장_m': row.get('length_m', ''),
+            '유역면적_km2': row.get('basin_km2', ''), '기점주소': (row.get('start_addr') or '').strip(),
+            '대조결과': status,
+            '주제도_폴리곤수': len(polys),
+            '주제도_고시번호': ';'.join(p['mnum'] for p in polys[:5]),
+            '주제도_이름출처': 'BOTH' if len(sources) > 1 else (sources[0] if sources else ''),
+            '동명주의': 'Y' if len(sgg_per_name[(sido, name)]) > 1 else '',
+            '대조근거': basis or '-',
         })
 
-    with (OUT / 'crosscheck_rows.csv').open('w', encoding='utf-8-sig', newline='') as handle:
+    with (OUT / ROWS_CSV).open('w', encoding='utf-8-sig', newline='') as handle:
         writer = csv.DictWriter(handle, fieldnames=list(out_rows[0].keys()))
         writer.writeheader()
         writer.writerows(out_rows)
 
-    with (OUT / 'crosscheck_summary.csv').open('w', encoding='utf-8-sig', newline='') as handle:
+    with (OUT / SUMMARY_CSV).open('w', encoding='utf-8-sig', newline='') as handle:
         writer = csv.writer(handle)
-        writer.writerow(['sido', 'sgg', 'sgg_code', '목록개소', '보유', '경계걸침_후보', '미보유', '코드미상',
-                         'SHP하천수', 'SHP무명폴리곤'])
+        writer.writerow(['시도', '시군구', '시군구코드', '목록개소', '보유', '경계걸침_후보', '미보유',
+                         '코드미상', '주제도_하천수', '주제도_무명폴리곤'])
         for (sido, sgg), counts in sorted(summary.items(), key=lambda kv: (kv[0][0] or '', kv[0][1] or '')):
             codes = codes_by_sgg.get((sido, sgg), set())
             writer.writerow([sido, sgg, ';'.join(sorted(codes)), sum(counts.values()),
@@ -475,9 +482,9 @@ def main() -> int:
     code_to_sgg = {code: (sido, sgg)
                    for (sido, sgg), codes in codes_by_sgg.items() for code in codes}
     unmatched_names = []
-    with (OUT / 'unmatched_shp.csv').open('w', encoding='utf-8-sig', newline='') as handle:
+    with (OUT / UNMATCHED_CSV).open('w', encoding='utf-8-sig', newline='') as handle:
         writer = csv.writer(handle)
-        writer.writerow(['sgg_code', 'sido', 'sgg', 'kind', 'stream_name', 'polygon_count', 'sample_mnum'])
+        writer.writerow(['시군구코드', '시도', '시군구', '구분', '소하천명', '폴리곤수', '고시번호_예시'])
         for (code, name), items in sorted(polys_by_code_name.items()):
             if (code, name) in matched_pairs:
                 continue
@@ -496,7 +503,7 @@ def main() -> int:
     print(f'  SHP 이름 회수 {named:,} / {len(polygons):,} ({named / len(polygons) * 100:.1f}%)'
           f' · 시군구+명칭 고유 {len(polys_by_code_name):,}')
 
-    write_report(OUT / 'crosscheck_report.md', out_rows=out_rows, polygons=polygons,
+    write_report(OUT / REPORT_MD, out_rows=out_rows, polygons=polygons,
                  status_count=status_count, summary=summary,
                  unmatched_names=unmatched_names, nameless_by_code=nameless_by_code)
 
@@ -506,15 +513,14 @@ def main() -> int:
         problems.append(f'상태 합계 {sum(status_count.values())} != 목록 {total}')
     if status_count['보유'] / total < 0.70:
         problems.append(f'보유 비율 {status_count["보유"] / total:.1%} 가 70% 미만이다 - 코드표를 확인하라.')
-    for name in ('crosscheck_rows.csv', 'crosscheck_summary.csv', 'unmatched_shp.csv',
-                 'crosscheck_report.md'):
+    for name in (ROWS_CSV, SUMMARY_CSV, UNMATCHED_CSV, REPORT_MD):
         if not (OUT / name).exists():
             problems.append(f'{name} 가 생성되지 않았다.')
     if problems:
         for problem in problems:
             print(f'FAIL {problem}')
         return 1
-    print('PASS 소하천 대조표: build/sochun/ 에 CSV 3개 + crosscheck_report.md')
+    print(f'PASS 소하천 대조표: build/sochun/ 에 CSV 3개 + {REPORT_MD}')
     return 0
 
 
