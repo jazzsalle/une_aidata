@@ -79,10 +79,11 @@ function catalogLabels(payload: { rivers?: Array<Record<string, unknown>> }): Fe
     });
 }
 
-/** 이름별로 가장 큰 조각 하나에만 라벨 표시를 남긴다. 같은 이름이 여러 번 찍히는 것을 막는다. */
-function markLabelAnchors(features: Feature[]): void {
+/** 소하천구역 폴리곤에서 이름별 라벨 점을 뽑는다. 이름마다 가장 큰 조각의 내부점 1개다 —
+ *  한 하천이 평균 5.7조각으로 들어오므로 조각마다 찍으면 같은 이름이 겹친다. */
+function sochunLabels(polygons: Feature[]): Feature[] {
   const largest = new Map<string, { feature: Feature; area: number }>();
-  for (const feature of features) {
+  for (const feature of polygons) {
     const name = String(feature.get('stream_name') ?? '');
     if (!name) continue;
     const geometry = feature.getGeometry() as { getArea?: () => number } | null;
@@ -90,7 +91,24 @@ function markLabelAnchors(features: Feature[]): void {
     const current = largest.get(name);
     if (!current || area > current.area) largest.set(name, { feature, area });
   }
-  for (const { feature } of largest.values()) feature.set('label_anchor', true, true);
+  const labels: Feature[] = [];
+  for (const [name, { feature }] of largest) {
+    const geometry = feature.getGeometry() as { getInteriorPoint?: () => Point; getInteriorPoints?: () => { getPoint?: (i: number) => Point } } | null;
+    const point = geometry?.getInteriorPoint?.() ?? geometry?.getInteriorPoints?.()?.getPoint?.(0);
+    if (!point) continue;
+    const label = new Feature_({ geometry: new Point(point.getCoordinates().slice(0, 2)) });
+    label.setId(`SOCHUNNAME:${String(feature.get('admin_code') ?? '')}:${name}`);
+    label.setProperties({
+      river_name: name,
+      river_class: '소하천',
+      admin_code: feature.get('admin_code'),
+      label_point_kind: 'derived_interior',
+      // 대표 조각을 가리켜 두면 클릭 상세가 그 조각의 속성으로 이어질 수 있다.
+      source_feature_id: feature.getId(),
+    }, true);
+    labels.push(label as unknown as Feature);
+  }
+  return labels;
 }
 
 function styleForRiver(source: RiverLayerSource, feature: FeatureLike, context: StyleContext, resolution = 0, showSochun = true) {
@@ -119,24 +137,7 @@ function styleForRiver(source: RiverLayerSource, feature: FeatureLike, context: 
     const ink = active ? tone.activeLine : (context.satellite ? satelliteColor : color);
     return labelStyle(text, ink, tone.casing, ink);
   }
-  // 소하천구역은 한 하천이 여러 조각으로 들어온다(전국 평균 5.7조각). 조각마다 이름을 찍으면
-  // 같은 이름이 수십 번 겹치므로, 이름별 대표 조각 하나에만 폴리곤 내부점 위로 글자를 얹는다.
-  if (source.semantic === 'sochun' && feature.get('label_anchor') && resolution <= labelMaxResolution('소하천')) {
-    const text = String(feature.get('stream_name') ?? '');
-    const geometry = feature.getGeometry() as { getInteriorPoint?: () => unknown; getInteriorPoints?: () => unknown } | null;
-    const anchor = geometry?.getInteriorPoint?.() ?? geometry?.getInteriorPoints?.();
-    const ink = active ? tone.activeLine : (context.satellite ? satelliteColor : color);
-    const [label] = labelStyle(text, ink, tone.casing, ink);
-    const [shape] = active
-      ? lineStyle(tone.activeLine, tone.activeCasing, width + 1.6, tone.activeFill, dash)
-      : lineStyle(context.satellite ? satelliteColor : color, tone.casing, width, context.satellite ? satelliteFill : fill, dash);
-    if (text && anchor && label && shape) {
-      // 라벨은 폴리곤 안쪽 한 점에만 얹는다. 점 표식(circle)은 빼고 글자만 남긴다.
-      label.setGeometry(anchor as never);
-      label.setImage(null as never);
-      return [shape, label];
-    }
-  }
+  // 소하천 이름은 소하천명 소스(sochun-label)가 따로 찍는다. 여기서는 폴리곤만 그린다.
   if (active) return lineStyle(tone.activeLine, tone.activeCasing, width + 1.6, tone.activeFill, dash);
   return lineStyle(context.satellite ? satelliteColor : color, tone.casing, width, context.satellite ? satelliteFill : fill, dash);
 }
@@ -251,7 +252,7 @@ export function createRiverLayers({ features, styleContext, key, adminCode }: Cr
       source: new VectorSource(),
       visible,
       // 라벨은 겹치면 서로를 못 읽게 한다. declutter 로 겹치는 글자를 OpenLayers 가 감춘다.
-      declutter: source.semantic === 'label' || source.semantic === 'sochun',
+      declutter: source.semantic === 'label',
       style: (feature, resolution) => styleForRiver(source, feature, styleContext(), resolution, Boolean(wanted.get(SOCHUN_SOURCE_ID))),
     });
     vectorLayers.set(source.id, layer);
@@ -287,13 +288,14 @@ export function createRiverLayers({ features, styleContext, key, adminCode }: Cr
       const response = await fetch(riverDataUrl(template, code), { cache: 'force-cache' });
       if (!response.ok) throw new Error(String(response.status));
       const payload = await response.json();
-      const parsed = source.semantic === 'label'
-        ? catalogLabels(payload)
-        : format.readFeatures(payload, {
-            dataProjection: 'EPSG:4326',
-            featureProjection: 'EPSG:3857',
-          }) as Feature[];
-      if (source.semantic === 'sochun') markLabelAnchors(parsed);
+      const parsed = source.id === 'sochun-label'
+        ? sochunLabels(format.readFeatures(payload, { dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857' }) as Feature[])
+        : source.semantic === 'label'
+          ? catalogLabels(payload)
+          : format.readFeatures(payload, {
+              dataProjection: 'EPSG:4326',
+              featureProjection: 'EPSG:3857',
+            }) as Feature[];
       // 받아 둔 것은 지역이 바뀌었어도 캐시에 남긴다. 되돌아올 때 다시 받지 않는다.
       cache.set(cacheKey, parsed);
       // 큰 파일을 받는 사이 사용자가 지역을 바꿨을 수 있다.
