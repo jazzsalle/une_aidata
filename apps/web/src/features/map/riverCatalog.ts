@@ -21,13 +21,15 @@ interface Catalog {
   rivers?: NetworkRiver[];
 }
 
+import { dataUrl } from './dataUrl';
+
 const CATALOG_URL = '/reference/rivers/river_network_catalog.json';
 let pending: Promise<NetworkRiver[]> | null = null;
 
 /** 한 번만 받는다. 실패한 약속은 버려 다시 시도할 수 있게 한다. */
 export function loadNetworkRivers(): Promise<NetworkRiver[]> {
   if (!pending) {
-    pending = fetch(CATALOG_URL, { cache: 'force-cache' })
+    pending = fetch(dataUrl(CATALOG_URL), { cache: 'force-cache' })
       .then((response) => {
         if (!response.ok) throw new Error(String(response.status));
         return response.json() as Promise<Catalog>;
