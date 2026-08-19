@@ -21,8 +21,8 @@ export interface RiverSearchEntry {
   feature_id: string;
   /** 화면 이동 전용 좌표(경도, 위도). 없으면 지도로 이동할 수 없다. */
   nav: [number, number] | null;
-  /** actual: 원자료 좌표 · extent: 형상 bbox 중심(자료값 아님) · none: 이동 불가 */
-  nav_kind: 'actual' | 'extent' | 'none';
+  /** actual: 원자료 좌표 · interior: 형상 내부점(파생) · extent: 형상 bbox 중심(자료값 아님) · none: 이동 불가 */
+  nav_kind: 'actual' | 'interior' | 'extent' | 'none';
   detail: string;
   no_coordinate_reason?: string;
 }
