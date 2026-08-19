@@ -200,6 +200,42 @@ def check_admin(path: Path, features: list) -> None:
             fail(f'{rel}: geometry 가 MultiPolygon 이 아니다')
 
 
+def check_flood(path: Path, features: list) -> None:
+    """행안부 침수흔적도 파일. 실자료라는 표시(data_status=actual · official_data=true · 출처·수집시각)가
+    빠지면 mock 시드와 섞여 화면이 실자료를 mock 으로, mock 을 실자료로 말하게 된다."""
+    rel = path.relative_to(REPO)
+    match = re.match(r'^FLOOD_TRACE_(\d{5})$', path.stem)
+    if not match:
+        fail(f'{rel}: 파일명이 FLOOD_TRACE_{{시군구코드}} 형식이 아니다')
+        return
+    code = match.group(1)
+    if code not in TARGET_ADMIN:
+        fail(f'{rel}: 코드표에 없는 시군구코드 {code}')
+        return
+    if code in ALIAS_ADMIN:
+        fail(f'{rel}: 대표 코드가 아닌 행정코드다. {ALIAS_ADMIN[code]} 로 맞춰야 지역 선택과 맞는다')
+        return
+    ids: set[str] = set()
+    for feature in features:
+        props = feature.get('properties') or {}
+        fid = str(feature.get('id') or props.get('id') or '')
+        if not fid:
+            fail(f'{rel}: id 없는 피처'); break
+        if fid in ids:
+            fail(f'{rel}: id 중복 {fid}'); break
+        ids.add(fid)
+        if str(props.get('admin_code') or '') != code:
+            fail(f'{rel}: admin_code {props.get("admin_code")} 가 파일명 코드 {code} 와 다르다'); break
+        if props.get('data_status') != 'actual' or props.get('official_data') is not True:
+            fail(f'{rel}: 실자료 표시(data_status=actual · official_data=true)가 없다 {fid}'); break
+        if props.get('is_prediction') is not False:
+            fail(f'{rel}: is_prediction=false 가 없다 — 침수흔적은 과거 기록이지 예측이 아니다 {fid}'); break
+        if not props.get('source') or not props.get('collected_at'):
+            fail(f'{rel}: 출처·수집시각이 없다 {fid}'); break
+        if props.get('layer') != 'FLOOD_TRACE':
+            fail(f'{rel}: layer 가 FLOOD_TRACE 가 아니다 {fid}'); break
+
+
 def check_stations(path: Path, features: list) -> None:
     rel = path.relative_to(REPO)
     seen: set[str] = set()
@@ -264,6 +300,8 @@ def main() -> int:
             check_stations(path, features)
         elif path.parent.name == 'admin':
             check_admin(path, features)
+        elif path.parent.name == 'flood':
+            check_flood(path, features)
 
     print(f'참조 GeoJSON: {len(paths)}개 파일 · 피처 {total:,}건')
     if failures:

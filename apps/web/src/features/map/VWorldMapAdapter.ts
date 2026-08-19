@@ -111,6 +111,11 @@ function styleFor(feature: FeatureLike, context: StyleContext) {
   if (layer === 'L1' || feature.getGeometry()?.getType() === 'Point') {
     return pointStyle(active ? 10 : 6, active ? activeLine : sat ? '#ffea00' : 'rgba(220,76,70,.9)', active ? activeCasing : casing, '#ffffff');
   }
+  if (layer === 'FLOOD_TRACE' && feature.get('data_status') === 'actual') {
+    // 행안부 침수흔적도(실자료). POC mock 시드와 한눈에 갈리도록 실선·다른 색으로 그린다.
+    // 시군구에 수천 건이 깔리는 곳(영등포 3,463)이 있어 채움을 옅게 둔다.
+    return lineStyle(active ? activeLine : sat ? '#80deea' : '#00838f', active ? activeCasing : casing, active ? 3.5 : 1.4, active ? (sat ? 'rgba(255,45,149,.28)' : 'rgba(255,152,0,.25)') : sat ? 'rgba(128,222,234,.28)' : 'rgba(0,131,143,.22)');
+  }
   if (layer === 'FLOOD_TRACE' || layer === 'L-FLOOD-RISK-AREA') {
     return lineStyle(active ? activeLine : sat ? '#ff9e2c' : '#1e88e5', active ? activeCasing : casing, active ? 4 : 2.4, active ? (sat ? 'rgba(255,45,149,.28)' : 'rgba(255,152,0,.25)') : sat ? 'rgba(255,158,44,.26)' : 'rgba(30,136,229,.22)', [8, 4]);
   }
@@ -216,6 +221,32 @@ export async function createVWorldMap(target: HTMLElement, adminCode: string, on
     }, null);
     if (extent) map.getView().fit(extent, { padding: [40, 40, 40, 40], maxZoom: 14, duration: 350 });
     return Boolean(extent);
+  }
+  // 행안부 침수흔적도(실자료)는 시군구별 파일(FLOOD_TRACE_{코드})이라 지역이 바뀔 때 받아 침수흔적
+  // 소스에 얹는다. mock 시드 3건은 그대로 두고 실자료만 지역에 따라 갈아 끼운다 — 두 자료는
+  // data_status(mock/actual)로 갈린다. 파일이 없는 시군구(184곳 밖)는 조용히 넘어간다.
+  const officialFloodLoaded = new Set<string>();
+  let officialFloodRequest = 0;
+  async function showOfficialFloodTraces(code: string) {
+    const source = sources.get('L-FLOOD-TRACE');
+    if (!source) return;
+    const request = ++officialFloodRequest;
+    // 이전 지역의 실자료를 걷어낸다(mock 시드는 남긴다).
+    source.getFeatures().filter((feature) => feature.get('data_status') === 'actual').forEach((feature) => source.removeFeature(feature));
+    officialFloodLoaded.clear();
+    try {
+      const response = await fetch(`/reference/flood/FLOOD_TRACE_${code}.geojson`, { cache: 'force-cache' });
+      if (!response.ok) return;
+      const features = new GeoJSON().readFeatures(await response.json(), { dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857' });
+      if (request !== officialFloodRequest) return;
+      features.forEach((feature) => {
+        feature.set('layer', 'FLOOD_TRACE');
+        const id = feature.get('id');
+        if (id) feature.setId(String(id));
+      });
+      source.addFeatures(features);
+      officialFloodLoaded.add(code);
+    } catch { /* 자료 없음 · 네트워크 실패는 화면 오류가 아니다. mock 시드로 남는다. */ }
   }
   if (floodResponse.ok) {
     const floodFeatures = new GeoJSON().readFeatures(await floodResponse.json(), { dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857' });
@@ -396,6 +427,7 @@ export async function createVWorldMap(target: HTMLElement, adminCode: string, on
     setRegion(code, moveTo) {
       // 하천자료는 시군구별 파일이라 지역이 바뀌면 자료도 바꿔야 한다.
       rivers.setRegion(code);
+      void showOfficialFloodTraces(code);
       // 시드 3곳은 예전처럼 중심·줌 11 로 간다(그 화면에 맞춰 시연이 짜여 있다). 그 밖은 경계를
       // 받아 그 범위에 맞춘다 — 여기서 먼저 animate 를 걸면 뒤따르는 fit 과 서로 끊어 어느 쪽도
       // 끝까지 가지 못한다. 경계를 못 받으면(파일 없음) 그때 중심으로 간다.
