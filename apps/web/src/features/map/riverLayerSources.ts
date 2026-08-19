@@ -153,7 +153,10 @@ export const RIVER_LAYER_SOURCES: RiverLayerSource[] = [
     styleName: '',
     projection: 'EPSG:3857',
     requiresVWorldKey: false,
-    defaultVisible: false,
+    // 지역을 고르면 국가·지방하천이 다 보여야 한다. 실폭만 켜 두면 하천 폭이 좁은 구간은
+    // 실폭 폴리곤이 없어서(중심선에만 있다) 그 하천이 지도에서 사라진다 — 경계가 그 자리를 메운다.
+    // 이 소스의 소하천 등급 폴리곤은 소하천구역 소스가 켜졌을 때만 그린다.
+    defaultVisible: true,
     style: { color: '#7b1fa2', satelliteColor: '#d18cff', width: 2, fill: 'rgba(123,31,162,.08)', satelliteFill: 'rgba(209,140,255,.18)', dash: [5, 4] },
     dataUrlTemplate: `/reference/rivers/TN_RIVER_BNDRY_${RIVER_DATA_URL_TOKEN}.geojson`,
     datasetShort: '국가기본도',
@@ -191,13 +194,38 @@ export const RIVER_LAYER_SOURCES: RiverLayerSource[] = [
     styleName: '',
     projection: 'EPSG:3857',
     requiresVWorldKey: false,
+    // 기본은 국가·지방하천만 보인다. 이 소스를 켜면 소하천구역과 함께, 국가기본도 경계·실폭에서
+    // 등급이 소하천인 폴리곤(경계 90,556 · 실폭 21,341)도 같이 나타난다 — 소하천 스위치 하나다.
+    // 시군구 하나에 소하천이 수백~천여 조각이라 기본으로 켜 두면 국가·지방하천이 묻힌다.
     defaultVisible: false,
     style: { color: '#2e7d32', satelliteColor: '#69f0ae', width: 1.8, fill: 'rgba(46,125,50,.12)', satelliteFill: 'rgba(105,240,174,.22)' },
     dataUrlTemplate: `/reference/rivers/LSMD_SOCHUN_${RIVER_DATA_URL_TOKEN}.geojson`,
     datasetShort: '소하천구역',
     // 하천명은 지자체마다 ALIAS/REMARK 중 어디에 들어 있는지가 다르다. 전처리가 읽어낸 것만 stream_name 으로 붙어 있고
     // 읽히지 않은 건에는 아예 없다 — 이름을 추정해 채우지 않았다.
-    note: '소하천정비법상 고시 소하천구역(폴리곤) 전국 116,758건 · 시군구 188개. 원본 EPSG:5186 을 4326 으로 재투영하고 2 m 단순화했다. 하천명(stream_name)은 원문 ALIAS/REMARK 에서 읽힌 건에만 있다(95.5%). 이름은 하천마다 가장 큰 조각 하나에만 찍는다 — 한 하천이 평균 5.7조각으로 들어오기 때문이다.',
+    note: '소하천정비법상 고시 소하천구역(폴리곤) 전국 116,758건 · 시군구 188개. 원본 EPSG:5186 을 4326 으로 재투영하고 2 m 단순화했다. 하천명(stream_name)은 원문 ALIAS/REMARK 에서 읽힌 건에만 있다(95.5%). 이름은 소하천명 레이어가 따로 찍는다.',
+  },
+  {
+    id: 'sochun-label',
+    label: '소하천명',
+    semantic: 'label',
+    kind: 'geojson',
+    status: 'active',
+    sourceOrg: '국토교통부 소하천구역(연속주제) LSMD_CONT_UJ301 의 하천명',
+    url: '',
+    layerName: '',
+    styleName: '',
+    projection: 'EPSG:3857',
+    requiresVWorldKey: false,
+    // 소하천 형상(소하천구역)과 따로 켜고 끈다. 형상 없이 이름만 보고 싶을 때, 형상만 보고 싶을 때가
+    // 다 있어서다. 기본은 꺼 둔다 — 시군구 하나에 소하천이 수백 개라 이름이 화면을 덮는다.
+    defaultVisible: false,
+    // 국가·지방하천명(진한 파랑)과 구분되는 초록 계열. 소하천구역 폴리곤 색과 같은 계열이라 짝이 보인다.
+    style: { color: '#1b5e20', satelliteColor: '#b9f6ca', width: 1 },
+    // 소하천구역 파일을 그대로 읽어 이름별 대표 조각의 내부점만 뽑는다. force-cache 라 파일은 한 번만 받는다.
+    dataUrlTemplate: `/reference/rivers/LSMD_SOCHUN_${RIVER_DATA_URL_TOKEN}.geojson`,
+    datasetShort: '소하천명',
+    note: '소하천구역의 하천명(stream_name)을 이름마다 가장 큰 조각의 내부점 1개에 찍는다. 한 하천이 평균 5.7조각으로 들어오므로 조각마다 찍으면 같은 이름이 겹친다. 소하천구역 폴리곤 형상과 별도로 켜고 끈다.',
   },
   {
     id: 'river-zone',

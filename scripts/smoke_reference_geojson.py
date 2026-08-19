@@ -169,6 +169,37 @@ def check_rivers(path: Path, features: list, river_ids: set[str]) -> None:
         fail(f'{rel}: 하천명 대표점이 중복이다(하천당 1개여야 한다) — {duplicated[:5]}')
 
 
+def check_admin(path: Path, features: list) -> None:
+    """시군구 경계 파일. 파일 1개 = 시군구 1건이고, 파일명 코드·admin_code·대표코드가 모두 같아야 한다.
+
+    하천 레이어와 같은 코드 규칙을 지켜야 지도가 성남시(41130)를 골랐을 때 경계 파일을 찾는다.
+    """
+    rel = path.relative_to(REPO)
+    match = re.match(r'^SGG_(\d{5})$', path.stem)
+    if not match:
+        fail(f'{rel}: 파일명이 SGG_{{시군구코드}} 형식이 아니다')
+        return
+    code = match.group(1)
+    if code not in TARGET_ADMIN:
+        fail(f'{rel}: 코드표에 없는 시군구코드 {code}')
+        return
+    if code in ALIAS_ADMIN:
+        fail(f'{rel}: 대표 코드가 아닌 행정코드다. {ALIAS_ADMIN[code]} 로 맞춰야 하천 레이어와 함께 뜬다')
+        return
+    if len(features) != 1:
+        fail(f'{rel}: 시군구 경계는 피처 1건이어야 하는데 {len(features)}건이다')
+    for feature in features:
+        props = feature.get('properties') or {}
+        if props.get('layer') != 'L3':
+            fail(f'{rel}: layer 가 L3 가 아니다 ({props.get("layer")})')
+        if str(props.get('admin_code') or '') != code:
+            fail(f'{rel}: admin_code {props.get("admin_code")} 가 파일명 코드 {code} 와 다르다')
+        if props.get('source_kind') != 'derived':
+            fail(f'{rel}: 행정동을 합친 파생 경계인데 source_kind=derived 표시가 없다')
+        if (feature.get('geometry') or {}).get('type') != 'MultiPolygon':
+            fail(f'{rel}: geometry 가 MultiPolygon 이 아니다')
+
+
 def check_stations(path: Path, features: list) -> None:
     rel = path.relative_to(REPO)
     seen: set[str] = set()
@@ -231,6 +262,8 @@ def main() -> int:
             check_rivers(path, features, river_ids)
         elif path.parent.name == 'stations':
             check_stations(path, features)
+        elif path.parent.name == 'admin':
+            check_admin(path, features)
 
     print(f'참조 GeoJSON: {len(paths)}개 파일 · 피처 {total:,}건')
     if failures:

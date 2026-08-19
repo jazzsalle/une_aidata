@@ -180,6 +180,43 @@ export async function createVWorldMap(target: HTMLElement, adminCode: string, on
   }
   const rivers: RiverLayerRegistry = createRiverLayers({ features: raw, styleContext, key, adminCode });
   mapLayers.push(...rivers.layers);
+
+  // 시군구 경계는 시드에 3곳(의왕·구미·남원)만 있다. 그 밖의 시군구는 전국 파일(SGG_{코드})에서
+  // 받아 L3 소스에 넣고, 화면을 그 경계에 맞춘다 — 줌 11 고정으로 두면 종로구는 점 몇 개로,
+  // 홍천군은 화면 밖으로 나간다. 시드 3곳은 시드 경계를 그대로 쓴다(그 경계에 위험지구가 걸려 있다).
+  // 시드 경계의 admin_code 는 앱 코드(남원 45190)인데 지도는 자료 코드(52190)로 지역을 부른다.
+  // 자료 코드로 맞춰 두어야 남원을 골랐을 때 시드 경계를 두고 파일을 또 받지 않는다.
+  const seedBoundaryCodes = new Set(raw.filter((feature) => String(feature.get('layer')) === 'L3').map((feature) => dataCodeOfApp(String(feature.get('admin_code') ?? ''))));
+  const loadedBoundaries = new Set<string>(seedBoundaryCodes);
+  let boundaryRequest = 0;
+  async function showAdminBoundary(code: string): Promise<boolean> {
+    const source = sources.get('L3');
+    if (!source) return false;
+    const request = ++boundaryRequest;
+    if (!loadedBoundaries.has(code)) {
+      try {
+        const response = await fetch(`/reference/admin/SGG_${code}.geojson`);
+        if (!response.ok) return false;
+        const features = new GeoJSON().readFeatures(await response.json(), { dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857' });
+        features.forEach((feature) => { const id = feature.get('id'); if (id) feature.setId(String(id)); });
+        // 늦게 도착한 응답이 이미 다른 지역으로 넘어간 화면을 덮지 않게 한다.
+        if (request !== boundaryRequest) return true;
+        source.addFeatures(features);
+        loadedBoundaries.add(code);
+      } catch { return false; }
+    }
+    const own = source.getFeatures().filter((feature) => dataCodeOfApp(String(feature.get('admin_code') ?? '')) === code);
+    if (!own.length) return false;
+    type Box = [number, number, number, number];
+    const extent = own.reduce<Box | null>((acc, feature) => {
+      const box = feature.getGeometry()?.getExtent() as Box | undefined;
+      if (!box) return acc;
+      if (!acc) return [box[0], box[1], box[2], box[3]];
+      return [Math.min(acc[0], box[0]), Math.min(acc[1], box[1]), Math.max(acc[2], box[2]), Math.max(acc[3], box[3])];
+    }, null);
+    if (extent) map.getView().fit(extent, { padding: [40, 40, 40, 40], maxZoom: 14, duration: 350 });
+    return Boolean(extent);
+  }
   if (floodResponse.ok) {
     const floodFeatures = new GeoJSON().readFeatures(await floodResponse.json(), { dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857' });
     floodFeatures.forEach((feature) => {
@@ -359,8 +396,20 @@ export async function createVWorldMap(target: HTMLElement, adminCode: string, on
     setRegion(code, moveTo) {
       // 하천자료는 시군구별 파일이라 지역이 바뀌면 자료도 바꿔야 한다.
       rivers.setRegion(code);
-      const target = moveTo ?? SEED_CENTERS[code] ?? DEFAULT_CENTER;
-      map.getView().animate({ center: fromLonLat(target), zoom: 11, duration: 350 });
+      // 시드 3곳은 예전처럼 중심·줌 11 로 간다(그 화면에 맞춰 시연이 짜여 있다). 그 밖은 경계를
+      // 받아 그 범위에 맞춘다 — 여기서 먼저 animate 를 걸면 뒤따르는 fit 과 서로 끊어 어느 쪽도
+      // 끝까지 가지 못한다. 경계를 못 받으면(파일 없음) 그때 중심으로 간다.
+      if (seedBoundaryCodes.has(code)) {
+        const target = moveTo ?? SEED_CENTERS[code] ?? DEFAULT_CENTER;
+        map.getView().animate({ center: fromLonLat(target), zoom: 11, duration: 350 });
+        void showAdminBoundary(code);
+        return;
+      }
+      void showAdminBoundary(code).then((fitted) => {
+        if (fitted) return;
+        const target = moveTo ?? SEED_CENTERS[code] ?? DEFAULT_CENTER;
+        map.getView().animate({ center: fromLonLat(target), zoom: 11, duration: 350 });
+      });
     },
     focusLonLat(lonLat, zoom = 15) {
       map.getView().animate({ center: fromLonLat(lonLat), zoom, duration: 350 });
