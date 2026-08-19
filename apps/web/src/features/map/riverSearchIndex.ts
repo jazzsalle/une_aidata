@@ -15,6 +15,8 @@ export interface RiverSearchEntry {
   admin: string;
   /** region: 시군구에 속함 · nationwide: 여러 시군구에 걸쳐 지역에 배정하지 않음 */
   scope: 'region' | 'nationwide';
+  /** nationwide 하천이 지나는 시군구코드 전부. 청계천이 전국에 14개라 이것 없이는 어느 것인지 고를 수 없다. */
+  admins?: string[];
   /** 지도 피처 id. 좌표만 있고 피처가 없는 항목은 빈 문자열이다. */
   feature_id: string;
   /** 화면 이동 전용 좌표(경도, 위도). 없으면 지도로 이동할 수 없다. */
@@ -49,22 +51,33 @@ export function loadRiverSearchIndex(): Promise<RiverSearchEntry[]> {
   return pending;
 }
 
-/** 이름 부분일치. 현재 지역 → 전국 하천 → 나머지 순으로 돌려준다.
- *  다른 지역 결과를 지우지 않는다 — 지역을 잘못 고른 채로 찾는 경우가 실제로 흔하다.
+/** 이 항목이 그 시군구의 것인가. 소하천은 admin, 국가·지방하천은 지나는 시군구(admins)로 본다. */
+export function entryInRegion(entry: RiverSearchEntry, admin: string): boolean {
+  if (!admin) return true;
+  if (entry.admin === admin) return true;
+  return Boolean(entry.admins?.includes(admin));
+}
+
+/** 이름 부분일치. 고른 시군구로 **거른다.** 같은 이름의 하천이 전국에 흔해서(청계천 14개) 정렬만으로는
+ *  어느 것인지 고를 수 없다 — 종로구에서 청계천을 찾았는데 의왕·남원 청계천이 함께 나오면 오류로 읽힌다.
+ *  거른 밖에 몇 건이 더 있는지(`elsewhere`)를 함께 돌려주어 화면이 "다른 지역에 N건" 을 말하고
+ *  전국 검색으로 넘어갈 수 있게 한다. nationwide=true 면 거르지 않고 현재 지역을 앞세운다.
  *  전국이 23,540건이라 상한(limit)을 넘으면 잘리는데, 그 사실을 화면이 말하도록 총 건수도 준다. */
 export function searchRivers(
-  entries: RiverSearchEntry[], query: string, admin: string, limit = 40,
-): { items: RiverSearchEntry[]; total: number } {
+  entries: RiverSearchEntry[], query: string, admin: string, limit = 40, nationwide = false,
+): { items: RiverSearchEntry[]; total: number; elsewhere: number } {
   const needle = query.trim();
-  if (!needle) return { items: [], total: 0 };
-  const matched = entries.filter((entry) => entry.name.includes(needle));
+  if (!needle) return { items: [], total: 0, elsewhere: 0 };
+  const byName = entries.filter((entry) => entry.name.includes(needle));
+  const inRegion = byName.filter((entry) => entryInRegion(entry, admin));
+  const pool = nationwide || !admin ? byName : inRegion;
   const rank = (entry: RiverSearchEntry) =>
-    (entry.admin === admin ? 0 : entry.scope === 'nationwide' ? 1 : 2);
-  matched.sort((a, b) => {
+    (entryInRegion(entry, admin) ? 0 : entry.scope === 'nationwide' ? 1 : 2);
+  const sorted = [...pool].sort((a, b) => {
     const byRank = rank(a) - rank(b);
     if (byRank) return byRank;
     if (a.name.length !== b.name.length) return a.name.length - b.name.length;
     return a.name.localeCompare(b.name, 'ko-KR');
   });
-  return { items: matched.slice(0, limit), total: matched.length };
+  return { items: sorted.slice(0, limit), total: sorted.length, elsewhere: byName.length - inRegion.length };
 }

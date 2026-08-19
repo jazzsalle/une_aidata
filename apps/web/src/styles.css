@@ -300,6 +300,9 @@ button { cursor: pointer; }
 .map-search-panel select, .map-search-panel input { width: 100%; min-height: 36px; border: 1px solid var(--border-panel-blue); border-radius: var(--r-sm); padding: 0 8px; background: #fff; color: var(--c-text); font-size: var(--fs-sm); line-height: var(--lh-sm); }
 .map-search-note { margin: 0; color: var(--c-text-muted); font-size: var(--fs-xs); line-height: var(--lh-xs); word-break: keep-all; }
 .map-search-count { margin: 0; color: var(--c-text-muted); font-size: var(--fs-xs); line-height: var(--lh-xs); }
+/* 검색 건수 줄 안의 '전국에서 찾기'. 버튼이지만 문장 속 링크처럼 보여야 줄이 안 깨진다. */
+.map-search-link { background: none; border: 0; padding: 0; color: var(--c-primary, #1769aa); font: inherit; text-decoration: underline; cursor: pointer; }
+.map-search-link:focus-visible { outline: 2px solid var(--c-primary, #1769aa); outline-offset: 2px; }
 .map-search-results { list-style: none; margin: 0; padding: 0; }
 .map-search-results button { display: grid; gap: 1px; width: 100%; min-height: 44px; border: 0; border-radius: var(--r-sm); padding: 6px 8px; background: transparent; text-align: left; }
 .map-search-results button:hover:not(:disabled) { background: var(--surface-panel-blue); }
