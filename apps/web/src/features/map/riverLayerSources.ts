@@ -139,7 +139,7 @@ export const RIVER_LAYER_SOURCES: RiverLayerSource[] = [
     dataUrlTemplate: `/reference/rivers/TN_RIVER_BT_${RIVER_DATA_URL_TOKEN}.geojson`,
     datasetShort: '국가기본도',
     // 폭이 좁은 구간은 이 자료에 폴리곤으로 들어오지 않는다(중심선에만 있다).
-    note: '국가기본도 실폭하천(폴리곤). 기존 seed-wkmstrm 과 겹쳐 보면 두 자료의 차이를 눈으로 확인할 수 있다. 실측 기준 두 자료의 정점 거리는 요천 중앙값 11.7 m · 안양천 13.1 m 로 벌어져 있다. 폭이 좁은 구간은 폴리곤이 없을 수 있다.',
+    note: '국가기본도 실폭하천(폴리곤) 전국 28,262건. 등급·하천명·하천코드는 원자료에 없어 같은 국가기본도 중심선에서 공간조인해 붙였다(river_class_source). 폭이 좁은 구간은 폴리곤이 없을 수 있다. 15 m 단순화 — 큰 하천 면이라 시군구 축척에서 차이가 보이지 않는다.',
   },
   {
     id: 'ngii-boundary',
@@ -158,7 +158,7 @@ export const RIVER_LAYER_SOURCES: RiverLayerSource[] = [
     dataUrlTemplate: `/reference/rivers/TN_RIVER_BNDRY_${RIVER_DATA_URL_TOKEN}.geojson`,
     datasetShort: '국가기본도',
     // river.go.kr 의 '법정 하천구역'과 같은 자료가 아니다. 국가기본도가 도시하는 하천경계다.
-    note: '국가기본도 하천경계(폴리곤). 제방·둔치를 포함하므로 실폭보다 넓다. RIMGIS 의 법정 하천구역과는 다른 자료이므로 법정 경계로 인용하지 않는다.',
+    note: '국가기본도 하천경계(폴리곤) 전국 140,851건. 제방·둔치를 포함하므로 실폭보다 넓다. RIMGIS 의 법정 하천구역과는 다른 자료이므로 법정 경계로 인용하지 않는다. 등급·하천명은 중심선 공간조인으로 붙였고 10 m 단순화했다.',
   },
   {
     id: 'river-network-label',
@@ -197,7 +197,7 @@ export const RIVER_LAYER_SOURCES: RiverLayerSource[] = [
     datasetShort: '소하천구역',
     // 하천명은 지자체마다 ALIAS/REMARK 중 어디에 들어 있는지가 다르다. 전처리가 읽어낸 것만 stream_name 으로 붙어 있고
     // 읽히지 않은 건에는 아예 없다 — 이름을 추정해 채우지 않았다.
-    note: '소하천정비법상 고시 소하천구역(폴리곤). 원본 EPSG:5186 을 4326 으로 재투영하고 2 m 단순화했다. 대상 6개 지역 1,531건(의왕 110·구미 159·남원 454·영천 115·인제 643·부산 50). 하천명(stream_name)은 원문 ALIAS/REMARK 에서 읽힌 건에만 있다.',
+    note: '소하천정비법상 고시 소하천구역(폴리곤) 전국 116,758건 · 시군구 188개. 원본 EPSG:5186 을 4326 으로 재투영하고 2 m 단순화했다. 하천명(stream_name)은 원문 ALIAS/REMARK 에서 읽힌 건에만 있다(95.5%). 이름은 하천마다 가장 큰 조각 하나에만 찍는다 — 한 하천이 평균 5.7조각으로 들어오기 때문이다.',
   },
   {
     id: 'river-zone',

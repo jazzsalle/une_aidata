@@ -85,6 +85,9 @@ def main() -> int:
     catalog = region_catalog()
     for row in catalog:
         code = row['code']
+        # 국가기본도 하천만 있고 소하천구역이 없는 시군구가 있다(전국 288 중 100곳).
+        if not row.get('sochun_count'):
+            continue
         sochun = check_collection(DIR / f'LSMD_SOCHUN_{code}.geojson', {'Polygon', 'MultiPolygon'})
         if len(sochun) != row['sochun_count']:
             fail(f'LSMD_SOCHUN_{code}: 카탈로그 건수 {row["sochun_count"]} 와 파일 {len(sochun)} 이 다르다.')

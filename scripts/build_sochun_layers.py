@@ -2,7 +2,6 @@
 
     입력  GIS_data/소하천_소하천구역(연속주제)+브이월드/LSMD_CONT_UJ301_{시도}.zip
     출력  apps/web/public/reference/rivers/LSMD_SOCHUN_{시군구코드}.geojson  (전국 188개)
-          apps/web/public/reference/rivers/river_region_catalog.json      (지역 선택기용 목록)
 
 **전국 시군구 단위로 낸다.** 파일명의 코드는 원자료 `COL_ADM_SE`(현행 행정표준코드)이고,
 지도는 고른 시군구 파일 하나만 받는다(중앙값 424 KB · 최대 3.6 MB). 대상지역 6곳만 반입하던
@@ -276,6 +275,30 @@ def main() -> int:
         # 코드표에 없는 시군구코드는 화면에 이름을 못 붙인다. 조용히 넘기지 않는다.
         print(f'  주의 코드표에 없는 시군구코드 {len(unknown)}개: {[r["code"] for r in unknown]}')
 
+    total = sum(r['sochun_count'] for r in rows)
+    print(f'  {province:12s} 시군구 {len(rows):3d} · 폴리곤 {total:7,} · '
+          f'{sum(r["size_kb"] for r in rows) / 1024:6.1f} MB')
+    return rows
+
+
+def main() -> int:
+    only = set(sys.argv[1:])
+    print(f'소하천구역 전국 반입 · {SRC_CRS} → EPSG:4326 · 단순화 {TOLERANCE_M} m · 좌표 {PRECISION}자리')
+    names = sgg_names()
+    provinces = sorted({region.province_file for region in REGIONS} |
+                       {path.stem[len('LSMD_CONT_UJ301_'):] for path in SRC_DIR.glob('LSMD_CONT_UJ301_*.zip')
+                        if not path.stem[len('LSMD_CONT_UJ301_'):].startswith('5174_')})
+    rows: list[dict] = []
+    for province in provinces:
+        if only and province not in only:
+            continue
+        rows.extend(build_province(province, names))
+
+    unknown = [r for r in rows if not r['sgg']]
+    if unknown:
+        # 코드표에 없는 시군구코드는 화면에 이름을 못 붙인다. 조용히 넘기지 않는다.
+        print(f'  주의 코드표에 없는 시군구코드 {len(unknown)}개: {[r["code"] for r in unknown]}')
+
     catalog = DEST / 'river_region_catalog.json'
     catalog.write_text(json.dumps({
         'dataset': 'river_region_catalog',
@@ -289,7 +312,7 @@ def main() -> int:
     named = sum(r['sochun_named'] for r in rows)
     size = sum(r['size_kb'] for r in rows) / 1024
     print(f'\n시군구 {len(rows)}개 · 폴리곤 {total:,} · 하천명 {named:,} ({named / max(1, total) * 100:.1f}%) · {size:,.0f} MB')
-    print(f'{catalog.name}: {catalog.stat().st_size / 1024:,.0f} KB')
+    print('지역 카탈로그는 scripts/build_river_region_catalog.py 가 만든다 — 국가기본도 하천만 있는 시군구도 담아야 한다.')
     return 0
 
 
