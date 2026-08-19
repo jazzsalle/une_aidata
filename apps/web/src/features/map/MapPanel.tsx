@@ -213,6 +213,7 @@ export function MapPanel({ adminCode, mapRegion, onRegionChange, focusTarget, hi
   const [searchError, setSearchError] = useState<string | null>(null);
   // 검색 결과로 이동할 때, 해당 지역 GeoJSON 이 아직 안 받아졌을 수 있다. 받아진 뒤 한 번 더 강조한다.
   const [pendingHighlight, setPendingHighlight] = useState<string | null>(null);
+  const highlightSeqRef = useRef(0);
   const [detail, setDetail] = useState<{ district: DistrictReference | null; river: RiverReference | null }>({ district: null, river: null });
   const [riverStates, setRiverStates] = useState<RiverSourceState[]>([]);
   const [visible, setVisible] = useState<Record<string, boolean>>({
@@ -265,8 +266,13 @@ export function MapPanel({ adminCode, mapRegion, onRegionChange, focusTarget, hi
     if (!focusTarget || !mapReady) return;
     mapRef.current?.focusLonLat(focusTarget.lonLat, focusTarget.zoom ?? 13);
   }, [focusTarget?.key, mapReady]);
+  // 검색 결과로 지역을 옮기며 하천 조각에 맞출 때는 경계 fit 을 건너뛴다(skipBoundaryFitRef).
+  // 둘 다 fit 하면 뒤에 끝나는 경계 fit 이 하천 fit 을 덮어 마포구 한강을 골랐는데 마포구 전체가 보인다.
+  const skipBoundaryFitRef = useRef(false);
   useEffect(() => {
-    mapRef.current?.setRegion(region, mapRegionIn(regions, region)?.center);
+    const skip = skipBoundaryFitRef.current;
+    skipBoundaryFitRef.current = false;
+    mapRef.current?.setRegion(region, mapRegionIn(regions, region)?.center, !skip);
     closePopup(); setHoverPoiId(null); setHover(null);
   }, [region, regions, closePopup]);
   useEffect(() => {
@@ -341,17 +347,24 @@ export function MapPanel({ adminCode, mapRegion, onRegionChange, focusTarget, hi
     if (selection && !next && selection.layerId === code) closePopup();
   }
   /** 검색 결과 1건으로 이동한다. 지역·레이어를 먼저 맞추고, 좌표로 이동한 뒤 형상 강조를 예약한다. */
-  function gotoSearchResult(entry: RiverSearchEntry) {
+  function gotoSearchResult(entry: RiverSearchEntry, toAdmin?: string) {
     if (!entry.nav) return;
     // 다른 지역 결과를 골랐으면 그 지역으로 옮긴다 — 상단 선택기까지. 검색이 시군구로 거르므로 다른
     // 지역 것은 '전국에서 찾기' 를 눌러 **일부러** 고른 것이다. 강남구를 보다 동작구 반포천을 골랐으면
     // 동작구 자료를 띄우는 것이 맞다. 소하천은 속한 시군구(admin)로, 국가·지방하천은 지나는 시군구 중
     // 첫 번째(admins[0])로 간다 — 한강처럼 여러 곳을 지나면 어느 하나를 골라야 하고, 이미 고른
     // 시군구를 지나면 그대로 둔다.
+    // toAdmin 은 결과 항목 아래 시군구 칩으로 고른 목적지다. 한강처럼 24곳을 지나는 하천은 어디로 갈지
+    // 사용자가 골라야 한다 — 첫 번째로 자동 이동하면 보려던 구간이 아닐 수 있다.
     let target = region;
-    if (entry.scope === 'region' && entry.admin && entry.admin !== region) target = entry.admin;
+    if (toAdmin) target = toAdmin;
+    else if (entry.scope === 'region' && entry.admin && entry.admin !== region) target = entry.admin;
     else if (entry.scope === 'nationwide' && !entryInRegion(entry, region) && entry.admins?.[0]) target = entry.admins[0];
-    if (target !== region) changeRegion(target);
+    if (target !== region) {
+      // 국가·지방하천이면 도착할 조각으로 맞출 것이므로 경계 fit 은 건너뛴다.
+      if (entry.scope === 'nationwide' && entry.feature_id) skipBoundaryFitRef.current = true;
+      changeRegion(target);
+    }
     // 소하천은 그 소스를 켠다. 국가·지방하천은 전용 레이어가 없고 국가기본도 경계·실폭 조각으로 맞추므로
     // 둘 다 꺼져 있으면 경계를 켠다 — 검색이 경계를 기준으로 가는데 경계가 꺼져 있으면 갈 곳이 없다.
     const code = riverSourceById(entry.source_id) ? riverLayerId(entry.source_id) : '';
@@ -374,8 +387,12 @@ export function MapPanel({ adminCode, mapRegion, onRegionChange, focusTarget, hi
     if (entry.scope === 'nationwide' && entry.feature_id) {
       const key = `RIVERCODE:${entry.feature_id}`;
       if (target === region && mapRef.current?.highlightFeature(key)) { setPendingHighlight(null); return; }
-      setPendingHighlight(key);
-      mapRef.current?.focusLonLat(entry.nav, 15);
+      // 같은 하천을 다른 시군구 칩으로 연달아 고르면 key 가 같아 상태가 안 바뀐다. 꼬리표로 바꿔 준다.
+      highlightSeqRef.current += 1;
+      setPendingHighlight(`${key}#${highlightSeqRef.current}`);
+      // 지역을 옮기는 중이면 좌표로 먼저 가지 않는다 — 조각이 도착하면 그쪽으로 맞춘다. 좌표(하천 내부점)는
+      // 다른 시군구일 수 있어 먼저 가 버리면 화면이 엉뚱한 데 갔다가 돌아온다.
+      if (target === region) mapRef.current?.focusLonLat(entry.nav, 15);
       return;
     }
     // 형상은 아직 안 받아졌을 수 있으므로 좌표로 먼저 옮긴다. 강조는 자료가 도착하면 붙는다.
@@ -577,7 +594,10 @@ export function MapPanel({ adminCode, mapRegion, onRegionChange, focusTarget, hi
                   const passes = entry.scope === 'nationwide' && entry.admins?.length
                     ? entry.admins.map((code) => mapRegionIn(regions, code)?.short ?? code)
                     : [];
-                  const passesText = passes.length > 3 ? `${passes.slice(0, 3).join('·')} 외 ${passes.length - 3}곳` : passes.join('·');
+                  // 지나는 시군구가 둘 이상이면 항목 아래에 시군구 칩을 다 펼친다. 칩을 누르면 그 시군구로
+                  // 간다. 항목 본체를 누르면 현재 지역을 지나는 경우 현재 지역, 아니면 조각이 가장 많은 곳이다.
+                  const passList = entry.scope === 'nationwide' && (entry.admins?.length ?? 0) > 1 ? entry.admins ?? [] : [];
+                  const passesText = passList.length ? '' : passes.join('·');
                   return (
                     <li key={`${entry.source_id}:${entry.admin}:${entry.feature_id || entry.name}:${entry.kind}`}>
                       <button
@@ -592,10 +612,31 @@ export function MapPanel({ adminCode, mapRegion, onRegionChange, focusTarget, hi
                           {entry.kind}
                           {entry.scope === 'region' && other ? ` · ${mapRegionIn(regions, entry.admin)?.short ?? entry.admin}` : ''}
                           {passesText ? ` · ${passesText}` : ''}
+                          {passList.length ? ` · ${passList.length}개 시군구 통과` : ''}
                           {entry.nav ? '' : ' · 좌표 없음'}
                         </span>
                         {entry.detail ? <span className="map-search-detail">{entry.detail}</span> : null}
                       </button>
+                      {passList.length ? (
+                        <ul className="map-search-passes" aria-label={`${entry.name}이 지나는 시군구`}>
+                          {passList.map((code) => {
+                            const here = code === region;
+                            return (
+                              <li key={code}>
+                                <button
+                                  type="button"
+                                  className={`map-search-pass${here ? ' here' : ''}`}
+                                  aria-current={here ? 'true' : undefined}
+                                  title={here ? '지금 보는 시군구' : `${mapRegionIn(regions, code)?.name ?? code}로 이동`}
+                                  onClick={() => gotoSearchResult(entry, code)}
+                                >
+                                  {mapRegionIn(regions, code)?.short ?? code}
+                                </button>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      ) : null}
                     </li>
                   );
                 })}

@@ -12,8 +12,11 @@
 자르면 원자료에 없는 경계선을 만들게 되고, 목록에서는 '이 시군구에서 볼 수 있는 하천'이면
 충분하다.
 
-판정은 하천 링을 따라 점을 골라 행정동 경계 안에 들어가는지 본다. 하천망도는 EPSG:5179,
-행정동 경계는 EPSG:5186 이라 표본점만 변환한다(전 정점을 변환하면 640만 점이다).
+판정은 **하천 폴리곤과 행정동 경계가 교차하는가**다(shapely STRtree + intersects). 처음엔 하천
+링 정점을 표본으로 찍어 행정동 안에 드는지 봤는데, 한강처럼 법정 하천구역 폴리곤의 정점이 강
+한가운데를 따라가는 하천은 강 남안을 짧게 접하는 구(서초·동작·송파)가 빠졌다 — 정점이 그 구
+안에 안 떨어진다. 교차 판정으로 바꾸니 한강이 19 → 26 시군구가 됐다. 하천망도는 EPSG:5179,
+행정동 경계는 EPSG:5186 이라 하천 폴리곤을 5186 으로 변환해 본다.
 
 행정동 경계의 기준일은 2025-06-30 으로 2026-06-30 개편 이전이다. 그래서 나온 시군구코드를
 `data/reference/sgg_code_map.json` 으로 한 번 걸러 현행 코드로 바꾼다 — 그 표가 종전 코드를
@@ -29,6 +32,9 @@ from pathlib import Path
 
 import pyproj
 import shapefile
+from shapely.geometry import MultiPolygon, Polygon, shape as to_shape
+from shapely.ops import transform
+from shapely.strtree import STRtree
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from source_data import GIS_DATA, REPO, RIVER_NETWORK_LOCAL, RIVER_NETWORK_NATIONAL, require  # noqa: E402
@@ -39,9 +45,6 @@ CATALOG = REPO / 'apps' / 'web' / 'public' / 'reference' / 'rivers' / 'river_net
 SGG_MAP = REPO / 'data' / 'reference' / 'sgg_code_map.json'
 
 TO5186 = pyproj.Transformer.from_crs('EPSG:5179', 'EPSG:5186', always_xy=True).transform
-CELL = 3000.0
-#: 하천 하나에서 뽑을 표본점 상한. 한강처럼 긴 하천도 이 정도면 지나는 시군구를 다 잡는다.
-MAX_SAMPLES = 400
 
 
 def sgg_of_adm_cd() -> dict:
@@ -60,70 +63,42 @@ def current_code() -> dict:
     payload = json.loads(require(SGG_MAP, '시군구 코드표').read_text(encoding='utf-8'))
     table: dict = {}
     for entry in payload['entries']:
-        codes = entry['codes']
-        # 항목의 첫 코드를 현행으로 본다(정렬돼 있고, 개편 지역은 새 코드가 앞선다).
-        primary = sorted(codes)[0]
-        for code in codes:
-            table[code] = primary
+        # 대표 코드(구는 시 코드 · 그 밖은 현행 코드). 하천 파일·행정경계와 같은 규칙이어야
+        # 고양시(41280)를 골랐을 때 덕양구(41281)로 배정된 한강이 목록에 뜬다.
+        for code in entry['codes']:
+            table[code] = entry['primary_code']
     return table
 
 
 def load_dongs(adm_to_sgg: dict):
+    """행정동 폴리곤(shapely, EPSG:5186) 과 그 시군구코드. 섬처럼 여러 조각인 행정동은 MultiPolygon."""
     reader = shapefile.Reader(str(require(Path(str(DONG_SHP) + '.shp'), '행정동 경계').with_suffix('')),
                               encoding='cp949')
-    dongs = []
-    for shape, record in zip(reader.shapes(), reader.records()):
+    geoms = []
+    codes = []
+    for shape, record in zip(reader.iterShapes(), reader.iterRecords()):
         code = adm_to_sgg.get((record['ADM_CD'] or '').strip())
         if not code:
             continue
         points = shape.points
         bounds = list(shape.parts) + [len(points)]
-        rings = [points[bounds[i]:bounds[i + 1]] for i in range(len(shape.parts))]
-        dongs.append((shape.bbox, rings, code))
-    return dongs
+        polys = [Polygon(points[bounds[i]:bounds[i + 1]]) for i in range(len(shape.parts))
+                 if bounds[i + 1] - bounds[i] >= 4]
+        if not polys:
+            continue
+        geom = (MultiPolygon(polys) if len(polys) > 1 else polys[0]).buffer(0)
+        geoms.append(geom)
+        codes.append(code)
+    return geoms, codes
 
 
-def grid_of(dongs):
-    grid = defaultdict(list)
-    for index, (box, _rings, _code) in enumerate(dongs):
-        for gx in range(int(box[0] // CELL), int(box[2] // CELL) + 1):
-            for gy in range(int(box[1] // CELL), int(box[3] // CELL) + 1):
-                grid[(gx, gy)].append(index)
-    return grid
-
-
-def inside(x: float, y: float, rings) -> bool:
-    """even-odd. 행정동은 섬처럼 여러 조각인 곳이 있어 링을 모두 함께 센다."""
-    crossed = False
-    for ring in rings:
-        for i in range(len(ring) - 1):
-            x1, y1 = ring[i]
-            x2, y2 = ring[i + 1]
-            if (y1 > y) != (y2 > y) and x < x1 + (y - y1) * (x2 - x1) / (y2 - y1):
-                crossed = not crossed
-    return crossed
-
-
-def sample_points(shape) -> list:
-    points = shape.points
-    if not points:
+def regions_of(shape, tree: STRtree, codes: list, promote: dict) -> list:
+    """하천 폴리곤과 교차하는 행정동의 시군구코드. 형상이 깨진 링은 buffer(0) 으로 고친다."""
+    geom = transform(TO5186, to_shape(shape.__geo_interface__)).buffer(0)
+    if geom.is_empty:
         return []
-    step = max(1, len(points) // MAX_SAMPLES)
-    return points[::step]
-
-
-def regions_of(shape, dongs, grid, promote: dict) -> list:
-    found = set()
-    for x5179, y5179 in sample_points(shape):
-        x, y = TO5186(x5179, y5179)
-        for index in grid.get((int(x // CELL), int(y // CELL)), ()):
-            box, rings, code = dongs[index]
-            if not (box[0] <= x <= box[2] and box[1] <= y <= box[3]):
-                continue
-            if inside(x, y, rings):
-                found.add(promote.get(code, code))
-                break
-    return sorted(found)
+    hits = tree.query(geom, predicate='intersects')
+    return sorted({promote.get(codes[i], codes[i]) for i in hits})
 
 
 def read_network(stem: Path):
@@ -136,16 +111,16 @@ def read_network(stem: Path):
 def main() -> int:
     adm_to_sgg = sgg_of_adm_cd()
     promote = current_code()
-    dongs = load_dongs(adm_to_sgg)
-    grid = grid_of(dongs)
-    print(f'행정동 {len(dongs):,} 폴리곤 · 격자 {len(grid):,} 칸')
+    geoms, codes = load_dongs(adm_to_sgg)
+    tree = STRtree(geoms)
+    print(f'행정동 {len(geoms):,} 폴리곤 · STRtree')
 
     assigned: dict = {}
     for stem in (RIVER_NETWORK_NATIONAL, RIVER_NETWORK_LOCAL):
         reader = read_network(stem)
         for record in reader.iterShapeRecords():
             code = str(record.record.as_dict().get('RIVCD_2') or '').strip()
-            assigned[code] = regions_of(record.shape, dongs, grid, promote)
+            assigned[code] = regions_of(record.shape, tree, codes, promote)
         print(f'  {stem.name}: 누적 {len(assigned):,} 하천')
 
     payload = json.loads(CATALOG.read_text(encoding='utf-8'))
@@ -157,8 +132,8 @@ def main() -> int:
             missing += 1
     payload['note'] += (' admin_codes 는 그 하천이 지나는 시군구다 — 하천을 자르지 않고 목록에서만 쓴다.')
     payload['region_assignment'] = {
-        'basis': '행정동 경계(BND_ADM_DONG_PG, BASE_DATE 20250630) 와의 공간판정',
-        'sampled_points_per_river': MAX_SAMPLES,
+        'basis': '행정동 경계(BND_ADM_DONG_PG, BASE_DATE 20250630) 와의 교차 판정(intersects)',
+        'method': 'shapely STRtree · 하천 폴리곤 ∩ 행정동 폴리곤. 표본점 방식은 강 남안을 짧게 접하는 구를 놓쳤다.',
         'note': '경계 기준일이 2026-06-30 개편 이전이라 결과를 sgg_code_map 으로 현행 코드로 바꿨다.',
         'unassigned': missing,
     }

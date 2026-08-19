@@ -2,7 +2,7 @@
  "dataset": "river_network_catalog",
  "source": "국가수자원관리종합시스템 하천망도 (국가하천 ntn_rvr · 지방하천 lcl_rvr)",
  "built_by": "scripts/build_river_network_catalog.py",
- "note": "형상은 반입하지 않는다 — 국가·지방하천의 면 형상은 국가기본도 하천경계·실폭이 갖고 있고, 이 파일은 그 폴리곤에 붙일 코드·이름·등급의 정본이다. 형상 반입 금지는 선·면 지오메트리를 클라이언트에 싣지 않는다는 뜻이며, 하천당 표기용 파생점 1개(label_point)는 예외로 두고 파생임을 함께 남긴다. admin_codes 는 그 하천이 지나는 시군구다 — 하천을 자르지 않고 목록에서만 쓴다.",
+ "note": "형상은 반입하지 않는다 — 국가·지방하천의 면 형상은 국가기본도 하천경계·실폭이 갖고 있고, 이 파일은 그 폴리곤에 붙일 코드·이름·등급의 정본이다. 형상 반입 금지는 선·면 지오메트리를 클라이언트에 싣지 않는다는 뜻이며, 하천당 표기용 파생점 1개(label_point)는 예외로 두고 파생임을 함께 남긴다. admin_codes 는 그 하천이 지나는 시군구다 — 하천을 자르지 않고 목록에서만 쓴다. admin_codes 는 그 하천이 지나는 시군구다 — 하천을 자르지 않고 목록에서만 쓴다.",
  "point_fields": {
   "nav": "bbox 중심 · 화면 이동 전용 · 자료가 가진 좌표가 아니다",
   "label_point": "가장 큰 링의 내부점 · 지도에 하천명을 찍는 자리 · 파생값(label_point_kind)"
@@ -135,7 +135,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461",
+    "41460",
     "41610"
    ]
   },
@@ -234,7 +234,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41285",
+    "41280",
     "41480"
    ]
   },
@@ -289,8 +289,7 @@
     "11500",
     "28237",
     "28245",
-    "41192",
-    "41196",
+    "41190",
     "41570"
    ]
   },
@@ -319,8 +318,7 @@
     "30200",
     "30230",
     "36110",
-    "43111",
-    "43112",
+    "43110",
     "43720",
     "43730",
     "43740",
@@ -394,6 +392,7 @@
     "26380",
     "26440",
     "26530",
+    "27290",
     "27710",
     "47170",
     "47190",
@@ -404,7 +403,7 @@
     "47840",
     "47850",
     "47900",
-    "48121",
+    "48120",
     "48250",
     "48270",
     "48330",
@@ -640,7 +639,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "52113",
+    "52110",
     "52130",
     "52140",
     "52210",
@@ -718,10 +717,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "43111",
-    "43112",
-    "43113",
-    "43114"
+    "43110"
    ]
   },
   {
@@ -795,8 +791,8 @@
    "label_point_kind": "derived_interior",
    "admin_codes": [
     "36110",
-    "43113",
-    "43114"
+    "43110",
+    "43750"
    ]
   },
   {
@@ -820,6 +816,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
+    "47820",
     "48270"
    ]
   },
@@ -925,7 +922,8 @@
     "41830",
     "51110",
     "51780",
-    "51790"
+    "51790",
+    "51800"
    ]
   },
   {
@@ -1026,6 +1024,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
+    "12150",
     "12190",
     "12720",
     "12730",
@@ -1057,8 +1056,8 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "42800",
     "51110",
+    "51800",
     "51810"
    ]
   },
@@ -1083,7 +1082,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "52113",
+    "52110",
     "52710"
    ]
   },
@@ -1192,7 +1191,7 @@
    "admin_codes": [
     "41220",
     "41550",
-    "44133",
+    "44130",
     "44200"
    ]
   },
@@ -1222,7 +1221,7 @@
     "11530",
     "11545",
     "11560",
-    "41171",
+    "41170",
     "41210"
    ]
   },
@@ -1247,8 +1246,8 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "42800",
-    "51790"
+    "51790",
+    "51800"
    ]
   },
   {
@@ -1331,7 +1330,7 @@
    "admin_codes": [
     "41220",
     "41370",
-    "41463",
+    "41460",
     "41590"
    ]
   },
@@ -1481,8 +1480,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "52111",
-    "52113"
+    "52110"
    ]
   },
   {
@@ -1740,13 +1738,18 @@
    "label_point_kind": "derived_interior",
    "admin_codes": [
     "11170",
+    "11200",
     "11215",
     "11440",
     "11500",
     "11560",
+    "11590",
+    "11650",
     "11680",
+    "11710",
     "11740",
-    "41281",
+    "41280",
+    "41310",
     "41360",
     "41450",
     "41480",
@@ -1829,7 +1832,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "47111",
+    "47110",
     "47130"
    ]
   },
@@ -1979,8 +1982,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "43112",
-    "43113"
+    "43110"
    ]
   },
   {
@@ -2173,7 +2175,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "52111"
+    "52110"
    ]
   },
   {
@@ -2293,7 +2295,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "47113"
+    "47110"
    ]
   },
   {
@@ -2317,7 +2319,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41465"
+    "41460"
    ]
   },
   {
@@ -2679,7 +2681,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48123"
+    "48120"
    ]
   },
   {
@@ -2849,7 +2851,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41287",
+    "41280",
     "41480"
    ]
   },
@@ -2946,7 +2948,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461"
+    "41460"
    ]
   },
   {
@@ -2994,6 +2996,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
+    "47110",
     "47750",
     "47770"
    ]
@@ -3864,7 +3867,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41173",
+    "41170",
     "41290"
    ]
   },
@@ -3913,7 +3916,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48121"
+    "48120"
    ]
   },
   {
@@ -4131,7 +4134,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "43111"
+    "43110"
    ]
   },
   {
@@ -5120,7 +5123,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41271",
+    "41270",
     "41410"
    ]
   },
@@ -5193,7 +5196,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "52113"
+    "52110"
    ]
   },
   {
@@ -5603,7 +5606,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461",
+    "41460",
     "41610"
    ]
   },
@@ -6522,7 +6525,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461"
+    "41460"
    ]
   },
   {
@@ -6716,7 +6719,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41463",
+    "41460",
     "41590"
    ]
   },
@@ -7728,7 +7731,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "47113"
+    "47110"
    ]
   },
   {
@@ -7753,7 +7756,7 @@
    "label_point_kind": "derived_interior",
    "admin_codes": [
     "36110",
-    "44131",
+    "44130",
     "44200"
    ]
   },
@@ -7779,7 +7782,7 @@
    "label_point_kind": "derived_interior",
    "admin_codes": [
     "36110",
-    "44131"
+    "44130"
    ]
   },
   {
@@ -8048,8 +8051,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41281",
-    "41285",
+    "41280",
     "41480",
     "41630"
    ]
@@ -8075,7 +8077,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "42800"
+    "51800"
    ]
   },
   {
@@ -8099,7 +8101,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41463"
+    "41460"
    ]
   },
   {
@@ -8700,7 +8702,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "52111",
+    "52110",
     "52710"
    ]
   },
@@ -8749,7 +8751,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41111"
+    "41110"
    ]
   },
   {
@@ -8773,7 +8775,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "44131"
+    "44130"
    ]
   },
   {
@@ -8845,7 +8847,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48127",
+    "48120",
     "48730"
    ]
   },
@@ -9232,7 +9234,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "47113"
+    "47110"
    ]
   },
   {
@@ -9666,7 +9668,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48125"
+    "48120"
    ]
   },
   {
@@ -10051,7 +10053,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "43111",
+    "43110",
     "43760"
    ]
   },
@@ -10172,7 +10174,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "44131"
+    "44130"
    ]
   },
   {
@@ -10634,7 +10636,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "42800"
+    "51800"
    ]
   },
   {
@@ -11335,7 +11337,7 @@
    "label_point_kind": "derived_interior",
    "admin_codes": [
     "41220",
-    "44133",
+    "44130",
     "44200"
    ]
   },
@@ -11456,7 +11458,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "42800"
+    "51800"
    ]
   },
   {
@@ -12179,7 +12181,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48125"
+    "48120"
    ]
   },
   {
@@ -13097,7 +13099,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48121"
+    "48120"
    ]
   },
   {
@@ -13553,7 +13555,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461"
+    "41460"
    ]
   },
   {
@@ -14011,8 +14013,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41131",
-    "41135"
+    "41130"
    ]
   },
   {
@@ -14132,7 +14133,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461"
+    "41460"
    ]
   },
   {
@@ -14156,7 +14157,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "52113"
+    "52110"
    ]
   },
   {
@@ -14228,7 +14229,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "47113",
+    "47110",
     "47130"
    ]
   },
@@ -15025,7 +15026,8 @@
    "label_point_kind": "derived_interior",
    "admin_codes": [
     "47920",
-    "47930"
+    "47930",
+    "51190"
    ]
   },
   {
@@ -15291,7 +15293,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461"
+    "41460"
    ]
   },
   {
@@ -15483,7 +15485,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48123"
+    "48120"
    ]
   },
   {
@@ -15891,7 +15893,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "44133"
+    "44130"
    ]
   },
   {
@@ -16181,9 +16183,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48121",
-    "48123",
-    "48127"
+    "48120"
    ]
   },
   {
@@ -16400,7 +16400,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48121"
+    "48120"
    ]
   },
   {
@@ -16472,7 +16472,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "47113",
+    "47110",
     "47130"
    ]
   },
@@ -16545,8 +16545,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48121",
-    "48123"
+    "48120"
    ]
   },
   {
@@ -17175,7 +17174,7 @@
    "label_point_kind": "derived_interior",
    "admin_codes": [
     "36110",
-    "43113"
+    "43110"
    ]
   },
   {
@@ -17367,7 +17366,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "47111"
+    "47110"
    ]
   },
   {
@@ -17391,7 +17390,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461",
+    "41460",
     "41610"
    ]
   },
@@ -17659,7 +17658,7 @@
    "label_point_kind": "derived_interior",
    "admin_codes": [
     "36110",
-    "43113"
+    "43110"
    ]
   },
   {
@@ -17876,7 +17875,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "44131"
+    "44130"
    ]
   },
   {
@@ -18213,7 +18212,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461"
+    "41460"
    ]
   },
   {
@@ -18769,7 +18768,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "43111",
+    "43110",
     "43720",
     "43760"
    ]
@@ -19951,7 +19950,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461"
+    "41460"
    ]
   },
   {
@@ -19975,7 +19974,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461"
+    "41460"
    ]
   },
   {
@@ -20602,7 +20601,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48123"
+    "48120"
    ]
   },
   {
@@ -21060,7 +21059,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "47113",
+    "47110",
     "47770"
    ]
   },
@@ -21446,7 +21445,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41281"
+    "41280"
    ]
   },
   {
@@ -21470,7 +21469,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41281"
+    "41280"
    ]
   },
   {
@@ -21494,7 +21493,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48129"
+    "48120"
    ]
   },
   {
@@ -22558,7 +22557,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "47111"
+    "47110"
    ]
   },
   {
@@ -22774,7 +22773,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48125"
+    "48120"
    ]
   },
   {
@@ -23254,7 +23253,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "43114"
+    "43110"
    ]
   },
   {
@@ -23302,7 +23301,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "52111"
+    "52110"
    ]
   },
   {
@@ -24676,8 +24675,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41281",
-    "41285"
+    "41280"
    ]
   },
   {
@@ -24894,7 +24892,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "52111"
+    "52110"
    ]
   },
   {
@@ -25329,8 +25327,8 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41135",
-    "41465"
+    "41130",
+    "41460"
    ]
   },
   {
@@ -25889,7 +25887,8 @@
    "label_point_kind": "derived_interior",
    "admin_codes": [
     "31110",
-    "31200"
+    "31200",
+    "47130"
    ]
   },
   {
@@ -25964,7 +25963,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48129"
+    "48120"
    ]
   },
   {
@@ -26399,7 +26398,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48129"
+    "48120"
    ]
   },
   {
@@ -26591,7 +26590,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "42800",
+    "51800",
     "51810"
    ]
   },
@@ -27172,7 +27171,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "43111"
+    "43110"
    ]
   },
   {
@@ -27556,7 +27555,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41463"
+    "41460"
    ]
   },
   {
@@ -27677,7 +27676,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "52113",
+    "52110",
     "52140",
     "52210",
     "52710"
@@ -28089,7 +28088,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "44133"
+    "44130"
    ]
   },
   {
@@ -28985,7 +28984,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461"
+    "41460"
    ]
   },
   {
@@ -29227,7 +29226,7 @@
    "label_point_kind": "derived_interior",
    "admin_codes": [
     "36110",
-    "44131"
+    "44130"
    ]
   },
   {
@@ -29588,7 +29587,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "43111"
+    "43110"
    ]
   },
   {
@@ -30118,7 +30117,8 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "12830"
+    "12830",
+    "52790"
    ]
   },
   {
@@ -30142,7 +30142,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461"
+    "41460"
    ]
   },
   {
@@ -30191,7 +30191,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "43111"
+    "43110"
    ]
   },
   {
@@ -30335,7 +30335,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48121"
+    "48120"
    ]
   },
   {
@@ -30796,7 +30796,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "44131"
+    "44130"
    ]
   },
   {
@@ -30895,7 +30895,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "43114"
+    "43110"
    ]
   },
   {
@@ -31112,7 +31112,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41285"
+    "41280"
    ]
   },
   {
@@ -31883,7 +31883,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "43111"
+    "43110"
    ]
   },
   {
@@ -32004,7 +32004,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461"
+    "41460"
    ]
   },
   {
@@ -32028,7 +32028,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "43112"
+    "43110"
    ]
   },
   {
@@ -32076,7 +32076,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "43114",
+    "43110",
     "43750"
    ]
   },
@@ -32560,7 +32560,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41271",
+    "41270",
     "41410",
     "41590"
    ]
@@ -33694,7 +33694,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461"
+    "41460"
    ]
   },
   {
@@ -34225,7 +34225,7 @@
    "label_point_kind": "derived_interior",
    "admin_codes": [
     "36110",
-    "43112"
+    "43110"
    ]
   },
   {
@@ -34706,7 +34706,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41281"
+    "41280"
    ]
   },
   {
@@ -34754,7 +34754,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "47113",
+    "47110",
     "47750"
    ]
   },
@@ -34875,9 +34875,8 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "43113",
-    "43114",
-    "44131"
+    "43110",
+    "44130"
    ]
   },
   {
@@ -34901,7 +34900,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "43114",
+    "43110",
     "43745",
     "43750"
    ]
@@ -35170,7 +35169,8 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "31710"
+    "31710",
+    "48330"
    ]
   },
   {
@@ -35218,6 +35218,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
+    "43720",
     "43730"
    ]
   },
@@ -35484,7 +35485,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461",
+    "41460",
     "41500"
    ]
   },
@@ -36016,8 +36017,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48121",
-    "48123"
+    "48120"
    ]
   },
   {
@@ -36065,7 +36065,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461"
+    "41460"
    ]
   },
   {
@@ -37682,7 +37682,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48121"
+    "48120"
    ]
   },
   {
@@ -37756,7 +37756,7 @@
    "label_point_kind": "derived_interior",
    "admin_codes": [
     "11380",
-    "41281"
+    "41280"
    ]
   },
   {
@@ -37804,7 +37804,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41135"
+    "41130"
    ]
   },
   {
@@ -38843,7 +38843,8 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "43800"
+    "43800",
+    "51750"
    ]
   },
   {
@@ -39279,7 +39280,7 @@
    "label_point_kind": "derived_interior",
    "admin_codes": [
     "41220",
-    "41461"
+    "41460"
    ]
   },
   {
@@ -39447,7 +39448,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "44133",
+    "44130",
     "44200"
    ]
   },
@@ -39568,7 +39569,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "44131"
+    "44130"
    ]
   },
   {
@@ -39712,7 +39713,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "52111"
+    "52110"
    ]
   },
   {
@@ -40219,7 +40220,7 @@
    "label_point_kind": "derived_interior",
    "admin_codes": [
     "41220",
-    "41461",
+    "41460",
     "41550"
    ]
   },
@@ -40268,8 +40269,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48125",
-    "48127"
+    "48120"
    ]
   },
   {
@@ -40413,7 +40413,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48127"
+    "48120"
    ]
   },
   {
@@ -40654,7 +40654,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "44131"
+    "44130"
    ]
   },
   {
@@ -40678,7 +40678,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41171"
+    "41170"
    ]
   },
   {
@@ -40969,8 +40969,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41171",
-    "41173"
+    "41170"
    ]
   },
   {
@@ -41283,8 +41282,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "52111",
-    "52113",
+    "52110",
     "52710"
    ]
   },
@@ -41309,7 +41307,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "52111",
+    "52110",
     "52710"
    ]
   },
@@ -41527,8 +41525,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48125",
-    "48127"
+    "48120"
    ]
   },
   {
@@ -42107,7 +42104,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461"
+    "41460"
    ]
   },
   {
@@ -42155,7 +42152,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48123"
+    "48120"
    ]
   },
   {
@@ -42564,7 +42561,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41131"
+    "41130"
    ]
   },
   {
@@ -43409,7 +43406,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "44131"
+    "44130"
    ]
   },
   {
@@ -43529,7 +43526,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "47113"
+    "47110"
    ]
   },
   {
@@ -43625,7 +43622,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "42800"
+    "51800"
    ]
   },
   {
@@ -43745,9 +43742,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41111",
-    "41113",
-    "41115"
+    "41110"
    ]
   },
   {
@@ -43892,7 +43887,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48125"
+    "48120"
    ]
   },
   {
@@ -44110,8 +44105,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "43112",
-    "43113"
+    "43110"
    ]
   },
   {
@@ -44742,6 +44736,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
+    "48240",
     "48820"
    ]
   },
@@ -45080,7 +45075,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "43114"
+    "43110"
    ]
   },
   {
@@ -45320,7 +45315,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41281"
+    "41280"
    ]
   },
   {
@@ -45921,8 +45916,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41463",
-    "41465"
+    "41460"
    ]
   },
   {
@@ -46019,7 +46013,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41281"
+    "41280"
    ]
   },
   {
@@ -46236,7 +46230,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "43114",
+    "43110",
     "43750"
    ]
   },
@@ -46285,7 +46279,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461",
+    "41460",
     "41550"
    ]
   },
@@ -46479,7 +46473,7 @@
    "label_point_kind": "derived_interior",
    "admin_codes": [
     "41220",
-    "44133"
+    "44130"
    ]
   },
   {
@@ -46601,7 +46595,7 @@
    "admin_codes": [
     "11650",
     "11680",
-    "41131"
+    "41130"
    ]
   },
   {
@@ -46819,8 +46813,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48121",
-    "48127"
+    "48120"
    ]
   },
   {
@@ -47012,7 +47005,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48129"
+    "48120"
    ]
   },
   {
@@ -47205,7 +47198,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "52113",
+    "52110",
     "52710"
    ]
   },
@@ -47519,7 +47512,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41465"
+    "41460"
    ]
   },
   {
@@ -47760,7 +47753,7 @@
    "label_point_kind": "derived_interior",
    "admin_codes": [
     "36110",
-    "43113"
+    "43110"
    ]
   },
   {
@@ -48338,7 +48331,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461"
+    "41460"
    ]
   },
   {
@@ -48461,7 +48454,7 @@
    "label_point_kind": "derived_interior",
    "admin_codes": [
     "26440",
-    "48129"
+    "48120"
    ]
   },
   {
@@ -49571,7 +49564,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41171"
+    "41170"
    ]
   },
   {
@@ -49716,7 +49709,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41463"
+    "41460"
    ]
   },
   {
@@ -49740,9 +49733,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41111",
-    "41113",
-    "41115"
+    "41110"
    ]
   },
   {
@@ -49838,7 +49829,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "42800"
+    "51800"
    ]
   },
   {
@@ -49886,7 +49877,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48125"
+    "48120"
    ]
   },
   {
@@ -50225,7 +50216,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41281"
+    "41280"
    ]
   },
   {
@@ -50490,7 +50481,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "44131"
+    "44130"
    ]
   },
   {
@@ -50708,7 +50699,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "44133"
+    "44130"
    ]
   },
   {
@@ -50975,7 +50966,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "47113"
+    "47110"
    ]
   },
   {
@@ -50999,7 +50990,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "47111"
+    "47110"
    ]
   },
   {
@@ -51239,7 +51230,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41273",
+    "41270",
     "41390"
    ]
   },
@@ -51409,7 +51400,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461"
+    "41460"
    ]
   },
   {
@@ -52495,7 +52486,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461"
+    "41460"
    ]
   },
   {
@@ -52784,7 +52775,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48129"
+    "48120"
    ]
   },
   {
@@ -53175,7 +53166,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48121",
+    "48120",
     "48740"
    ]
   },
@@ -53634,7 +53625,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461",
+    "41460",
     "41610"
    ]
   },
@@ -54477,7 +54468,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "52113",
+    "52110",
     "52710"
    ]
   },
@@ -54863,7 +54854,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48123"
+    "48120"
    ]
   },
   {
@@ -54935,8 +54926,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41271",
-    "41273"
+    "41270"
    ]
   },
   {
@@ -55009,7 +54999,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48127",
+    "48120",
     "48730"
    ]
   },
@@ -55106,8 +55096,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41171",
-    "41173",
+    "41170",
     "41410",
     "41430"
    ]
@@ -55661,7 +55650,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41135"
+    "41130"
    ]
   },
   {
@@ -55733,7 +55722,8 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "31110"
+    "31110",
+    "31200"
    ]
   },
   {
@@ -55853,7 +55843,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48123"
+    "48120"
    ]
   },
   {
@@ -55949,7 +55939,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48127"
+    "48120"
    ]
   },
   {
@@ -56144,7 +56134,7 @@
    "label_point_kind": "derived_interior",
    "admin_codes": [
     "36110",
-    "44131"
+    "44130"
    ]
   },
   {
@@ -56314,7 +56304,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461"
+    "41460"
    ]
   },
   {
@@ -57039,6 +57029,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
+    "51230",
     "51770"
    ]
   },
@@ -57281,7 +57272,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "47113"
+    "47110"
    ]
   },
   {
@@ -57379,8 +57370,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41133",
-    "41135"
+    "41130"
    ]
   },
   {
@@ -57452,7 +57442,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48129"
+    "48120"
    ]
   },
   {
@@ -57500,7 +57490,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41117"
+    "41110"
    ]
   },
   {
@@ -58126,6 +58116,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
+    "48170",
     "48820"
    ]
   },
@@ -58488,8 +58479,8 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41117",
-    "41463"
+    "41110",
+    "41460"
    ]
   },
   {
@@ -58610,7 +58601,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461"
+    "41460"
    ]
   },
   {
@@ -58851,8 +58842,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "43111",
-    "43112"
+    "43110"
    ]
   },
   {
@@ -59118,7 +59108,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41111"
+    "41110"
    ]
   },
   {
@@ -59503,7 +59493,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41281"
+    "41280"
    ]
   },
   {
@@ -60156,7 +60146,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461",
+    "41460",
     "41610"
    ]
   },
@@ -60181,7 +60171,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41463"
+    "41460"
    ]
   },
   {
@@ -61876,7 +61866,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48123"
+    "48120"
    ]
   },
   {
@@ -61924,7 +61914,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461"
+    "41460"
    ]
   },
   {
@@ -62673,7 +62663,7 @@
    "label_point_kind": "derived_interior",
    "admin_codes": [
     "36110",
-    "43112"
+    "43110"
    ]
   },
   {
@@ -63083,7 +63073,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461"
+    "41460"
    ]
   },
   {
@@ -63371,9 +63361,8 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "43113",
-    "43114",
-    "44131"
+    "43110",
+    "44130"
    ]
   },
   {
@@ -64745,7 +64734,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461"
+    "41460"
    ]
   },
   {
@@ -65443,7 +65432,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48125"
+    "48120"
    ]
   },
   {
@@ -66361,7 +66350,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41135"
+    "41130"
    ]
   },
   {
@@ -66723,8 +66712,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41281",
-    "41285"
+    "41280"
    ]
   },
   {
@@ -66820,7 +66808,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "52111"
+    "52110"
    ]
   },
   {
@@ -67158,7 +67146,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "44131"
+    "44130"
    ]
   },
   {
@@ -67207,7 +67195,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461",
+    "41460",
     "41550"
    ]
   },
@@ -67328,7 +67316,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "52113",
+    "52110",
     "52210",
     "52710"
    ]
@@ -67354,10 +67342,8 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41113",
-    "41117",
-    "41463",
-    "41465",
+    "41110",
+    "41460",
     "41590"
    ]
   },
@@ -67430,7 +67416,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461"
+    "41460"
    ]
   },
   {
@@ -67815,7 +67801,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "42800"
+    "51800"
    ]
   },
   {
@@ -68344,7 +68330,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "43111"
+    "43110"
    ]
   },
   {
@@ -68416,7 +68402,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48121"
+    "48120"
    ]
   },
   {
@@ -68732,7 +68718,8 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "27720"
+    "27720",
+    "47730"
    ]
   },
   {
@@ -69165,7 +69152,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461"
+    "41460"
    ]
   },
   {
@@ -69646,7 +69633,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461"
+    "41460"
    ]
   },
   {
@@ -69766,7 +69753,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "44133"
+    "44130"
    ]
   },
   {
@@ -69838,8 +69825,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "43113",
-    "43114"
+    "43110"
    ]
   },
   {
@@ -71429,7 +71415,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "43111"
+    "43110"
    ]
   },
   {
@@ -71453,7 +71439,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48125"
+    "48120"
    ]
   },
   {
@@ -71863,7 +71849,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48125"
+    "48120"
    ]
   },
   {
@@ -72394,7 +72380,7 @@
    "label_point_kind": "derived_interior",
    "admin_codes": [
     "41550",
-    "44133"
+    "44130"
    ]
   },
   {
@@ -72588,7 +72574,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "47111"
+    "47110"
    ]
   },
   {
@@ -72758,7 +72744,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "47113",
+    "47110",
     "47230"
    ]
   },
@@ -72807,7 +72793,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "52111"
+    "52110"
    ]
   },
   {
@@ -73096,7 +73082,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48125"
+    "48120"
    ]
   },
   {
@@ -73120,7 +73106,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "47111"
+    "47110"
    ]
   },
   {
@@ -74036,7 +74022,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41287",
+    "41280",
     "41480"
    ]
   },
@@ -74133,7 +74119,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "44133",
+    "44130",
     "44200"
    ]
   },
@@ -74303,7 +74289,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41285",
+    "41280",
     "41480"
    ]
   },
@@ -74738,8 +74724,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "52111",
-    "52113",
+    "52110",
     "52710"
    ]
   },
@@ -75558,7 +75543,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "47113"
+    "47110"
    ]
   },
   {
@@ -75775,7 +75760,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41465"
+    "41460"
    ]
   },
   {
@@ -76018,7 +76003,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "52113"
+    "52110"
    ]
   },
   {
@@ -76284,7 +76269,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "44131"
+    "44130"
    ]
   },
   {
@@ -76429,7 +76414,7 @@
    "label_point_kind": "derived_interior",
    "admin_codes": [
     "36110",
-    "43113"
+    "43110"
    ]
   },
   {
@@ -76525,8 +76510,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "52111",
-    "52113",
+    "52110",
     "52710"
    ]
   },
@@ -77080,7 +77064,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461"
+    "41460"
    ]
   },
   {
@@ -77538,7 +77522,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48121",
+    "48120",
     "48250"
    ]
   },
@@ -77779,7 +77763,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48121",
+    "48120",
     "48250"
    ]
   },
@@ -77973,7 +77957,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48121"
+    "48120"
    ]
   },
   {
@@ -78599,6 +78583,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
+    "11320",
     "41150",
     "41630"
    ]
@@ -78624,7 +78609,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "43111"
+    "43110"
    ]
   },
   {
@@ -78744,7 +78729,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "52111"
+    "52110"
    ]
   },
   {
@@ -78914,7 +78899,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48121",
+    "48120",
     "48250"
    ]
   },
@@ -79131,7 +79116,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48125"
+    "48120"
    ]
   },
   {
@@ -79372,7 +79357,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48121"
+    "48120"
    ]
   },
   {
@@ -79396,7 +79381,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "47113",
+    "47110",
     "47770"
    ]
   },
@@ -79421,7 +79406,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41463"
+    "41460"
    ]
   },
   {
@@ -79973,7 +79958,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "44131"
+    "44130"
    ]
   },
   {
@@ -80045,7 +80030,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "44131"
+    "44130"
    ]
   },
   {
@@ -80575,7 +80560,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48125"
+    "48120"
    ]
   },
   {
@@ -80817,7 +80802,7 @@
    "label_point_kind": "derived_interior",
    "admin_codes": [
     "41220",
-    "41461",
+    "41460",
     "41550"
    ]
   },
@@ -80842,6 +80827,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
+    "30170",
     "30200"
    ]
   },
@@ -80890,7 +80876,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48125"
+    "48120"
    ]
   },
   {
@@ -81350,7 +81336,7 @@
    "label_point_kind": "derived_interior",
    "admin_codes": [
     "11380",
-    "41281"
+    "41280"
    ]
   },
   {
@@ -81398,7 +81384,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "42800"
+    "51800"
    ]
   },
   {
@@ -81494,8 +81480,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48121",
-    "48123"
+    "48120"
    ]
   },
   {
@@ -81956,8 +81941,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "44131",
-    "44133",
+    "44130",
     "44200"
    ]
   },
@@ -82127,7 +82111,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "44133"
+    "44130"
    ]
   },
   {
@@ -82472,7 +82456,7 @@
    "label_point_kind": "derived_interior",
    "admin_codes": [
     "41550",
-    "44133"
+    "44130"
    ]
   },
   {
@@ -82568,7 +82552,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "42800"
+    "51800"
    ]
   },
   {
@@ -82616,7 +82600,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461",
+    "41460",
     "41500",
     "41550",
     "43770"
@@ -82860,7 +82844,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "47113"
+    "47110"
    ]
   },
   {
@@ -83100,7 +83084,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "47113"
+    "47110"
    ]
   },
   {
@@ -83464,7 +83448,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461"
+    "41460"
    ]
   },
   {
@@ -84259,7 +84243,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "47111"
+    "47110"
    ]
   },
   {
@@ -84283,8 +84267,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "47111",
-    "47113"
+    "47110"
    ]
   },
   {
@@ -84553,11 +84536,8 @@
    "admin_codes": [
     "11680",
     "11710",
-    "41131",
-    "41133",
-    "41135",
-    "41463",
-    "41465"
+    "41130",
+    "41460"
    ]
   },
   {
@@ -84703,7 +84683,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48125"
+    "48120"
    ]
   },
   {
@@ -84946,7 +84926,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48123"
+    "48120"
    ]
   },
   {
@@ -85093,7 +85073,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461"
+    "41460"
    ]
   },
   {
@@ -85453,7 +85433,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "44133"
+    "44130"
    ]
   },
   {
@@ -85477,6 +85457,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
+    "27170",
     "27230",
     "47850"
    ]
@@ -85839,7 +85820,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48125"
+    "48120"
    ]
   },
   {
@@ -86415,7 +86396,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "43111"
+    "43110"
    ]
   },
   {
@@ -86559,7 +86540,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "44131"
+    "44130"
    ]
   },
   {
@@ -86896,8 +86877,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48121",
-    "48123"
+    "48120"
    ]
   },
   {
@@ -87790,7 +87770,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "47113"
+    "47110"
    ]
   },
   {
@@ -88007,7 +87987,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41173",
+    "41170",
     "41430"
    ]
   },
@@ -88057,7 +88037,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "44133"
+    "44130"
    ]
   },
   {
@@ -88204,7 +88184,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "43111"
+    "43110"
    ]
   },
   {
@@ -88372,7 +88352,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "42800"
+    "51800"
    ]
   },
   {
@@ -88445,7 +88425,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461",
+    "41460",
     "41550"
    ]
   },
@@ -88470,7 +88450,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "44133"
+    "44130"
    ]
   },
   {
@@ -89271,7 +89251,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41281"
+    "41280"
    ]
   },
   {
@@ -89369,7 +89349,7 @@
    "admin_codes": [
     "11380",
     "11440",
-    "41281"
+    "41280"
    ]
   },
   {
@@ -89561,7 +89541,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "47113"
+    "47110"
    ]
   },
   {
@@ -90768,7 +90748,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "47113"
+    "47110"
    ]
   },
   {
@@ -90888,7 +90868,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41461"
+    "41460"
    ]
   },
   {
@@ -91344,7 +91324,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41273"
+    "41270"
    ]
   },
   {
@@ -91849,7 +91829,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "41113",
+    "41110",
     "41430",
     "41590"
    ]
@@ -92504,8 +92484,7 @@
    ],
    "label_point_kind": "derived_interior",
    "admin_codes": [
-    "48125",
-    "48127"
+    "48120"
    ]
   },
   {
@@ -93356,8 +93335,8 @@
   }
  ],
  "region_assignment": {
-  "basis": "행정동 경계(BND_ADM_DONG_PG, BASE_DATE 20250630) 와의 공간판정",
-  "sampled_points_per_river": 400,
+  "basis": "행정동 경계(BND_ADM_DONG_PG, BASE_DATE 20250630) 와의 교차 판정(intersects)",
+  "method": "shapely STRtree · 하천 폴리곤 ∩ 행정동 폴리곤. 표본점 방식은 강 남안을 짧게 접하는 구를 놓쳤다.",
   "note": "경계 기준일이 2026-06-30 개편 이전이라 결과를 sgg_code_map 으로 현행 코드로 바꿨다.",
   "unassigned": 0
  }
