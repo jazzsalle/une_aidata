@@ -18,7 +18,7 @@
  *  URL·레이어명이 확정되지 않은 소스는 **빈 문자열로 두고 `unverified` 로 남긴다.**
  *  추정한 경로를 채워 넣으면 그 순간부터 그것이 확인된 사실처럼 읽힌다. */
 
-export type RiverSemantic = 'channel' | 'zone' | 'centerline' | 'label' | 'sochun' | 'point';
+export type RiverSemantic = 'channel' | 'zone' | 'sochun' | 'label';
 export type RiverSourceKind = 'wms' | 'geojson' | 'wfs';
 /** active: 표시 대상 · legacy: 비교용으로만 남긴 기존 소스 · unverified: 경로/승인 미확정이라 켤 수 없음 */
 export type RiverSourceStatus = 'active' | 'legacy' | 'unverified';
@@ -85,10 +85,8 @@ export const riverSourceIdOf = (layerId: string) => layerId.slice(RIVER_LAYER_PR
 export const SEMANTIC_LABEL: Record<RiverSemantic, string> = {
   channel: '실폭(물길)',
   zone: '법정 하천구역',
-  centerline: '중심선',
-  label: '하천명',
   sochun: '소하천구역',
-  point: '하천 지점(마커)',
+  label: '하천명',
 };
 
 /** 각 의미가 베이스맵과 어떻게 보이는 것이 정상인지. 팝업·토글 설명에 쓴다 —
@@ -96,10 +94,8 @@ export const SEMANTIC_LABEL: Record<RiverSemantic, string> = {
 export const SEMANTIC_ALIGNMENT_NOTE: Record<RiverSemantic, string> = {
   channel: '항공영상의 수면과 겹치는 것이 정상입니다.',
   zone: '제방·둔치를 포함하므로 항공영상의 물길보다 넓게 표시되는 것이 정상입니다.',
-  centerline: '물길 한가운데를 지나는 것이 정상입니다.',
-  label: '하천명은 중심선 자료의 RIVER_NM 이며, 하천마다 대표점 한 곳에만 표시합니다.',
   sochun: '소하천정비법상 고시된 소하천구역입니다. 국가·지방하천과 별개 자료이므로 국가기본도 하천과 겹치지 않는 것이 정상입니다.',
-  point: '전국하천표준데이터가 실제로 보유한 시점·종점 위경도입니다. 좌표가 없는 하천은 마커가 없고 검색 목록에만 나옵니다.',
+  label: '하천명 표기점. 하천 형상이 아니라 이름을 찍는 자리다',
 };
 
 // 2026-08-08: 기존 `seed-wkmstrm`(geo.json L2 = VWorld LT_C_WKMSTRM)을 목록에서 제거했다.
@@ -126,28 +122,6 @@ export const RIVER_LAYER_SOURCES: RiverLayerSource[] = [
     note: 'VWorld WMS 는 Access-Control-Allow-Origin 을 보내지 않아(WMTS 는 보낸다) OpenLayers 10 의 fetch 기반 이미지 로더에서 ORB 로 차단된다. 키·등록도메인 문제가 아니라 VWorld 서버 설정 문제다. 서버측 프록시를 두면 우회되지만, 렌더되는 형상이 seed-wkmstrm 과 동일하므로 정합 개선 효과는 없다. DOMAIN 은 등록 서비스 URL 이어야 하며 localhost 는 거절된다(VITE_VWORLD_SERVICE_DOMAIN 참고).',
   },
   {
-    id: 'vworld-wms-centerline',
-    label: '하천 중심선 (VWorld)',
-    semantic: 'centerline',
-    kind: 'wms',
-    status: 'unverified',
-    sourceOrg: 'VWorld',
-    url: 'https://api.vworld.kr/req/wms',
-    // GetCapabilities로 실제 코드를 확인한 뒤 채운다. 추정한 레이어명을 넣지 않는다.
-    layerName: '',
-    styleName: '',
-    projection: 'EPSG:3857',
-    requiresVWorldKey: true,
-    defaultVisible: false,
-    style: { color: '#00838f', satelliteColor: '#18ffff', width: 2, dash: [10, 5] },
-    note: 'VWorld WMS 가이드 문서에서 확인된 수자원 레이어는 하천망(lt_c_wkmstrm)과 대·중·표준권역 3종뿐이고 중심선은 목록에 없다. 키로 GetCapabilities를 호출해 전체 레이어 목록을 받은 뒤 수자원 분류에서 실제 코드를 확인해 layerName을 채우면 status를 active로 올린다.',
-  },
-  // --- 국토지리정보원 국가기본도 하천 3종 (2026-08-08 반입) ---------------------
-  //  VWorld 베이스맵과 같은 국가기본도 계보다. 원본은 EPSG:5179 SHP 전국 자료이고,
-  //  scripts/extract_river_layers.py 로 대상 3개 지자체만 잘라 4326 GeoJSON 으로 바꾼 뒤
-  //  scripts/build_river_web_layers.py 로 2 m 단순화·좌표 6자리로 줄여 반입했다.
-  //  형상을 옮기기만 했고 면적·하폭 같은 파생 지표는 만들지 않는다.
-  {
     id: 'ngii-realwidth',
     label: '실폭하천 (국가기본도)',
     semantic: 'channel',
@@ -165,7 +139,7 @@ export const RIVER_LAYER_SOURCES: RiverLayerSource[] = [
     dataUrlTemplate: `/reference/rivers/TN_RIVER_BT_${RIVER_DATA_URL_TOKEN}.geojson`,
     datasetShort: '국가기본도',
     // 폭이 좁은 구간은 이 자료에 폴리곤으로 들어오지 않는다(중심선에만 있다).
-    note: '국가기본도 실폭하천(폴리곤). 기존 seed-wkmstrm 과 겹쳐 보면 두 자료의 차이를 눈으로 확인할 수 있다. 실측 기준 두 자료의 정점 거리는 요천 중앙값 11.7 m · 안양천 13.1 m 로 벌어져 있다. 폭이 좁은 구간은 폴리곤이 없을 수 있다.',
+    note: '국가기본도 실폭하천(폴리곤) 전국 28,262건. 등급·하천명·하천코드는 원자료에 없어 같은 국가기본도 중심선에서 공간조인해 붙였다(river_class_source). 폭이 좁은 구간은 폴리곤이 없을 수 있다. 15 m 단순화 — 큰 하천 면이라 시군구 축척에서 차이가 보이지 않는다.',
   },
   {
     id: 'ngii-boundary',
@@ -184,50 +158,27 @@ export const RIVER_LAYER_SOURCES: RiverLayerSource[] = [
     dataUrlTemplate: `/reference/rivers/TN_RIVER_BNDRY_${RIVER_DATA_URL_TOKEN}.geojson`,
     datasetShort: '국가기본도',
     // river.go.kr 의 '법정 하천구역'과 같은 자료가 아니다. 국가기본도가 도시하는 하천경계다.
-    note: '국가기본도 하천경계(폴리곤). 제방·둔치를 포함하므로 실폭보다 넓다. RIMGIS 의 법정 하천구역과는 다른 자료이므로 법정 경계로 인용하지 않는다.',
+    note: '국가기본도 하천경계(폴리곤) 전국 140,851건. 제방·둔치를 포함하므로 실폭보다 넓다. RIMGIS 의 법정 하천구역과는 다른 자료이므로 법정 경계로 인용하지 않는다. 등급·하천명은 중심선 공간조인으로 붙였고 10 m 단순화했다.',
   },
   {
-    id: 'ngii-centerline',
-    label: '하천중심선 (국가기본도)',
-    semantic: 'centerline',
-    kind: 'geojson',
-    status: 'active',
-    sourceOrg: '국토지리정보원 국가기본도 (TN_RIVER_CTLN)',
-    url: '',
-    layerName: '',
-    styleName: '',
-    projection: 'EPSG:3857',
-    requiresVWorldKey: false,
-    defaultVisible: false,
-    style: { color: '#00838f', satelliteColor: '#18ffff', width: 1.6, dash: [10, 5] },
-    dataUrlTemplate: `/reference/rivers/TN_RIVER_CTLN_${RIVER_DATA_URL_TOKEN}.geojson`,
-    datasetShort: '국가기본도',
-    // 원자료는 세류(RVC005)가 85% 를 차지해 시·군 지도에서는 하천망을 읽을 수 없다.
-    note: '국가기본도 하천중심선. 하천명(RIVER_NM)을 가진 유일한 자료다. 국가·지방·소·기타하천만 담았고 세류(RVC005)는 제외했다 — 원자료에서 세류가 85% 를 차지해 시·군 단위 화면에서는 하천망이 묻힌다.',
-  },
-  {
-    id: 'ngii-river-name',
-    label: '하천명 (국가기본도)',
+    id: 'river-network-label',
+    label: '하천명 (국가·지방하천)',
     semantic: 'label',
     kind: 'geojson',
     status: 'active',
-    sourceOrg: '국토지리정보원 국가기본도 (TN_RIVER_CTLN · RIVER_NM)',
+    sourceOrg: '국가수자원관리종합시스템 하천망도 (하천명·등급)',
     url: '',
     layerName: '',
     styleName: '',
     projection: 'EPSG:3857',
     requiresVWorldKey: false,
-    defaultVisible: false,
-    // 라벨은 글자와 점만 그린다. width/fill 은 쓰이지 않지만 계약상 필요한 값만 채운다.
-    style: { color: '#0b3c5d', satelliteColor: '#ffffff', width: 1 },
-    dataUrlTemplate: `/reference/rivers/TN_RIVER_LABEL_${RIVER_DATA_URL_TOKEN}.geojson`,
-    datasetShort: '국가기본도',
-    // 중심선 조각마다 글자를 붙이면 같은 이름이 수천 번 겹쳐 아무것도 읽히지 않는다.
-    note: '중심선(RIVER_NM)에서 뽑은 하천명 표시점. 하천 하나당 가장 긴 조각의 중간 정점 한 곳만 쓴다(좌표를 새로 만들지 않는다). 지자체별 33~100개.',
+    defaultVisible: true,
+    style: { color: '#0d47a1', satelliteColor: '#82b1ff', width: 1 },
+    // 형상 파일이 아니라 카탈로그(JSON)를 읽는다. 좌표는 하천당 라벨점 1개다.
+    dataUrlTemplate: '/reference/rivers/river_network_catalog.json',
+    datasetShort: '하천명',
+    note: '국가·지방하천 3,856건의 하천명. 형상이 아니라 하천마다 라벨점 1개이며, 그 점은 하천망도 폴리곤의 내부점을 전처리에서 계산한 파생값이다(label_point_kind=derived_interior). 소하천 이름은 소하천구역 레이어가 직접 그린다.',
   },
-  // --- 소하천구역(연속주제) · 전국하천표준데이터 (2026-08-14 반입) ---------------
-  //  이 둘만 대상 6개 지역 전체를 덮는다. 국가기본도 하천 3종은 원본 SHP 를 확보한
-  //  의왕·구미·남원 3곳만 있으므로, 부산·인제·영천에서는 '이 지역 자료 없음'으로 남는다.
   {
     id: 'lsmd-sochun',
     label: '소하천구역',
@@ -246,26 +197,7 @@ export const RIVER_LAYER_SOURCES: RiverLayerSource[] = [
     datasetShort: '소하천구역',
     // 하천명은 지자체마다 ALIAS/REMARK 중 어디에 들어 있는지가 다르다. 전처리가 읽어낸 것만 stream_name 으로 붙어 있고
     // 읽히지 않은 건에는 아예 없다 — 이름을 추정해 채우지 않았다.
-    note: '소하천정비법상 고시 소하천구역(폴리곤). 원본 EPSG:5186 을 4326 으로 재투영하고 2 m 단순화했다. 대상 6개 지역 1,531건(의왕 110·구미 159·남원 454·영천 115·인제 643·부산 50). 하천명(stream_name)은 원문 ALIAS/REMARK 에서 읽힌 건에만 있다.',
-  },
-  {
-    id: 'river-standard-point',
-    label: '하천표준데이터 지점',
-    semantic: 'point',
-    kind: 'geojson',
-    status: 'active',
-    sourceOrg: '공공데이터포털 전국하천표준데이터',
-    url: '',
-    layerName: '',
-    styleName: '',
-    projection: 'EPSG:3857',
-    requiresVWorldKey: false,
-    defaultVisible: false,
-    style: { color: '#c62828', satelliteColor: '#ff5252', width: 1 },
-    dataUrlTemplate: `/reference/rivers/RIVER_STD_POINTS_${RIVER_DATA_URL_TOKEN}.geojson`,
-    datasetShort: '표준데이터 지점',
-    // 좌표 결측이 이 자료의 기본 상태다. 마커가 적은 것은 오류가 아니라 원자료가 그런 것이다.
-    note: '전국하천표준데이터의 시점·종점 위경도 마커. 원자료 2,558건 중 좌표 보유는 194건뿐이고, 대상 6개 지역에서는 부산 17건·의왕 1건 = 18건(마커 36개)뿐이다. 좌표가 없는 409건은 마커를 만들지 않고 검색 목록에서 확인한다 — 주소를 지오코딩해 좌표를 만들지 않는다.',
+    note: '소하천정비법상 고시 소하천구역(폴리곤) 전국 116,758건 · 시군구 188개. 원본 EPSG:5186 을 4326 으로 재투영하고 2 m 단순화했다. 하천명(stream_name)은 원문 ALIAS/REMARK 에서 읽힌 건에만 있다(95.5%). 이름은 하천마다 가장 큰 조각 하나에만 찍는다 — 한 하천이 평균 5.7조각으로 들어오기 때문이다.',
   },
   {
     id: 'river-zone',

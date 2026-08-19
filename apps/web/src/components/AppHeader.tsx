@@ -1,15 +1,21 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import type { CurrentSituation } from '../types/contracts';
 import type { RouteDefinition } from '../hooks/useRoute';
 import { routes } from '../hooks/useRoute';
+import { type MapRegion, dataCodeOfApp, groupBySido } from '../features/map/mapRegions';
 import { PageHeading } from './PageHeading';
 
 interface Props {
   route: RouteDefinition;
   situations: CurrentSituation[];
   selected: CurrentSituation | null;
+  /** 전국 시군구 목록. 아직 안 받아졌으면 빈 배열이고, 그때는 지역 선택기를 비활성으로 둔다. */
+  regions: MapRegion[];
+  /** 지도가 보고 있는 시군구코드. */
+  mapRegion: string;
   onNavigate(path: string): void;
   onSelect(id: string): void;
+  onSelectRegion(code: string): void;
   onSave(): void;
 }
 
@@ -22,8 +28,15 @@ interface Props {
  *  축소 예산(회귀 주의): 수축 경로는 브랜드 블록의 h1 말줄임 하나뿐이다.
  *  브랜드 블록만 `flex:1 1 auto; min-width:120px`, 나머지는 전부 `flex:0 0 auto`,
  *  빈 스페이서가 내비를 오른쪽으로 밀어붙인다. */
-export function AppHeader({ route, situations, selected, onNavigate, onSelect, onSave }: Props) {
+export function AppHeader({ route, situations, selected, regions, mapRegion, onNavigate, onSelect, onSelectRegion, onSave }: Props) {
   const headerRef = useRef<HTMLElement | null>(null);
+  const sidoGroups = useMemo(() => groupBySido(regions), [regions]);
+  // 이 시군구에 시드 상황이 있는가. 앱 지역코드(45190)와 자료 코드(52190)가 다른 곳이 있어
+  // 상황의 admin_code 를 자료 코드로 바꿔 맞춘다.
+  const situationsHere = useMemo(
+    () => situations.filter((item) => dataCodeOfApp(item.admin_code) === mapRegion),
+    [situations, mapRegion],
+  );
 
   // sticky 기준값은 전부 --header-h 에서 파생하므로(F-14), 실측 높이만 여기서 갱신한다.
   // 셀렉터·문구는 건드리지 않는다.
@@ -66,14 +79,43 @@ export function AppHeader({ route, situations, selected, onNavigate, onSelect, o
           <span className="brand-divider" aria-hidden="true" />
           <PageHeading title={route.title} />
         </div>
-        <label className="context-select">
-          <span>지역·상황</span>
-          <select value={selected?.situation_id ?? ''} onChange={(event) => onSelect(event.target.value)}>
+        {/* 지역과 상황을 나눠 둔다. 상황 시드는 3곳뿐인데 하천 공간자료는 전국 188개 시군구에
+            있어서, 하나로 묶어 두면 시드가 없는 지역을 아예 고를 수 없다. 지역만 바꾸면 지도는
+            그 시군구로 가고 판단 패널은 마지막 상황을 유지한다. */}
+        <label className="context-select" htmlFor="region-select">
+          <span>지역</span>
+          <select
+            id="region-select"
+            value={mapRegion}
+            disabled={!regions.length}
+            onChange={(event) => onSelectRegion(event.target.value)}
+          >
+            {sidoGroups.map(([sido, list]) => (
+              <optgroup key={sido} label={sido}>
+                {list.map((item) => (
+                  <option key={item.admin} value={item.admin}>
+                    {item.sgg}{item.hasPlanSeed ? '' : ' (하천자료만)'}
+                  </option>
+                ))}
+              </optgroup>
+            ))}
+          </select>
+        </label>
+        <label className="context-select" htmlFor="situation-select">
+          <span>상황</span>
+          <select
+            id="situation-select"
+            value={selected?.situation_id ?? ''}
+            onChange={(event) => onSelect(event.target.value)}
+          >
             {situations.map((item) => (
               <option key={item.situation_id} value={item.situation_id}>{item.admin_name}</option>
             ))}
           </select>
         </label>
+        {regions.length && !situationsHere.length ? (
+          <span className="context-note" role="status">이 지역은 하천자료만</span>
+        ) : null}
         <span className="header-spacer" aria-hidden="true" />
         <nav className="global-nav" aria-label="주요 메뉴">
           {routes.map((item) => (

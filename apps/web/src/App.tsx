@@ -6,6 +6,7 @@ import { ReportPage } from './pages/ReportPage';
 import { useRoute } from './hooks/useRoute';
 import { loadLayers, loadObservations, loadPriorityAreas, loadProcedures, loadReport, loadReportEvidenceSelection, loadSatelliteAssets, loadSimilarEvents, selectFloodPhaseAssets, loadSatelliteEvidenceSets, loadSituations, saveReportEvidenceSelection, saveSituationView } from './services/apiClient';
 import type { AgentResponse, CurrentSituation, LayerCatalogItem, PriorityAreaResult, ProcedureStep, ReportDraft, ReportEvidenceSelection, SatelliteAsset, SimilarEvent, PhaseSelectionResult, SatelliteEvidenceSet } from './types/contracts';
+import { DEFAULT_MAP_REGION, type MapRegion, dataCodeOfApp, loadMapRegions } from './features/map/mapRegions';
 import type { AgentContextItem } from './types/uiContext';
 import { sameContext } from './types/uiContext';
 import './styles.css';
@@ -41,6 +42,17 @@ export default function App() {
   const [highlightedFeature,setHighlightedFeature]=useState<string|null>(null); const [error,setError]=useState<string|null>(null); const [notice,setNotice]=useState<string|null>(null);
   const [agentContext,setAgentContext]=useState<AgentContextItem[]>([]);
   const selected=useMemo(()=>situations.find(item=>item.situation_id===selectedId)??situations[0]??null,[situations,selectedId]);
+  // 지도가 보고 있는 시군구. 상황과 별개로 움직인다 — 상황 시드는 3곳뿐이지만 하천 공간자료는
+  // 전국 188개 시군구에 있다. 상황을 바꾸면 지도도 그 지역으로 따라간다.
+  const [mapRegions,setMapRegions]=useState<MapRegion[]>([]); const [mapRegion,setMapRegion]=useState(DEFAULT_MAP_REGION);
+  useEffect(()=>{loadMapRegions().then(setMapRegions).catch(()=>setMapRegions([]));},[]);
+  useEffect(()=>{if(selected)setMapRegion(dataCodeOfApp(selected.admin_code));},[selected?.admin_code]);
+  const [focusTarget,setFocusTarget]=useState<{key:string;lonLat:[number,number];zoom?:number}|null>(null);
+  function onFocusMap(lonLat:[number,number],zoom?:number){setFocusTarget({key:`${lonLat[0]},${lonLat[1]},${zoom??''},${Date.now()}`,lonLat,zoom});}
+  function onSelectRegion(code:string){setMapRegion(code);
+    // 그 시군구에 시드 상황이 있으면 상황까지 바꿔 대시보드 전체가 그 지역으로 간다.
+    const here=situations.find(item=>dataCodeOfApp(item.admin_code)===code);
+    if(here)setSelectedId(here.situation_id);}
 
   useEffect(()=>{Promise.all([loadSituations(),loadLayers()]).then(([loadedSituations,loadedLayers])=>{setSituations(loadedSituations);setLayers(loadedLayers);if(loadedSituations[0])setSelectedId(loadedSituations[0].situation_id);}).catch((e:unknown)=>setError(e instanceof Error?e.message:'초기 데이터 로드 실패'));},[]);
   useEffect(()=>{if(!selected)return;setHighlightedFeature(null);clearContext();setReportEvidence(loadReportEvidenceSelection(selected.situation_id));loadObservations(selected).then(result=>{const merged=mergeObservations(selected,result.observations);setActiveSituation(merged);if(result.meta.data_status==='actual')setNotice('기상청 초단기실황을 현재 조건에 반영했습니다.');}).catch(()=>setActiveSituation(selected));},[selected?.situation_id]);
@@ -58,10 +70,10 @@ export default function App() {
   function updateEvidence(next:ReportEvidenceSelection,message:string){if(!activeSituation)return;setReportEvidence(next);saveReportEvidenceSelection(activeSituation.situation_id,next);setNotice(message);}
 
   return <div className="app-shell multi-page-shell">
-    <AppHeader route={route} situations={situations} selected={activeSituation??selected} onNavigate={navigate} onSelect={setSelectedId} onSave={()=>{const id=saveSituationView(activeSituation??selected,highlightedFeature);setNotice(id?'상황뷰를 브라우저에 저장했습니다.':'저장할 상황이 없습니다.');}} />
+    <AppHeader route={route} situations={situations} selected={activeSituation??selected} regions={mapRegions} mapRegion={mapRegion} onSelectRegion={onSelectRegion} onNavigate={navigate} onSelect={setSelectedId} onSave={()=>{const id=saveSituationView(activeSituation??selected,highlightedFeature);setNotice(id?'상황뷰를 브라우저에 저장했습니다.':'저장할 상황이 없습니다.');}} />
     {error?<div className="global-error" role="alert">{error}</div>:null}
     <main id="main-content" className={`page-main page-${route.id}`}><SituationContextRow selected={activeSituation??selected}/>{notice?<p className="page-status" role="status">{notice}</p>:null}
-      {route.id==='dashboard'?<DashboardPage situation={activeSituation??selected} priorities={priorities} procedures={procedures} events={similarEvents} selectedEventId={selectedEventId} highlightedFeature={highlightedFeature} onSituationCreated={onSituationCreated} onAgentResponse={onAgentResponse} onHighlight={setHighlightedFeature} onSelectEvent={setSelectedEventId} agentContext={agentContext} onAddContext={addContext} onRemoveContext={removeContext}/>:null}
+      {route.id==='dashboard'?<DashboardPage mapRegion={mapRegion} focusTarget={focusTarget} onFocusMap={onFocusMap} situation={activeSituation??selected} priorities={priorities} procedures={procedures} events={similarEvents} selectedEventId={selectedEventId} highlightedFeature={highlightedFeature} onSituationCreated={onSituationCreated} onAgentResponse={onAgentResponse} onHighlight={setHighlightedFeature} onSelectEvent={setSelectedEventId} agentContext={agentContext} onAddContext={addContext} onRemoveContext={removeContext}/>:null}
       {route.id==='evidence'?<EvidencePage situation={activeSituation??selected} satellites={satellites} selectionResults={phaseSelections} evidenceSets={evidenceSets} selectedEvidenceSetId={selectedEvidenceSetId} onSelectEvidenceSet={setSelectedEvidenceSetId} events={similarEvents} selection={reportEvidence} onSelectSatelliteEventSet={(assetIds,eventId,evidenceSet)=>updateEvidence({...reportEvidence,satellite_event_set:{asset_ids:assetIds,event_id:eventId,evidence_set_id:evidenceSet.evidence_set_id,provenance_version:evidenceSet.version,target_region_match:evidenceSet.area.is_target_region,added_at:new Date().toISOString()},satellite_pair:null,updated_at:new Date().toISOString()},'PRE·EVENT·POST 증거세트와 출처·무결성 정보를 보고서 근거에 반영했습니다.')} onToggleFloodTrace={()=>updateEvidence({...reportEvidence,include_flood_trace:!reportEvidence.include_flood_trace,updated_at:new Date().toISOString()},reportEvidence.include_flood_trace?'침수흔적도 근거를 보고서에서 제외했습니다.':'침수흔적도 근거를 보고서에 반영했습니다.')} onToggleEvent={(eventId)=>{const ids=reportEvidence.similar_event_ids.includes(eventId)?reportEvidence.similar_event_ids.filter(id=>id!==eventId):[...reportEvidence.similar_event_ids,eventId];updateEvidence({...reportEvidence,similar_event_ids:ids,updated_at:new Date().toISOString()},'과거 피해·대응·복구 사례 선택을 보고서에 반영했습니다.');}}/>:null}
       {route.id==='report'?<ReportPage situation={activeSituation??selected} priorities={priorities} events={similarEvents} report={report} selection={reportEvidence}/>:null}
     </main><footer className="site-footer"><span>실제·시나리오·Seed 상태를 구분하여 표시합니다.</span><span>활성 레이어 {layers.filter(item=>item.default_visible).length}/{layers.length}</span></footer>

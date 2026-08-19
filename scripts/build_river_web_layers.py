@@ -9,6 +9,9 @@
   2. Douglas-Peucker 단순화. 허용오차는 미터로 주고 EPSG:5179 에서 계산한다.
   3. 중심선은 `RIVER_SE` 로 세류(RVC005)를 제외한다. 세류가 전체의 85% 를 차지하는데
      시·군 단위 지도에서는 실개천까지 그리면 하천망을 읽을 수 없다.
+  4. 남은 중심선 중 **이름 없는 소하천**은 `TN_RIVER_CTLN_MINOR_{admin}.geojson` 으로 갈라 낸다.
+     실측하면 남원 4,781건·구미 4,741건·의왕 785건이고 참조 GeoJSON 전체 용량의 20% 를 쓰는데
+     `RIVER_NM` 이 없어 검색·식별에는 기여하지 못한다. 버리지 않고 기본 비표시 레이어로 옮긴다.
 
 **형상을 옮기는 것 외에 값을 만들어내지 않는다.** 면적·하폭 같은 파생 지표를 계산하지 않는다.
 """
@@ -45,6 +48,16 @@ CLASS_RANK = {'RVC001': 0, 'RVC002': 1, 'RVC003': 2, 'RVC004': 3, 'RVC005': 4}
 CLASS_UNKNOWN = '등급미확인'
 GRID_CELL_M = 300.0
 MESRMTH_LABEL = {'P': '사진측량', 'F': '현황측량', 'C': '지적측량'}
+
+# 이름 없는 소하천 중심선은 별도 파일로 가른다. 소하천의 이름은 소하천구역(LSMD_SOCHUN)이 갖고
+# 있고 국가기본도 중심선 쪽은 거의 비어 있다(남원 4,781건 전부 무명, 구미 5,183건 중 58종만 유명).
+MINOR_LAYER = 'TN_RIVER_CTLN_MINOR'
+
+
+def is_minor_centerline(props: dict) -> bool:
+    """이름 없는 소하천 중심선인가. 산출 뒤 분리 스크립트와 이 판정을 공유한다."""
+    return props.get('river_class') == '소하천' and not (props.get('RIVER_NM') or '').strip()
+
 
 # 앱에 남길 속성만 고른다. 제작업체·DB등록일시는 화면에서 쓸 일이 없다.
 KEEP_PROPS = ('NF_ID', 'RIVER_NO', 'RIVER_NM', 'RIVER_SE', 'admin_code', 'source_layer', 'semantic')
@@ -234,6 +247,11 @@ def simplify_geometry(geometry):
     return {'type': kind, 'coordinates': coords}
 
 
+def write_collection(path: Path, features: list) -> None:
+    path.write_text(json.dumps({'type': 'FeatureCollection', 'features': features},
+                               ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
+
+
 def build(path: Path) -> None:
     parts = path.stem.split('_')
     admin = parts[-1]
@@ -284,9 +302,14 @@ def build(path: Path) -> None:
                      'properties': slim, 'geometry': geometry})
 
     DEST.mkdir(parents=True, exist_ok=True)
+    minor = []
+    if layer == 'TN_RIVER_CTLN':
+        minor = [row for row in kept if is_minor_centerline(row['properties'])]
+        if minor:
+            kept = [row for row in kept if not is_minor_centerline(row['properties'])]
+            write_collection(DEST / f'{MINOR_LAYER}_{admin}.geojson', minor)
     out = DEST / f'{layer}_{admin}.geojson'
-    out.write_text(json.dumps({'type': 'FeatureCollection', 'features': kept},
-                              ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
+    write_collection(out, kept)
     before = path.stat().st_size / 1048576
     after = out.stat().st_size / 1048576
     note = f' · 3종 외 제외 {dropped_se:,}건' if dropped_se else ''
@@ -299,6 +322,8 @@ def build(path: Path) -> None:
         note += ' · ' + ' '.join(f'{k}{v:,}' for k, v in sorted(classes.items(), key=lambda x: -x[1]))
     if tagged:
         note += f' · river_id 연결 {tagged}건'
+    if minor:
+        note += f' · 무명 소하천 {len(minor):,}건 분리'
     print(f'  {out.name}: {len(kept):,}건 · {before:.1f} MB → {after:.2f} MB '
           f'({after / before * 100:.0f}%){note}')
 

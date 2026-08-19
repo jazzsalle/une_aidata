@@ -143,9 +143,9 @@ def main() -> int:
 
             def step_enter() -> None:
                 page.goto(f'{BASE}/', wait_until='load')
-                page.wait_for_selector('.context-select select')
+                page.wait_for_selector('#situation-select')
                 page.wait_for_function(
-                    'count => document.querySelectorAll(".context-select select option").length === count',
+                    'count => document.querySelectorAll("#situation-select option").length === count',
                     arg=situation_count,
                 )
                 page.wait_for_function('title => document.title === title', arg=DASHBOARD_TITLE)
@@ -156,7 +156,7 @@ def main() -> int:
 
             def make_region_step(situation_id: str):
                 def step() -> None:
-                    page.locator('.context-select select').select_option(situation_id)
+                    page.locator('#situation-select').select_option(situation_id)
                     wait_top_area(situation_id)
                 return step
 
@@ -203,7 +203,7 @@ def main() -> int:
                 card.click(position={'x': 14, 'y': 14})
 
             def step_map_highlight_existing() -> None:
-                page.locator('.context-select select').select_option('SIT-NW-POC-001')
+                page.locator('#situation-select').select_option('SIT-NW-POC-001')
                 wait_top_area('SIT-NW-POC-001')
                 click_priority_card()
                 page.wait_for_timeout(2000)
@@ -213,7 +213,7 @@ def main() -> int:
             steps.run('S7 카드 클릭 지도 이동 (45190 NW-A-02 · 존재 ID 하이라이트)', step_map_highlight_existing)
 
             def step_map_highlight_gumi() -> None:
-                page.locator('.context-select select').select_option('SIT-GM-POC-001')
+                page.locator('#situation-select').select_option('SIT-GM-POC-001')
                 wait_top_area('SIT-GM-POC-001')
                 click_priority_card()
                 page.wait_for_timeout(2000)
@@ -244,9 +244,9 @@ def main() -> int:
                 )
                 try:
                     # 같은 값을 다시 고르면 재조회가 일어나지 않으므로 다른 상황을 거쳐 돌아온다.
-                    page.locator('.context-select select').select_option('SIT-NW-POC-001')
+                    page.locator('#situation-select').select_option('SIT-NW-POC-001')
                     wait_top_area('SIT-NW-POC-001')
-                    page.locator('.context-select select').select_option('SIT-GM-POC-001')
+                    page.locator('#situation-select').select_option('SIT-GM-POC-001')
                     wait_top_area('SIT-GM-POC-001')
                     click_priority_card()
                     notice = page.wait_for_selector('.map-highlight-notice')
@@ -284,7 +284,7 @@ def main() -> int:
             def step_priority_detail_modal() -> None:
                 page.get_by_role('tab', name='현재 판단').click()
                 page.wait_for_selector('#insight-panel-0 .priority-card')
-                page.locator('.context-select select').select_option('SIT-NW-POC-001')
+                page.locator('#situation-select').select_option('SIT-NW-POC-001')
                 wait_top_area('SIT-NW-POC-001')
                 trigger = page.locator('.priority-card .priority-detail-button').first
                 trigger.click()

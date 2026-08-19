@@ -24,7 +24,14 @@ REPO = Path(__file__).resolve().parent.parent
 DIR = REPO / 'apps' / 'web' / 'public' / 'reference' / 'rivers'
 
 KOREA_BBOX = (124.0, 33.0, 132.0, 39.0)
-GENERIC_NAMES = {'소하천구역', '소하천예정지', '소하천', '구역', '예정지'}
+# stream_name 으로 새면 안 되는 값. 앞의 5개는 구분 라벨이고, 뒤의 4개는 '천'으로 끝나지만
+# 하천명이 아닌 폐천 계열이다(포천시 '기존폐천' 1,383건 등). NDMS 소하천 전체 목록에 등재되지
+# 않은 것만 넣는다 — scripts/build_sochun_layers.py 의 GENERIC + BLOCK 과 같은 뜻이며,
+# 게이트는 검사 대상 모듈을 import 하지 않으므로 여기에 따로 적는다.
+GENERIC_NAMES = {
+    '소하천구역', '소하천예정지', '소하천', '구역', '예정지',
+    '하천', '폐천', '기존폐천', '신생폐천',
+}
 failures: list[str] = []
 
 
@@ -66,55 +73,65 @@ def check_collection(path: Path, expect_types: set[str]) -> list[dict]:
     return features
 
 
+def region_catalog() -> list[dict]:
+    path = DIR / 'river_region_catalog.json'
+    if not path.exists():
+        fail('river_region_catalog.json 이 없다. npm run data:rivers 로 재생성하라.')
+        return []
+    return json.loads(path.read_text(encoding='utf-8'))['regions']
+
+
 def main() -> int:
-    for region in REGIONS:
-        sochun = check_collection(DIR / f'LSMD_SOCHUN_{region.admin}.geojson', {'Polygon', 'MultiPolygon'})
+    catalog = region_catalog()
+    for row in catalog:
+        code = row['code']
+        # 국가기본도 하천만 있고 소하천구역이 없는 시군구가 있다(전국 288 중 100곳).
+        if not row.get('sochun_count'):
+            continue
+        sochun = check_collection(DIR / f'LSMD_SOCHUN_{code}.geojson', {'Polygon', 'MultiPolygon'})
+        if len(sochun) != row['sochun_count']:
+            fail(f'LSMD_SOCHUN_{code}: 카탈로그 건수 {row["sochun_count"]} 와 파일 {len(sochun)} 이 다르다.')
+            continue
+        if not row['sgg']:
+            fail(f'LSMD_SOCHUN_{code}: 코드표에 없는 시군구코드라 지역 이름을 붙일 수 없다.')
         for feature in sochun:
             props = feature['properties']
-            if props.get('admin_code') != region.admin:
-                fail(f'LSMD_SOCHUN_{region.admin}: admin_code 가 {props.get("admin_code")} 로 어긋난다.')
+            if props.get('admin_code') != code:
+                fail(f'LSMD_SOCHUN_{code}: admin_code 가 {props.get("admin_code")} 로 어긋난다.')
                 break
             name = props.get('stream_name')
             if name and name in GENERIC_NAMES:
-                fail(f'LSMD_SOCHUN_{region.admin}: stream_name 에 일반값 "{name}" 이 들어갔다.')
+                fail(f'LSMD_SOCHUN_{code}: stream_name 에 일반값 "{name}" 이 들어갔다.')
                 break
-
-        points = check_collection(DIR / f'RIVER_STD_POINTS_{region.admin}.geojson', {'Point'})
-        for feature in points:
-            props = feature['properties']
-            missing = [key for key in ('name', 'point_role', 'provider', 'reference_date') if not props.get(key)]
-            if missing:
-                fail(f'RIVER_STD_POINTS_{region.admin}: 필수 속성 누락 {missing} ({feature.get("id")})')
-                break
-            if props.get('official_data') is not True or props.get('value_status') != 'actual':
-                fail(f'RIVER_STD_POINTS_{region.admin}: 실제 연계값 표기가 없다 ({feature.get("id")}). '
-                     'official_data=true · value_status=actual 이어야 한다.')
-                break
-
-    catalog_path = DIR / 'river_standard_catalog.json'
-    if not catalog_path.exists():
-        fail('river_standard_catalog.json 이 없다.')
-    else:
-        catalog = json.loads(catalog_path.read_text(encoding='utf-8'))
-        codes = {block['admin_code'] for block in catalog['regions']}
-        expected = {region.admin for region in REGIONS}
-        if codes != expected:
-            fail(f'river_standard_catalog.json: 지역 구성이 다르다 {sorted(codes)} != {sorted(expected)}')
-        for block in catalog['regions']:
-            for row in block['rivers']:
-                if row['has_coordinate'] != bool(row.get('points')):
-                    fail(f'river_standard_catalog.json: has_coordinate 와 points 가 어긋난다 ({row.get("name")})')
-                    break
+    # 시드가 있는 지역은 지도 자료도 반드시 있어야 한다 — 없으면 대시보드가 빈 지도를 연다.
+    # 남원은 앱 시드코드(45190)와 공간자료 코드(52190)가 다르다. 지도는 자료 코드로 파일을
+    # 찾으므로 파일이 앱 코드로 남아 있으면 그 지역에서 하천이 통째로 안 뜬다(실제로 그랬다).
+    data_code = {'45190': '52190'}
+    for region in REGIONS:
+        if region.admin == '26':
+            continue  # 부산 광역 합본은 구·군 단위 반입으로 대체됐다
+        code = data_code.get(region.admin, region.admin)
+        if not (DIR / f'LSMD_SOCHUN_{code}.geojson').exists():
+            fail(f'대상지역 {region.name}({code}) 의 소하천구역 파일이 없다.')
+        for kind in ('TN_RIVER_BNDRY', 'TN_RIVER_BT'):
+            stale = DIR / f'{kind}_{region.admin}.geojson'
+            if code != region.admin and stale.exists():
+                fail(f'{stale.name}: 앱 코드로 남아 있다. 지도는 {code} 로 찾으므로 파일명을 바꿔야 한다.')
 
     index_path = DIR / 'river_search_index.json'
     if not index_path.exists():
         fail('river_search_index.json 이 없다.')
     else:
         entries = json.loads(index_path.read_text(encoding='utf-8'))['entries']
-        admins = {region.admin for region in REGIONS}
+        admins = {row['code'] for row in catalog}
         for entry in entries:
-            if entry['admin'] not in admins:
-                fail(f'river_search_index.json: 대상 외 지역 {entry["admin"]}')
+            # 전국 하천(국가·지방)은 여러 시군구에 걸쳐 있어 지역에 배정하지 않는다.
+            if entry.get('scope') == 'nationwide':
+                if entry['admin']:
+                    fail(f'river_search_index.json: 전국 항목인데 지역이 붙어 있다 ({entry["name"]})')
+                    break
+            elif entry['admin'] not in admins:
+                fail(f'river_search_index.json: 지역 카탈로그에 없는 지역 {entry["admin"]}')
                 break
             if (entry['nav'] is None) != (entry['nav_kind'] == 'none'):
                 fail(f'river_search_index.json: nav 와 nav_kind 가 어긋난다 ({entry["name"]} · {entry["nav_kind"]})')
@@ -128,7 +145,7 @@ def main() -> int:
         for message in failures:
             print(f'  - {message}')
         return 1
-    print(f'PASS: 하천 참조자료 검증 (대상 {len(REGIONS)}개 지역)')
+    print(f'PASS: 하천 참조자료 검증 (시군구 {len(catalog)}개)')
     return 0
 
 

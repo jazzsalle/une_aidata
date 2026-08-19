@@ -33,8 +33,17 @@ coverage/
 test-results/
 playwright-report/
 
-# 외부 공간자료 원본 내려받기 (국토지리정보원 국가기본도 SHP 등) — 리포에 넣지 않는다.
-# 전처리 산출물만 data/ 아래로 반입한다.
+# 외부 원자료 루트. 2026-08-18 부터 GIS_data/ 아래로 모았다 — 경로는 scripts/source_data.py 하나가 안다.
+# 소하천구역 zip 460 MB · 국가기본도 3종 967 MB · 행정동 경계 130 MB 등이라 리포에 넣지 않는다.
+# 전처리 산출물(apps/web/public/reference/, data/reference/)만 커밋한다.
+# 폴더 자체가 아니라 그 안의 항목을 무시한다 — 그래야 아래 예외가 살아난다
+# (git 은 부모 디렉터리가 제외되면 자식을 다시 포함할 수 없다).
+GIS_data/*
+# T3Q 참고자료는 예전부터 리포가 들고 있던 것이라 계속 추적한다(원자료가 아니라 참고문서다).
+!GIS_data/메타데이터 참고자료(T3Q)/
+GIS_data/**/desktop.ini
+
+# 아래는 GIS_data/ 로 옮기기 전의 경로들. 예전 작업 PC 를 위해 남겨 둔다.
 국가기본도_*/
 *.shp
 *.dbf
@@ -45,3 +54,9 @@ build/
 # 산출물은 apps/web/public/reference/rivers/ 아래에 있고 scripts/build_sochun_layers.py 등으로 재생성한다.
 소하천_소하천구역*/
 전국하천표준데이터/
+# 행안부 NDMS 소하천 전체 목록(소하천대장 xlsx). 대조 검증 입력이며 산출물은 build/sochun/ 이다.
+소하천 전체 목록/
+anlysis/
+# 국가데이터처 법정동 연계정보 CSV(79 MB)와 행정동 경계 SHP(130 MB). 전처리 입력이며
+# 산출물 data/reference/sgg_code_map.json 은 커밋한다(scripts/build_sgg_code_map.py 로 재생성).
+행정구역/

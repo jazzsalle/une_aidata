@@ -10,15 +10,18 @@ import type { FeatureLike } from 'ol/Feature';
 import type Layer from 'ol/layer/Layer';
 import type BaseLayer from 'ol/layer/Base';
 import { lineStyle, palette, pointStyle } from './mapStyles';
-import { MAP_REGIONS } from './mapRegions';
+import { DEFAULT_MAP_REGION, dataCodeOfApp } from './mapRegions';
 import { createRiverLayers, type RiverLayerRegistry, type RiverSourceState } from './riverLayers';
 import { isRiverLayerId, riverLayerId } from './riverLayerSources';
 
 const DEFAULT_CENTER: [number, number] = [127.39, 35.416];
-// 지역 중심은 지도 전용 지역 카탈로그 한 곳에서만 정한다. 좌표를 두 군데 적어 두면 갈라진다.
-const CENTERS: Record<string, [number, number]> = Object.fromEntries(
-  MAP_REGIONS.map((region) => [region.admin, region.center]),
-);
+// 전국 시군구 중심좌표는 river_region_catalog.json 에 있고 MapPanel 이 들고 있다. 어댑터는
+// 지도를 만들 때 쓸 초기 좌표만 알면 되므로, 시드가 있는 3곳만 여기 둔다(그 외는 호출자가 준다).
+const SEED_CENTERS: Record<string, [number, number]> = {
+  '41430': [126.968, 37.344],
+  '47190': [128.344, 36.119],
+  '52190': [127.390, 35.416],
+};
 export type MapConnectionState = 'seed-only' | 'connecting' | 'connected' | 'error';
 export type BaseMapType = 'base' | 'satellite';
 /** 지도에서 클릭한 POI 1건. 팝업 렌더는 React가 담당하므로 화면표현 없이 원본 속성만 전달한다. */
@@ -54,7 +57,7 @@ export interface MapFeatureHover {
 
 export interface VWorldMapHandle {
   map: OlMap;
-  setRegion(code: string): void;
+  setRegion(code: string, center?: [number, number]): void;
   highlightFeature(id: string): boolean;
   /** 검색 결과로 이동한다. 형상이 아직 안 받아진 소스도 있으므로 좌표만으로 먼저 이동시킨다. */
   focusLonLat(lonLat: [number, number], zoom?: number): void;
@@ -220,7 +223,7 @@ export async function createVWorldMap(target: HTMLElement, adminCode: string, on
     sources.set(layerId,source);vectors.set(layerId,layer);mapLayers.push(layer);
   }
 
-  const center = CENTERS[adminCode] ?? DEFAULT_CENTER;
+  const center = SEED_CENTERS[dataCodeOfApp(adminCode)] ?? SEED_CENTERS[DEFAULT_MAP_REGION] ?? DEFAULT_CENTER;
   const map = new OlMap({ target, layers: mapLayers, view: new View({ center: fromLonLat(center), zoom: 11 }), controls: [] });
 
   const clickHandlers = new Set<(selection: MapFeatureSelection | null) => void>();
@@ -353,10 +356,11 @@ export async function createVWorldMap(target: HTMLElement, adminCode: string, on
       anchorCoordinate = coordinate ? coordinate.slice(0, 2) : null;
       if (!coordinate && clicked) { clicked = null; vectors.forEach((vector) => vector.changed()); rivers.redraw(); }
     },
-    setRegion(code) {
-      // 국가기본도 하천은 지자체별 파일이라 지역이 바뀌면 자료도 바꿔야 한다.
+    setRegion(code, moveTo) {
+      // 하천자료는 시군구별 파일이라 지역이 바뀌면 자료도 바꿔야 한다.
       rivers.setRegion(code);
-      map.getView().animate({ center: fromLonLat(CENTERS[code] ?? DEFAULT_CENTER), zoom: 11, duration: 350 });
+      const target = moveTo ?? SEED_CENTERS[code] ?? DEFAULT_CENTER;
+      map.getView().animate({ center: fromLonLat(target), zoom: 11, duration: 350 });
     },
     focusLonLat(lonLat, zoom = 15) {
       map.getView().animate({ center: fromLonLat(lonLat), zoom, duration: 350 });
