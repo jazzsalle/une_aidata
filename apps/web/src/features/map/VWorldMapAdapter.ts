@@ -110,8 +110,10 @@ function styleFor(feature: FeatureLike, context: StyleContext) {
     return pointStyle(active ? 10 : 6, active ? activeLine : sat ? '#ffea00' : 'rgba(220,76,70,.9)', active ? activeCasing : casing, '#ffffff');
   }
   if (layer === 'FLOOD_TRACE') {
-    // 행안부 침수흔적도(실자료). 시군구에 수천 건이 깔리는 곳(영등포 3,463)이 있어 채움을 옅게 둔다.
-    return lineStyle(active ? activeLine : sat ? '#80deea' : '#00838f', active ? activeCasing : casing, active ? 3.5 : 1.4, active ? (sat ? 'rgba(255,45,149,.28)' : 'rgba(255,152,0,.25)') : sat ? 'rgba(128,222,234,.28)' : 'rgba(0,131,143,.22)');
+    // 행안부 침수흔적도(실자료). 주황 — 하천(파랑·보라)·소하천(초록)·행정경계(파랑)와 한눈에 갈린다.
+    // 시군구에 수천 건이 깔리는 곳(영등포 3,463)이 있어 채움을 옅게 둔다. 영상지도 위에서는 더 밝은 주황.
+    // 강조색(activeLine)이 일반지도에서 주황이라 침수흔적과 겹친다 — 강조만 진한 빨강으로 둔다.
+    return lineStyle(active ? (sat ? activeLine : '#c62828') : sat ? '#ffb74d' : '#ef6c00', active ? activeCasing : casing, active ? 3.5 : 1.4, active ? (sat ? 'rgba(255,45,149,.28)' : 'rgba(198,40,40,.3)') : sat ? 'rgba(255,183,77,.3)' : 'rgba(239,108,0,.24)');
   }
   // 하천(L2)은 여기서 그리지 않는다. 소스별로 나뉘어 riverLayers 가 전담한다.
   const base = sat ? '#ffffff' : provisional ? '#9b6b32' : '#1769aa';
