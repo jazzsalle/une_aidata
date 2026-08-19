@@ -31,12 +31,14 @@ interface RiverSearchIndex {
   entries: RiverSearchEntry[];
 }
 
+import { dataUrl } from './dataUrl';
+
 const INDEX_URL = '/reference/rivers/river_search_index.json';
 let pending: Promise<RiverSearchEntry[]> | null = null;
 
 export function loadRiverSearchIndex(): Promise<RiverSearchEntry[]> {
   if (!pending) {
-    pending = fetch(INDEX_URL, { cache: 'force-cache' })
+    pending = fetch(dataUrl(INDEX_URL), { cache: 'force-cache' })
       .then((response) => {
         if (!response.ok) throw new Error(String(response.status));
         return response.json() as Promise<RiverSearchIndex>;

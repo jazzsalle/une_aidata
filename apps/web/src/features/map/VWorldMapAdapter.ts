@@ -9,6 +9,7 @@ import { fromLonLat, toLonLat } from 'ol/proj';
 import type { FeatureLike } from 'ol/Feature';
 import type Layer from 'ol/layer/Layer';
 import type BaseLayer from 'ol/layer/Base';
+import { dataUrl } from './dataUrl';
 import { lineStyle, palette, pointStyle } from './mapStyles';
 import { DEFAULT_MAP_REGION, dataCodeOfApp } from './mapRegions';
 import { createRiverLayers, type RiverLayerRegistry, type RiverSourceState } from './riverLayers';
@@ -198,9 +199,16 @@ export async function createVWorldMap(target: HTMLElement, adminCode: string, on
     const source = sources.get('L3');
     if (!source) return false;
     const request = ++boundaryRequest;
+    // 고른 지역 경계만 남긴다. 걷어내지 않으면 종로→중구 순으로 고를 때 둘이 겹쳐 그려져
+    // "중구를 골랐는데 종로·동대문 경계가 같이 나온다" 가 된다 — 실제로 그랬다.
+    // 시드 경계(의왕·구미·남원)는 위험지구가 걸려 있어 그대로 둔다.
+    source.getFeatures()
+      .filter((feature) => !seedBoundaryCodes.has(dataCodeOfApp(String(feature.get('admin_code') ?? ''))) && dataCodeOfApp(String(feature.get('admin_code') ?? '')) !== code)
+      .forEach((feature) => source.removeFeature(feature));
+    loadedBoundaries.forEach((loaded) => { if (!seedBoundaryCodes.has(loaded) && loaded !== code) loadedBoundaries.delete(loaded); });
     if (!loadedBoundaries.has(code)) {
       try {
-        const response = await fetch(`/reference/admin/SGG_${code}.geojson`);
+        const response = await fetch(dataUrl(`/reference/admin/SGG_${code}.geojson`));
         if (!response.ok) return false;
         const features = new GeoJSON().readFeatures(await response.json(), { dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857' });
         features.forEach((feature) => { const id = feature.get('id'); if (id) feature.setId(String(id)); });
@@ -235,7 +243,7 @@ export async function createVWorldMap(target: HTMLElement, adminCode: string, on
     source.getFeatures().filter((feature) => feature.get('data_status') === 'actual').forEach((feature) => source.removeFeature(feature));
     officialFloodLoaded.clear();
     try {
-      const response = await fetch(`/reference/flood/FLOOD_TRACE_${code}.geojson`, { cache: 'force-cache' });
+      const response = await fetch(dataUrl(`/reference/flood/FLOOD_TRACE_${code}.geojson`), { cache: 'force-cache' });
       if (!response.ok) return;
       const features = new GeoJSON().readFeatures(await response.json(), { dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857' });
       if (request !== officialFloodRequest) return;

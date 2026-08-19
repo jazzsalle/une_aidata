@@ -9,6 +9,7 @@ import type { FeatureLike } from 'ol/Feature';
 import Feature_ from 'ol/Feature';
 import Point from 'ol/geom/Point';
 import { fromLonLat } from 'ol/proj';
+import { dataUrl } from './dataUrl';
 import { labelStyle, lineStyle, palette } from './mapStyles';
 import {
   RIVER_LAYER_SOURCES,
@@ -285,7 +286,7 @@ export function createRiverLayers({ features, styleContext, key, adminCode }: Cr
     messages.set(source.id, '자료 받는 중');
     emit();
     try {
-      const response = await fetch(riverDataUrl(template, code), { cache: 'force-cache' });
+      const response = await fetch(dataUrl(riverDataUrl(template, code)), { cache: 'force-cache' });
       if (!response.ok) throw new Error(String(response.status));
       const payload = await response.json();
       const parsed = source.id === 'sochun-label'

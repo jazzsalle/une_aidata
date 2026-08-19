@@ -523,14 +523,30 @@ export function MapPanel({ adminCode, mapRegion, focusTarget, highlightedFeature
           ) : null}
           <div className="map-search-field">
             <label htmlFor="map-river-search">하천명 검색</label>
-            <input
-              id="map-river-search"
-              type="search"
-              value={query}
-              placeholder="예: 요천, 안양천, 신기천"
-              autoComplete="off"
-              onChange={(event) => setQuery(event.target.value)}
-            />
+            <div className="map-search-input-row">
+              <input
+                id="map-river-search"
+                type="search"
+                value={query}
+                placeholder="예: 요천, 안양천, 신기천"
+                autoComplete="off"
+                onChange={(event) => setQuery(event.target.value)}
+                onKeyDown={(event) => { if (event.key === 'Escape' && query) { event.preventDefault(); setQuery(''); } }}
+              />
+              {/* 한 번 찾은 뒤 다른 하천을 찾으려면 검색어를 지우고 전국 모드도 풀어야 한다. 둘을 한 번에 되돌린다.
+                  type=search 의 기본 ✕ 는 브라우저마다 있고 없고 해서 따로 둔다. */}
+              {query ? (
+                <button
+                  type="button"
+                  className="map-search-clear"
+                  aria-label="검색어 지우기"
+                  title="검색어 지우기 (Esc)"
+                  onClick={() => { setQuery(''); setSearchNationwide(false); document.getElementById('map-river-search')?.focus(); }}
+                >
+                  ✕
+                </button>
+              ) : null}
+            </div>
           </div>
           {searchError ? <p className="map-search-note" role="alert">{searchError}</p> : null}
           {!searchIndex && !searchError ? <p className="map-search-note" role="status">검색 색인 받는 중</p> : null}

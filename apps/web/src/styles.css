@@ -296,6 +296,12 @@ button { cursor: pointer; }
 /* 좌하단 · 하천 검색 패널. 레이어 메뉴(우하단)와 좌우로 갈라 두어 둘 다 열려 있어도 겹치지 않는다. */
 .map-search-panel { position: absolute; left: var(--overlay-inset); bottom: calc(var(--overlay-inset) + 36px); z-index: 7; display: grid; gap: var(--sp-2); width: clamp(240px, 68%, 320px); max-height: calc(100% - 96px); overflow-y: auto; border: 1px solid var(--border-panel-blue); border-radius: var(--r-lg); padding: var(--sp-2); background: var(--c-surface); box-shadow: 0 8px 26px rgba(19, 43, 69, .24); }
 .map-search-region, .map-search-field { display: grid; gap: 4px; }
+.map-search-input-row { position: relative; display: flex; }
+.map-search-input-row input { flex: 1; min-width: 0; padding-right: 28px; }
+/* 검색어 지우기. 입력칸 안 오른쪽에 겹쳐 둔다. 키보드로도 닿는다. */
+.map-search-clear { position: absolute; right: 2px; top: 50%; transform: translateY(-50%); width: 24px; height: 24px; border: 0; border-radius: 4px; background: transparent; color: var(--c-text-muted); font-size: 13px; line-height: 1; cursor: pointer; }
+.map-search-clear:hover, .map-search-clear:focus-visible { background: var(--c-surface-2, #eef2f6); color: var(--c-text, #1a1a1a); outline: none; }
+.map-search-clear:focus-visible { box-shadow: 0 0 0 2px var(--c-primary, #1769aa); }
 .map-search-panel label { color: var(--c-text-muted); font-size: var(--fs-xs); line-height: var(--lh-xs); }
 .map-search-panel select, .map-search-panel input { width: 100%; min-height: 36px; border: 1px solid var(--border-panel-blue); border-radius: var(--r-sm); padding: 0 8px; background: #fff; color: var(--c-text); font-size: var(--fs-sm); line-height: var(--lh-sm); }
 .map-search-note { margin: 0; color: var(--c-text-muted); font-size: var(--fs-xs); line-height: var(--lh-xs); word-break: keep-all; }
