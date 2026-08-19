@@ -17,7 +17,9 @@
 
 국가·지방하천은 하천망도 카탈로그에서 온다. 이들은 여러 시군구에 걸쳐 있어 한 지역에
 배정할 수 없으므로 `admin` 을 비우고 `scope='nationwide'` 로 표시한다 — 결과를 고르면
-지역을 바꾸지 않고 그 하천 위치로만 움직인다.
+지역을 바꾸지 않고 그 하천 위치로만 움직인다. 대신 지나는 시군구 전부를 `admins` 에 담는다.
+청계천이 전국에 14개(지방하천 5 · 소하천 9)라 시군구 없이는 어느 청계천인지 고를 수 없다.
+시군구를 골랐을 때 그 시군구를 지나는 것만 거르고, 화면에 '종로구 외 3곳' 처럼 적는 데 쓴다.
 """
 from __future__ import annotations
 
@@ -69,11 +71,14 @@ def main() -> int:
             lons = [p[0] for p in bucket['points']]
             lats = [p[1] for p in bucket['points']]
             pieces = len(bucket['ids'])
-            detail = f'{row["sgg"] or code}'
+            # 시군구명은 넣지 않는다 — 화면이 admin 으로 지역을 적으므로(다른 지역 결과에만) 여기 또 적으면
+            # '포천시 포천시' 처럼 겹친다. 구역 수·고시일처럼 이 행에만 있는 것을 적는다.
+            parts = []
             if pieces > 1:
-                detail += f' · 구역 {pieces}개'
+                parts.append(f'구역 {pieces}개')
             if bucket['notified']:
-                detail += f' · 고시 {max(bucket["notified"])}'
+                parts.append(f'고시 {max(bucket["notified"])}')
+            detail = ' · '.join(parts)
             entries.append({
                 'name': name,
                 'kind': '소하천구역',
@@ -94,6 +99,7 @@ def main() -> int:
                 'kind': river['river_class'],
                 'source_id': 'river-network',
                 'admin': '',
+                'admins': list(river.get('admin_codes') or []),
                 'scope': 'nationwide',
                 'feature_id': river['river_code'],
                 'nav': river['nav'],

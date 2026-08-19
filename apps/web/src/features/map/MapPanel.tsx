@@ -7,7 +7,7 @@ import {
   isRiverLayerId, riverLayerId, riverSourceById, riverSourceIdOf,
 } from './riverLayerSources';
 import { DEFAULT_MAP_REGION, type MapRegion, dataCodeOfApp, groupBySido, loadMapRegions, mapRegionIn } from './mapRegions';
-import { loadRiverSearchIndex, searchRivers, type RiverSearchEntry } from './riverSearchIndex';
+import { entryInRegion, loadRiverSearchIndex, searchRivers, type RiverSearchEntry } from './riverSearchIndex';
 import { loadPlanReference } from '../../services/apiClient';
 // 위험지구 상세 렌더·표기 규칙은 '현재 판단' 상세보기 모달과 공용 컴포넌트를 재사용한다.
 import { DistrictDetailSections, FactList, MISSING, districtFactRows, evidenceText, orMissing, str, type Fact } from '../../components/DistrictDetail';
@@ -419,9 +419,13 @@ export function MapPanel({ adminCode, mapRegion, focusTarget, highlightedFeature
     () => sidoList.find(([sido]) => sido === currentSido)?.[1] ?? [],
     [sidoList, currentSido],
   );
+  // 시군구로 거른 결과가 기본이다. 사용자가 '전국에서 찾기' 를 누르면 거르지 않는다.
+  // 검색어나 지역이 바뀌면 다시 시군구로 좁힌다 — 전국 모드가 눌러붙어 있으면 다음 검색이 또 섞인다.
+  const [searchNationwide, setSearchNationwide] = useState(false);
+  useEffect(() => { setSearchNationwide(false); }, [query, region]);
   const search = useMemo(
-    () => (searchIndex ? searchRivers(searchIndex, query, region) : { items: [], total: 0 }),
-    [searchIndex, query, region],
+    () => (searchIndex ? searchRivers(searchIndex, query, region, 40, searchNationwide) : { items: [], total: 0, elsewhere: 0 }),
+    [searchIndex, query, region, searchNationwide],
   );
   const results = search.items;
   const tag = hover ? hoverTag(hover) : null;
@@ -532,10 +536,23 @@ export function MapPanel({ adminCode, mapRegion, focusTarget, highlightedFeature
           {!searchIndex && !searchError ? <p className="map-search-note" role="status">검색 색인 받는 중</p> : null}
           {searchIndex && query.trim() ? (
             <>
-              <p className="map-search-count" role="status" aria-live="polite">{search.total ? `${search.total.toLocaleString('ko-KR')}건${search.total > results.length ? ` (상위 ${results.length}건 표시)` : ''}` : '일치하는 하천이 없습니다.'}</p>
+              <p className="map-search-count" role="status" aria-live="polite">
+                {search.total
+                  ? `${searchNationwide ? '전국 ' : `${currentRegion?.short ?? '이 지역'} `}${search.total.toLocaleString('ko-KR')}건${search.total > results.length ? ` (상위 ${results.length}건 표시)` : ''}`
+                  : searchNationwide ? '일치하는 하천이 없습니다.' : `${currentRegion?.short ?? '이 지역'}에 일치하는 하천이 없습니다.`}
+                {/* 같은 이름이 다른 시군구에 있으면 그 사실을 말하고 전국으로 넘어갈 길을 둔다. 조용히 숨기면 '없다'로 읽힌다. */}
+                {!searchNationwide && search.elsewhere > 0 ? (
+                  <> · 다른 지역에 {search.elsewhere.toLocaleString('ko-KR')}건 <button type="button" className="map-search-link" onClick={() => setSearchNationwide(true)}>전국에서 찾기</button></>
+                ) : null}
+              </p>
               <ul className="map-search-results">
                 {results.map((entry) => {
-                  const other = entry.scope === 'region' && entry.admin !== region;
+                  const other = !entryInRegion(entry, region);
+                  // 국가·지방하천은 여러 시군구를 지난다. 어느 것인지 알 수 있게 지나는 시군구를 적는다.
+                  const passes = entry.scope === 'nationwide' && entry.admins?.length
+                    ? entry.admins.map((code) => mapRegionIn(regions, code)?.short ?? code)
+                    : [];
+                  const passesText = passes.length > 3 ? `${passes.slice(0, 3).join('·')} 외 ${passes.length - 3}곳` : passes.join('·');
                   return (
                     <li key={`${entry.source_id}:${entry.admin}:${entry.feature_id || entry.name}:${entry.kind}`}>
                       <button
@@ -548,7 +565,8 @@ export function MapPanel({ adminCode, mapRegion, focusTarget, highlightedFeature
                         <span className="map-search-name">{entry.name}</span>
                         <span className="map-search-meta">
                           {entry.kind}
-                          {other ? ` · ${mapRegionIn(regions, entry.admin)?.short ?? entry.admin}` : ''}
+                          {entry.scope === 'region' && other ? ` · ${mapRegionIn(regions, entry.admin)?.short ?? entry.admin}` : ''}
+                          {passesText ? ` · ${passesText}` : ''}
                           {entry.nav ? '' : ' · 좌표 없음'}
                         </span>
                         {entry.detail ? <span className="map-search-detail">{entry.detail}</span> : null}
