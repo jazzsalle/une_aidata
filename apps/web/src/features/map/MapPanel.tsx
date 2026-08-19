@@ -108,9 +108,22 @@ function facts(selection: MapFeatureSelection, district: DistrictReference | nul
     rows.push({ label: '행정코드', value: orMissing(properties.admin_code) });
     rows.push({ label: '경계자료', value: orMissing(properties.source) });
   } else if (selection.layerId === 'L-FLOOD-TRACE' || selection.layerId === 'FLOOD_TRACE') {
-    rows.push({ label: '발생일', value: orMissing(properties.occurred_at) });
-    rows.push({ label: '연계 사건', value: orMissing(properties.event_id) });
-    rows.push({ label: '자료상태', value: orMissing(properties.data_status) });
+    if (properties.data_status === 'actual') {
+      // 행안부 침수흔적도(실자료). 원자료 필드를 그대로 보여 준다 — 등급(1~6)의 뜻은 명세를 받기 전까지 값 그대로다.
+      rows.push({ label: '재난명', value: orMissing(properties.disaster_name) });
+      rows.push({ label: '침수 기간', value: properties.occurred_at ? `${properties.occurred_at}${properties.ended_at && properties.ended_at !== properties.occurred_at ? ` ~ ${properties.ended_at}` : ''}` : MISSING });
+      rows.push({ label: '침수 원인', value: orMissing(properties.cause_detail) });
+      rows.push({ label: '침수심', value: properties.flood_depth_m != null ? `${properties.flood_depth_m} m` : MISSING });
+      rows.push({ label: '침수면적', value: properties.flood_area_m2 != null ? `${Number(properties.flood_area_m2).toLocaleString()} m²` : MISSING });
+      rows.push({ label: '등급(원자료 FLDN_GRD)', value: orMissing(properties.flood_grade) });
+      rows.push({ label: '자료상태', value: '실자료 · 행안부 침수흔적도' });
+      rows.push({ label: '출처', value: orMissing(properties.source) });
+      rows.push({ label: '수집시각', value: orMissing(properties.collected_at) });
+    } else {
+      rows.push({ label: '발생일', value: orMissing(properties.occurred_at) });
+      rows.push({ label: '연계 사건', value: orMissing(properties.event_id) });
+      rows.push({ label: '자료상태', value: orMissing(properties.data_status) });
+    }
   } else if (selection.layerId === 'L-FLOOD-RISK-AREA') {
     rows.push({ label: '표기 등급', value: orMissing(properties.risk_grade) });
     rows.push({ label: '관련 하천', value: orMissing(properties.river_name) });

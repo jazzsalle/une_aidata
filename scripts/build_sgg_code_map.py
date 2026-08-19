@@ -47,6 +47,15 @@ OUT = REPO / 'data' / 'reference' / 'sgg_code_map.json'
 # 자치구가 있는 시. '창원시 성산구'(띄움)와 '청주시서원구'(붙임)가 원자료에 섞여 있다.
 GU_IN_CITY = re.compile(r'^(.+?시)\s*[가-힣]+구$')
 
+# 시도 단위 개편으로 이름이 바뀐 것. 폐지행의 시도명을 현행 시도명으로 바꿔 시군구 이름을 대조할 때 쓴다.
+# 2023 강원 · 2024 전북 · 2026 전남광주. 이 개편들은 OLD_LAWDCD 가 비어 있어 코드로는 이어지지 않는다.
+SIDO_RENAME = {
+    '강원도': '강원특별자치도',
+    '전라북도': '전북특별자치도',
+    '전라남도': '전남광주통합특별시',
+    '광주광역시': '전남광주통합특별시',
+}
+
 
 def read_codes() -> list[dict]:
     text = zipfile.ZipFile(require(SRC, '행정표준코드 법정동코드')).read(MEMBER).decode('cp949')
@@ -92,6 +101,38 @@ def build(rows: list[dict]):
         owner = next(iter(owners))
         by_name[owner].add(old_code)
     add_rollup()
+
+    # OLD_LAWDCD 로 이어지지 않는 종전 코드를 **이름으로** 잇는다. 강원(2023)·전북(2024) 개편은
+    # OLD_LAWDCD 가 비어 있고, 2002~2018 자료(침수흔적도 등)는 그보다 오래된 코드도 쓴다.
+    # 두 규칙만 자동으로 잇는다 — 둘 다 이름에서 바로 나오는 것이다.
+    #   ① (시도, 시군구) 이름이 현행 항목과 같다. 시도명은 개편표를 거친다. 폐지된 구(부천시 원미구)는 시로 올린다.
+    #   ② 군→시 승격 — 어간이 같고 어미만 군→시 (여주군→여주시 · 화성군→화성시).
+    # 이름이 바뀐 통합(청원군→청주시 · 마산시→창원시 · 제주도 49→50 · 인천 중구 분구)은 잇지 않는다.
+    # 뻔해 보여도 손으로 넣기 시작하면 검증되지 않은 판단이 표에 섞인다. 코드미상으로 남긴다.
+    taken = {code for codes in by_name.values() for code in codes}
+    dead_names: dict[str, tuple[str, str]] = {}
+    for row in rows:
+        if not (row.get('DEL_DT') or '').strip():
+            continue
+        code = (row.get('LAWD_CD') or '').strip()
+        if len(code) != 10 or not code.isdigit() or code[:5] in taken:
+            continue
+        dead_names.setdefault(code[:5], (row['SIDO_NM'].strip(), row['SGG_NM'].strip()))
+    for old_code, (sido, sgg) in sorted(dead_names.items()):
+        cur = SIDO_RENAME.get(sido, sido)
+        target = None
+        if (cur, sgg) in by_name:
+            target = (cur, sgg)
+        else:
+            match = GU_IN_CITY.match(sgg)
+            if match and (cur, match.group(1)) in by_name:
+                target = (cur, match.group(1))
+            elif sgg.endswith('군') and (cur, sgg[:-1] + '시') in by_name:
+                target = (cur, sgg[:-1] + '시')
+        if target:
+            by_name[target].add(old_code)
+    add_rollup()
+
     current |= {code for codes in by_name.values() for code in codes if code in current}
     return by_name, ambiguous, current
 
@@ -145,6 +186,7 @@ def main() -> int:
             'codes 는 한 시군구가 가질 수 있는 코드 전부다. 현행 코드와 종전 코드를 함께 담는다.',
             '자치구가 있는 시는 구 코드와 시 코드를 함께 갖는다 — SHP 의 COL_ADM_SE 가 시 단위이기 때문이다.',
             '종전 코드는 지금 다른 시군구가 쓰고 있지 않을 때만 담는다(OLD_LAWDCD 기준).',
+            'OLD_LAWDCD 가 비어 있는 종전 코드는 이름으로 잇는다 — (시도·시군구) 이름 일치(시도명 개편표 경유), 폐지된 구→시, 군→시 승격. 이름이 바뀐 통합은 잇지 않는다.',
             '승계가 갈린 종전 코드는 ambiguous_old_codes 로 빼 두고 표에 넣지 않는다.',
             'parent_code 는 자치구가 있는 시의 구 항목에만 붙는다 — 자료마다 시/구 층위가 달라 맞출 때 쓴다.',
             'primary_code 는 파일명·admin_code 를 맞출 대표 코드다. 구는 시 코드, 그 밖은 현행 코드다.',
