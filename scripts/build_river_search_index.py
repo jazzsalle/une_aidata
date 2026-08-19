@@ -25,6 +25,7 @@ from __future__ import annotations
 
 import json
 import sys
+from collections import Counter, defaultdict
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
@@ -91,15 +92,31 @@ def main() -> int:
                 'detail': detail,
             })
 
+    # 하천코드별로 국가기본도 경계·실폭 조각이 있는 시군구와 조각 수. 검색 결과를 골랐을 때 어느
+    # 시군구로 옮길지 정하는 근거다 — 하천망도가 말하는 '지나는 시군구' 와 국가기본도에 조각이 실제로
+    # 있는 시군구는 다르다. 반포천은 하천망도로는 동작구·서초구인데 동작구 구간은 복개라 국가기본도
+    # 조각이 서초구에만 있다. 조각이 있는 곳으로 가야 화면에 뭐가 보인다.
+    pieces: dict[str, Counter] = defaultdict(Counter)
+    for layer in ('TN_RIVER_BNDRY', 'TN_RIVER_BT'):
+        for path in DIR.glob(f'{layer}_*.geojson'):
+            code = path.stem[len(layer) + 1:]
+            for feature in json.loads(path.read_text(encoding='utf-8'))['features']:
+                river_code = feature['properties'].get('river_code')
+                if river_code:
+                    pieces[str(river_code)][code] += 1
+
     network_path = DIR / 'river_network_catalog.json'
     if network_path.exists():
         for river in json.loads(network_path.read_text(encoding='utf-8'))['rivers']:
+            # admins 는 조각이 많은 시군구부터. 조각이 없는 시군구(복개·미도시 구간)는 뒤로 간다.
+            counted = pieces.get(str(river['river_code']), Counter())
+            admins = sorted(river.get('admin_codes') or [], key=lambda c: (-counted.get(c, 0), c))
             entries.append({
                 'name': river['river_name'],
                 'kind': river['river_class'],
                 'source_id': 'river-network',
                 'admin': '',
-                'admins': list(river.get('admin_codes') or []),
+                'admins': admins,
                 'scope': 'nationwide',
                 'feature_id': river['river_code'],
                 # 이동 좌표는 bbox 중심(nav)이 아니라 폴리곤 내부점(label_point)이다. 한강 bbox 중심은
