@@ -19,6 +19,9 @@ interface Props {
   adminCode: string;
   /** 상단에서 고른 시군구. 주면 이 값이 지도 지역이 된다(앱 지역과 별개로 움직인다). */
   mapRegion?: string;
+  /** 지도 안(검색창 시군구 선택 · 검색 결과 클릭)에서 지역이 바뀔 때 올려 보낸다. 상단 선택기가
+   *  같이 따라와야 한다 — 지도는 동작구인데 상단은 강남구면 어느 쪽이 맞는지 알 수 없다. */
+  onRegionChange?(code: string): void;
   /** 바깥(하천 목록 등)에서 지도를 옮길 때 쓴다. key 가 바뀔 때만 움직인다. */
   focusTarget?: { key: string; lonLat: [number, number]; zoom?: number } | null;
   highlightedFeatureId?: string | null;
@@ -181,7 +184,7 @@ function PoiPin() {
   );
 }
 
-export function MapPanel({ adminCode, mapRegion, focusTarget, highlightedFeatureId, initialVisible, compact = false, priorityAreas, onSelectFeature }: Props) {
+export function MapPanel({ adminCode, mapRegion, onRegionChange, focusTarget, highlightedFeatureId, initialVisible, compact = false, priorityAreas, onSelectFeature }: Props) {
   const ref = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<VWorldMapHandle | null>(null);
   const popupRef = useRef<HTMLDivElement | null>(null);
@@ -255,6 +258,8 @@ export function MapPanel({ adminCode, mapRegion, focusTarget, highlightedFeature
 
   // 상단에서 지역을 바꾸면 지도가 따라간다. 상단 값이 없을 때만 앱 지역을 따른다.
   useEffect(() => { setRegion(mapRegion ?? dataCodeOfApp(adminCode)); }, [mapRegion, adminCode]);
+  /** 지도 안에서 지역을 바꿀 때는 이걸 쓴다. 지도 상태와 상단 선택기를 함께 옮긴다. */
+  const changeRegion = useCallback((code: string) => { setRegion(code); onRegionChange?.(code); }, [onRegionChange]);
   // 하천 목록에서 고른 하천으로 이동. 좌표는 파생값(형상 bbox 중심)이라 화면에 값으로 쓰지 않는다.
   useEffect(() => {
     if (!focusTarget || !mapReady) return;
@@ -338,28 +343,44 @@ export function MapPanel({ adminCode, mapRegion, focusTarget, highlightedFeature
   /** 검색 결과 1건으로 이동한다. 지역·레이어를 먼저 맞추고, 좌표로 이동한 뒤 형상 강조를 예약한다. */
   function gotoSearchResult(entry: RiverSearchEntry) {
     if (!entry.nav) return;
-    // 국가·지방하천은 여러 시군구에 걸쳐 있어 한 지역에 배정하지 않았다. 지역을 바꾸지 않고
-    // 위치로만 움직인다 — 바꾸면 보고 있던 시군구 자료가 통째로 갈린다.
-    if (entry.scope === 'region' && entry.admin !== region) setRegion(entry.admin);
-    // 국가·지방하천은 전용 레이어가 없다(형상을 반입하지 않는다). 켤 소스가 있을 때만 켠다.
+    // 다른 지역 결과를 골랐으면 그 지역으로 옮긴다 — 상단 선택기까지. 검색이 시군구로 거르므로 다른
+    // 지역 것은 '전국에서 찾기' 를 눌러 **일부러** 고른 것이다. 강남구를 보다 동작구 반포천을 골랐으면
+    // 동작구 자료를 띄우는 것이 맞다. 소하천은 속한 시군구(admin)로, 국가·지방하천은 지나는 시군구 중
+    // 첫 번째(admins[0])로 간다 — 한강처럼 여러 곳을 지나면 어느 하나를 골라야 하고, 이미 고른
+    // 시군구를 지나면 그대로 둔다.
+    let target = region;
+    if (entry.scope === 'region' && entry.admin && entry.admin !== region) target = entry.admin;
+    else if (entry.scope === 'nationwide' && !entryInRegion(entry, region) && entry.admins?.[0]) target = entry.admins[0];
+    if (target !== region) changeRegion(target);
+    // 소하천은 그 소스를 켠다. 국가·지방하천은 전용 레이어가 없고 국가기본도 경계·실폭 조각으로 맞추므로
+    // 둘 다 꺼져 있으면 경계를 켠다 — 검색이 경계를 기준으로 가는데 경계가 꺼져 있으면 갈 곳이 없다.
     const code = riverSourceById(entry.source_id) ? riverLayerId(entry.source_id) : '';
     if (code && !visible[code]) {
       setVisible((current) => ({ ...current, [code]: true }));
       mapRef.current?.setRiverSourceVisible(entry.source_id, true);
     }
-    // 국가·지방하천이 고른 시군구를 지나면, 그 시군구의 국가기본도 경계·실폭 조각으로 맞춘다.
-    // nav 는 전국 bbox 중심이라 한강을 강남구에서 찾았는데 경기 광주 산속으로 간다.
-    // 조각은 파일이 도착해야 잡히므로 pendingHighlight 로 걸고, 그때까지는 좌표로 먼저 간다.
-    // 이미 실려 있으면 highlightFeature 가 바로 맞추고 true 를 돌려준다 — 그러면 nav 로 안 간다.
-    const inRegion = entry.scope === 'nationwide' && entry.feature_id && entryInRegion(entry, region);
-    if (inRegion) {
+    if (entry.scope === 'nationwide') {
+      const boundary = riverLayerId('ngii-boundary');
+      const realwidth = riverLayerId('ngii-realwidth');
+      if (!visible[boundary] && !visible[realwidth]) {
+        setVisible((current) => ({ ...current, [boundary]: true }));
+        mapRef.current?.setRiverSourceVisible('ngii-boundary', true);
+      }
+    }
+    // 국가·지방하천은 옮긴 시군구의 국가기본도 경계·실폭 조각으로 맞춘다. nav 는 전국 bbox 중심이라
+    // 한강을 강남구에서 찾았는데 경기 광주 산속으로 간다. 조각은 파일이 도착해야 잡히므로
+    // pendingHighlight 로 걸고, 그때까지는 좌표로 먼저 간다. 이미 실려 있으면 highlightFeature 가
+    // 바로 맞추고 true 를 돌려준다 — 그러면 nav 로 안 간다.
+    if (entry.scope === 'nationwide' && entry.feature_id) {
       const key = `RIVERCODE:${entry.feature_id}`;
-      if (mapRef.current?.highlightFeature(key)) { setPendingHighlight(null); return; }
+      if (target === region && mapRef.current?.highlightFeature(key)) { setPendingHighlight(null); return; }
       setPendingHighlight(key);
+      mapRef.current?.focusLonLat(entry.nav, 15);
+      return;
     }
     // 형상은 아직 안 받아졌을 수 있으므로 좌표로 먼저 옮긴다. 강조는 자료가 도착하면 붙는다.
     mapRef.current?.focusLonLat(entry.nav, entry.nav_kind === 'actual' ? 16 : 15);
-    if (!inRegion) setPendingHighlight(entry.scope === 'region' ? entry.feature_id || null : null);
+    setPendingHighlight(entry.feature_id || null);
   }
 
   function toggleBaseMap() {
@@ -488,7 +509,7 @@ export function MapPanel({ adminCode, mapRegion, focusTarget, highlightedFeature
               onChange={(event) => {
                 // 시도를 바꾸면 그 시도의 첫 시군구로 옮긴다. 빈 상태로 두면 지도가 어디를 보는지 알 수 없다.
                 const first = sidoList.find(([sido]) => sido === event.target.value)?.[1]?.[0];
-                if (first) setRegion(first.admin);
+                if (first) changeRegion(first.admin);
               }}
             >
               {sidoList.map(([sido]) => <option key={sido} value={sido}>{sido}</option>)}
@@ -498,7 +519,7 @@ export function MapPanel({ adminCode, mapRegion, focusTarget, highlightedFeature
               id="map-region-select"
               value={region}
               disabled={!regions.length}
-              onChange={(event) => setRegion(event.target.value)}
+              onChange={(event) => changeRegion(event.target.value)}
             >
               {sggList.map((item) => (
                 <option key={item.admin} value={item.admin}>{item.sgg}{item.hasPlanSeed ? '' : ' (하천자료만)'}</option>
