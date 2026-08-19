@@ -47,6 +47,9 @@ export interface RiverLayerRegistry {
 }
 
 interface StyleContext { selected: string | null; clicked: string | null; satellite: boolean }
+/** 국가기본도 경계·실폭에서 등급이 소하천인 폴리곤은 소하천구역 소스가 켜졌을 때만 그린다.
+ *  기본 화면은 국가·지방하천만 보여야 하는데 소하천 폴리곤이 그 다섯 배라 함께 그리면 묻힌다. */
+const SOCHUN_SOURCE_ID = 'lsmd-sochun';
 
 /** 하천망도 카탈로그(JSON)를 라벨 점 피처로 바꾼다. 형상은 담겨 있지 않다 — 하천당 점 1개다. */
 /** 하천명이 보이기 시작하는 해상도 상한(EPSG:3857 m/px). 값이 클수록 넓게 볼 때부터 보인다.
@@ -90,7 +93,15 @@ function markLabelAnchors(features: Feature[]): void {
   for (const { feature } of largest.values()) feature.set('label_anchor', true, true);
 }
 
-function styleForRiver(source: RiverLayerSource, feature: FeatureLike, context: StyleContext, resolution = 0) {
+function styleForRiver(source: RiverLayerSource, feature: FeatureLike, context: StyleContext, resolution = 0, showSochun = true) {
+  // 국가기본도 경계·실폭의 소하천 등급은 소하천 스위치를 따른다. 선택·강조 중인 피처는 예외다 —
+  // 검색이나 계획문서에서 소하천을 가리켰는데 안 보이면 안 된다.
+  if (!showSochun && source.semantic !== 'sochun' && source.semantic !== 'label' && String(feature.get('river_class') ?? '') === '소하천') {
+    const key = String(feature.getId() ?? feature.get('id') ?? '');
+    const rid = String(feature.get('river_id') ?? '');
+    const marked = [context.selected, context.clicked];
+    if (!(key && marked.includes(key)) && !(rid && marked.includes(rid))) return [];
+  }
   const { color, satelliteColor, width, fill, satelliteFill, dash } = source.style;
   const id = String(feature.getId() ?? feature.get('id') ?? '');
   // Agent·보고서는 하천을 rivers.json 의 river_id(RIV-YC 등)로 가리킨다. 국가기본도 피처는
@@ -212,7 +223,7 @@ export function createRiverLayers({ features, styleContext, key, adminCode }: Cr
       properties: { layerId: riverLayerId(source.id), riverSourceId: source.id },
       source: new VectorSource({ features: picked }),
       visible,
-      style: (feature, resolution) => styleForRiver(source, feature, styleContext(), resolution),
+      style: (feature, resolution) => styleForRiver(source, feature, styleContext(), resolution, Boolean(wanted.get(SOCHUN_SOURCE_ID))),
     });
     vectorLayers.set(source.id, layer);
     layers.push(layer);
@@ -241,7 +252,7 @@ export function createRiverLayers({ features, styleContext, key, adminCode }: Cr
       visible,
       // 라벨은 겹치면 서로를 못 읽게 한다. declutter 로 겹치는 글자를 OpenLayers 가 감춘다.
       declutter: source.semantic === 'label' || source.semantic === 'sochun',
-      style: (feature, resolution) => styleForRiver(source, feature, styleContext(), resolution),
+      style: (feature, resolution) => styleForRiver(source, feature, styleContext(), resolution, Boolean(wanted.get(SOCHUN_SOURCE_ID))),
     });
     vectorLayers.set(source.id, layer);
     layers.push(layer);
@@ -404,6 +415,8 @@ export function createRiverLayers({ features, styleContext, key, adminCode }: Cr
       const mode = delivery.get(sourceId);
       wmsLayers.get(sourceId)?.setVisible(visible && mode === 'wms');
       vectorLayers.get(sourceId)?.setVisible(visible && mode === 'geojson');
+      // 소하천 스위치는 국가기본도 경계·실폭의 소하천 등급 폴리곤도 좌우하므로 그쪽을 다시 그린다.
+      if (sourceId === SOCHUN_SOURCE_ID) vectorLayers.forEach((layer) => layer.changed());
       emit();
     },
     isVisible(sourceId) { return Boolean(wanted.get(sourceId)); },

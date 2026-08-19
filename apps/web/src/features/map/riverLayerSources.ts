@@ -153,8 +153,9 @@ export const RIVER_LAYER_SOURCES: RiverLayerSource[] = [
     styleName: '',
     projection: 'EPSG:3857',
     requiresVWorldKey: false,
-    // 지역을 고르면 국가·지방·소하천이 다 보여야 한다. 실폭만 켜 두면 하천 폭이 좁은 구간은
+    // 지역을 고르면 국가·지방하천이 다 보여야 한다. 실폭만 켜 두면 하천 폭이 좁은 구간은
     // 실폭 폴리곤이 없어서(중심선에만 있다) 그 하천이 지도에서 사라진다 — 경계가 그 자리를 메운다.
+    // 이 소스의 소하천 등급 폴리곤은 소하천구역 소스가 켜졌을 때만 그린다.
     defaultVisible: true,
     style: { color: '#7b1fa2', satelliteColor: '#d18cff', width: 2, fill: 'rgba(123,31,162,.08)', satelliteFill: 'rgba(209,140,255,.18)', dash: [5, 4] },
     dataUrlTemplate: `/reference/rivers/TN_RIVER_BNDRY_${RIVER_DATA_URL_TOKEN}.geojson`,
@@ -193,9 +194,10 @@ export const RIVER_LAYER_SOURCES: RiverLayerSource[] = [
     styleName: '',
     projection: 'EPSG:3857',
     requiresVWorldKey: false,
-    // 소하천은 국가기본도 경계·실폭에도 일부 들어 있지만(등급 소하천 90,556건) 고시 소하천구역은
-    // 이 자료뿐이다. 지역을 고르면 함께 떠야 세 등급이 다 보인다.
-    defaultVisible: true,
+    // 기본은 국가·지방하천만 보인다. 이 소스를 켜면 소하천구역과 함께, 국가기본도 경계·실폭에서
+    // 등급이 소하천인 폴리곤(경계 90,556 · 실폭 21,341)도 같이 나타난다 — 소하천 스위치 하나다.
+    // 시군구 하나에 소하천이 수백~천여 조각이라 기본으로 켜 두면 국가·지방하천이 묻힌다.
+    defaultVisible: false,
     style: { color: '#2e7d32', satelliteColor: '#69f0ae', width: 1.8, fill: 'rgba(46,125,50,.12)', satelliteFill: 'rgba(105,240,174,.22)' },
     dataUrlTemplate: `/reference/rivers/LSMD_SOCHUN_${RIVER_DATA_URL_TOKEN}.geojson`,
     datasetShort: '소하천구역',
