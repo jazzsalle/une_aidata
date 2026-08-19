@@ -347,9 +347,19 @@ export function MapPanel({ adminCode, mapRegion, focusTarget, highlightedFeature
       setVisible((current) => ({ ...current, [code]: true }));
       mapRef.current?.setRiverSourceVisible(entry.source_id, true);
     }
+    // 국가·지방하천이 고른 시군구를 지나면, 그 시군구의 국가기본도 경계·실폭 조각으로 맞춘다.
+    // nav 는 전국 bbox 중심이라 한강을 강남구에서 찾았는데 경기 광주 산속으로 간다.
+    // 조각은 파일이 도착해야 잡히므로 pendingHighlight 로 걸고, 그때까지는 좌표로 먼저 간다.
+    // 이미 실려 있으면 highlightFeature 가 바로 맞추고 true 를 돌려준다 — 그러면 nav 로 안 간다.
+    const inRegion = entry.scope === 'nationwide' && entry.feature_id && entryInRegion(entry, region);
+    if (inRegion) {
+      const key = `RIVERCODE:${entry.feature_id}`;
+      if (mapRef.current?.highlightFeature(key)) { setPendingHighlight(null); return; }
+      setPendingHighlight(key);
+    }
     // 형상은 아직 안 받아졌을 수 있으므로 좌표로 먼저 옮긴다. 강조는 자료가 도착하면 붙는다.
     mapRef.current?.focusLonLat(entry.nav, entry.nav_kind === 'actual' ? 16 : 15);
-    setPendingHighlight(entry.scope === 'region' ? entry.feature_id || null : null);
+    if (!inRegion) setPendingHighlight(entry.scope === 'region' ? entry.feature_id || null : null);
   }
 
   function toggleBaseMap() {

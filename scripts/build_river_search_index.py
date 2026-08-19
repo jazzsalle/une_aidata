@@ -102,8 +102,11 @@ def main() -> int:
                 'admins': list(river.get('admin_codes') or []),
                 'scope': 'nationwide',
                 'feature_id': river['river_code'],
-                'nav': river['nav'],
-                'nav_kind': river['nav_kind'],
+                # 이동 좌표는 bbox 중심(nav)이 아니라 폴리곤 내부점(label_point)이다. 한강 bbox 중심은
+                # 경기 광주 산속이지만 내부점은 반드시 하천 위에 있다. 시군구를 골랐을 때는 화면이
+                # 그 시군구의 국가기본도 조각으로 맞추므로 이 좌표는 다른 지역 하천으로 갈 때만 쓴다.
+                'nav': river.get('label_point') or river['nav'],
+                'nav_kind': 'interior' if river.get('label_point') else river['nav_kind'],
                 'detail': f'하천코드 {river["river_code"]}',
             })
 

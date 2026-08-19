@@ -126,8 +126,10 @@ function styleForRiver(source: RiverLayerSource, feature: FeatureLike, context: 
   // Agent·보고서는 하천을 rivers.json 의 river_id(RIV-YC 등)로 가리킨다. 국가기본도 피처는
   // 자체 id 를 쓰므로 전처리에서 붙인 river_id 로도 선택 상태를 판정한다.
   const riverId = String(feature.get('river_id') ?? '');
+  const riverCodeMark = `RIVERCODE:${String(feature.get('river_code') ?? '')}`;
   const marks = [context.selected, context.clicked];
-  const active = (Boolean(id) && marks.includes(id)) || (Boolean(riverId) && marks.includes(riverId));
+  const active = (Boolean(id) && marks.includes(id)) || (Boolean(riverId) && marks.includes(riverId))
+    || (Boolean(feature.get('river_code')) && marks.includes(riverCodeMark));
   const tone = palette(context.satellite);
   // 하천명은 점 1개에 글자만 그린다. 형상이 아니므로 선·면 스타일을 주지 않는다.
   if (source.semantic === 'label') {

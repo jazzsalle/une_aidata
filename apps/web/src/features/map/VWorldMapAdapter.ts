@@ -429,11 +429,18 @@ export async function createVWorldMap(target: HTMLElement, adminCode: string, on
     highlightFeature(id) {
       // 하천은 표시 중인 소스에 따라 벡터가 숨어 있을 수 있으므로 먼저 해당 소스를 켠다.
       rivers.revealFeature(id);
+      // 'RIVERCODE:1000010' 은 하천망도 하천코드로 가리키는 것이다. 한강처럼 여러 시군구를 지나는
+      // 국가·지방하천은 형상을 안 들여오므로, 지금 지도에 실린 시군구의 국가기본도 경계·실폭 중
+      // 같은 하천코드를 가진 조각들로 맞춘다 — 전국 bbox 중심으로 가면 강남구에서 한강을 찾았는데
+      // 경기 광주 산속으로 간다.
+      const riverCode = id.startsWith('RIVERCODE:') ? id.slice('RIVERCODE:'.length) : '';
       for (const source of [...sources.values(), ...rivers.featureSources()]) {
         // 국가기본도 하천은 한 하천이 여러 폴리곤으로 나뉜다(요천 5개). river_id 로 가리키면
         // 그 하천에 속한 조각 전부를 잡아 합친 범위로 맞춘다 — 한 조각만 잡으면 엉뚱하게 확대된다.
-        const byRiverId = source.getFeatures().filter((candidate) => String(candidate.get('river_id') ?? '') === id);
-        const matches = byRiverId.length ? byRiverId : [
+        const byRiverId = source.getFeatures().filter((candidate) => riverCode
+          ? String(candidate.get('river_code') ?? '') === riverCode
+          : String(candidate.get('river_id') ?? '') === id);
+        const matches = byRiverId.length ? byRiverId : riverCode ? [] : [
           source.getFeatureById(id) ?? source.getFeatures().find((candidate) => String(candidate.get('id') ?? candidate.get('district_code') ?? candidate.get('trace_id') ?? '') === id),
         ].filter((feature): feature is NonNullable<typeof feature> => Boolean(feature));
         if (!matches.length) continue;
