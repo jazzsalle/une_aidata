@@ -17,36 +17,36 @@
    "answerable": true,
    "answer_passages": [
     {
-     "passage_text": "1의 연면적은(는) 356.4 m2이다. 출처: 대구광역시 2016 표(제4.2장 풍수해위험지구선정-내수재해 1편(463~660).md, 23쪽).",
+     "passage_text": "100의 연면적은(는) 265.08 m2이다. 출처: 대구광역시 2016 표(제4.2장 풍수해위험지구선정-내수재해 1편(463~660).md, 28쪽).",
      "class_iri": "urn:rawdata:class/risk-district",
      "instance_kind": "measurement",
      "provenance": {
       "source_file": "자연재해저감종합계획/03_대구광역시2016_A구세대_6권분책/보고서/제4.2장 풍수해위험지구선정-내수재해 1편(463~660)/제4.2장 풍수해위험지구선정-내수재해 1편(463~660).md",
-      "page": 23,
+      "page": 28,
       "set_id": "set-01",
-      "instance_id": "urn:rawdata:inst/measurement/set-01/3e377df129"
+      "instance_id": "urn:rawdata:inst/measurement/set-01/c8683ce4da"
      }
     },
     {
-     "passage_text": "2의 연면적은(는) 275.73 m2이다. 출처: 대구광역시 2016 표(제4.2장 풍수해위험지구선정-내수재해 1편(463~660).md, 23쪽).",
+     "passage_text": "101의 연면적은(는) 153.65 m2이다. 출처: 대구광역시 2016 표(제4.2장 풍수해위험지구선정-내수재해 1편(463~660).md, 28쪽).",
      "class_iri": "urn:rawdata:class/risk-district",
      "instance_kind": "measurement",
      "provenance": {
       "source_file": "자연재해저감종합계획/03_대구광역시2016_A구세대_6권분책/보고서/제4.2장 풍수해위험지구선정-내수재해 1편(463~660)/제4.2장 풍수해위험지구선정-내수재해 1편(463~660).md",
-      "page": 23,
+      "page": 28,
       "set_id": "set-01",
-      "instance_id": "urn:rawdata:inst/measurement/set-01/e671e8d87e"
+      "instance_id": "urn:rawdata:inst/measurement/set-01/d522093b58"
      }
     },
     {
-     "passage_text": "3의 연면적은(는) 467.7 m2이다. 출처: 대구광역시 2016 표(제4.2장 풍수해위험지구선정-내수재해 1편(463~660).md, 23쪽).",
+     "passage_text": "102의 연면적은(는) 153 m2이다. 출처: 대구광역시 2016 표(제4.2장 풍수해위험지구선정-내수재해 1편(463~660).md, 28쪽).",
      "class_iri": "urn:rawdata:class/risk-district",
      "instance_kind": "measurement",
      "provenance": {
       "source_file": "자연재해저감종합계획/03_대구광역시2016_A구세대_6권분책/보고서/제4.2장 풍수해위험지구선정-내수재해 1편(463~660)/제4.2장 풍수해위험지구선정-내수재해 1편(463~660).md",
-      "page": 23,
+      "page": 28,
       "set_id": "set-01",
-      "instance_id": "urn:rawdata:inst/measurement/set-01/e076f9ea2c"
+      "instance_id": "urn:rawdata:inst/measurement/set-01/044fd82b56"
      }
     }
    ],
@@ -1155,36 +1155,36 @@
    "answerable": true,
    "answer_passages": [
     {
-     "passage_text": "17의 과업연장은(는) 1.03 ㎞이다. 출처: 경남 김해시 과업의 범위(01장 과업의 개요.md, 6쪽).",
+     "passage_text": "소하천 34의 유로 연장은(는) 2.09 ㎞이다. 출처: 경남 김해시 과업대상 소하천 개요(01장 과업의 개요.md, 18쪽).",
      "class_iri": "urn:rawdata:class/target-stream",
      "instance_kind": "measurement",
      "provenance": {
       "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/01장 과업의 개요/01장 과업의 개요.md",
-      "page": 6,
+      "page": 18,
       "set_id": "set-12",
-      "instance_id": "urn:rawdata:inst/measurement/set-12/1420ef9d73"
+      "instance_id": "urn:rawdata:inst/measurement/set-12/57ddd36d5a"
      }
     },
     {
-     "passage_text": "17의 과업연장은(는) 1.03 ㎞이다. 출처: 경남 김해시 과업의 범위(01장 과업의 개요.md, 6쪽).",
+     "passage_text": "소하천 35의 유로 연장은(는) 1.59 ㎞이다. 출처: 경남 김해시 과업대상 소하천 개요(01장 과업의 개요.md, 18쪽).",
      "class_iri": "urn:rawdata:class/target-stream",
      "instance_kind": "measurement",
      "provenance": {
       "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/01장 과업의 개요/01장 과업의 개요.md",
-      "page": 6,
+      "page": 18,
       "set_id": "set-12",
-      "instance_id": "urn:rawdata:inst/measurement/set-12/ee757a7e48"
+      "instance_id": "urn:rawdata:inst/measurement/set-12/b5449bf740"
      }
     },
     {
-     "passage_text": "17의 과업연장은(는) 1.03 ㎞이다. 출처: 경남 김해시 과업의 범위(01장 과업의 개요.md, 6쪽).",
+     "passage_text": "소하천 36의 유로 연장은(는) 2 ㎞이다. 출처: 경남 김해시 과업대상 소하천 개요(01장 과업의 개요.md, 18쪽).",
      "class_iri": "urn:rawdata:class/target-stream",
      "instance_kind": "measurement",
      "provenance": {
       "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/01장 과업의 개요/01장 과업의 개요.md",
-      "page": 6,
+      "page": 18,
       "set_id": "set-12",
-      "instance_id": "urn:rawdata:inst/measurement/set-12/cb87f5f7d2"
+      "instance_id": "urn:rawdata:inst/measurement/set-12/428fe2c9bd"
      }
     }
    ],
@@ -1209,36 +1209,36 @@
    "answerable": true,
    "answer_passages": [
     {
-     "passage_text": "1의 유로 연장은(는) 1.85 ㎞이다. 출처: 경남 김해시 표(04장 소하천 보전과 이용에 관한 기본사항.md, 5쪽).",
+     "passage_text": "소하천 13의 유로 연장은(는) 1.45 ㎞이다. 출처: 경남 김해시 소하천별 유역 개황(04장 소하천 보전과 이용에 관한 기본사항.md, 7쪽).",
      "class_iri": "urn:rawdata:class/baseline-status",
      "instance_kind": "measurement",
      "provenance": {
       "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/04장 소하천 보전과 이용에 관한 기본사항/04장 소하천 보전과 이용에 관한 기본사항.md",
-      "page": 5,
+      "page": 7,
       "set_id": "set-12",
-      "instance_id": "urn:rawdata:inst/measurement/set-12/78f0406838"
+      "instance_id": "urn:rawdata:inst/measurement/set-12/584f4d295e"
      }
     },
     {
-     "passage_text": "1의 하천 연장은(는) 0.48 ㎞이다. 출처: 경남 김해시 표(04장 소하천 보전과 이용에 관한 기본사항.md, 5쪽).",
+     "passage_text": "소하천 13의 하천 연장은(는) 0.82 ㎞이다. 출처: 경남 김해시 소하천별 유역 개황(04장 소하천 보전과 이용에 관한 기본사항.md, 7쪽).",
      "class_iri": "urn:rawdata:class/baseline-status",
      "instance_kind": "measurement",
      "provenance": {
       "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/04장 소하천 보전과 이용에 관한 기본사항/04장 소하천 보전과 이용에 관한 기본사항.md",
-      "page": 5,
+      "page": 7,
       "set_id": "set-12",
-      "instance_id": "urn:rawdata:inst/measurement/set-12/da788a8b88"
+      "instance_id": "urn:rawdata:inst/measurement/set-12/0c462ae7ed"
      }
     },
     {
-     "passage_text": "2의 유로 연장은(는) 2.33 ㎞이다. 출처: 경남 김해시 표(04장 소하천 보전과 이용에 관한 기본사항.md, 5쪽).",
+     "passage_text": "소하천 14의 유로 연장은(는) 2.31 ㎞이다. 출처: 경남 김해시 소하천별 유역 개황(04장 소하천 보전과 이용에 관한 기본사항.md, 7쪽).",
      "class_iri": "urn:rawdata:class/baseline-status",
      "instance_kind": "measurement",
      "provenance": {
       "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/04장 소하천 보전과 이용에 관한 기본사항/04장 소하천 보전과 이용에 관한 기본사항.md",
-      "page": 5,
+      "page": 7,
       "set_id": "set-12",
-      "instance_id": "urn:rawdata:inst/measurement/set-12/136859000f"
+      "instance_id": "urn:rawdata:inst/measurement/set-12/a3f35b0b4a"
      }
     }
    ],
@@ -1263,36 +1263,36 @@
    "answerable": true,
    "answer_passages": [
     {
-     "passage_text": "계의 2007년은(는) 25476 년이다. 출처: 경남 김해시 표(04장 소하천 보전과 이용에 관한 기본사항.md, 227쪽).",
+     "passage_text": "경남 김해시 4.3 타 계획과의 조정 — 구 분 계; 2007년 25,476; 2011년 26,057; 2016년 26,664; 2020년 27,382; ’07년 대비 ’20년 1,906. 출처: 04장 소하천 보전과 이용에 관한 기본사항.md (227쪽).",
      "class_iri": "urn:rawdata:class/plan-information",
-     "instance_kind": "measurement",
+     "instance_kind": "entity",
      "provenance": {
       "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/04장 소하천 보전과 이용에 관한 기본사항/04장 소하천 보전과 이용에 관한 기본사항.md",
       "page": 227,
       "set_id": "set-12",
-      "instance_id": "urn:rawdata:inst/measurement/set-12/1cb81f0b0c"
+      "instance_id": "urn:rawdata:inst/entity/set-12/37231e1b6a"
      }
     },
     {
-     "passage_text": "계의 2011년은(는) 26057 년이다. 출처: 경남 김해시 표(04장 소하천 보전과 이용에 관한 기본사항.md, 227쪽).",
+     "passage_text": "경남 김해시 4.3 타 계획과의 조정 — 구 분 계; 2007년 25,476; 2011년 25,685; 2016년 25,926; 2020년 26,390; ’07년 대비 ’20년 914. 출처: 04장 소하천 보전과 이용에 관한 기본사항.md (227쪽).",
      "class_iri": "urn:rawdata:class/plan-information",
-     "instance_kind": "measurement",
+     "instance_kind": "entity",
      "provenance": {
       "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/04장 소하천 보전과 이용에 관한 기본사항/04장 소하천 보전과 이용에 관한 기본사항.md",
       "page": 227,
       "set_id": "set-12",
-      "instance_id": "urn:rawdata:inst/measurement/set-12/db5310abdb"
+      "instance_id": "urn:rawdata:inst/entity/set-12/cba6c4fe11"
      }
     },
     {
-     "passage_text": "계의 2016년은(는) 26664 년이다. 출처: 경남 김해시 표(04장 소하천 보전과 이용에 관한 기본사항.md, 227쪽).",
+     "passage_text": "경남 김해시 4.3 타 계획과의 조정 — 구 분 계; 2007년 25,476; 2011년 25,351; 2016년 25,216; 2020년 25,415; ’07년 대비 ’20년 ∇61. 출처: 04장 소하천 보전과 이용에 관한 기본사항.md (227쪽).",
      "class_iri": "urn:rawdata:class/plan-information",
-     "instance_kind": "measurement",
+     "instance_kind": "entity",
      "provenance": {
       "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/04장 소하천 보전과 이용에 관한 기본사항/04장 소하천 보전과 이용에 관한 기본사항.md",
       "page": 227,
       "set_id": "set-12",
-      "instance_id": "urn:rawdata:inst/measurement/set-12/27532b03d5"
+      "instance_id": "urn:rawdata:inst/entity/set-12/d1d18cc0d7"
      }
     }
    ],
@@ -1371,36 +1371,36 @@
    "answerable": true,
    "answer_passages": [
     {
-     "passage_text": "9의 연장은(는) 405 m이다. 출처: 경남 김해시 표(07장 소하천공사의 실시에 관한사항.md, 453쪽).",
+     "passage_text": "경남 김해시 4.4 소하천의 종합적인 정비방향 — 구 분 전원 하천 구간; 시설계획 ․ 굴곡부를 완화시키고 수충 부는 보강 ․ 소하천단면은 하류에서 상류 로 연속성을 이루도록 계획; 환경계획 ․ 사람의 출입이 많은 경우 쓰레기통 및 오물수거시설 설치 ․ 오염하천 감시를 용이하게 토출관 설치; 다목적이용계획 ․ 유휴지에 잔디식재 및 그늘 막 설치 ․ 자연석을 이용한 징검다리 등을 설치하고 조경수를 식재; 적용구간 상 류 구 간 (산지부). 출처: 04장 소하천 보전과 이용에 관한 기본사항.md (279쪽).",
      "class_iri": "urn:rawdata:class/improvement-plan",
-     "instance_kind": "measurement",
+     "instance_kind": "entity",
      "provenance": {
-      "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/07장 소하천공사의 실시에 관한사항/07장 소하천공사의 실시에 관한사항.md",
-      "page": 453,
+      "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/04장 소하천 보전과 이용에 관한 기본사항/04장 소하천 보전과 이용에 관한 기본사항.md",
+      "page": 279,
       "set_id": "set-12",
-      "instance_id": "urn:rawdata:inst/measurement/set-12/295e5fb210"
+      "instance_id": "urn:rawdata:inst/entity/set-12/5c2369647c"
      }
     },
     {
-     "passage_text": "9의 연장은(는) 133 m이다. 출처: 경남 김해시 표(07장 소하천공사의 실시에 관한사항.md, 453쪽).",
+     "passage_text": "경남 김해시 4.4 소하천의 종합적인 정비방향 — 구 분 전원 하천 구간; 시설계획 ․ 기존 선형을 유지하면서 마을진입로와 연계 ․ 호안계획은 주변경관과 조화 를 이루도록 자연석을 이용; 환경계획 ․ 가능한 하수 및 오수를 분리 ․ 소하천내에쓰레기통 및 오물 수거시설을 설치하고 주기적; 다목적이용계획 ․ 고수부지에 잔디식재, 시설 공간으로 활용 ․ 보 등을 설치하여 유량확보 및 수변친수 공간으로 활용; 적용구간 중･하류부 구 간 (취락부). 출처: 04장 소하천 보전과 이용에 관한 기본사항.md (279쪽).",
      "class_iri": "urn:rawdata:class/improvement-plan",
-     "instance_kind": "measurement",
+     "instance_kind": "entity",
      "provenance": {
-      "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/07장 소하천공사의 실시에 관한사항/07장 소하천공사의 실시에 관한사항.md",
-      "page": 453,
+      "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/04장 소하천 보전과 이용에 관한 기본사항/04장 소하천 보전과 이용에 관한 기본사항.md",
+      "page": 279,
       "set_id": "set-12",
-      "instance_id": "urn:rawdata:inst/measurement/set-12/622a88f794"
+      "instance_id": "urn:rawdata:inst/entity/set-12/32046bab2b"
      }
     },
     {
-     "passage_text": "9의 연장은(는) 140 m이다. 출처: 경남 김해시 표(07장 소하천공사의 실시에 관한사항.md, 453쪽).",
+     "passage_text": "경남 김해시 4.4 소하천의 종합적인 정비방향 — 구 분 전원 하천 구간; 시설계획 ․ 기존 선형을 유지하되 심한 굴곡부는 바로잡아 수해를 예방 ․ 유속이완만한 구간은잔디 를 식재하여 법면을 보호; 환경계획 으로 청소 ․ 제방 상단에 폐비닐 적치함 등의 설치로 환경오염을 예방; 다목적이용계획 ․ 유휴지에 잔디식재, 의자 등을 설치하여 휴식공간 으로 활용; 적용구간 하류부 구 간 (농경지). 출처: 04장 소하천 보전과 이용에 관한 기본사항.md (279쪽).",
      "class_iri": "urn:rawdata:class/improvement-plan",
-     "instance_kind": "measurement",
+     "instance_kind": "entity",
      "provenance": {
-      "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/07장 소하천공사의 실시에 관한사항/07장 소하천공사의 실시에 관한사항.md",
-      "page": 453,
+      "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/04장 소하천 보전과 이용에 관한 기본사항/04장 소하천 보전과 이용에 관한 기본사항.md",
+      "page": 279,
       "set_id": "set-12",
-      "instance_id": "urn:rawdata:inst/measurement/set-12/b7525f8465"
+      "instance_id": "urn:rawdata:inst/entity/set-12/613993dc0c"
      }
     }
    ],

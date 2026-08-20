@@ -1835,3 +1835,37 @@ button.context-add-button:hover { background: var(--surface-panel-blue); }
 .agent-turn-links-label { color: var(--c-text-muted); font-size: var(--fs-xs); line-height: var(--lh-xs); }
 .agent-link-chip { display: inline-block; padding: 2px 8px; border: 1px solid #3949ab; border-radius: 999px; background: rgba(57,73,171,.06); color: #3949ab; font-size: var(--fs-xs); line-height: var(--lh-xs); cursor: pointer; }
 .agent-link-chip:hover, .agent-link-chip:focus-visible { background: #3949ab; color: #fff; }
+
+/* 메타 표본 하단 패널 3종. 기존 하단 패널 관례(테두리·라운드·간격)를 따르고 접기가 기본이다. */
+.plan-knowledge, .event-timeline, .satellite-preview { margin: 16px 0; border: 1px solid var(--border-panel-blue); border-radius: 12px; background: var(--c-surface); padding: 12px 16px; }
+.panel-toggle { border: 0; background: none; padding: 0; font: inherit; font-weight: 700; color: var(--c-text); cursor: pointer; }
+.panel-toggle::before { content: '▸ '; }
+.panel-toggle[aria-expanded="true"]::before { content: '▾ '; }
+.plan-knowledge-body, .event-timeline-body, .satellite-preview-body { margin-top: 10px; display: grid; gap: 10px; }
+.plan-knowledge-controls { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.plan-knowledge-controls label { display: flex; gap: 6px; align-items: center; font-size: var(--fs-sm); }
+.plan-knowledge-set { margin: 0; font-size: var(--fs-xs); }
+.plan-knowledge-questions { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.plan-knowledge-questions button { display: flex; gap: 8px; width: 100%; border: 0; background: none; padding: 5px 6px; border-radius: 6px; text-align: left; font-size: var(--fs-sm); line-height: var(--lh-sm); cursor: pointer; }
+.plan-knowledge-questions button:hover:not(:disabled) { background: var(--surface-panel-blue); }
+.plan-knowledge-questions button:disabled { cursor: not-allowed; opacity: .55; }
+.plan-knowledge-cq { flex: none; color: var(--c-text-muted); font-size: var(--fs-xs); min-width: 96px; }
+.plan-knowledge-empty { flex: none; color: var(--c-text-muted); font-size: var(--fs-xs); }
+.plan-knowledge-answer { border-left: 3px solid #3949ab; padding-left: 10px; display: grid; gap: 8px; }
+.plan-knowledge-answer p { margin: 0; font-size: var(--fs-sm); line-height: var(--lh-sm); }
+.plan-knowledge-meta { color: var(--c-text-muted) !important; font-size: var(--fs-xs) !important; }
+.plan-knowledge-footnote { margin: 0; color: var(--c-text-muted); font-size: var(--fs-xs); line-height: var(--lh-xs); }
+.event-timeline-head p { margin: 0; font-size: var(--fs-sm); }
+.event-timeline-sub { color: var(--c-text-muted); font-size: var(--fs-xs) !important; }
+.event-timeline-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.event-timeline-list li { display: grid; grid-template-columns: 130px 110px 1fr; gap: 8px; align-items: baseline; font-size: var(--fs-sm); border-left: 3px solid #3949ab; padding-left: 10px; }
+.event-timeline-list li small { grid-column: 3; color: var(--c-text-muted); font-size: var(--fs-xs); }
+.event-timeline-stage { font-weight: 600; }
+.event-timeline-note { margin: 0; color: var(--c-text-muted); font-size: var(--fs-xs); }
+.satellite-preview-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+.satellite-preview-grid figure { margin: 0; display: grid; gap: 4px; justify-items: center; }
+.satellite-preview-grid img { border-radius: 6px; border: 1px solid var(--c-border, #d5dbe3); }
+.satellite-preview-grid figcaption { display: grid; justify-items: center; font-size: var(--fs-xs); color: var(--c-text-muted); }
+.satellite-preview-empty { display: grid; place-items: center; width: 128px; height: 128px; border: 1px dashed var(--c-border, #d5dbe3); border-radius: 6px; color: var(--c-text-muted); font-size: var(--fs-xs); }
+.satellite-preview-note { margin: 0; color: var(--c-text-muted); font-size: var(--fs-xs); line-height: var(--lh-xs); }
+@media (max-width: 720px) { .event-timeline-list li { grid-template-columns: 1fr; } .event-timeline-list li small { grid-column: 1; } }
