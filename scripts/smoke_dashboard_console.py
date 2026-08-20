@@ -271,15 +271,21 @@ def main() -> int:
 
             steps.run('S10 유사사례 선택·비교 상세 표시', step_select_similar_event)
 
-            def step_t3q_mock_search() -> None:
-                page.wait_for_function('document.querySelectorAll(".mock-search-controls select option").length > 0')
-                page.locator('.mock-search-controls button', has_text='Mock 검색').click()
-                page.wait_for_selector('.mock-search-results')
-                page.wait_for_selector('.mock-search-results h3:has-text("Event Master")')
-                if page.locator('.mock-search-panel .inline-error').count():
-                    raise AssertionError(f'Mock 검색 오류 표시: {page.locator(".mock-search-panel .inline-error").inner_text()}')
+            def step_meta_knowledge_panels() -> None:
+                # Mock 검색 패널은 2026-08-21 계획지식 패널로 대체됐다(메타 반영 P4).
+                # 하단 메타 표본 패널 3개가 열리고, CQ 답 passage 가 구분색으로 나오는지 본다.
+                page.locator('.plan-knowledge .panel-toggle').click()
+                page.wait_for_selector('.plan-knowledge-questions button:not([disabled])')
+                page.locator('.plan-knowledge-questions button:not([disabled])').first.click()
+                page.wait_for_selector('.plan-knowledge-answer p.meta-demo-text')
+                page.locator('.event-timeline .panel-toggle').click()
+                page.wait_for_selector('.event-timeline-list li')
+                if 'KDSA-' not in page.locator('.event-timeline-head strong').inner_text():
+                    raise AssertionError('사건 타임라인에 KDSA 마스터ID 가 없습니다')
+                page.locator('.satellite-preview .panel-toggle').click()
+                page.wait_for_selector('.satellite-preview-grid figure')
 
-            steps.run('S11 T3Q 구조 Mock 검색 실행·결과 표시', step_t3q_mock_search)
+            steps.run('S11 메타 표본 패널(지식·타임라인·위성 미리보기) 표시', step_meta_knowledge_panels)
 
             def step_priority_detail_modal() -> None:
                 page.get_by_role('tab', name='현재 판단').click()
