@@ -337,29 +337,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiEnvelope'
-  /api/v1/flood-traces:
-    get:
-      operationId: getFloodTraces
-      summary: 침수흔적 POC Seed 조회
-      responses:
-        '200':
-          description: ApiEnvelope
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiEnvelope'
-        '400':
-          description: 입력값 오류
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiEnvelope'
-      parameters:
-      - in: query
-        name: admin_code
-        required: false
-        schema:
-          type: string
   /api/v1/satellite-assets:
     get:
       operationId: getSatelliteAssets

@@ -30,7 +30,9 @@ export interface RiverVectorStyle {
   width: number;
   fill?: string;
   satelliteFill?: string;
-  dash?: number[];
+  dash?: number[  // 'river-zone'(법정 하천구역 RIMGIS)은 2026-08-21 뺐다 — 소비 0 · 소스 미확정 회색 행만 차지했고,
+  // RIMGIS 는 성과품 다운로드 형태라 연결 계획이 없다(메타 반영 P4).
+];
 }
 
 /** 정적 GeoJSON에서 특정 피처만 뽑아 쓰는 소스의 추출 규칙. */
@@ -212,22 +214,6 @@ export const RIVER_LAYER_SOURCES: RiverLayerSource[] = [
     dataUrlTemplate: `/reference/rivers/LSMD_SOCHUN_${RIVER_DATA_URL_TOKEN}.geojson`,
     datasetShort: '소하천명',
     note: '소하천구역의 하천명(stream_name)을 이름마다 가장 큰 조각의 내부점 1개에 찍는다. 한 하천이 평균 5.7조각으로 들어오므로 조각마다 찍으면 같은 이름이 겹친다. 소하천구역 폴리곤 형상과 별도로 켜고 끈다.',
-  },
-  {
-    id: 'river-zone',
-    label: '법정 하천구역 (RIMGIS)',
-    semantic: 'zone',
-    kind: 'wfs',
-    status: 'unverified',
-    sourceOrg: '미확정',
-    url: '',
-    layerName: '',
-    styleName: '',
-    projection: 'EPSG:3857',
-    requiresVWorldKey: false,
-    defaultVisible: false,
-    style: { color: '#7b1fa2', satelliteColor: '#d18cff', width: 2.4, fill: 'rgba(123,31,162,.12)', satelliteFill: 'rgba(209,140,255,.2)', dash: [5, 4] },
-    note: 'river.go.kr(RIMGIS)은 공개 REST 오픈API가 확인되지 않으며 성과품 SHP 신청·다운로드 형태로 보인다. 국가공간정보포털 WMS/WFS가 대안. 제공 형태 확정 전까지 비활성으로 둔다.',
   },
 ];
 

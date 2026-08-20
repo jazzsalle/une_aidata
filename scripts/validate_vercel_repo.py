@@ -45,4 +45,3 @@ print(f'PASS: Vercel 저장소 구조 검증 ({len(list(root.rglob("*")))} entri
 
 assert (root/'server/domain/similarEvents.ts').exists()
 assert (root/'server/routes/v1/integrations/status.ts').exists()
-assert (root/'apps/web/public/seed/flood_traces_seed.geojson').exists()

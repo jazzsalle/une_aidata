@@ -9,7 +9,6 @@ import { PlanKnowledgePanel } from '../components/PlanKnowledgePanel';
 import { EventTimelinePanel } from '../components/EventTimelinePanel';
 import { SatellitePreviewPanel } from '../components/SatellitePreviewPanel';
 import { T3qReadinessPanel } from '../components/T3qReadinessPanel';
-import { T3qMockSearchPanel } from '../components/T3qMockSearchPanel';
 import { PanelResizer, useResizableLeftPanel } from '../components/PanelResizer';
 
 interface Props {
@@ -55,7 +54,6 @@ export function DashboardPage(props: Props) {
       <EventTimelinePanel />
       <SatellitePreviewPanel />
       <T3qReadinessPanel adminCode={props.situation?.admin_code} />
-      <T3qMockSearchPanel adminCode={props.situation?.admin_code} />
       <SituationTimeline situation={props.situation} />
     </>
   );

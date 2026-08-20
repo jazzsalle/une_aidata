@@ -3,7 +3,6 @@ import * as health from '../server/routes/health.js';
 import * as agentMessages from '../server/routes/v1/agent/messages.js';
 import * as contractsProviderConformance from '../server/routes/v1/contracts/provider-conformance.js';
 import * as contractsProviders from '../server/routes/v1/contracts/providers.js';
-import * as floodTraces from '../server/routes/v1/flood-traces.js';
 import * as integrationsStatus from '../server/routes/v1/integrations/status.js';
 import * as integrationsUneRagProbe from '../server/routes/v1/integrations/une-rag-probe.js';
 import * as mapLayers from '../server/routes/v1/map/layers.js';
@@ -37,7 +36,6 @@ const routes: Record<string, RouteHandler> = {
   'POST /api/v1/agent/messages': agentMessages.POST,
   'GET /api/v1/contracts/provider-conformance': contractsProviderConformance.GET,
   'GET /api/v1/contracts/providers': contractsProviders.GET,
-  'GET /api/v1/flood-traces': floodTraces.GET,
   'GET /api/v1/integrations/status': integrationsStatus.GET,
   'GET /api/v1/integrations/une-rag-probe': integrationsUneRagProbe.GET,
   'GET /api/v1/map/layers': mapLayers.GET,
