@@ -12,7 +12,10 @@ export interface SatelliteAsset{asset_id:string;admin_code:string;admin_name?:st
 export interface LayerCatalogItem{layer_id:string;name:string;renderer:string;provider:string;fallback?:string|null;future_provider?:string|null;default_visible:boolean;public_level:string;data_status?:'pending'|DataStatus;data_meaning?:string;}
 export interface ReportDraft{report_id:string;situation_id:string;status:'DRAFT'|'REVIEWED'|'ARCHIVED';ndms_submission:false;sections:Record<string,unknown>;limitations?:string[];}
 export interface MapAction{action:'fit_bounds'|'pan_to'|'highlight'|'toggle_layer'|'open_popup'|'set_comparison'|'clear_highlight';target_id?:string|null;layer_id?:string|null;visible?:boolean|null;payload?:Record<string,unknown>|null;}
-export interface AgentResponse{message_id:string;answer:string;priority_areas:PriorityArea[];similar_events:SimilarEvent[];procedures:ProcedureStep[];map_actions:MapAction[];evidence:EvidenceItem[];warnings:string[];limitations:string[];operator_confirmation_required:true;}
+export interface AgentLink{kind:'region'|'river'|'district';label:string;admin_code?:string;name?:string;target_id?:string;nav?:[number,number];nav_kind?:string;river_code?:string;}
+export interface AgentResponse{message_id:string;answer:string;priority_areas:PriorityArea[];similar_events:SimilarEvent[];procedures:ProcedureStep[];map_actions:MapAction[];evidence:EvidenceItem[];warnings:string[];limitations:string[];operator_confirmation_required:true;
+ /** T3Q 메타 표본(CQ) 응답에만 있는 optional 필드 — 클릭하면 지도·지역으로 이동하는 대상. */
+ links?:AgentLink[];meta_demo?:boolean;}
 export interface IntegrationStatus{integration_id:string;name:string;configured:boolean;runtime_mode:string;message:string;required_env:string[];checked_at:string;validation_state?:'verified'|'configured'|'pending'|'fallback'|'error';next_action?:string;}
 
 

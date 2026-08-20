@@ -17,36 +17,36 @@
    "answerable": true,
    "answer_passages": [
     {
-     "passage_text": "대구광역시 2016 탐문 및 설문조사에 의한 내수재해 위험지구 후보지 현황(계속) — 고유 번호 설1; 지구명 다사서재1 지구; 위 치 다사읍 서재리 산 13-2; 탐문 ․ 설문 내용 사면안정화 및 우수관거 확충; 비 고 우방아파트 배후 절개지. 출처: 제3장 기초현황조사 2편-(335~532).md <표 3.5.1-25>(319쪽).",
+     "passage_text": "1의 연면적은(는) 356.4 m2이다. 출처: 대구광역시 2016 표(제4.2장 풍수해위험지구선정-내수재해 1편(463~660).md, 23쪽).",
      "class_iri": "urn:rawdata:class/risk-district",
-     "instance_kind": "entity",
+     "instance_kind": "measurement",
      "provenance": {
-      "source_file": "자연재해저감종합계획/03_대구광역시2016_A구세대_6권분책/보고서/제3장 기초현황조사 2편-(335~532)/제3장 기초현황조사 2편-(335~532).md",
-      "page": 319,
+      "source_file": "자연재해저감종합계획/03_대구광역시2016_A구세대_6권분책/보고서/제4.2장 풍수해위험지구선정-내수재해 1편(463~660)/제4.2장 풍수해위험지구선정-내수재해 1편(463~660).md",
+      "page": 23,
       "set_id": "set-01",
-      "instance_id": "urn:rawdata:inst/entity/set-01/8d8819ae6f"
+      "instance_id": "urn:rawdata:inst/measurement/set-01/3e377df129"
      }
     },
     {
-     "passage_text": "대구광역시 2016 탐문 및 설문조사에 의한 내수재해 위험지구 후보지 현황(계속) — 고유 번호 설2; 지구명 다사서재2 지구; 위 치 다사읍 서재리 산 12; 탐문 ․ 설문 내용 사면안정화 및 우수관거 확충; 비 고 진흥아파트 배후 절개지. 출처: 제3장 기초현황조사 2편-(335~532).md <표 3.5.1-25>(319쪽).",
+     "passage_text": "2의 연면적은(는) 275.73 m2이다. 출처: 대구광역시 2016 표(제4.2장 풍수해위험지구선정-내수재해 1편(463~660).md, 23쪽).",
      "class_iri": "urn:rawdata:class/risk-district",
-     "instance_kind": "entity",
+     "instance_kind": "measurement",
      "provenance": {
-      "source_file": "자연재해저감종합계획/03_대구광역시2016_A구세대_6권분책/보고서/제3장 기초현황조사 2편-(335~532)/제3장 기초현황조사 2편-(335~532).md",
-      "page": 319,
+      "source_file": "자연재해저감종합계획/03_대구광역시2016_A구세대_6권분책/보고서/제4.2장 풍수해위험지구선정-내수재해 1편(463~660)/제4.2장 풍수해위험지구선정-내수재해 1편(463~660).md",
+      "page": 23,
       "set_id": "set-01",
-      "instance_id": "urn:rawdata:inst/entity/set-01/a5462062ce"
+      "instance_id": "urn:rawdata:inst/measurement/set-01/e671e8d87e"
      }
     },
     {
-     "passage_text": "대구광역시 2016 탐문 및 설문조사에 의한 내수재해 위험지구 후보지 현황(계속) — 고유 번호 설3; 지구명 다사달천 지구; 위 치 다사읍 달천리 298; 탐문 ․ 설문 내용 사면안정화 및 식생기반재 취부; 비 고 달천리 다사로101길 안쪽 유실지. 출처: 제3장 기초현황조사 2편-(335~532).md <표 3.5.1-25>(319쪽).",
+     "passage_text": "3의 연면적은(는) 467.7 m2이다. 출처: 대구광역시 2016 표(제4.2장 풍수해위험지구선정-내수재해 1편(463~660).md, 23쪽).",
      "class_iri": "urn:rawdata:class/risk-district",
-     "instance_kind": "entity",
+     "instance_kind": "measurement",
      "provenance": {
-      "source_file": "자연재해저감종합계획/03_대구광역시2016_A구세대_6권분책/보고서/제3장 기초현황조사 2편-(335~532)/제3장 기초현황조사 2편-(335~532).md",
-      "page": 319,
+      "source_file": "자연재해저감종합계획/03_대구광역시2016_A구세대_6권분책/보고서/제4.2장 풍수해위험지구선정-내수재해 1편(463~660)/제4.2장 풍수해위험지구선정-내수재해 1편(463~660).md",
+      "page": 23,
       "set_id": "set-01",
-      "instance_id": "urn:rawdata:inst/entity/set-01/10a1bbd0da"
+      "instance_id": "urn:rawdata:inst/measurement/set-01/e076f9ea2c"
      }
     }
    ],
@@ -125,17 +125,6 @@
    "answerable": true,
    "answer_passages": [
     {
-     "passage_text": "대구광역시 2016 풍수해저감종합계획 세부수립기준(적용범위) 1-005 — <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표 <표; 컬럼2 표목차. 출처: 00. 1권-목차.md <표 1.4-1>(3쪽).",
-     "class_iri": "urn:rawdata:class/plan-information",
-     "instance_kind": "entity",
-     "provenance": {
-      "source_file": "자연재해저감종합계획/03_대구광역시2016_A구세대_6권분책/보고서/00. 1권-목차/00. 1권-목차.md",
-      "page": 3,
-      "set_id": "set-01",
-      "instance_id": "urn:rawdata:inst/entity/set-01/89ed016b09"
-     }
-    },
-    {
      "passage_text": "대구광역시 2016 풍수해저감종합계획 세부수립기준(적용범위) 1-005 — 목 차 대구광역시. 출처: 00. 1권-목차.md <표 1.4-1>(3쪽).",
      "class_iri": "urn:rawdata:class/plan-information",
      "instance_kind": "entity",
@@ -155,6 +144,17 @@
       "page": 7,
       "set_id": "set-01",
       "instance_id": "urn:rawdata:inst/entity/set-01/b0d2fca76f"
+     }
+    },
+    {
+     "passage_text": "대구광역시 2016 계획의 범위 — 구분 수립대상; 수 립 범 위 - 시･군 계획 : 시･군. 출처: 제1장 서론.md (7쪽).",
+     "class_iri": "urn:rawdata:class/plan-information",
+     "instance_kind": "entity",
+     "provenance": {
+      "source_file": "자연재해저감종합계획/03_대구광역시2016_A구세대_6권분책/보고서/제1장 서론/제1장 서론.md",
+      "page": 7,
+      "set_id": "set-01",
+      "instance_id": "urn:rawdata:inst/entity/set-01/1a7830897a"
      }
     }
    ],
@@ -494,36 +494,36 @@
    "answerable": true,
    "answer_passages": [
     {
-     "passage_text": "동진강 2017 과업구간 현황 — 하천명 하천명; 하천 등급 하천 등급; 위 치 시 점; 유역 면적 (km2) 유역 면적 (km2); 과업연장 (km) 과업연장 (km). 출처: 01_제1장 개요.md <표 1.2-1>(3쪽).",
+     "passage_text": "정읍천 정읍천의 과업 연장은(는) 18.02 km이다. 출처: 동진강 2017 수계의 구성(02_제2장 유역 및 하천현황1.md, 4쪽).",
      "class_iri": "urn:rawdata:class/basin-survey",
-     "instance_kind": "entity",
+     "instance_kind": "measurement",
      "provenance": {
-      "source_file": "하천기본계획/01_2017_동진강_구지침5장표준/01_제1장 개요/01_제1장 개요.md",
-      "page": 3,
+      "source_file": "하천기본계획/01_2017_동진강_구지침5장표준/02_제2장 유역 및 하천현황1/02_제2장 유역 및 하천현황1.md",
+      "page": 4,
       "set_id": "set-01",
-      "instance_id": "urn:rawdata:inst/entity/set-01/ca247ac573"
+      "instance_id": "urn:rawdata:inst/measurement/set-01/fd18378cdb"
      }
     },
     {
-     "passage_text": "동진강 2017 과업구간 현황 — 하천명 하천명; 하천 등급 하천 등급; 위 치 시 점; 유역 면적 (km2) 유역 면적 (km2); 과업연장 (km) 홍수량 산 정. 출처: 01_제1장 개요.md <표 1.2-1>(3쪽).",
+     "passage_text": "정읍천 정읍천의 과업 연장은(는) 12.93 km이다. 출처: 동진강 2017 수계의 구성(02_제2장 유역 및 하천현황1.md, 4쪽).",
      "class_iri": "urn:rawdata:class/basin-survey",
-     "instance_kind": "entity",
+     "instance_kind": "measurement",
      "provenance": {
-      "source_file": "하천기본계획/01_2017_동진강_구지침5장표준/01_제1장 개요/01_제1장 개요.md",
-      "page": 3,
+      "source_file": "하천기본계획/01_2017_동진강_구지침5장표준/02_제2장 유역 및 하천현황1/02_제2장 유역 및 하천현황1.md",
+      "page": 4,
       "set_id": "set-01",
-      "instance_id": "urn:rawdata:inst/entity/set-01/2aa88626d5"
+      "instance_id": "urn:rawdata:inst/measurement/set-01/ce6d352459"
      }
     },
     {
-     "passage_text": "동진강 2017 과업구간 현황 — 하천명 하천명; 하천 등급 하천 등급; 위 치 시군; 유역 면적 (km2) 유역 면적 (km2); 과업연장 (km) 홍수량 산 정. 출처: 01_제1장 개요.md <표 1.2-1>(3쪽).",
+     "passage_text": "부전천 부전천의 과업 연장은(는) 3 km이다. 출처: 동진강 2017 수계의 구성(02_제2장 유역 및 하천현황1.md, 4쪽).",
      "class_iri": "urn:rawdata:class/basin-survey",
-     "instance_kind": "entity",
+     "instance_kind": "measurement",
      "provenance": {
-      "source_file": "하천기본계획/01_2017_동진강_구지침5장표준/01_제1장 개요/01_제1장 개요.md",
-      "page": 3,
+      "source_file": "하천기본계획/01_2017_동진강_구지침5장표준/02_제2장 유역 및 하천현황1/02_제2장 유역 및 하천현황1.md",
+      "page": 4,
       "set_id": "set-01",
-      "instance_id": "urn:rawdata:inst/entity/set-01/89c1023ff7"
+      "instance_id": "urn:rawdata:inst/measurement/set-01/b06a6809a0"
      }
     }
    ],
@@ -535,8 +535,25 @@
     },
     {
      "kind": "river",
-     "label": "하천",
-     "name": "하천"
+     "label": "정읍천",
+     "name": "정읍천",
+     "nav": [
+      126.839106,
+      35.600794
+     ],
+     "nav_kind": "derived_interior",
+     "river_code": "3300350"
+    },
+    {
+     "kind": "river",
+     "label": "부전천",
+     "name": "부전천",
+     "nav": [
+      126.917445,
+      35.530273
+     ],
+     "nav_kind": "derived_interior",
+     "river_code": "3320360"
     }
    ],
    "data_status": "meta_demo"
@@ -552,17 +569,6 @@
    "question": "이 계획의 수립연도와 목표연도는 언제이며, 정비사업은 어느 시기에 단계별로 시행되는가?",
    "answerable": true,
    "answer_passages": [
-    {
-     "passage_text": "동진강 2017 2. 수자원 부존량 — 하천명 하천명; 유역 면적 (km²) 유역 면적 (km²); 연평균 강수량 (mm) 연평균 강수량 (mm); 수자원 총량 수자원 총량; 가용수자원량(유출량) 홍수기 (6~9월); 손실량 손실량. 출처: 03_제3장 종합분석_2이수특성분석.md (10쪽).",
-     "class_iri": "urn:rawdata:class/plan-information",
-     "instance_kind": "entity",
-     "provenance": {
-      "source_file": "하천기본계획/01_2017_동진강_구지침5장표준/03_제3장 종합분석_2이수특성분석/03_제3장 종합분석_2이수특성분석.md",
-      "page": 10,
-      "set_id": "set-01",
-      "instance_id": "urn:rawdata:inst/entity/set-01/724a808699"
-     }
-    },
     {
      "passage_text": "정읍천 정읍천 (국가)의 유역 면적은(는) 216.32 km²이다. 출처: 동진강 2017 표(03_제3장 종합분석_2이수특성분석.md, 10쪽).",
      "class_iri": "urn:rawdata:class/plan-information",
@@ -584,6 +590,17 @@
       "set_id": "set-01",
       "instance_id": "urn:rawdata:inst/measurement/set-01/da195ce61e"
      }
+    },
+    {
+     "passage_text": "동진강 2017 2. 수자원 부존량 — 하천명 정읍천 (국가); 유역 면적 (km²) 216.32; 연평균 강수량 (mm) 1,313.6; 수자원 총량 284.16; 가용수자원량(유출량) 100.02 (35.20); 손실량 145.04 (51.04). 출처: 03_제3장 종합분석_2이수특성분석.md (10쪽).",
+     "class_iri": "urn:rawdata:class/plan-information",
+     "instance_kind": "entity",
+     "provenance": {
+      "source_file": "하천기본계획/01_2017_동진강_구지침5장표준/03_제3장 종합분석_2이수특성분석/03_제3장 종합분석_2이수특성분석.md",
+      "page": 10,
+      "set_id": "set-01",
+      "instance_id": "urn:rawdata:inst/entity/set-01/d941522cbf"
+     }
     }
    ],
    "links": [
@@ -594,13 +611,14 @@
     },
     {
      "kind": "river",
-     "label": "하천",
-     "name": "하천"
-    },
-    {
-     "kind": "river",
      "label": "정읍천",
-     "name": "정읍천"
+     "name": "정읍천",
+     "nav": [
+      126.839106,
+      35.600794
+     ],
+     "nav_kind": "derived_interior",
+     "river_code": "3300350"
     }
    ],
    "data_status": "meta_demo"
@@ -617,36 +635,36 @@
    "answerable": true,
    "answer_passages": [
     {
-     "passage_text": "동진강 2017 수위관측기록 보유현황 관측소 연 대 보유 — 관측소 관측소; 측정장비 (평수기/홍수 측정장비 (평수기/홍수; 위 치 행 정 구 역; 유역면 적 유역면 적; 최근 관측년 최근 관측년; 관할기관 관할기관. 출처: 02_제2장 유역 및 하천현황1.md <표 2.1-21>(45쪽).",
-     "class_iri": "urn:rawdata:class/flood-control-analysis",
-     "instance_kind": "entity",
-     "provenance": {
-      "source_file": "하천기본계획/01_2017_동진강_구지침5장표준/02_제2장 유역 및 하천현황1/02_제2장 유역 및 하천현황1.md",
-      "page": 45,
-      "set_id": "set-01",
-      "instance_id": "urn:rawdata:inst/entity/set-01/b6b439e155"
-     }
-    },
-    {
-     "passage_text": "동진강 정읍의 최근 관측년은(는) 2011 년이다. 출처: 동진강 2017 수위관측기록 보유현황 관측소 연 대 보유(02_제2장 유역 및 하천현황1.md, 45쪽).",
+     "passage_text": "정읍천 정읍천(국가) 종점의 금회 홍수량은(는) 1286 ㎥/s이다. 출처: 동진강 2017 표(03_제3장 종합분석_1치수특성분석.md, 38쪽).",
      "class_iri": "urn:rawdata:class/flood-control-analysis",
      "instance_kind": "measurement",
      "provenance": {
-      "source_file": "하천기본계획/01_2017_동진강_구지침5장표준/02_제2장 유역 및 하천현황1/02_제2장 유역 및 하천현황1.md",
-      "page": 45,
+      "source_file": "하천기본계획/01_2017_동진강_구지침5장표준/03_제3장 종합분석_1치수특성분석/03_제3장 종합분석_1치수특성분석.md",
+      "page": 38,
       "set_id": "set-01",
-      "instance_id": "urn:rawdata:inst/measurement/set-01/6d91b14ee8"
+      "instance_id": "urn:rawdata:inst/measurement/set-01/e70ba5b59a"
      }
     },
     {
-     "passage_text": "동진강 2017 수위관측기록 보유현황 관측소 연 대 보유 — 관측소 정읍; 측정장비 (평수기/홍수 유속계기); 위 치 정읍시 정우면 초강리; 유역면 적 158.05; 최근 관측년 2011; 관할기관 국토교통부. 출처: 02_제2장 유역 및 하천현황1.md <표 2.1-21>(45쪽).",
+     "passage_text": "정읍천 정읍천(국가) 종점의 기수립 홍수량은(는) 960 ㎥/s이다. 출처: 동진강 2017 표(03_제3장 종합분석_1치수특성분석.md, 38쪽).",
      "class_iri": "urn:rawdata:class/flood-control-analysis",
-     "instance_kind": "entity",
+     "instance_kind": "measurement",
      "provenance": {
-      "source_file": "하천기본계획/01_2017_동진강_구지침5장표준/02_제2장 유역 및 하천현황1/02_제2장 유역 및 하천현황1.md",
-      "page": 45,
+      "source_file": "하천기본계획/01_2017_동진강_구지침5장표준/03_제3장 종합분석_1치수특성분석/03_제3장 종합분석_1치수특성분석.md",
+      "page": 38,
       "set_id": "set-01",
-      "instance_id": "urn:rawdata:inst/entity/set-01/a1c34e2bc8"
+      "instance_id": "urn:rawdata:inst/measurement/set-01/bcabf048a5"
+     }
+    },
+    {
+     "passage_text": "한교천 한교천 합류전의 금회 홍수량은(는) 1056 ㎥/s이다. 출처: 동진강 2017 표(03_제3장 종합분석_1치수특성분석.md, 38쪽).",
+     "class_iri": "urn:rawdata:class/flood-control-analysis",
+     "instance_kind": "measurement",
+     "provenance": {
+      "source_file": "하천기본계획/01_2017_동진강_구지침5장표준/03_제3장 종합분석_1치수특성분석/03_제3장 종합분석_1치수특성분석.md",
+      "page": 38,
+      "set_id": "set-01",
+      "instance_id": "urn:rawdata:inst/measurement/set-01/4dad2aa99b"
      }
     }
    ],
@@ -658,8 +676,25 @@
     },
     {
      "kind": "river",
-     "label": "동진강",
-     "name": "동진강"
+     "label": "정읍천",
+     "name": "정읍천",
+     "nav": [
+      126.839106,
+      35.600794
+     ],
+     "nav_kind": "derived_interior",
+     "river_code": "3300350"
+    },
+    {
+     "kind": "river",
+     "label": "한교천",
+     "name": "한교천",
+     "nav": [
+      126.875305,
+      35.60322
+     ],
+     "nav_kind": "derived_interior",
+     "river_code": "3320490"
     }
    ],
    "data_status": "meta_demo"
@@ -717,13 +752,14 @@
     },
     {
      "kind": "river",
-     "label": "하천",
-     "name": "하천"
-    },
-    {
-     "kind": "river",
      "label": "정읍천",
-     "name": "정읍천"
+     "name": "정읍천",
+     "nav": [
+      126.839106,
+      35.600794
+     ],
+     "nav_kind": "derived_interior",
+     "river_code": "3300350"
     }
    ],
    "data_status": "meta_demo"
@@ -782,7 +818,13 @@
     {
      "kind": "river",
      "label": "정읍천",
-     "name": "정읍천"
+     "name": "정읍천",
+     "nav": [
+      126.839106,
+      35.600794
+     ],
+     "nav_kind": "derived_interior",
+     "river_code": "3300350"
     }
    ],
    "data_status": "meta_demo"
@@ -798,17 +840,6 @@
    "question": "하천기본계획 보고서는 어떤 항목을 어떤 서식(하천일람표·구역 조서·종횡단도)으로 남기도록 되어 있는가?",
    "answerable": true,
    "answer_passages": [
-    {
-     "passage_text": "동진강 2017 기상관측소 현황 — 관측소 관측소; 종별 종별; 위 치 행 정 구 역; 해발고 (EL.m) 해발고 (EL.m); 관측개시 년 월 관측개시 년 월; 관할기관 관할기관. 출처: 02_제2장 유역 및 하천현황1.md <표 2.1-16>(39쪽).",
-     "class_iri": "urn:rawdata:class/survey-record",
-     "instance_kind": "entity",
-     "provenance": {
-      "source_file": "하천기본계획/01_2017_동진강_구지침5장표준/02_제2장 유역 및 하천현황1/02_제2장 유역 및 하천현황1.md",
-      "page": 39,
-      "set_id": "set-01",
-      "instance_id": "urn:rawdata:inst/entity/set-01/9fc98816d9"
-     }
-    },
     {
      "passage_text": "동진강 정읍의 해발고은(는) 39.5 EL.m이다. 출처: 동진강 2017 기상관측소 현황(02_제2장 유역 및 하천현황1.md, 39쪽).",
      "class_iri": "urn:rawdata:class/survey-record",
@@ -830,6 +861,17 @@
       "set_id": "set-01",
       "instance_id": "urn:rawdata:inst/entity/set-01/a019939382"
      }
+    },
+    {
+     "passage_text": "동진강 정읍의 해발고은(는) 25 EL.m이다. 출처: 동진강 2017 기상관측소 현황(02_제2장 유역 및 하천현황1.md, 39쪽).",
+     "class_iri": "urn:rawdata:class/survey-record",
+     "instance_kind": "measurement",
+     "provenance": {
+      "source_file": "하천기본계획/01_2017_동진강_구지침5장표준/02_제2장 유역 및 하천현황1/02_제2장 유역 및 하천현황1.md",
+      "page": 39,
+      "set_id": "set-01",
+      "instance_id": "urn:rawdata:inst/measurement/set-01/84235f0e17"
+     }
     }
    ],
    "links": [
@@ -841,7 +883,13 @@
     {
      "kind": "river",
      "label": "동진강",
-     "name": "동진강"
+     "name": "동진강",
+     "nav": [
+      126.802925,
+      35.739507
+     ],
+     "nav_kind": "derived_interior",
+     "river_code": "3300010"
     }
    ],
    "data_status": "meta_demo"
@@ -896,11 +944,6 @@
      "kind": "region",
      "label": "전북특별자치도 정읍시",
      "admin_code": "52180"
-    },
-    {
-     "kind": "river",
-     "label": "하천",
-     "name": "하천"
     }
    ],
    "data_status": "meta_demo"
@@ -917,36 +960,36 @@
    "answerable": true,
    "answer_passages": [
     {
-     "passage_text": "동진강 1의 구분은(는) 1 분이다. 출처: 동진강 2017 표(05_제5장 투자계획 및 기대효과.md, 3쪽).",
-     "class_iri": "urn:rawdata:class/economic-analysis",
+     "passage_text": "정읍천 정읍천의 사업비은(는) 1.32 억원이다. 출처: 동진강 2017 표(05_제5장 투자계획 및 기대효과.md, 11쪽).",
+     "class_iri": "urn:rawdata:class/implementation-plan",
      "instance_kind": "measurement",
      "provenance": {
       "source_file": "하천기본계획/01_2017_동진강_구지침5장표준/05_제5장 투자계획 및 기대효과/05_제5장 투자계획 및 기대효과.md",
-      "page": 3,
+      "page": 11,
       "set_id": "set-01",
-      "instance_id": "urn:rawdata:inst/measurement/set-01/b09ec3b848"
+      "instance_id": "urn:rawdata:inst/measurement/set-01/d125fe6e35"
      }
     },
     {
-     "passage_text": "동진강 1의 연장은(는) 1618 m이다. 출처: 동진강 2017 표(05_제5장 투자계획 및 기대효과.md, 3쪽).",
-     "class_iri": "urn:rawdata:class/economic-analysis",
+     "passage_text": "정읍천 정읍천의 사업비은(는) 0.16 억원이다. 출처: 동진강 2017 표(05_제5장 투자계획 및 기대효과.md, 11쪽).",
+     "class_iri": "urn:rawdata:class/implementation-plan",
      "instance_kind": "measurement",
      "provenance": {
       "source_file": "하천기본계획/01_2017_동진강_구지침5장표준/05_제5장 투자계획 및 기대효과/05_제5장 투자계획 및 기대효과.md",
-      "page": 3,
+      "page": 11,
       "set_id": "set-01",
-      "instance_id": "urn:rawdata:inst/measurement/set-01/b42e7260f9"
+      "instance_id": "urn:rawdata:inst/measurement/set-01/127f5836e0"
      }
     },
     {
-     "passage_text": "동진강 2017 경제성 분석 — 구분 1; 지구명 대산신축; 위 치 정읍시 정우면 대산리; 구 간 (No.) 6+769~8+289; 안별 우; 연장 (m) 1,618. 출처: 05_제5장 투자계획 및 기대효과.md (3쪽).",
-     "class_iri": "urn:rawdata:class/economic-analysis",
-     "instance_kind": "entity",
+     "passage_text": "정읍천 정읍천의 사업비은(는) 0.26 억원이다. 출처: 동진강 2017 표(05_제5장 투자계획 및 기대효과.md, 11쪽).",
+     "class_iri": "urn:rawdata:class/implementation-plan",
+     "instance_kind": "measurement",
      "provenance": {
       "source_file": "하천기본계획/01_2017_동진강_구지침5장표준/05_제5장 투자계획 및 기대효과/05_제5장 투자계획 및 기대효과.md",
-      "page": 3,
+      "page": 11,
       "set_id": "set-01",
-      "instance_id": "urn:rawdata:inst/entity/set-01/a19232a13a"
+      "instance_id": "urn:rawdata:inst/measurement/set-01/404fe8fff3"
      }
     }
    ],
@@ -958,8 +1001,14 @@
     },
     {
      "kind": "river",
-     "label": "동진강",
-     "name": "동진강"
+     "label": "정읍천",
+     "name": "정읍천",
+     "nav": [
+      126.839106,
+      35.600794
+     ],
+     "nav_kind": "derived_interior",
+     "river_code": "3300350"
     }
    ],
    "data_status": "meta_demo"
@@ -976,36 +1025,36 @@
    "answerable": true,
    "answer_passages": [
     {
-     "passage_text": "동진강 2017 과업구간 현황 — 하천명 하천명; 하천 등급 하천 등급; 위 치 시 점; 유역 면적 (km2) 유역 면적 (km2); 과업연장 (km) 과업연장 (km). 출처: 01_제1장 개요.md <표 1.2-1>(3쪽).",
+     "passage_text": "동진강 2005의 년 도은(는) 2005 년이다. 출처: 동진강 2017 표(02_제2장 유역 및 하천현황1.md, 35쪽).",
      "class_iri": "urn:rawdata:class/basin-survey",
-     "instance_kind": "entity",
+     "instance_kind": "measurement",
      "provenance": {
-      "source_file": "하천기본계획/01_2017_동진강_구지침5장표준/01_제1장 개요/01_제1장 개요.md",
-      "page": 3,
+      "source_file": "하천기본계획/01_2017_동진강_구지침5장표준/02_제2장 유역 및 하천현황1/02_제2장 유역 및 하천현황1.md",
+      "page": 35,
       "set_id": "set-01",
-      "instance_id": "urn:rawdata:inst/entity/set-01/ca247ac573"
+      "instance_id": "urn:rawdata:inst/measurement/set-01/aec1b57873"
      }
     },
     {
-     "passage_text": "동진강 2017 과업구간 현황 — 하천명 하천명; 하천 등급 하천 등급; 위 치 시 점; 유역 면적 (km2) 유역 면적 (km2); 과업연장 (km) 홍수량 산 정. 출처: 01_제1장 개요.md <표 1.2-1>(3쪽).",
+     "passage_text": "동진강 2005의 년 도은(는) 2010 년이다. 출처: 동진강 2017 표(02_제2장 유역 및 하천현황1.md, 35쪽).",
      "class_iri": "urn:rawdata:class/basin-survey",
-     "instance_kind": "entity",
+     "instance_kind": "measurement",
      "provenance": {
-      "source_file": "하천기본계획/01_2017_동진강_구지침5장표준/01_제1장 개요/01_제1장 개요.md",
-      "page": 3,
+      "source_file": "하천기본계획/01_2017_동진강_구지침5장표준/02_제2장 유역 및 하천현황1/02_제2장 유역 및 하천현황1.md",
+      "page": 35,
       "set_id": "set-01",
-      "instance_id": "urn:rawdata:inst/entity/set-01/2aa88626d5"
+      "instance_id": "urn:rawdata:inst/measurement/set-01/d37628a0f6"
      }
     },
     {
-     "passage_text": "동진강 2017 과업구간 현황 — 하천명 하천명; 하천 등급 하천 등급; 위 치 시군; 유역 면적 (km2) 유역 면적 (km2); 과업연장 (km) 홍수량 산 정. 출처: 01_제1장 개요.md <표 1.2-1>(3쪽).",
+     "passage_text": "동진강 2006의 년 도은(는) 2006 년이다. 출처: 동진강 2017 표(02_제2장 유역 및 하천현황1.md, 35쪽).",
      "class_iri": "urn:rawdata:class/basin-survey",
-     "instance_kind": "entity",
+     "instance_kind": "measurement",
      "provenance": {
-      "source_file": "하천기본계획/01_2017_동진강_구지침5장표준/01_제1장 개요/01_제1장 개요.md",
-      "page": 3,
+      "source_file": "하천기본계획/01_2017_동진강_구지침5장표준/02_제2장 유역 및 하천현황1/02_제2장 유역 및 하천현황1.md",
+      "page": 35,
       "set_id": "set-01",
-      "instance_id": "urn:rawdata:inst/entity/set-01/89c1023ff7"
+      "instance_id": "urn:rawdata:inst/measurement/set-01/4df49843e3"
      }
     }
    ],
@@ -1017,8 +1066,14 @@
     },
     {
      "kind": "river",
-     "label": "하천",
-     "name": "하천"
+     "label": "동진강",
+     "name": "동진강",
+     "nav": [
+      126.802925,
+      35.739507
+     ],
+     "nav_kind": "derived_interior",
+     "river_code": "3300010"
     }
    ],
    "data_status": "meta_demo"
@@ -1076,13 +1131,14 @@
     },
     {
      "kind": "river",
-     "label": "하천",
-     "name": "하천"
-    },
-    {
-     "kind": "river",
      "label": "정읍천",
-     "name": "정읍천"
+     "name": "정읍천",
+     "nav": [
+      126.839106,
+      35.600794
+     ],
+     "nav_kind": "derived_interior",
+     "river_code": "3300350"
     }
    ],
    "data_status": "meta_demo"
@@ -1099,36 +1155,36 @@
    "answerable": true,
    "answer_passages": [
     {
-     "passage_text": "경남 김해시 1.2 과업의 범위 — 소하천 번 호 소하천 번 호; 소하천명 소하천명; 위 치 구분; 과업연장(㎞) 당초; 비 고 비 고. 출처: 01장 과업의 개요.md (5쪽).",
+     "passage_text": "17의 과업연장은(는) 1.03 ㎞이다. 출처: 경남 김해시 과업의 범위(01장 과업의 개요.md, 6쪽).",
      "class_iri": "urn:rawdata:class/target-stream",
-     "instance_kind": "entity",
+     "instance_kind": "measurement",
      "provenance": {
       "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/01장 과업의 개요/01장 과업의 개요.md",
-      "page": 5,
+      "page": 6,
       "set_id": "set-12",
-      "instance_id": "urn:rawdata:inst/entity/set-12/1a4fabc4e3"
+      "instance_id": "urn:rawdata:inst/measurement/set-12/1420ef9d73"
      }
     },
     {
-     "passage_text": "경남 김해시 1.2 과업의 범위 — 소하천 번 호 1; 소하천명 안평천; 위 치 기점; 과업연장(㎞) 0.45. 출처: 01장 과업의 개요.md (5쪽).",
+     "passage_text": "17의 과업연장은(는) 1.03 ㎞이다. 출처: 경남 김해시 과업의 범위(01장 과업의 개요.md, 6쪽).",
      "class_iri": "urn:rawdata:class/target-stream",
-     "instance_kind": "entity",
+     "instance_kind": "measurement",
      "provenance": {
       "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/01장 과업의 개요/01장 과업의 개요.md",
-      "page": 5,
+      "page": 6,
       "set_id": "set-12",
-      "instance_id": "urn:rawdata:inst/entity/set-12/598de4b463"
+      "instance_id": "urn:rawdata:inst/measurement/set-12/ee757a7e48"
      }
     },
     {
-     "passage_text": "경남 김해시 1.2 과업의 범위 — 소하천 번 호 1; 소하천명 안평천; 위 치 종점; 과업연장(㎞) 0.45. 출처: 01장 과업의 개요.md (5쪽).",
+     "passage_text": "17의 과업연장은(는) 1.03 ㎞이다. 출처: 경남 김해시 과업의 범위(01장 과업의 개요.md, 6쪽).",
      "class_iri": "urn:rawdata:class/target-stream",
-     "instance_kind": "entity",
+     "instance_kind": "measurement",
      "provenance": {
       "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/01장 과업의 개요/01장 과업의 개요.md",
-      "page": 5,
+      "page": 6,
       "set_id": "set-12",
-      "instance_id": "urn:rawdata:inst/entity/set-12/af03968184"
+      "instance_id": "urn:rawdata:inst/measurement/set-12/cb87f5f7d2"
      }
     }
    ],
@@ -1153,36 +1209,36 @@
    "answerable": true,
    "answer_passages": [
     {
-     "passage_text": "경남 김해시 제 3 장 소하천 측량 — 소하천명 안평천; 현황측량 (km) 0.48; 표석매설 (개소) 1. 출처: 03장 하천측량.md (4쪽).",
-     "class_iri": "urn:rawdata:class/survey-result",
-     "instance_kind": "entity",
+     "passage_text": "1의 유로 연장은(는) 1.85 ㎞이다. 출처: 경남 김해시 표(04장 소하천 보전과 이용에 관한 기본사항.md, 5쪽).",
+     "class_iri": "urn:rawdata:class/baseline-status",
+     "instance_kind": "measurement",
      "provenance": {
-      "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/03장 하천측량/03장 하천측량.md",
-      "page": 4,
+      "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/04장 소하천 보전과 이용에 관한 기본사항/04장 소하천 보전과 이용에 관한 기본사항.md",
+      "page": 5,
       "set_id": "set-12",
-      "instance_id": "urn:rawdata:inst/entity/set-12/b64c414ca2"
+      "instance_id": "urn:rawdata:inst/measurement/set-12/78f0406838"
      }
     },
     {
-     "passage_text": "경남 김해시 제 3 장 소하천 측량 — 소하천명 우동천; 현황측량 (km) 1.26; 표석매설 (개소) 1. 출처: 03장 하천측량.md (4쪽).",
-     "class_iri": "urn:rawdata:class/survey-result",
-     "instance_kind": "entity",
+     "passage_text": "1의 하천 연장은(는) 0.48 ㎞이다. 출처: 경남 김해시 표(04장 소하천 보전과 이용에 관한 기본사항.md, 5쪽).",
+     "class_iri": "urn:rawdata:class/baseline-status",
+     "instance_kind": "measurement",
      "provenance": {
-      "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/03장 하천측량/03장 하천측량.md",
-      "page": 4,
+      "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/04장 소하천 보전과 이용에 관한 기본사항/04장 소하천 보전과 이용에 관한 기본사항.md",
+      "page": 5,
       "set_id": "set-12",
-      "instance_id": "urn:rawdata:inst/entity/set-12/81945401b3"
+      "instance_id": "urn:rawdata:inst/measurement/set-12/da788a8b88"
      }
     },
     {
-     "passage_text": "경남 김해시 제 3 장 소하천 측량 — 소하천명 오척천; 현황측량 (km) 2.31; 표석매설 (개소) 1. 출처: 03장 하천측량.md (4쪽).",
-     "class_iri": "urn:rawdata:class/survey-result",
-     "instance_kind": "entity",
+     "passage_text": "2의 유로 연장은(는) 2.33 ㎞이다. 출처: 경남 김해시 표(04장 소하천 보전과 이용에 관한 기본사항.md, 5쪽).",
+     "class_iri": "urn:rawdata:class/baseline-status",
+     "instance_kind": "measurement",
      "provenance": {
-      "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/03장 하천측량/03장 하천측량.md",
-      "page": 4,
+      "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/04장 소하천 보전과 이용에 관한 기본사항/04장 소하천 보전과 이용에 관한 기본사항.md",
+      "page": 5,
       "set_id": "set-12",
-      "instance_id": "urn:rawdata:inst/entity/set-12/b2e8a7d6ec"
+      "instance_id": "urn:rawdata:inst/measurement/set-12/136859000f"
      }
     }
    ],
@@ -1207,17 +1263,6 @@
    "answerable": true,
    "answer_passages": [
     {
-     "passage_text": "경남 김해시 4.3 타 계획과의 조정 — 구 분 구 분; 2007년 2007년; 2011년 2011년; 2016년 2016년; 2020년 2020년; ’07년 대비 ’20년 증가량. 출처: 04장 소하천 보전과 이용에 관한 기본사항.md (227쪽).",
-     "class_iri": "urn:rawdata:class/plan-information",
-     "instance_kind": "entity",
-     "provenance": {
-      "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/04장 소하천 보전과 이용에 관한 기본사항/04장 소하천 보전과 이용에 관한 기본사항.md",
-      "page": 227,
-      "set_id": "set-12",
-      "instance_id": "urn:rawdata:inst/entity/set-12/450b6154c6"
-     }
-    },
-    {
      "passage_text": "계의 2007년은(는) 25476 년이다. 출처: 경남 김해시 표(04장 소하천 보전과 이용에 관한 기본사항.md, 227쪽).",
      "class_iri": "urn:rawdata:class/plan-information",
      "instance_kind": "measurement",
@@ -1237,6 +1282,17 @@
       "page": 227,
       "set_id": "set-12",
       "instance_id": "urn:rawdata:inst/measurement/set-12/db5310abdb"
+     }
+    },
+    {
+     "passage_text": "계의 2016년은(는) 26664 년이다. 출처: 경남 김해시 표(04장 소하천 보전과 이용에 관한 기본사항.md, 227쪽).",
+     "class_iri": "urn:rawdata:class/plan-information",
+     "instance_kind": "measurement",
+     "provenance": {
+      "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/04장 소하천 보전과 이용에 관한 기본사항/04장 소하천 보전과 이용에 관한 기본사항.md",
+      "page": 227,
+      "set_id": "set-12",
+      "instance_id": "urn:rawdata:inst/measurement/set-12/27532b03d5"
      }
     }
    ],
@@ -1261,36 +1317,36 @@
    "answerable": true,
    "answer_passages": [
     {
-     "passage_text": "경남 김해시 토양의 수문학적 분류기준 — 소하천명 소하천명; 유역면적 A(㎢) 유역면적 A(㎢); 유로연장 L(㎞) 유로연장 L(㎞); 구분 구분; 토 양 형 A. 출처: 04장 소하천 보전과 이용에 관한 기본사항.md <표 4.1-7>(121쪽).",
-     "class_iri": "urn:rawdata:class/hydrologic-analysis",
-     "instance_kind": "entity",
-     "provenance": {
-      "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/04장 소하천 보전과 이용에 관한 기본사항/04장 소하천 보전과 이용에 관한 기본사항.md",
-      "page": 121,
-      "set_id": "set-12",
-      "instance_id": "urn:rawdata:inst/entity/set-12/76373bf228"
-     }
-    },
-    {
-     "passage_text": "안평천 01 안평천의 유역면적 A은(는) 0.7 ㎢이다. 출처: 경남 김해시 토양의 수문학적 분류기준(04장 소하천 보전과 이용에 관한 기본사항.md, 121쪽).",
+     "passage_text": "하천 하천명의 빈도별 홍수량은(는) 10 ㎥/s이다. 출처: 경남 김해시 소하천 치수계획을 위한 설계빈도(06장 소하천공사 시행의 기본방향에 관한사항(완).md, 116쪽).",
      "class_iri": "urn:rawdata:class/hydrologic-analysis",
      "instance_kind": "measurement",
      "provenance": {
-      "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/04장 소하천 보전과 이용에 관한 기본사항/04장 소하천 보전과 이용에 관한 기본사항.md",
-      "page": 121,
+      "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/06장 소하천공사 시행의 기본방향에 관한사항(완)/06장 소하천공사 시행의 기본방향에 관한사항(완).md",
+      "page": 116,
       "set_id": "set-12",
-      "instance_id": "urn:rawdata:inst/measurement/set-12/f6dbdc23fe"
+      "instance_id": "urn:rawdata:inst/measurement/set-12/5e97257374"
      }
     },
     {
-     "passage_text": "안평천 01 안평천의 유로연장 L은(는) 1.85 ㎞이다. 출처: 경남 김해시 토양의 수문학적 분류기준(04장 소하천 보전과 이용에 관한 기본사항.md, 121쪽).",
+     "passage_text": "하천 하천명의 빈도별 홍수량은(는) 20 ㎥/s이다. 출처: 경남 김해시 소하천 치수계획을 위한 설계빈도(06장 소하천공사 시행의 기본방향에 관한사항(완).md, 116쪽).",
      "class_iri": "urn:rawdata:class/hydrologic-analysis",
      "instance_kind": "measurement",
      "provenance": {
-      "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/04장 소하천 보전과 이용에 관한 기본사항/04장 소하천 보전과 이용에 관한 기본사항.md",
-      "page": 121,
+      "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/06장 소하천공사 시행의 기본방향에 관한사항(완)/06장 소하천공사 시행의 기본방향에 관한사항(완).md",
+      "page": 116,
       "set_id": "set-12",
-      "instance_id": "urn:rawdata:inst/measurement/set-12/a2e3767786"
+      "instance_id": "urn:rawdata:inst/measurement/set-12/eeae0ae830"
+     }
+    },
+    {
+     "passage_text": "하천 하천명의 빈도별 홍수량은(는) 30 ㎥/s이다. 출처: 경남 김해시 소하천 치수계획을 위한 설계빈도(06장 소하천공사 시행의 기본방향에 관한사항(완).md, 116쪽).",
+     "class_iri": "urn:rawdata:class/hydrologic-analysis",
+     "instance_kind": "measurement",
+     "provenance": {
+      "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/06장 소하천공사 시행의 기본방향에 관한사항(완)/06장 소하천공사 시행의 기본방향에 관한사항(완).md",
+      "page": 116,
+      "set_id": "set-12",
+      "instance_id": "urn:rawdata:inst/measurement/set-12/57863dcf3f"
      }
     }
    ],
@@ -1315,36 +1371,36 @@
    "answerable": true,
    "answer_passages": [
     {
-     "passage_text": "경남 김해시 4.4 소하천의 종합적인 정비방향 — 구 분 전원 하천 구간; 시설계획 ․ 굴곡부를 완화시키고 수충 부는 보강 ․ 소하천단면은 하류에서 상류 로 연속성을 이루도록 계획; 환경계획 ․ 사람의 출입이 많은 경우 쓰레기통 및 오물수거시설 설치 ․ 오염하천 감시를 용이하게 토출관 설치; 다목적이용계획 ․ 유휴지에 잔디식재 및 그늘 막 설치 ․ 자연석을 이용한 징검다리 등을 설치하고 조경수를 식재; 적용구간 상 류 구 간 (산지부). 출처: 04장 소하천 보전과 이용에 관한 기본사항.md (279쪽).",
+     "passage_text": "9의 연장은(는) 405 m이다. 출처: 경남 김해시 표(07장 소하천공사의 실시에 관한사항.md, 453쪽).",
      "class_iri": "urn:rawdata:class/improvement-plan",
-     "instance_kind": "entity",
+     "instance_kind": "measurement",
      "provenance": {
-      "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/04장 소하천 보전과 이용에 관한 기본사항/04장 소하천 보전과 이용에 관한 기본사항.md",
-      "page": 279,
+      "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/07장 소하천공사의 실시에 관한사항/07장 소하천공사의 실시에 관한사항.md",
+      "page": 453,
       "set_id": "set-12",
-      "instance_id": "urn:rawdata:inst/entity/set-12/5c2369647c"
+      "instance_id": "urn:rawdata:inst/measurement/set-12/295e5fb210"
      }
     },
     {
-     "passage_text": "경남 김해시 4.4 소하천의 종합적인 정비방향 — 구 분 전원 하천 구간; 시설계획 ․ 기존 선형을 유지하면서 마을진입로와 연계 ․ 호안계획은 주변경관과 조화 를 이루도록 자연석을 이용; 환경계획 ․ 가능한 하수 및 오수를 분리 ․ 소하천내에쓰레기통 및 오물 수거시설을 설치하고 주기적; 다목적이용계획 ․ 고수부지에 잔디식재, 시설 공간으로 활용 ․ 보 등을 설치하여 유량확보 및 수변친수 공간으로 활용; 적용구간 중･하류부 구 간 (취락부). 출처: 04장 소하천 보전과 이용에 관한 기본사항.md (279쪽).",
+     "passage_text": "9의 연장은(는) 133 m이다. 출처: 경남 김해시 표(07장 소하천공사의 실시에 관한사항.md, 453쪽).",
      "class_iri": "urn:rawdata:class/improvement-plan",
-     "instance_kind": "entity",
+     "instance_kind": "measurement",
      "provenance": {
-      "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/04장 소하천 보전과 이용에 관한 기본사항/04장 소하천 보전과 이용에 관한 기본사항.md",
-      "page": 279,
+      "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/07장 소하천공사의 실시에 관한사항/07장 소하천공사의 실시에 관한사항.md",
+      "page": 453,
       "set_id": "set-12",
-      "instance_id": "urn:rawdata:inst/entity/set-12/32046bab2b"
+      "instance_id": "urn:rawdata:inst/measurement/set-12/622a88f794"
      }
     },
     {
-     "passage_text": "경남 김해시 4.4 소하천의 종합적인 정비방향 — 구 분 전원 하천 구간; 시설계획 ․ 기존 선형을 유지하되 심한 굴곡부는 바로잡아 수해를 예방 ․ 유속이완만한 구간은잔디 를 식재하여 법면을 보호; 환경계획 으로 청소 ․ 제방 상단에 폐비닐 적치함 등의 설치로 환경오염을 예방; 다목적이용계획 ․ 유휴지에 잔디식재, 의자 등을 설치하여 휴식공간 으로 활용; 적용구간 하류부 구 간 (농경지). 출처: 04장 소하천 보전과 이용에 관한 기본사항.md (279쪽).",
+     "passage_text": "9의 연장은(는) 140 m이다. 출처: 경남 김해시 표(07장 소하천공사의 실시에 관한사항.md, 453쪽).",
      "class_iri": "urn:rawdata:class/improvement-plan",
-     "instance_kind": "entity",
+     "instance_kind": "measurement",
      "provenance": {
-      "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/04장 소하천 보전과 이용에 관한 기본사항/04장 소하천 보전과 이용에 관한 기본사항.md",
-      "page": 279,
+      "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/07장 소하천공사의 실시에 관한사항/07장 소하천공사의 실시에 관한사항.md",
+      "page": 453,
       "set_id": "set-12",
-      "instance_id": "urn:rawdata:inst/entity/set-12/613993dc0c"
+      "instance_id": "urn:rawdata:inst/measurement/set-12/b7525f8465"
      }
     }
    ],
@@ -1531,36 +1587,36 @@
    "answerable": true,
    "answer_passages": [
     {
-     "passage_text": "경남 김해시 4.3 타 계획과의 조정 — 구분 구분; 기존 하수도정비기본계획(2007.12) 1단계; 본계획 1단계. 출처: 04장 소하천 보전과 이용에 관한 기본사항.md (265쪽).",
-     "class_iri": "urn:rawdata:class/implementation-plan",
-     "instance_kind": "entity",
+     "passage_text": "안평천 안평천의 편익은(는) 4.06 백만원이다. 출처: 경남 김해시 표(08장 치수경제성 분석.md, 65쪽).",
+     "class_iri": "urn:rawdata:class/flood-economics",
+     "instance_kind": "measurement",
      "provenance": {
-      "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/04장 소하천 보전과 이용에 관한 기본사항/04장 소하천 보전과 이용에 관한 기본사항.md",
-      "page": 265,
+      "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/08장 치수경제성 분석/08장 치수경제성 분석.md",
+      "page": 65,
       "set_id": "set-12",
-      "instance_id": "urn:rawdata:inst/entity/set-12/56488e9147"
+      "instance_id": "urn:rawdata:inst/measurement/set-12/a4a032bcc0"
      }
     },
     {
-     "passage_text": "경남 김해시 4.3 타 계획과의 조정 — 구분 목표연도; 기존 하수도정비기본계획(2007.12) 2010년; 본계획 2015년. 출처: 04장 소하천 보전과 이용에 관한 기본사항.md (265쪽).",
-     "class_iri": "urn:rawdata:class/implementation-plan",
-     "instance_kind": "entity",
+     "passage_text": "우동천 우동천의 편익은(는) 7889.18 백만원이다. 출처: 경남 김해시 표(08장 치수경제성 분석.md, 65쪽).",
+     "class_iri": "urn:rawdata:class/flood-economics",
+     "instance_kind": "measurement",
      "provenance": {
-      "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/04장 소하천 보전과 이용에 관한 기본사항/04장 소하천 보전과 이용에 관한 기본사항.md",
-      "page": 265,
+      "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/08장 치수경제성 분석/08장 치수경제성 분석.md",
+      "page": 65,
       "set_id": "set-12",
-      "instance_id": "urn:rawdata:inst/entity/set-12/09fe4ce9a1"
+      "instance_id": "urn:rawdata:inst/measurement/set-12/19395a2616"
      }
     },
     {
-     "passage_text": "경남 김해시 사업시행 전 소하천별 수리학적 계수 — 하천명 하천명; Reach No. Reach No.; V = aQb a; h = cQd c. 출처: 05장 재해예방 및 환경개선과 수질보전에 관한사항.md <표 5.3-23>(378쪽).",
-     "class_iri": "urn:rawdata:class/implementation-plan",
-     "instance_kind": "entity",
+     "passage_text": "우동천 우동천의 편익은(는) 24141.9 백만원이다. 출처: 경남 김해시 표(08장 치수경제성 분석.md, 65쪽).",
+     "class_iri": "urn:rawdata:class/flood-economics",
+     "instance_kind": "measurement",
      "provenance": {
-      "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/05장 재해예방 및 환경개선과 수질보전에 관한사항/05장 재해예방 및 환경개선과 수질보전에 관한사항.md",
-      "page": 378,
+      "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/08장 치수경제성 분석/08장 치수경제성 분석.md",
+      "page": 65,
       "set_id": "set-12",
-      "instance_id": "urn:rawdata:inst/entity/set-12/d09d7725ee"
+      "instance_id": "urn:rawdata:inst/measurement/set-12/a6f5ddc73c"
      }
     }
    ],
@@ -1585,17 +1641,6 @@
    "answerable": true,
    "answer_passages": [
     {
-     "passage_text": "경남 김해시 토양의 수문학적 분류기준 — 소하천명 소하천명; 유역면적 A(㎢) 유역면적 A(㎢); 유로연장 L(㎞) 유로연장 L(㎞); 구분 구분; 토 양 형 A. 출처: 04장 소하천 보전과 이용에 관한 기본사항.md <표 4.1-7>(121쪽).",
-     "class_iri": "urn:rawdata:class/hydrologic-analysis",
-     "instance_kind": "entity",
-     "provenance": {
-      "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/04장 소하천 보전과 이용에 관한 기본사항/04장 소하천 보전과 이용에 관한 기본사항.md",
-      "page": 121,
-      "set_id": "set-12",
-      "instance_id": "urn:rawdata:inst/entity/set-12/76373bf228"
-     }
-    },
-    {
      "passage_text": "안평천 01 안평천의 유역면적 A은(는) 0.7 ㎢이다. 출처: 경남 김해시 토양의 수문학적 분류기준(04장 소하천 보전과 이용에 관한 기본사항.md, 121쪽).",
      "class_iri": "urn:rawdata:class/hydrologic-analysis",
      "instance_kind": "measurement",
@@ -1615,6 +1660,17 @@
       "page": 121,
       "set_id": "set-12",
       "instance_id": "urn:rawdata:inst/measurement/set-12/a2e3767786"
+     }
+    },
+    {
+     "passage_text": "경남 김해시 토양의 수문학적 분류기준 — 소하천명 01 안평천; 유역면적 A(㎢) 0.70; 유로연장 L(㎞) 1.85; 구분 면적(㎢); 토 양 형 0.03. 출처: 04장 소하천 보전과 이용에 관한 기본사항.md <표 4.1-7>(121쪽).",
+     "class_iri": "urn:rawdata:class/hydrologic-analysis",
+     "instance_kind": "entity",
+     "provenance": {
+      "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/04장 소하천 보전과 이용에 관한 기본사항/04장 소하천 보전과 이용에 관한 기본사항.md",
+      "page": 121,
+      "set_id": "set-12",
+      "instance_id": "urn:rawdata:inst/entity/set-12/0dc34b4dea"
      }
     }
    ],

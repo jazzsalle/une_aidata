@@ -1829,3 +1829,9 @@ button.context-add-button:hover { background: var(--surface-panel-blue); }
    데이터의 -META- id · data_status:'meta_demo' 가 이 클래스를 결정한다(코드가 아니라 데이터). */
 .meta-demo-text { color: #3949ab; }
 .meta-demo-badge { display: inline-block; padding: 1px 6px; border: 1px solid #3949ab; border-radius: 999px; color: #3949ab; font-size: var(--fs-xs); line-height: var(--lh-xs); background: rgba(57,73,171,.06); }
+
+/* 메타 CQ 답변의 바로가기 칩. 답변에서 지도로 건너가는 유일한 통로라 버튼임이 읽혀야 한다. */
+.agent-turn-links { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; margin-top: 4px; }
+.agent-turn-links-label { color: var(--c-text-muted); font-size: var(--fs-xs); line-height: var(--lh-xs); }
+.agent-link-chip { display: inline-block; padding: 2px 8px; border: 1px solid #3949ab; border-radius: 999px; background: rgba(57,73,171,.06); color: #3949ab; font-size: var(--fs-xs); line-height: var(--lh-xs); cursor: pointer; }
+.agent-link-chip:hover, .agent-link-chip:focus-visible { background: #3949ab; color: #fff; }

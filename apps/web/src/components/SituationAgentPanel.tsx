@@ -1,12 +1,14 @@
 import { useEffect,useMemo,useRef,useState } from 'react';
 import type { KeyboardEvent as ReactKeyboardEvent } from 'react';
-import type {AgentResponse,CreateSituationInput,CurrentSituation,Observation,SituationMode} from '../types/contracts';
+import type {AgentLink,AgentResponse,CreateSituationInput,CurrentSituation,Observation,SituationMode} from '../types/contracts';
 import type {AgentContextItem} from '../types/uiContext';
 import {createSituation,sendAgentMessage} from '../services/apiClient';
 import {moveTabFocus} from '../hooks/useRovingTabs';
 interface Props{situation:CurrentSituation|null;onSituationCreated(s:CurrentSituation):void;onAgentResponse(r:AgentResponse):void;
  /** 지도·우측 패널에서 선택해 질의와 함께 전달할 대상. 미연결이어도 동작이 깨지지 않도록 optional 이다. */
- contextItems?:AgentContextItem[];onRemoveContext?(item:AgentContextItem):void;}
+ contextItems?:AgentContextItem[];onRemoveContext?(item:AgentContextItem):void;
+ /** 메타 CQ 답변의 링크 칩 클릭 — 지역 전환·하천 이동·지구 하이라이트를 바깥(DashboardPage)이 맡는다. */
+ onOpenLink?(link:AgentLink):void;}
 interface AgentTurn{turn_id:string;role:'user'|'assistant';text:string;created_at:string;response?:AgentResponse;context?:AgentContextItem[];}
 const SUGGESTIONS=['우선 확인지역의 선정 근거는?','현재와 유사한 과거 피해·복구 사례는?','매뉴얼상 먼저 확인할 절차는?','침수흔적도와 위성영상 변화를 비교해줘'];
 function valueOf(s:CurrentSituation|null,type:string){const v=s?.observations.find(i=>i.type===type)?.value;return typeof v==='number'?String(v):'';}
@@ -14,11 +16,25 @@ function paragraphs(text:string){return text.split(/\n+/).map(line=>line.trim())
 function turnTime(iso:string){return new Date(iso).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});}
 function contextKey(item:AgentContextItem){return `${item.kind}:${item.id}`;}
 function contextText(item:AgentContextItem){return item.detail?`${item.label} · ${item.detail}`:item.label;}
-export function SituationAgentPanel({situation,onSituationCreated,onAgentResponse,contextItems,onRemoveContext}:Props){
+export function SituationAgentPanel({situation,onSituationCreated,onAgentResponse,contextItems,onRemoveContext,onOpenLink}:Props){
  const [activeTab,setActiveTab]=useState<'input'|'agent'>('input');const [message,setMessage]=useState('현재 조건에서 우선 확인해야 할 지역과 근거를 알려줘');const [sending,setSending]=useState(false);const [applying,setApplying]=useState(false);const [applyError,setApplyError]=useState('');const [sendError,setSendError]=useState('');const [mode,setMode]=useState<SituationMode>('hybrid');const [rain3h,setRain3h]=useState('');const [rain12h,setRain12h]=useState('');const [water,setWater]=useState('');const [flow,setFlow]=useState('');const [symptom,setSymptom]=useState('');const [turns,setTurns]=useState<AgentTurn[]>([]);
  // 추천질문은 접힘이 기본이다. 펼친 채로 두면 좌측 패널 높이를 먼저 먹어 대화 스레드가 눌린다.
  // 건수를 summary 라벨에 적어 접혀 있어도 무엇이 있는지 읽히게 한다.
  const [suggestionsOpen,setSuggestionsOpen]=useState(false);
+ // 메타 표본 상황(-META-)이면 추천질문을 그 지역의 역량질문(CQ)으로 바꾼다 — T3Q 실 API 전의
+ // Mock 시범이라, 준비된 답이 있는 질문(answerable)만 보여 준다.
+ const [cqSuggestions,setCqSuggestions]=useState<string[]>([]);
+ const isMetaSituation=Boolean(situation?.situation_id?.includes('-META-'));
+ useEffect(()=>{
+  if(!isMetaSituation||!situation){setCqSuggestions([]);return;}
+  let alive=true;
+  fetch('/seed/meta_demo_cq_answers_seed.json').then(r=>r.ok?r.json():null).then(payload=>{
+   if(!alive||!payload)return;
+   const rows=(payload.entries??[]).filter((e:{admin_code:string;answerable:boolean})=>e.admin_code===situation.admin_code&&e.answerable);
+   setCqSuggestions(rows.map((e:{question:string})=>e.question));
+  }).catch(()=>{if(alive)setCqSuggestions([]);});
+  return()=>{alive=false;};
+ },[situation?.situation_id]);
  const threadRef=useRef<HTMLDivElement|null>(null);
  const observations=useMemo(()=>situation?.observations??[],[situation]);
  const context=useMemo(()=>contextItems??[],[contextItems]);
@@ -35,7 +51,8 @@ export function SituationAgentPanel({situation,onSituationCreated,onAgentRespons
   const response=turn.response;
   return <article key={turn.turn_id} className={`agent-turn ${turn.role}`}>
    <p className="agent-turn-head"><span className="agent-turn-role">{turn.role==='user'?'담당자 질문':'AI Agent 답변'}</span><span className="agent-turn-time">{turnTime(turn.created_at)}</span></p>
-   <div className="agent-turn-body">{paragraphs(turn.text).map((line,index)=><p key={`${turn.turn_id}-p-${index}`}>{line}</p>)}</div>
+   <div className={`agent-turn-body${response?.meta_demo?' meta-demo-text':''}`}>{paragraphs(turn.text).map((line,index)=><p key={`${turn.turn_id}-p-${index}`}>{line}</p>)}</div>
+   {response?.links?.length?<div className="agent-turn-links"><span className="agent-turn-links-label">바로가기</span>{response.links.map((link,index)=><button key={`${turn.turn_id}-lk-${index}`} type="button" className="agent-link-chip" onClick={()=>onOpenLink?.(link)} title={link.kind==='region'?'이 지역으로 지도 이동':link.kind==='river'?'하천 위치로 지도 이동':'지도에서 강조'}>{link.kind==='region'?'📍':link.kind==='river'?'〰':'▨'} {link.label}</button>)}</div>:null}
    {turn.context&&turn.context.length?<p className="agent-turn-context"><span className="agent-turn-context-label">함께 전달한 선택 대상</span>{turn.context.map(item=><span key={`${turn.turn_id}-c-${contextKey(item)}`} className="agent-turn-context-item">{contextText(item)}</span>)}</p>:null}
    {response?<p className="agent-turn-summary">근거 {response.evidence.length}건 · 유사사례 {response.similar_events.length}건 · 지도 이동 {response.map_actions.length?'있음':'없음'}</p>:null}
    {response&&response.warnings.length?<div className="agent-turn-notes warnings"><h4>확인 필요 안내</h4><ul>{response.warnings.map((item,index)=><li key={`${turn.turn_id}-w-${index}`}>{item}</li>)}</ul></div>:null}
@@ -50,8 +67,8 @@ export function SituationAgentPanel({situation,onSituationCreated,onAgentRespons
    {sending?<p className="agent-turn-pending">AI Agent가 답변을 정리하는 중입니다…</p>:null}
   </div>
   <details className="agent-suggestions" open={suggestionsOpen} onToggle={e=>setSuggestionsOpen(e.currentTarget.open)}>
-   <summary>추천질문 {SUGGESTIONS.length}건</summary>
-   <div className="agent-suggestion-list">{SUGGESTIONS.map(i=><button key={i} type="button" className="suggestion" onClick={()=>setMessage(i)}>{i}</button>)}</div>
+   <summary>{isMetaSituation&&cqSuggestions.length?`역량질문(CQ) ${cqSuggestions.length}건 〔표본〕`:`추천질문 ${SUGGESTIONS.length}건`}</summary>
+   <div className="agent-suggestion-list">{(isMetaSituation&&cqSuggestions.length?cqSuggestions:SUGGESTIONS).map(i=><button key={i} type="button" className={`suggestion${isMetaSituation&&cqSuggestions.length?' meta-demo-text':''}`} onClick={()=>setMessage(i)}>{i}</button>)}</div>
   </details>
   <div className="agent-composer">
    {context.length?<div className="agent-context-bar">

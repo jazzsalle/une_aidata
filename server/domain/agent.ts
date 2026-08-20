@@ -232,7 +232,68 @@ function geoIdSet(): Set<string> {
   return new Set((seed.geo.features as unknown as Rec[]).map((feature) => str(rec(feature.properties).id)).filter(Boolean));
 }
 
+/** 질문 문자열 정규화 — 공백·문장부호를 걷어 CQ 질문과 느슨하게 대조한다. */
+function normalizeQuestion(text: string): string {
+  return String(text ?? '').replace(/[\s?.,·]/g, '');
+}
+
+interface MetaCqEntry {
+  cq_key: string; plan_type: string; set_label: string; admin_code: string; admin_name: string;
+  cq_id: string; question: string; answerable: boolean;
+  answer_passages: Array<{ passage_text: string; class_iri: string; instance_kind: string; provenance: Record<string, unknown> }>;
+  links: Array<Record<string, unknown>>;
+}
+
+/** T3Q 메타 표본 지역에서 역량질문(CQ)이 들어오면 준비된 인스턴스 답을 돌려준다.
+
+    T3Q 실 API 가 아직 붙지 않아, 실제 올 예상 데이터(메타 인스턴스)의 passage 를 그대로
+    나열하는 Mock 시범이다 — 값을 요약·재계산하지 않는다. 매칭은 질문 전체의 정규화 일치
+    또는 앞 12자 이상 부분일치다(추천질문 버튼이 CQ 원문을 넣으므로 보통 정확히 맞는다). */
+function matchMetaCq(situation: CurrentSituation, message: string): MetaCqEntry | null {
+  if (!situation.situation_id.includes('-META-')) return null;
+  const entries = (seed.metaDemoCqAnswers?.entries ?? []) as unknown as MetaCqEntry[];
+  const asked = normalizeQuestion(message);
+  if (asked.length < 8) return null;
+  let best: MetaCqEntry | null = null;
+  for (const entry of entries) {
+    if (entry.admin_code !== situation.admin_code || !entry.answerable) continue;
+    const q = normalizeQuestion(entry.question);
+    if (q === asked || q.includes(asked) || asked.includes(q)) return entry;
+    if (!best && asked.length >= 12 && (q.startsWith(asked.slice(0, 12)) || asked.startsWith(q.slice(0, 12)))) best = entry;
+  }
+  return best;
+}
+
 export async function buildAgentResponse(situation: CurrentSituation, message: string, context: AgentContextItem[] = []) {
+  const metaCq = matchMetaCq(situation, message);
+  if (metaCq) {
+    const passages = metaCq.answer_passages.slice(0, 3);
+    const answer = [
+      `〔표본〕 ${metaCq.set_label} ${metaCq.plan_type} 보고서의 메타 인스턴스에서 찾은 근거입니다 (${metaCq.cq_id}).`,
+      ...passages.map((p, i) => `${i + 1}. ${p.passage_text}`),
+    ].join('\n');
+    return {
+      message_id: `MSG-${crypto.randomUUID()}`,
+      answer,
+      user_message: message,
+      context,
+      priority_areas: [],
+      similar_events: [],
+      procedures: [],
+      map_actions: [],
+      links: metaCq.links,
+      meta_demo: true,
+      evidence: passages.map((p) => ({
+        kind: 'meta_instance',
+        ref: String(p.provenance?.instance_id ?? ''),
+        description: `${String(p.provenance?.source_file ?? '')} ${p.provenance?.page ? `${p.provenance.page}쪽` : ''}`.trim(),
+      })) as unknown as EvidenceItem[],
+      warnings: ['T3Q 메타 인스턴스 표본(Mock) 응답입니다 — 실 T3Q API 연계 전 시범이며 실지역 공식자료가 아닙니다.'],
+      limitations: ['답변은 메타 인스턴스 passage 원문 나열이며 요약·재계산하지 않았습니다.',
+        '표본 지역(대구 서구·정읍·김해)은 비교본이며 POC 대상지역 검증자료가 아닙니다.'],
+      operator_confirmation_required: true,
+    };
+  }
   const priority = calculatePriorityAreas(situation);
   const similar = await searchSimilarEvents(situation, 3);
   const procedures = (seed.procedures.procedures as Array<Record<string, unknown>>).filter((item) => Array.isArray(item.target_admin_codes) && item.target_admin_codes.includes(situation.admin_code)).slice(0, 5);

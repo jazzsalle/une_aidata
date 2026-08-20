@@ -336,6 +336,16 @@ def meta_situations() -> list:
 
 # ---------------------------------------------------------------- 역량질문 답변
 
+def river_nav_table() -> dict:
+    """하천명 → (지도 이동 좌표, 지나는 시군구). 하천망도 카탈로그의 내부점(label_point)이다.
+    동명 하천은 링크를 붙일 지역(admin_code)을 지나는 것을 고른다."""
+    path = REPO / 'apps' / 'web' / 'public' / 'reference' / 'rivers' / 'river_network_catalog.json'
+    table: dict = {}
+    for river in json.loads(require(path, '하천망도 카탈로그').read_text(encoding='utf-8'))['rivers']:
+        table.setdefault(river['river_name'], []).append(river)
+    return table
+
+
 def build_cq_answers() -> dict:
     """보고서 3종 × CQ 별로 실값 인스턴스의 passage 를 골라 답변을 만든다.
 
@@ -343,24 +353,38 @@ def build_cq_answers() -> dict:
     links 는 화면이 클릭 칩으로 그릴 이동 대상(지역·하천·지구)이다.
     """
     entries = []
+    nav_table = river_nav_table()
     for key, (plan_name, admin_code, admin_name, set_label) in PLANS.items():
         payload = load_instances(plan_name)
         cq_doc = load_cq(plan_name)
+        def broken_passage(text: str) -> bool:
+            """'관측소 관측소; 수계 수계' 처럼 라벨이 값 자리에 반복된 조각(깨진 표 행).
+            토큰 끝의 구두점(; , .)을 떼고 비교한다 — '관측소'와 '관측소;' 도 반복이다."""
+            tokens = [t.strip(';,.·—-') for t in text.split()]
+            return sum(1 for a, b in zip(tokens, tokens[1:]) if a == b and len(a) >= 2) >= 2
+
         by_cq: dict[str, list] = {}
         for inst in payload['instances']:
             attrs = inst.get('attributes') or {}
             text = clean((inst.get('passage') or {}).get('passage_text'))
-            if not text or len(text) < 60:
+            if not text or len(text) < 60 or broken_passage(text):
                 continue
             if inst.get('instance_kind') == 'entity' and is_header_row(attrs):
                 continue
             # 성명 필드가 있는 인스턴스는 답변 소재에서 제외한다(마스킹돼 있어도 개인정보).
             if any('성명' in clean(k) for k in attrs):
                 continue
+            prop_tail = clean(inst.get('measured_property')).split()[-1] if clean(inst.get('measured_property')) else ''
             for cq_id in inst.get('answers_cq') or []:
-                bucket = by_cq.setdefault(cq_id, [])
-                if len(bucket) < 3:
-                    bucket.append(inst)
+                bucket = by_cq.setdefault(cq_id, {'general': [], 'by_prop': {}})
+                if len(bucket['general']) < 20:
+                    bucket['general'].append(inst)
+                # 측정항목별로도 담아 둔다 — CQ 인스턴스가 만 건이 넘어 앞쪽만 보면 요구 항목
+                # (계획홍수량 등)이 버킷에 못 든다.
+                if prop_tail:
+                    prop_bucket = bucket['by_prop'].setdefault(prop_tail, [])
+                    if len(prop_bucket) < 3:
+                        prop_bucket.append(inst)
 
         questions = []
         for axis in cq_doc.get('axis_questions') or []:
@@ -369,14 +393,41 @@ def build_cq_answers() -> dict:
 
         for question in questions:
             cq_id = question.get('cq_id')
-            picked = by_cq.get(cq_id, [])
+            bucket = by_cq.get(cq_id, {'general': [], 'by_prop': {}})
+            # 질문이 요구하는 측정항목(계획홍수량 등)을 먼저 뽑는다. '계획홍수량' 요구에
+            # measured_property 가 '금회 홍수량' 으로 오는 식이라 끝 어절('홍수량')로 닿게 한다.
+            wanted = [clean(m.get('measured_property')) for m in question.get('required_measurements') or []]
+            tails = [w.split()[-1] for w in wanted if w]
+            picked = []
+            for tail in tails:
+                for prop_tail, insts in bucket['by_prop'].items():
+                    if tail in prop_tail or prop_tail in tail:
+                        for inst in insts:
+                            if inst not in picked and len(picked) < 3:
+                                picked.append(inst)
+            for inst in bucket['general']:
+                if inst not in picked and len(picked) < 3:
+                    picked.append(inst)
             links = [{'kind': 'region', 'label': admin_name, 'admin_code': admin_code}]
             river_names = set()
             for inst in picked:
                 river = clean(((inst.get('keys') or {}).get('domain') or {}).get('river_name'))
-                if river and len(river) >= 2 and river not in river_names and not river.endswith(('강(','천(')):
+                # '하천'·'확률강' 같은 값은 표에서 잘려 나온 조각이지 하천명이 아니다 — 링크를 만들면
+                # 동명의 실제 하천(창녕 '하천' 등)으로 엉뚱하게 이동한다.
+                broken = {'하천', '소하천', '확률강', '월별강', '하천명'}
+                if river and len(river) >= 3 and river not in broken and river not in river_names and not river.endswith(('강(', '천(')):
                     river_names.add(river)
-                    links.append({'kind': 'river', 'label': river, 'name': river})
+                    link = {'kind': 'river', 'label': river, 'name': river}
+                    # 지도 이동 좌표 — 하천망도에 있는 하천만. 동명이면 이 지역을 지나는 것을 고른다.
+                    # 없는 하천(소하천 등)은 nav 없이 지역 이동만 된다. 좌표를 만들어내지 않는다.
+                    candidates = nav_table.get(river, [])
+                    match = next((c for c in candidates if admin_code in (c.get('admin_codes') or [])),
+                                 candidates[0] if len(candidates) == 1 else None)
+                    if match and match.get('label_point'):
+                        link['nav'] = match['label_point']
+                        link['nav_kind'] = 'derived_interior'
+                        link['river_code'] = match['river_code']
+                    links.append(link)
             entries.append({
                 'cq_key': f'{key}:{cq_id}',
                 'plan_type': plan_name,
