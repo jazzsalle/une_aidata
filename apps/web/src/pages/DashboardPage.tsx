@@ -36,7 +36,13 @@ export function DashboardPage(props: Props) {
   return (
     <>
       <div className="dashboard-grid" ref={leftPanel.gridRef} style={leftPanel.style}>
-        <SituationAgentPanel situation={props.situation} onSituationCreated={props.onSituationCreated} onAgentResponse={props.onAgentResponse} contextItems={props.agentContext} onRemoveContext={props.onRemoveContext} />
+        <SituationAgentPanel situation={props.situation} onSituationCreated={props.onSituationCreated} onAgentResponse={props.onAgentResponse} contextItems={props.agentContext} onRemoveContext={props.onRemoveContext}
+          onOpenLink={(link)=>{
+            // 메타 CQ 답변의 바로가기 — kind 별로 기존 지도 연동 경로를 그대로 태운다.
+            if(link.kind==='region'&&link.admin_code)props.onRegionChange(link.admin_code);
+            else if(link.kind==='river'&&link.nav)props.onFocusMap(link.nav,13);
+            else if(link.kind==='district'&&link.target_id)props.onHighlight(link.target_id);
+          }} />
         <PanelResizer control={leftPanel} />
         <MapPanel adminCode={props.situation?.admin_code ?? '45190'} mapRegion={props.mapRegion} onRegionChange={props.onRegionChange} focusTarget={props.focusTarget} highlightedFeatureId={props.highlightedFeature} priorityAreas={props.priorities?.areas} onSelectFeature={props.onAddContext} />
         <InsightPanel mapRegion={props.mapRegion} onFocusMap={props.onFocusMap} priorities={props.priorities} procedures={props.procedures} similarEvents={props.events} selectedEventId={props.selectedEventId} onHighlight={props.onHighlight} onSelectEvent={props.onSelectEvent} adminCode={props.situation?.admin_code ?? null} onAddContext={props.onAddContext} />
