@@ -34,7 +34,20 @@ const SEED_REGIONS: Record<string, { appAdmin: string; center: [number, number] 
   '47190': { appAdmin: '47190', center: [128.344, 36.119] },
   // 남원은 2024년 전북특별자치도 출범 뒤 공간자료가 52190 을 쓴다. 앱 시드는 45190 그대로다.
   '52190': { appAdmin: '45190', center: [127.390, 35.416] },
+  // 메타 표본 3곳(2026-08-21) — T3Q 재난메타 인스턴스에서 변환한 비교본 시드가 있는 지역.
+  // 중심좌표는 표본 지구가 몰린 곳(대구 서구 시가지·정읍천 시가지·김해 시가지)이다.
+  '27170': { appAdmin: '27170', center: [128.552, 35.874] },
+  '52180': { appAdmin: '52180', center: [126.856, 35.570] },
+  '48250': { appAdmin: '48250', center: [128.879, 35.234] },
 };
+
+/** 메타 표본 지역(비교본). 화면이 구분색·뱃지를 그릴 때 쓴다. */
+export const META_DEMO_REGIONS = new Set(['27170', '52180', '48250']);
+/** T3Q 메타 인스턴스 표본 식별자인가. 상황(SIT-DG-META-001)·지구(DG-META-01)·하천(RIV-JE-META-01)
+ *  모두 -META- 규약을 쓴다 — situations 스키마가 additionalProperties:false 라 필드를 못 늘려서
+ *  id 규약으로 통일했다. 실데이터가 오면 이 규약의 행만 걷어내면 이번 반영분이 전부 걷힌다. */
+export const isMetaDemoId = (value: string | null | undefined): boolean =>
+  Boolean(value && value.includes('-META-'));
 
 /** 앱 지역코드 → 지도 자료 코드. 남원만 다르다. */
 export const dataCodeOfApp = (appAdmin: string): string =>
