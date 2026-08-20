@@ -5,6 +5,9 @@ import { InsightPanel } from '../components/InsightPanel';
 import { SituationTimeline } from '../components/SituationTimeline';
 import { MapPanel } from '../features/map/MapPanel';
 import { IntegrationStatusPanel } from '../components/IntegrationStatusPanel';
+import { PlanKnowledgePanel } from '../components/PlanKnowledgePanel';
+import { EventTimelinePanel } from '../components/EventTimelinePanel';
+import { SatellitePreviewPanel } from '../components/SatellitePreviewPanel';
 import { T3qReadinessPanel } from '../components/T3qReadinessPanel';
 import { T3qMockSearchPanel } from '../components/T3qMockSearchPanel';
 import { PanelResizer, useResizableLeftPanel } from '../components/PanelResizer';
@@ -48,6 +51,9 @@ export function DashboardPage(props: Props) {
         <InsightPanel mapRegion={props.mapRegion} onFocusMap={props.onFocusMap} priorities={props.priorities} procedures={props.procedures} similarEvents={props.events} selectedEventId={props.selectedEventId} onHighlight={props.onHighlight} onSelectEvent={props.onSelectEvent} adminCode={props.situation?.admin_code ?? null} onAddContext={props.onAddContext} />
       </div>
       <IntegrationStatusPanel />
+      <PlanKnowledgePanel />
+      <EventTimelinePanel />
+      <SatellitePreviewPanel />
       <T3qReadinessPanel adminCode={props.situation?.admin_code} />
       <T3qMockSearchPanel adminCode={props.situation?.admin_code} />
       <SituationTimeline situation={props.situation} />

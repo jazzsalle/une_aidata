@@ -369,6 +369,9 @@ def build_cq_answers() -> dict:
             text = clean((inst.get('passage') or {}).get('passage_text'))
             if not text or len(text) < 60 or broken_passage(text):
                 continue
+            # subject 가 '1' 같은 무의미한 조각인 measurement 는 문맥 없는 문장이 된다("1의 연면적은…").
+            if inst.get('instance_kind') == 'measurement' and len(clean(inst.get('subject'))) < 3:
+                continue
             if inst.get('instance_kind') == 'entity' and is_header_row(attrs):
                 continue
             # 성명 필드가 있는 인스턴스는 답변 소재에서 제외한다(마스킹돼 있어도 개인정보).
