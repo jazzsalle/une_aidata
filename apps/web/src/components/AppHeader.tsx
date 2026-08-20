@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef } from 'react';
 import type { CurrentSituation } from '../types/contracts';
 import type { RouteDefinition } from '../hooks/useRoute';
 import { routes } from '../hooks/useRoute';
-import { type MapRegion, dataCodeOfApp, groupBySido } from '../features/map/mapRegions';
+import { type MapRegion, dataCodeOfApp, groupBySido, isMetaDemoId } from '../features/map/mapRegions';
 import { PageHeading } from './PageHeading';
 
 interface Props {
@@ -109,7 +109,10 @@ export function AppHeader({ route, situations, selected, regions, mapRegion, onN
             onChange={(event) => onSelect(event.target.value)}
           >
             {situations.map((item) => (
-              <option key={item.situation_id} value={item.situation_id}>{item.admin_name}</option>
+              /* 메타 표본 상황은 이름과 색으로 가른다 — option 은 구조를 못 넣어 텍스트 접두로 병행한다. */
+              <option key={item.situation_id} value={item.situation_id} className={isMetaDemoId(item.situation_id) ? 'meta-demo-text' : undefined}>
+                {isMetaDemoId(item.situation_id) ? `〔표본〕 ${item.admin_name}` : item.admin_name}
+              </option>
             ))}
           </select>
         </label>

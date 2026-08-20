@@ -53,6 +53,7 @@
     "data:sgg-code-map": "python3 scripts/build_sgg_code_map.py",
     "data:admin-boundaries": "python3 scripts/build_admin_boundaries.py",
     "data:flood-traces": "python3 scripts/build_flood_traces.py",
+    "data:meta-demo": "python3 scripts/build_meta_demo_seeds.py",
     "data:sochun-crosscheck": "python3 scripts/build_sochun_ledger_crosscheck.py"
   },
   "engines": {

@@ -1,0 +1,63 @@
+{
+ "dataset": "meta_demo_event_timeline",
+ "version": "1.0",
+ "source_note": "재난메타_정의서_v0.96.xlsx 「참고4. 적용 사례·항목 바인딩」 전사 표본",
+ "notice": "사건 마스터ID 를 축으로 시점별 연결 자료를 보여 주는 표본이다. KDSA 채번·연결 관계는 정의서 예시 그대로이며 실제 등록된 사건이 아니다.",
+ "event": {
+  "event_master_id": "KDSA-20220808-1168010800-001",
+  "id_rule": "KDSA-{YYYYMMDD}-{법정동코드 10자리}-{순번 3자리}",
+  "event_name": "2022 수도권 집중호우(강남 도심침수)",
+  "region": "서울특별시 강남구 역삼동",
+  "legal_region_code_10": "1168010800",
+  "hazard_codes": [
+   "T10206",
+   "T10107"
+  ],
+  "poc_event_id_note": "POC 내부 event_id 형식은 EVT::{YYYYMMDD}-{TYPE}-{REGION5}-{SEQ3} 로 다르다. 실연계 시 KDSA ↔ EVT:: 매핑을 Adapter 가 맡는다."
+ },
+ "timeline": [
+  {
+   "at": "2022-08-08T00:00:00+09:00",
+   "stage": "경보",
+   "title": "호우경보 발령(기상청 CAP)",
+   "element_binding": "ALT-07 경보 종류 · ALT-17 사건참조(경보)",
+   "qname": "cap:alert · dsafe:aboutEvent"
+  },
+  {
+   "at": "2022-08-08T21:00:00+09:00",
+   "stage": "관측",
+   "title": "시간강수량 98.5 mm (AWS 종로, 기상청)",
+   "element_binding": "HZ-O06 시간당 강우량 · CLX-01 기후극값",
+   "qname": "sosa:Observation"
+  },
+  {
+   "at": "2022-08-09T00:00:00+09:00",
+   "stage": "공간",
+   "title": "침수구역 경계(GeoJSON Polygon)",
+   "element_binding": "SPT-01 공간객체 · EVT-07 공간범위",
+   "qname": "locn:geometry · geo:geoJSONLiteral"
+  },
+  {
+   "at": "2022-08-09T09:00:00+09:00",
+   "stage": "보고",
+   "title": "중대본 상황보고 3보",
+   "element_binding": "REC-02 사건참조",
+   "qname": "foaf:Document · dsafe:aboutEvent"
+  },
+  {
+   "at": "2022-08-22T00:00:00+09:00",
+   "stage": "선포",
+   "title": "특별재난지역 선포",
+   "element_binding": "EVT-11 선포상태",
+   "qname": "dsafe:declarationStatus"
+  },
+  {
+   "at": "2026-07-08T09:30:00+09:00",
+   "stage": "AI 데이터",
+   "title": "SAR 홍수탐지 학습데이터셋 등재",
+   "element_binding": "AID-01 AI 데이터셋ID · AID-12 사건참조(데이터셋)",
+   "qname": "dcat:Dataset · dsafe:aboutEvent"
+  }
+ ],
+ "data_status": "meta_demo"
+}

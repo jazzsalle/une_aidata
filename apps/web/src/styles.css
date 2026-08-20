@@ -1823,3 +1823,9 @@ button.context-add-button:hover { background: var(--surface-panel-blue); }
 .river-list button:disabled{opacity:.55}
 .river-list strong{font-size:var(--fs-sm);line-height:var(--lh-sm)}
 .river-list small{font-size:var(--fs-xs);line-height:var(--lh-xs);color:var(--c-text-muted)}
+
+/* T3Q 메타 인스턴스 표본(비교본) 유래 텍스트. 실데이터가 오면 수정 전/후를 화면에서 바로 가르기
+   위한 전역 구분색이다 — 값 단위로 칠하고, 색만으로 구분하지 않도록 뱃지·〔표본〕 라벨을 병행한다.
+   데이터의 -META- id · data_status:'meta_demo' 가 이 클래스를 결정한다(코드가 아니라 데이터). */
+.meta-demo-text { color: #3949ab; }
+.meta-demo-badge { display: inline-block; padding: 1px 6px; border: 1px solid #3949ab; border-radius: 999px; color: #3949ab; font-size: var(--fs-xs); line-height: var(--lh-xs); background: rgba(57,73,171,.06); }

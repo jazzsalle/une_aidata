@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { isMetaDemoId } from '../features/map/mapRegions';
 import { moveTabFocus } from '../hooks/useRovingTabs';
 import { loadPlanReference } from '../services/apiClient';
 import { DetailModal } from './DetailModal';
@@ -213,7 +214,8 @@ export function InsightPanel(props:Props){
             <div className="rank">{area.rank}</div>
             <div className="priority-body">
               <div className="priority-title">
-                <button type="button" className="priority-name-button" aria-label={`${area.name} 지도에서 보기`} onClick={event=>{event.stopPropagation();onHighlight(area.spatial_object_id);}}><strong>{area.name}</strong></button>
+                <button type="button" className="priority-name-button" aria-label={`${area.name} 지도에서 보기`} onClick={event=>{event.stopPropagation();onHighlight(area.spatial_object_id);}}><strong className={isMetaDemoId(area.spatial_object_id)?'meta-demo-text':undefined}>{area.name}</strong></button>
+                {isMetaDemoId(area.spatial_object_id)?<span className="meta-demo-badge">표본</span>:null}
                 <span>{area.score}점</span>
               </div>
               {typeTag||locationSummary?<p className="priority-tags">
@@ -323,7 +325,7 @@ export function InsightPanel(props:Props){
             const detailId=`plan-district-detail-${item.district_code}`;
             return <article className={`plan-district-card ${open?'open':''}`} key={item.district_code}>
               <button type="button" className="plan-district-toggle" aria-expanded={open} aria-controls={detailId} onClick={()=>setOpenDistrict(open?null:item.district_code)}>
-                <span className="plan-district-head"><strong>{item.district_name}</strong><span className="plan-badge type">{orMissing(item.disaster_type)}</span></span>
+                <span className="plan-district-head"><strong className={isMetaDemoId(item.district_code)?'meta-demo-text':undefined}>{item.district_name}</strong>{isMetaDemoId(item.district_code)?<span className="meta-demo-badge">표본</span>:null}<span className="plan-badge type">{orMissing(item.disaster_type)}</span></span>
                 <span className="plan-district-sub">{orMissing(item.location)}</span>
                 <span className="plan-district-sub">계획서 위험도 표기 {orMissing(item.grade)} · 계획 우선순위 {orMissing(item.priority)}</span>
                 <span className="plan-district-sub">사업비 {money(item.cost_million_krw)}</span>
