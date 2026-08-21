@@ -2,6 +2,7 @@ import { Fragment, useEffect, useMemo, useState } from 'react';
 import type { CurrentSituation, PriorityAreaResult, ReportDraft, ReportEvidenceSelection, SimilarEvent } from '../types/contracts';
 import type { ReportBlock, ReportDocument, ReportSection } from '../domain/reportDocument';
 import { listBlock, measurementBlocks, noteBlock, rankedListBlock, textBlock, toMarkdown } from '../domain/reportDocument';
+import { isMetaDemoId } from '../features/map/mapRegions';
 
 interface Props {
   situation: CurrentSituation | null;
@@ -36,8 +37,12 @@ interface ReportDocumentInput {
  * 과거 참고정보 프레이밍만 사용하고 피해예측·공식 위험도·자동 조치결정을 만들지 않는다.
  */
 export function buildReportDocument({ overview, conditions, actions, damageStatus, priorities, selectedEvents, selection }: ReportDocumentInput): ReportDocument {
+  // 메타 표본 상황: 우리 산정값(순위 마커·사유)을 보고서에 싣지 않는다 — 표본 지구 이름만 나열하고
+  // 미표시 사실을 명기한다. reasons 가 비어도 'name - ' 꼬리 대시가 남지 않게 이름만 쓴다.
   const priorityBlock = priorities
-    ? rankedListBlock(priorities.areas.slice(0, 5).map((area) => ({ marker: area.rank, text: `${area.name} - ${area.reasons.join(', ')}` })))
+    ? isMetaDemoId(priorities.situation_id)
+      ? textBlock(`〔표본〕 지구 목록(산정값 미표시 — T3Q 실데이터 수신 전): ${priorities.areas.map((area) => area.name).join(', ')}`)
+      : rankedListBlock(priorities.areas.slice(0, 5).map((area) => ({ marker: area.rank, text: area.reasons.length ? `${area.name} - ${area.reasons.join(', ')}` : area.name })))
     : textBlock('미확인');
   const eventItems = selectedEvents.map((event) => {
     const factorText=event.similarity.factors

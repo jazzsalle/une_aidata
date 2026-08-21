@@ -26,7 +26,11 @@ function eventSummary(event,rank){return{
 };}
 
 async function main(){
-  const situations=seed.currentSituations.situations;
+  // 메타 표본 상황(-META-)은 산정하지 않는 나열 모드라 아래 회귀 단언(유사사례 15건·요인점수 등)의
+  // 대상이 아니다 — 5개 POC 상황만 돌리고, 메타는 별도 단언(산정값 부재)으로 지킨다.
+  const allSituations=seed.currentSituations.situations;
+  const situations=allSituations.filter((s)=>!s.situation_id.includes('-META-'));
+  const metaSituations=allSituations.filter((s)=>s.situation_id.includes('-META-'));
   const eventRecords=seed.damageRecovery.records;
   const cqScenarios=seed.t3qMockSearchScenarios.scenarios;
   assert(eventRecords.length===15,`Mock Event 수가 15가 아님: ${eventRecords.length}`);
@@ -104,6 +108,16 @@ async function main(){
     assert(report.sections.priority_areas.length>0,`${situation.situation_id}: 보고서 우선확인지역 누락`);
     assert(report.ndms_submission===false,`${situation.situation_id}: NDMS 자동제출 플래그 오류`);
     result.report_results.push({situation_id:situation.situation_id,report_id:report.report_id,selected_event_id:selected.event_id,similar_event_count:refs.length,factor_count:refs[0].similarity_factors.length,response_comparison_count:refs[0].response_comparison.length,priority_area_count:report.sections.priority_areas.length,ndms_submission:report.ndms_submission});
+  }
+
+  // 메타 표본: 산정값(점수·사유·확인항목)이 payload 에 실리지 않아야 한다 — 나열 모드 회귀 단언.
+  const {calculatePriorityAreas}=require('../../.runtime-cjs/server/domain/priorityAreas.js');
+  assert(metaSituations.length===3,`메타 표본 상황 수가 3이 아님: ${metaSituations.length}`);
+  for(const situation of metaSituations){
+    const listing=calculatePriorityAreas(situation);
+    assert(listing.method==='META_DEMO_LISTING_NO_SCORING',`${situation.situation_id}: 메타 나열 method 아님 (${listing.method})`);
+    assert(listing.areas.length>0,`${situation.situation_id}: 메타 지구 목록 비어 있음`);
+    assert(listing.areas.every(a=>a.reasons.length===0&&a.required_checks.length===0&&a.score===0),`${situation.situation_id}: 메타 표본에 산정값이 섞임`);
   }
 
   for(const scenario of cqScenarios){
