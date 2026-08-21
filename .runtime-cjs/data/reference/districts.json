@@ -34,10 +34,7 @@
         }
     ],
     "counts": {
-        "total": 29,
-        "uiwang_41430": 17,
-        "gumi_47190": 6,
-        "namwon_45190": 6
+        "total": 43
     },
     "districts": [
         {
@@ -2037,6 +2034,514 @@
                 "doc_title": "제2차 남원시 자연재해저감 종합계획 수립 주요현황(작성서식 2)(2022.4)",
                 "pdf_page": 16,
                 "page_label": "주요현황 제15쪽"
+            }
+        },
+        {
+            "district_code": "DG-META-01",
+            "ledger_code": null,
+            "code_origin": "T3Q 메타 인스턴스 후보지명 기반 임의 부여",
+            "district_name": "비산11지구(후보)",
+            "admin_code": "27170",
+            "admin_name": "대구광역시 서구",
+            "disaster_type": "내수재해",
+            "disaster_subtype": "침수위험 후보지",
+            "hazard_codes": [
+                "T10107",
+                "T10206"
+            ],
+            "location": "대구광역시 서구 비산동 1856-3번지 일원",
+            "river_name": null,
+            "station": null,
+            "risk_factors": [
+                "하수관거 용량 부족 및 도로 표면수 유입 지체에 따른 침수피해"
+            ],
+            "risk_thresholds": [],
+            "grade": "후보지(위험도 미판정)",
+            "mitigation": [],
+            "project_status": "후보지 검토",
+            "priority": null,
+            "coordinates": null,
+            "note": "주민설문 유래 후보지 — 설문자 성명은 개인정보로 옮기지 않았다",
+            "evidence": null,
+            "data_status": "meta_demo",
+            "source_note": "T3Q 재난메타 인스턴스 표본(2026-08-13 전달분) — 실지역 공식자료가 아닌 비교본",
+            "provenance": {
+                "source_file": "자연재해저감종합계획/03_대구광역시2016_A구세대_6권분책/보고서/제3장 기초현황조사 2편-(335~532)/제3장 기초현황조사 2편-(335~532).md",
+                "page": 294,
+                "set_id": "set-01",
+                "instance_id": "urn:rawdata:inst/entity/set-01/8579667501"
+            }
+        },
+        {
+            "district_code": "DG-META-02",
+            "ledger_code": null,
+            "code_origin": "T3Q 메타 인스턴스 후보지명 기반 임의 부여",
+            "district_name": "원대3지구(후보)",
+            "admin_code": "27170",
+            "admin_name": "대구광역시 서구",
+            "disaster_type": "내수재해",
+            "disaster_subtype": "침수위험 후보지",
+            "hazard_codes": [
+                "T10107",
+                "T10206"
+            ],
+            "location": "대구광역시 서구 원대동3가 1252-16번지일원",
+            "river_name": null,
+            "station": null,
+            "risk_factors": [
+                "하수관거 용량 부족에 따른 침수피해"
+            ],
+            "risk_thresholds": [],
+            "grade": "후보지(위험도 미판정)",
+            "mitigation": [],
+            "project_status": "후보지 검토",
+            "priority": null,
+            "coordinates": null,
+            "note": "주민설문 유래 후보지 — 설문자 성명은 개인정보로 옮기지 않았다",
+            "evidence": null,
+            "data_status": "meta_demo",
+            "source_note": "T3Q 재난메타 인스턴스 표본(2026-08-13 전달분) — 실지역 공식자료가 아닌 비교본",
+            "provenance": {
+                "source_file": "자연재해저감종합계획/03_대구광역시2016_A구세대_6권분책/보고서/제3장 기초현황조사 2편-(335~532)/제3장 기초현황조사 2편-(335~532).md",
+                "page": 294,
+                "set_id": "set-01",
+                "instance_id": "urn:rawdata:inst/entity/set-01/f9b5cba1c1"
+            }
+        },
+        {
+            "district_code": "DG-META-03",
+            "ledger_code": null,
+            "code_origin": "T3Q 메타 인스턴스 후보지명 기반 임의 부여",
+            "district_name": "평리1지구(후보)",
+            "admin_code": "27170",
+            "admin_name": "대구광역시 서구",
+            "disaster_type": "내수재해",
+            "disaster_subtype": "침수위험 후보지",
+            "hazard_codes": [
+                "T10107",
+                "T10206"
+            ],
+            "location": "대구광역시 서구 평리동 484-4번지 일원",
+            "river_name": null,
+            "station": null,
+            "risk_factors": [
+                "하수관거 용량 부족에 따른 침수피해"
+            ],
+            "risk_thresholds": [],
+            "grade": "후보지(위험도 미판정)",
+            "mitigation": [],
+            "project_status": "후보지 검토",
+            "priority": null,
+            "coordinates": null,
+            "note": "주민설문 유래 후보지 — 설문자 성명은 개인정보로 옮기지 않았다",
+            "evidence": null,
+            "data_status": "meta_demo",
+            "source_note": "T3Q 재난메타 인스턴스 표본(2026-08-13 전달분) — 실지역 공식자료가 아닌 비교본",
+            "provenance": {
+                "source_file": "자연재해저감종합계획/03_대구광역시2016_A구세대_6권분책/보고서/제3장 기초현황조사 2편-(335~532)/제3장 기초현황조사 2편-(335~532).md",
+                "page": 294,
+                "set_id": "set-01",
+                "instance_id": "urn:rawdata:inst/entity/set-01/fceafdeb51"
+            }
+        },
+        {
+            "district_code": "DG-META-04",
+            "ledger_code": null,
+            "code_origin": "T3Q 메타 인스턴스 후보지명 기반 임의 부여",
+            "district_name": "평리2지구(후보)",
+            "admin_code": "27170",
+            "admin_name": "대구광역시 서구",
+            "disaster_type": "내수재해",
+            "disaster_subtype": "침수위험 후보지",
+            "hazard_codes": [
+                "T10107",
+                "T10206"
+            ],
+            "location": "대구광역시 서구 평리동 676-7번지 일원",
+            "river_name": null,
+            "station": null,
+            "risk_factors": [
+                "대평리시장 주변 하수관거 용량 부족에 따른 침수피해"
+            ],
+            "risk_thresholds": [],
+            "grade": "후보지(위험도 미판정)",
+            "mitigation": [],
+            "project_status": "후보지 검토",
+            "priority": null,
+            "coordinates": null,
+            "note": "주민설문 유래 후보지 — 설문자 성명은 개인정보로 옮기지 않았다",
+            "evidence": null,
+            "data_status": "meta_demo",
+            "source_note": "T3Q 재난메타 인스턴스 표본(2026-08-13 전달분) — 실지역 공식자료가 아닌 비교본",
+            "provenance": {
+                "source_file": "자연재해저감종합계획/03_대구광역시2016_A구세대_6권분책/보고서/제3장 기초현황조사 2편-(335~532)/제3장 기초현황조사 2편-(335~532).md",
+                "page": 294,
+                "set_id": "set-01",
+                "instance_id": "urn:rawdata:inst/entity/set-01/5a1569abe4"
+            }
+        },
+        {
+            "district_code": "DG-META-05",
+            "ledger_code": null,
+            "code_origin": "T3Q 메타 인스턴스 후보지명 기반 임의 부여",
+            "district_name": "평리3지구(후보)",
+            "admin_code": "27170",
+            "admin_name": "대구광역시 서구",
+            "disaster_type": "내수재해",
+            "disaster_subtype": "침수위험 후보지",
+            "hazard_codes": [
+                "T10107",
+                "T10206"
+            ],
+            "location": "대구광역시 서구 평리동 1044-1번지 일원",
+            "river_name": null,
+            "station": null,
+            "risk_factors": [
+                "하수관거 용량 부족에 따른 침수피해"
+            ],
+            "risk_thresholds": [],
+            "grade": "후보지(위험도 미판정)",
+            "mitigation": [],
+            "project_status": "후보지 검토",
+            "priority": null,
+            "coordinates": null,
+            "note": "주민설문 유래 후보지 — 설문자 성명은 개인정보로 옮기지 않았다",
+            "evidence": null,
+            "data_status": "meta_demo",
+            "source_note": "T3Q 재난메타 인스턴스 표본(2026-08-13 전달분) — 실지역 공식자료가 아닌 비교본",
+            "provenance": {
+                "source_file": "자연재해저감종합계획/03_대구광역시2016_A구세대_6권분책/보고서/제3장 기초현황조사 2편-(335~532)/제3장 기초현황조사 2편-(335~532).md",
+                "page": 294,
+                "set_id": "set-01",
+                "instance_id": "urn:rawdata:inst/entity/set-01/a8896303b6"
+            }
+        },
+        {
+            "district_code": "DG-META-06",
+            "ledger_code": null,
+            "code_origin": "T3Q 메타 인스턴스 후보지명 기반 임의 부여",
+            "district_name": "평리4지구(후보)",
+            "admin_code": "27170",
+            "admin_name": "대구광역시 서구",
+            "disaster_type": "내수재해",
+            "disaster_subtype": "침수위험 후보지",
+            "hazard_codes": [
+                "T10107",
+                "T10206"
+            ],
+            "location": "대구광역시 서구 평리동 663-1번지 일원",
+            "river_name": null,
+            "station": null,
+            "risk_factors": [
+                "낙엽에 의한 우수맨홀 유입구 막힘에 따른 피해"
+            ],
+            "risk_thresholds": [],
+            "grade": "후보지(위험도 미판정)",
+            "mitigation": [],
+            "project_status": "후보지 검토",
+            "priority": null,
+            "coordinates": null,
+            "note": "주민설문 유래 후보지 — 설문자 성명은 개인정보로 옮기지 않았다",
+            "evidence": null,
+            "data_status": "meta_demo",
+            "source_note": "T3Q 재난메타 인스턴스 표본(2026-08-13 전달분) — 실지역 공식자료가 아닌 비교본",
+            "provenance": {
+                "source_file": "자연재해저감종합계획/03_대구광역시2016_A구세대_6권분책/보고서/제3장 기초현황조사 2편-(335~532)/제3장 기초현황조사 2편-(335~532).md",
+                "page": 294,
+                "set_id": "set-01",
+                "instance_id": "urn:rawdata:inst/entity/set-01/967248cc0c"
+            }
+        },
+        {
+            "district_code": "JE-META-01",
+            "ledger_code": null,
+            "code_origin": "T3Q 메타 인스턴스 지구명 기반 임의 부여",
+            "district_name": "산북제",
+            "admin_code": "52180",
+            "admin_name": "전북특별자치도 정읍시",
+            "disaster_type": "하천재해",
+            "disaster_subtype": "기수립 정비지구",
+            "hazard_codes": [
+                "T10206"
+            ],
+            "location": "정읍시 정읍천 10+010~26+10",
+            "river_name": "정읍천",
+            "station": "10+010~26+10",
+            "risk_factors": [
+                "홍수예방 축 제 지구 · 연장 3,131m"
+            ],
+            "risk_thresholds": [],
+            "grade": "기수립 계획 정비지구",
+            "mitigation": [
+                "축 제 L=3,131m"
+            ],
+            "project_status": "기수립",
+            "priority": null,
+            "coordinates": null,
+            "note": null,
+            "evidence": null,
+            "data_status": "meta_demo",
+            "source_note": "T3Q 재난메타 인스턴스 표본(2026-08-13 전달분) — 실지역 공식자료가 아닌 비교본",
+            "provenance": {
+                "source_file": "하천기본계획/01_2017_동진강_구지침5장표준/02_제2장 유역 및 하천현황3_관련계획검토및조정/02_제2장 유역 및 하천현황3_관련계획검토및조정.md",
+                "page": 3,
+                "set_id": "set-01",
+                "instance_id": "urn:rawdata:inst/entity/set-01/3df626d41f"
+            }
+        },
+        {
+            "district_code": "JE-META-02",
+            "ledger_code": null,
+            "code_origin": "T3Q 메타 인스턴스 지구명 기반 임의 부여",
+            "district_name": "덕천제",
+            "admin_code": "52180",
+            "admin_name": "전북특별자치도 정읍시",
+            "disaster_type": "하천재해",
+            "disaster_subtype": "기수립 정비지구",
+            "hazard_codes": [
+                "T10206"
+            ],
+            "location": "정읍시 정읍천 50+105~62+090",
+            "river_name": "정읍천",
+            "station": "50+105~62+090",
+            "risk_factors": [
+                "홍수예방 축 제 지구 · 연장 2,340m"
+            ],
+            "risk_thresholds": [],
+            "grade": "기수립 계획 정비지구",
+            "mitigation": [
+                "축 제 L=2,340m"
+            ],
+            "project_status": "기수립",
+            "priority": null,
+            "coordinates": null,
+            "note": null,
+            "evidence": null,
+            "data_status": "meta_demo",
+            "source_note": "T3Q 재난메타 인스턴스 표본(2026-08-13 전달분) — 실지역 공식자료가 아닌 비교본",
+            "provenance": {
+                "source_file": "하천기본계획/01_2017_동진강_구지침5장표준/02_제2장 유역 및 하천현황3_관련계획검토및조정/02_제2장 유역 및 하천현황3_관련계획검토및조정.md",
+                "page": 3,
+                "set_id": "set-01",
+                "instance_id": "urn:rawdata:inst/entity/set-01/cef6e143e8"
+            }
+        },
+        {
+            "district_code": "JE-META-03",
+            "ledger_code": null,
+            "code_origin": "T3Q 메타 인스턴스 지구명 기반 임의 부여",
+            "district_name": "망제1제",
+            "admin_code": "52180",
+            "admin_name": "전북특별자치도 정읍시",
+            "disaster_type": "하천재해",
+            "disaster_subtype": "기수립 정비지구",
+            "hazard_codes": [
+                "T10206"
+            ],
+            "location": "정읍시 정읍천 50+080~52+00",
+            "river_name": "정읍천",
+            "station": "50+080~52+00",
+            "risk_factors": [
+                "홍수예방 고 호 지구 · 연장 425m"
+            ],
+            "risk_thresholds": [],
+            "grade": "기수립 계획 정비지구",
+            "mitigation": [
+                "고 호 L=425m"
+            ],
+            "project_status": "기수립",
+            "priority": null,
+            "coordinates": null,
+            "note": null,
+            "evidence": null,
+            "data_status": "meta_demo",
+            "source_note": "T3Q 재난메타 인스턴스 표본(2026-08-13 전달분) — 실지역 공식자료가 아닌 비교본",
+            "provenance": {
+                "source_file": "하천기본계획/01_2017_동진강_구지침5장표준/02_제2장 유역 및 하천현황3_관련계획검토및조정/02_제2장 유역 및 하천현황3_관련계획검토및조정.md",
+                "page": 3,
+                "set_id": "set-01",
+                "instance_id": "urn:rawdata:inst/entity/set-01/555266b931"
+            }
+        },
+        {
+            "district_code": "JE-META-04",
+            "ledger_code": null,
+            "code_origin": "T3Q 메타 인스턴스 지구명 기반 임의 부여",
+            "district_name": "대산교",
+            "admin_code": "52180",
+            "admin_name": "전북특별자치도 정읍시",
+            "disaster_type": "하천재해",
+            "disaster_subtype": "기수립 정비지구",
+            "hazard_codes": [
+                "T10206"
+            ],
+            "location": "정읍시 정읍천 33+1920",
+            "river_name": "정읍천",
+            "station": "33+1920",
+            "risk_factors": [
+                "홍수예방 교량 개량 지구 · 연장 36m"
+            ],
+            "risk_thresholds": [],
+            "grade": "기수립 계획 정비지구",
+            "mitigation": [
+                "교량 개량 L=36m"
+            ],
+            "project_status": "기수립",
+            "priority": null,
+            "coordinates": null,
+            "note": null,
+            "evidence": null,
+            "data_status": "meta_demo",
+            "source_note": "T3Q 재난메타 인스턴스 표본(2026-08-13 전달분) — 실지역 공식자료가 아닌 비교본",
+            "provenance": {
+                "source_file": "하천기본계획/01_2017_동진강_구지침5장표준/02_제2장 유역 및 하천현황3_관련계획검토및조정/02_제2장 유역 및 하천현황3_관련계획검토및조정.md",
+                "page": 3,
+                "set_id": "set-01",
+                "instance_id": "urn:rawdata:inst/entity/set-01/fee5ccd457"
+            }
+        },
+        {
+            "district_code": "GH-META-01",
+            "ledger_code": "1",
+            "code_origin": "T3Q 메타 인스턴스 소하천번호",
+            "district_name": "안평천 정비대상",
+            "admin_code": "48250",
+            "admin_name": "경상남도 김해시",
+            "disaster_type": "소하천재해",
+            "disaster_subtype": "정비대상 소하천",
+            "hazard_codes": [
+                "T10206",
+                "T10107"
+            ],
+            "location": "김해시 안평천",
+            "river_name": "안평천(소하천)",
+            "station": null,
+            "risk_factors": [
+                "소하천정비종합계획 과업 대상 · 과업연장 0.45km"
+            ],
+            "risk_thresholds": [],
+            "grade": "정비대상",
+            "mitigation": [],
+            "project_status": "계획수립",
+            "priority": null,
+            "coordinates": null,
+            "note": null,
+            "evidence": null,
+            "data_status": "meta_demo",
+            "source_note": "T3Q 재난메타 인스턴스 표본(2026-08-13 전달분) — 실지역 공식자료가 아닌 비교본",
+            "provenance": {
+                "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/01장 과업의 개요/01장 과업의 개요.md",
+                "page": 5,
+                "set_id": "set-12",
+                "instance_id": "urn:rawdata:inst/entity/set-12/598de4b463"
+            }
+        },
+        {
+            "district_code": "GH-META-02",
+            "ledger_code": "2",
+            "code_origin": "T3Q 메타 인스턴스 소하천번호",
+            "district_name": "우동천 정비대상",
+            "admin_code": "48250",
+            "admin_name": "경상남도 김해시",
+            "disaster_type": "소하천재해",
+            "disaster_subtype": "정비대상 소하천",
+            "hazard_codes": [
+                "T10206",
+                "T10107"
+            ],
+            "location": "김해시 우동천",
+            "river_name": "우동천(소하천)",
+            "station": null,
+            "risk_factors": [
+                "소하천정비종합계획 과업 대상 · 과업연장 0.85km"
+            ],
+            "risk_thresholds": [],
+            "grade": "정비대상",
+            "mitigation": [],
+            "project_status": "계획수립",
+            "priority": null,
+            "coordinates": null,
+            "note": null,
+            "evidence": null,
+            "data_status": "meta_demo",
+            "source_note": "T3Q 재난메타 인스턴스 표본(2026-08-13 전달분) — 실지역 공식자료가 아닌 비교본",
+            "provenance": {
+                "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/01장 과업의 개요/01장 과업의 개요.md",
+                "page": 5,
+                "set_id": "set-12",
+                "instance_id": "urn:rawdata:inst/entity/set-12/12c0228b32"
+            }
+        },
+        {
+            "district_code": "GH-META-03",
+            "ledger_code": "3",
+            "code_origin": "T3Q 메타 인스턴스 소하천번호",
+            "district_name": "오척천 정비대상",
+            "admin_code": "48250",
+            "admin_name": "경상남도 김해시",
+            "disaster_type": "소하천재해",
+            "disaster_subtype": "정비대상 소하천",
+            "hazard_codes": [
+                "T10206",
+                "T10107"
+            ],
+            "location": "김해시 오척천",
+            "river_name": "오척천(소하천)",
+            "station": null,
+            "risk_factors": [
+                "소하천정비종합계획 과업 대상 · 과업연장 2.31km"
+            ],
+            "risk_thresholds": [],
+            "grade": "정비대상",
+            "mitigation": [],
+            "project_status": "계획수립",
+            "priority": null,
+            "coordinates": null,
+            "note": null,
+            "evidence": null,
+            "data_status": "meta_demo",
+            "source_note": "T3Q 재난메타 인스턴스 표본(2026-08-13 전달분) — 실지역 공식자료가 아닌 비교본",
+            "provenance": {
+                "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/01장 과업의 개요/01장 과업의 개요.md",
+                "page": 5,
+                "set_id": "set-12",
+                "instance_id": "urn:rawdata:inst/entity/set-12/6acfe42678"
+            }
+        },
+        {
+            "district_code": "GH-META-04",
+            "ledger_code": "4",
+            "code_origin": "T3Q 메타 인스턴스 소하천번호",
+            "district_name": "방동천 정비대상",
+            "admin_code": "48250",
+            "admin_name": "경상남도 김해시",
+            "disaster_type": "소하천재해",
+            "disaster_subtype": "정비대상 소하천",
+            "hazard_codes": [
+                "T10206",
+                "T10107"
+            ],
+            "location": "김해시 방동천",
+            "river_name": "방동천(소하천)",
+            "station": null,
+            "risk_factors": [
+                "소하천정비종합계획 과업 대상 · 과업연장 1.80km"
+            ],
+            "risk_thresholds": [],
+            "grade": "정비대상",
+            "mitigation": [],
+            "project_status": "계획수립",
+            "priority": null,
+            "coordinates": null,
+            "note": null,
+            "evidence": null,
+            "data_status": "meta_demo",
+            "source_note": "T3Q 재난메타 인스턴스 표본(2026-08-13 전달분) — 실지역 공식자료가 아닌 비교본",
+            "provenance": {
+                "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/01장 과업의 개요/01장 과업의 개요.md",
+                "page": 5,
+                "set_id": "set-12",
+                "instance_id": "urn:rawdata:inst/entity/set-12/f366d30d72"
             }
         }
     ]

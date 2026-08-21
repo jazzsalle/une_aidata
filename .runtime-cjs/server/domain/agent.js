@@ -55,6 +55,30 @@ function detectIntent(message) {
     return { river: has('river'), threshold: has('threshold'), district: has('district'), damage: has('damage'), procedure: has('procedure'), station: has('station') };
 }
 /** "특보 유량이 1100인데 …" 형태의 질의 유량값(㎥/s 추정)을 추출한다. */
+/** 질문 속 "강우 120mm" · "수위 3.5m" 류 수치를 입력 조건 제안으로 파싱한다.
+
+    Agent 가 조건을 직접 적용하는 일은 없다 — 화면이 입력 탭에 **채워만 주고** 적용 버튼은
+    담당자가 누른다(operator_confirmation_required 원칙). 단위가 붙은 수치만 잡는다 —
+    "120mm" 없이 "120" 만 있으면 어느 조건인지 알 수 없어 제안하지 않는다. */
+function extractSuggestedConditions(message) {
+    const rules = [
+        { pattern: /(\d[\d,]*(?:\.\d+)?)\s*(?:mm|밀리)/g, type: 'RAINFALL_3H', unit: 'mm', label: '3시간 강우' },
+        { pattern: /수위[^\d]{0,6}(\d[\d,]*(?:\.\d+)?)\s*(?:m|미터)(?![\d³3])/g, type: 'WATER_LEVEL', unit: 'm', label: '수위' },
+        { pattern: /(\d[\d,]*(?:\.\d+)?)\s*(?:m3\/s|㎥\/s|m³\/s|톤)/g, type: 'DISCHARGE', unit: 'm3/s', label: '유량' },
+    ];
+    const found = [];
+    for (const rule of rules) {
+        const match = rule.pattern.exec(message);
+        if (!match?.[1])
+            continue;
+        const value = Number(match[1].replace(/,/g, ''));
+        if (Number.isFinite(value) && value > 0 && !found.some((item) => item.type === rule.type)) {
+            found.push({ type: rule.type, value, unit: rule.unit, label: rule.label });
+        }
+    }
+    // 강우 문맥이 아닌 mm(지도 축척 등)를 오인할 수 있어, 강우 제안은 비·강우 낱말이 있을 때만 남긴다.
+    return found.filter((item) => item.type !== 'RAINFALL_3H' || /강우|강수|비|호우|mm/.test(message));
+}
 function extractFlowValue(message, intent) {
     if (!intent.threshold && !intent.river)
         return null;
@@ -227,7 +251,64 @@ function dedupeEvidence(items) {
 function geoIdSet() {
     return new Set(seeds_js_1.seed.geo.features.map((feature) => str(rec(feature.properties).id)).filter(Boolean));
 }
+/** 질문 문자열 정규화 — 공백·문장부호를 걷어 CQ 질문과 느슨하게 대조한다. */
+function normalizeQuestion(text) {
+    return String(text ?? '').replace(/[\s?.,·]/g, '');
+}
+/** T3Q 메타 표본 지역에서 역량질문(CQ)이 들어오면 준비된 인스턴스 답을 돌려준다.
+
+    T3Q 실 API 가 아직 붙지 않아, 실제 올 예상 데이터(메타 인스턴스)의 passage 를 그대로
+    나열하는 Mock 시범이다 — 값을 요약·재계산하지 않는다. 매칭은 질문 전체의 정규화 일치
+    또는 앞 12자 이상 부분일치다(추천질문 버튼이 CQ 원문을 넣으므로 보통 정확히 맞는다). */
+function matchMetaCq(situation, message) {
+    if (!situation.situation_id.includes('-META-'))
+        return null;
+    const entries = (seeds_js_1.seed.metaDemoCqAnswers?.entries ?? []);
+    const asked = normalizeQuestion(message);
+    if (asked.length < 8)
+        return null;
+    let best = null;
+    for (const entry of entries) {
+        if (entry.admin_code !== situation.admin_code || !entry.answerable)
+            continue;
+        const q = normalizeQuestion(entry.question);
+        if (q === asked || q.includes(asked) || asked.includes(q))
+            return entry;
+        if (!best && asked.length >= 12 && (q.startsWith(asked.slice(0, 12)) || asked.startsWith(q.slice(0, 12))))
+            best = entry;
+    }
+    return best;
+}
 async function buildAgentResponse(situation, message, context = []) {
+    const metaCq = matchMetaCq(situation, message);
+    if (metaCq) {
+        const passages = metaCq.answer_passages.slice(0, 3);
+        const answer = [
+            `〔표본〕 ${metaCq.set_label} ${metaCq.plan_type} 보고서의 메타 인스턴스에서 찾은 근거입니다 (${metaCq.cq_id}).`,
+            ...passages.map((p, i) => `${i + 1}. ${p.passage_text}`),
+        ].join('\n');
+        return {
+            message_id: `MSG-${crypto.randomUUID()}`,
+            answer,
+            user_message: message,
+            context,
+            priority_areas: [],
+            similar_events: [],
+            procedures: [],
+            map_actions: [],
+            links: metaCq.links,
+            meta_demo: true,
+            evidence: passages.map((p) => ({
+                kind: 'meta_instance',
+                ref: String(p.provenance?.instance_id ?? ''),
+                description: `${String(p.provenance?.source_file ?? '')} ${p.provenance?.page ? `${p.provenance.page}쪽` : ''}`.trim(),
+            })),
+            warnings: ['T3Q 메타 인스턴스 표본(Mock) 응답입니다 — 실 T3Q API 연계 전 시범이며 실지역 공식자료가 아닙니다.'],
+            limitations: ['답변은 메타 인스턴스 passage 원문 나열이며 요약·재계산하지 않았습니다.',
+                '표본 지역(대구 서구·정읍·김해)은 비교본이며 POC 대상지역 검증자료가 아닙니다.'],
+            operator_confirmation_required: true,
+        };
+    }
     const priority = (0, priorityAreas_js_1.calculatePriorityAreas)(situation);
     const similar = await (0, similarEvents_js_1.searchSimilarEvents)(situation, 3);
     const procedures = seeds_js_1.seed.procedures.procedures.filter((item) => Array.isArray(item.target_admin_codes) && item.target_admin_codes.includes(situation.admin_code)).slice(0, 5);
@@ -334,11 +415,17 @@ async function buildAgentResponse(situation, message, context = []) {
     const unresolvedLabels = !enriched && targets.contextLabels.length ? targets.contextLabels.join(' · ') : null;
     if (unresolvedLabels)
         extraWarnings.push(`선택하신 ${unresolvedLabels}에 해당하는 계획자료 대상을 확인하지 못해 현재 조건 기준 기본 결과를 제시합니다.`);
+    // 질문 속 수치(120mm 등)를 조건 제안으로 파싱했다면, 답 끝에 다음 행동을 알려 준다 —
+    // 답 아래 ⚙ 칩이 왜 있는지 답 스스로 설명해야 시연·실사용 모두에서 흐름이 이어진다.
+    const suggestedConditions = extractSuggestedConditions(message);
+    const suggestionTail = suggestedConditions.length
+        ? ` 질문에 담긴 ${suggestedConditions.map((item) => `${item.label} ${item.value}${item.unit}`).join(' · ')} 값은 아래 조건 제안 버튼으로 입력 탭에 채울 수 있으며, 적용·재산정하면 현재 결과와 비교할 수 있습니다.`
+        : '';
     const answer = enriched && sentences.length
-        ? `${sentences.join(' ')} ${first ? `현재 조건 우선 확인 후보 1순위는 ${first.name}입니다.` : ''} 본 답변은 계획문서·Seed 기반 참고정보이며 공식 위험도·피해예측·자동 조치결정이 아닙니다.`.replace(/\s+/g, ' ').trim()
+        ? `${sentences.join(' ')} ${first ? `현재 조건 우선 확인 후보 1순위는 ${first.name}입니다.` : ''}${suggestionTail} 본 답변은 계획문서·Seed 기반 참고정보이며 공식 위험도·피해예측·자동 조치결정이 아닙니다.`.replace(/\s+/g, ' ').trim()
         : unresolvedLabels
-            ? `선택하신 ${unresolvedLabels}${josa(unresolvedLabels, '은', '는')} 계획자료에서 확인되지 않아 현재 조건 기준 기본 결과를 제시합니다. ${legacyAnswer}`
-            : legacyAnswer;
+            ? `선택하신 ${unresolvedLabels}${josa(unresolvedLabels, '은', '는')} 계획자료에서 확인되지 않아 현재 조건 기준 기본 결과를 제시합니다. ${legacyAnswer}${suggestionTail}`
+            : `${legacyAnswer}${suggestionTail}`;
     // 지도 Action은 GeoJSON에 존재하는 ID만 실행한다.
     const geoIds = geoIdSet();
     const focusDistrictId = targets.districts.map((item) => str(item.district_code)).find((id) => geoIds.has(id)) ?? null;
@@ -374,6 +461,7 @@ async function buildAgentResponse(situation, message, context = []) {
         evidence: responseEvidence,
         warnings,
         limitations,
+        suggested_conditions: suggestedConditions,
         operator_confirmation_required: true,
     };
 }

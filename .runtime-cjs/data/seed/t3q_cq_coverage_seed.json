@@ -62,7 +62,7 @@
             ],
             "current_providers": [
                 "districts.json",
-                "flood_traces_seed.geojson",
+                "reference/flood/FLOOD_TRACE_*(행안부 침수흔적도 실자료)",
                 "LocalGeoJsonProvider",
                 "T3Q-structure MockProvider"
             ],
