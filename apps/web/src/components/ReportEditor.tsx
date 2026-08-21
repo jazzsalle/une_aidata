@@ -56,7 +56,10 @@ export function buildReportDocument({ overview, conditions, actions, damageStatu
     const passageChildren=event.evidence
       .map((item)=>`근거 Passage: ${item.title} (${item.passage_id??item.evidence_id})`);
     return {
-      text: `${event.event_name}: 사건 유사도 ${event.similarity.event_similarity_score}점, 비교범위 ${event.similarity.comparison_coverage}%, 신뢰 ${event.similarity.confidence_status}, 데이터상태 ${event.data_status} (${factorText || '비교요인 미확보'})`,
+      // 메타 표본 상황: 유사도·비교범위·요인점수(우리 산정값)를 보고서에 싣지 않는다.
+      text: isMetaDemoId(priorities?.situation_id)
+        ? `${event.event_name}: 데이터상태 ${event.data_status} (유사도 등 산정값 미표시 — 표본 지역)`
+        : `${event.event_name}: 사건 유사도 ${event.similarity.event_similarity_score}점, 비교범위 ${event.similarity.comparison_coverage}%, 신뢰 ${event.similarity.confidence_status}, 데이터상태 ${event.data_status} (${factorText || '비교요인 미확보'})`,
       children: [
         ...(isSeedReference(event) ? ['Seed 참고사례 · T3Q 실데이터 아님'] : []),
         ...(responseChildren.length > 0 ? responseChildren : ['대응비교 미확보']),

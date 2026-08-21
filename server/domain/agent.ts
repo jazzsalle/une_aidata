@@ -411,7 +411,10 @@ export async function buildAgentResponse(situation: CurrentSituation, message: s
 
   // 유사사례·절차 축
   if (enriched && (intent.damage || eventFocus.size) && best) {
-    sentences.push(`참고 유사사례는 '${best.event_name}'(${dateOnly(best.occurred_from)}, 유사도 ${best.similarity_score}점)이며 과거 참고자료입니다.`);
+    // 메타 표본에서는 유사도 점수(우리 산정값)를 문장에 싣지 않는다.
+    sentences.push(isMeta
+      ? `참고 유사사례는 '${best.event_name}'(${dateOnly(best.occurred_from)})이며 과거 참고자료입니다.`
+      : `참고 유사사례는 '${best.event_name}'(${dateOnly(best.occurred_from)}, 유사도 ${best.similarity_score}점)이며 과거 참고자료입니다.`);
   }
   if (enriched && intent.procedure && procedures.length) {
     sentences.push(`관련 대응절차 참고 템플릿은 ${procedures.length}건이며 첫 단계는 '${str(procedures[0]?.action_title)}'입니다(부산 북구청 매뉴얼 기반 잠정 템플릿).`);

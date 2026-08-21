@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { isMetaDemoId } from '../features/map/mapRegions';
+import { META_DEMO_REGIONS, isMetaDemoId } from '../features/map/mapRegions';
 import { moveTabFocus } from '../hooks/useRovingTabs';
 import { loadPlanReference } from '../services/apiClient';
 import { DetailModal } from './DetailModal';
@@ -113,6 +113,8 @@ function FactList({rows,className='plan-fact-list'}:{rows:Array<{label:string;va
 
 export function InsightPanel(props:Props){
   const {priorities,procedures,similarEvents,selectedEventId,onHighlight,onSelectEvent,adminCode,onAddContext}=props;
+  // 메타 표본 지역: 유사도 점수·비교범위 같은 우리 산정값을 유사사례 탭에서도 그리지 않는다.
+  const metaSituation=META_DEMO_REGIONS.has(adminCode??'');
   const [tab,setTab]=useState<Tab>('현재 판단');
   // 하천 탭. 목록은 탭을 처음 열 때만 받는다(카탈로그 1.4 MB · 검색색인 5.9 MB, gzip 로 훨씬 작다).
   const [riverClass,setRiverClass]=useState<RiverClass>('국가하천');
@@ -211,7 +213,9 @@ export function InsightPanel(props:Props){
           // 메타 표본 지구: 순위·점수·사유(우리 산정값)를 그리지 않는다 — T3Q 데이터 오인 방지.
           const metaArea=isMetaDemoId(area.spatial_object_id);
           return <article
-            className="priority-card"
+            /* 메타 나열 카드는 rank 원이 없으므로 1열 그리드로 — 2열(32px+1fr) 그대로면 본문이
+               32px 칸에 끼어 글자가 세로로 깨진다. */
+            className={metaArea?'priority-card meta-listing':'priority-card'}
             key={area.spatial_object_id}
             /* 마우스 편의를 위한 카드 전체 클릭. 키보드 진입점은 아래 지역명 버튼이며 내부 컨트롤은 stopPropagation 한다. */
             onClick={()=>onHighlight(area.spatial_object_id)}
@@ -240,22 +244,24 @@ export function InsightPanel(props:Props){
 
       {tab==='유사사례'&&<div className="event-list">
         <div className="notice-card info"><strong>과거 피해·복구 참고</strong><p>현재 피해를 예측하지 않으며 향후 T3Q NDMS 데이터로 교체합니다.</p></div>
+        {/* 메타 표본: 유사도·비교범위·요인점수(우리 산정값)를 숨기고 과거 기록 원자료만 남긴다. */}
+        {metaSituation?<p className="meta-demo-text priority-meta-caption">표본 지역에서는 유사도 점수 등 산정값을 표시하지 않습니다(T3Q 실데이터 수신 전).</p>:null}
         {similarEvents.map(event=><div className="event-card-row" key={event.event_id}>
           <button type="button" className={`event-card ${selectedEvent?.event_id===event.event_id?'selected':''}`} onClick={()=>onSelectEvent(event.event_id)}>
-            <span className="event-score">{event.similarity_score}점</span>
+            {metaSituation?null:<span className="event-score">{event.similarity_score}점</span>}
             <strong>{event.event_name}</strong>
             <small>{new Date(event.occurred_from).toLocaleDateString('ko-KR')} · {event.spatial_relation}</small>
-            <div className="similarity-meta"><span>비교 {event.similarity.comparison_coverage}%</span><span>신뢰 {event.similarity.confidence_status}</span><span>Graph {event.similarity.graph_similarity_status==='NOT_AVAILABLE'?'비교 제외':'적용'}</span></div>
-            <ul>{event.similarity.factors.filter(factor=>factor.availability==='AVAILABLE').sort((a,b)=>b.contribution_score-a.contribution_score).slice(0,3).map(factor=><li key={factor.factor_code}>{factor.factor_name} {factor.contribution_score.toFixed(1)}점</li>)}</ul>
+            {metaSituation?null:<div className="similarity-meta"><span>비교 {event.similarity.comparison_coverage}%</span><span>신뢰 {event.similarity.confidence_status}</span><span>Graph {event.similarity.graph_similarity_status==='NOT_AVAILABLE'?'비교 제외':'적용'}</span></div>}
+            {metaSituation?null:<ul>{event.similarity.factors.filter(factor=>factor.availability==='AVAILABLE').sort((a,b)=>b.contribution_score-a.contribution_score).slice(0,3).map(factor=><li key={factor.factor_code}>{factor.factor_name} {factor.contribution_score.toFixed(1)}점</li>)}</ul>}
             <span className="event-damage-line">피해기록 {str(event.damage.description)?'서술 있음':'미확보'} · 대응 {event.response.length}건 · 복구 {event.recovery.length}건</span>
-            <span className="evidence-count">근거 {event.evidence.length}건 · 문서관련도 {event.similarity.retrieval_relevance_score??'별도'}</span>
+            <span className="evidence-count">근거 {event.evidence.length}건{metaSituation?'':` · 문서관련도 ${event.similarity.retrieval_relevance_score??'별도'}`}</span>
           </button>
           {onAddContext?<button type="button" className="context-add-button" onClick={()=>onAddContext({kind:'similar_event',id:event.event_id,label:event.event_name,detail:`${event.spatial_relation} · ${event.hazards.join(', ')}`,admin_code:event.admin_code})}>질의에 참조</button>:null}
         </div>)}
 
         {selectedEvent?<section className="similar-event-detail" aria-labelledby="similar-event-detail-title">
           <h3 id="similar-event-detail-title">선택 사례 비교 상세</h3>
-          <p><strong>{selectedEvent.event_name}</strong> · 사건 유사도 {selectedEvent.similarity.event_similarity_score}점 · 비교 가능 범위 {selectedEvent.similarity.comparison_coverage}%</p>
+          <p><strong>{selectedEvent.event_name}</strong>{metaSituation?null:<> · 사건 유사도 {selectedEvent.similarity.event_similarity_score}점 · 비교 가능 범위 {selectedEvent.similarity.comparison_coverage}%</>}</p>
 
           <section className="event-damage-block" aria-labelledby="event-damage-title">
             <h4 id="event-damage-title">피해정보(과거 기록)</h4>
@@ -276,11 +282,12 @@ export function InsightPanel(props:Props){
             </div>
           </section>
 
-          <div className="table-scroll" tabIndex={0} aria-label="요인별 유사도 점수 표">
+          {/* 요인별 점수 표는 통째로 우리 산정값 — 메타 표본에서는 그리지 않는다. */}
+          {metaSituation?null:<div className="table-scroll" tabIndex={0} aria-label="요인별 유사도 점수 표">
             <table className="comparison-table"><caption>요인별 점수와 기여도</caption><thead><tr><th scope="col">요인</th><th scope="col">상태</th><th scope="col">가중치</th><th scope="col">요인점수</th><th scope="col">기여도</th></tr></thead><tbody>
               {selectedEvent.similarity.factors.map(factor=><tr key={factor.factor_code}><th scope="row">{factor.factor_name}</th><td>{factor.availability==='AVAILABLE'?'비교':'미확보'}</td><td>{factor.weight}</td><td>{factor.normalized_score===null?'-':factor.normalized_score.toFixed(3)}</td><td>{factor.contribution_score.toFixed(1)}</td></tr>)}
             </tbody></table>
-          </div>
+          </div>}
           <div className="table-scroll" tabIndex={0} aria-label="현재 확인사항과 과거 대응조치 비교 표">
             <table className="comparison-table"><caption>현재 확인사항과 과거 대응조치</caption><thead><tr><th scope="col">현재 확인사항</th><th scope="col">과거 조치</th><th scope="col">차이·확인</th></tr></thead><tbody>
               {selectedEvent.response_comparison.map(item=><tr key={item.action_category}><th scope="row">{item.current_required_check}</th><td>{item.past_event_action??'근거 미확보'}</td><td>{item.difference}</td></tr>)}
