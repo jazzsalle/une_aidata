@@ -1115,6 +1115,54 @@
                     }
                 }
             ]
+        },
+        {
+            "river_id": "RIV-JE-META-01",
+            "name": "정읍천",
+            "grade": "국가하천",
+            "admin_code": "52180",
+            "admin_name": "전북특별자치도 정읍시",
+            "basin_area_km2": 216.32,
+            "length_km": 18.02,
+            "plan_name": "동진강(정읍천) 하천기본계획(2017)",
+            "profile_evidence": "동진강 2017 과업구간 현황 — 하천명 정읍천; 하천 등급 국가; 위 치 정읍; 유역 면적 (km2) 216.32; 과업연장 (km) 18.02. 출처: 01_제1장 개요.md <표 1.2-1>(3쪽).",
+            "stations": [
+                {
+                    "station_code": null,
+                    "station_name": "정읍천(국가) 종점",
+                    "design_flood_m3s": 1286.0,
+                    "design_frequency_yr": null,
+                    "evidence": "정읍천 정읍천(국가) 종점의 금회 홍수량은(는) 1286 ㎥/s이다. 출처: 동진강 2017 표(03_제3장 종합분석_1치수특성분석.md, 38쪽)."
+                }
+            ],
+            "data_status": "meta_demo",
+            "source_note": "T3Q 재난메타 인스턴스 표본(2026-08-13 전달분) — 실지역 공식자료가 아닌 비교본",
+            "provenance": {
+                "source_file": "하천기본계획/01_2017_동진강_구지침5장표준/01_제1장 개요/01_제1장 개요.md",
+                "page": 3,
+                "set_id": "set-01",
+                "instance_id": "urn:rawdata:inst/entity/set-01/8e8797070b"
+            }
+        },
+        {
+            "river_id": "RIV-GH-META-01",
+            "name": "안평천",
+            "grade": "소하천",
+            "admin_code": "48250",
+            "admin_name": "경상남도 김해시",
+            "basin_area_km2": null,
+            "length_km": 0.45,
+            "plan_name": "김해시 소하천정비종합계획",
+            "profile_evidence": "경남 김해시 1.2 과업의 범위 — 소하천 번 호 1; 소하천명 안평천; 위 치 기점; 과업연장(㎞) 0.45. 출처: 01장 과업의 개요.md (5쪽).",
+            "stations": [],
+            "data_status": "meta_demo",
+            "source_note": "T3Q 재난메타 인스턴스 표본(2026-08-13 전달분) — 실지역 공식자료가 아닌 비교본",
+            "provenance": {
+                "source_file": "소하천정비종합계획/03_경남김해_12장구체계잔재/01장 과업의 개요/01장 과업의 개요.md",
+                "page": 5,
+                "set_id": "set-12",
+                "instance_id": "urn:rawdata:inst/entity/set-12/598de4b463"
+            }
         }
     ]
 }

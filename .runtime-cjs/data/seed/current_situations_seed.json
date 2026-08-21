@@ -356,6 +356,185 @@
                 "delayed": [],
                 "fallback_used": true
             }
+        },
+        {
+            "situation_id": "SIT-DG-META-001",
+            "admin_code": "27170",
+            "admin_name": "대구광역시 서구",
+            "reference_time": "2026-08-21T15:00:00+09:00",
+            "mode": "scenario",
+            "hazards": [
+                "HEAVY_RAIN",
+                "FLOOD"
+            ],
+            "user_input": {
+                "field_symptoms": [
+                    "비산동·평리동 일대 하수관거 월류 신고"
+                ],
+                "location_text": "서구 비산동 일원",
+                "affected_objects": [
+                    "지하공간",
+                    "반지하 주택",
+                    "이면도로"
+                ],
+                "required_checks": [
+                    "하수관거 월류 지점 확인",
+                    "침수 후보지 배수 상태"
+                ]
+            },
+            "observations": [
+                {
+                    "type": "WEATHER_ALERT",
+                    "station_id": null,
+                    "value": "주의보",
+                    "unit": null,
+                    "observed_at": "2026-08-21T14:50:00+09:00",
+                    "source_provider": "ScenarioObservationProvider",
+                    "value_status": "scenario",
+                    "official_data": false,
+                    "name": "호우주의보"
+                },
+                {
+                    "type": "RAINFALL_3H",
+                    "station_id": "DG-RF-01",
+                    "value": 68.0,
+                    "unit": "mm",
+                    "observed_at": "2026-08-21T14:50:00+09:00",
+                    "source_provider": "ScenarioObservationProvider",
+                    "value_status": "scenario",
+                    "official_data": false
+                }
+            ],
+            "data_quality": {
+                "latest_at": "2026-08-21T14:50:00+09:00",
+                "missing": [
+                    "official_public_api_response"
+                ],
+                "delayed": [],
+                "fallback_used": true
+            }
+        },
+        {
+            "situation_id": "SIT-JE-META-001",
+            "admin_code": "52180",
+            "admin_name": "전북특별자치도 정읍시",
+            "reference_time": "2026-08-21T15:00:00+09:00",
+            "mode": "scenario",
+            "hazards": [
+                "HEAVY_RAIN",
+                "FLOOD"
+            ],
+            "user_input": {
+                "field_symptoms": [
+                    "정읍천 수위 상승 현장 확인 요청"
+                ],
+                "location_text": "정읍천 시가지 구간",
+                "affected_objects": [
+                    "하천변 도로",
+                    "교량 접근로"
+                ],
+                "required_checks": [
+                    "정읍천 수위 확인",
+                    "기수립 정비지구 제방 상태"
+                ]
+            },
+            "observations": [
+                {
+                    "type": "WEATHER_ALERT",
+                    "station_id": null,
+                    "value": "주의보",
+                    "unit": null,
+                    "observed_at": "2026-08-21T14:50:00+09:00",
+                    "source_provider": "ScenarioObservationProvider",
+                    "value_status": "scenario",
+                    "official_data": false,
+                    "name": "호우주의보"
+                },
+                {
+                    "type": "RAINFALL_3H",
+                    "station_id": "JE-RF-01",
+                    "value": 74.0,
+                    "unit": "mm",
+                    "observed_at": "2026-08-21T14:50:00+09:00",
+                    "source_provider": "ScenarioObservationProvider",
+                    "value_status": "scenario",
+                    "official_data": false
+                },
+                {
+                    "type": "WATER_LEVEL",
+                    "station_id": "JE-WL-01",
+                    "value": 2.1,
+                    "unit": "m",
+                    "observed_at": "2026-08-21T14:50:00+09:00",
+                    "source_provider": "ScenarioObservationProvider",
+                    "value_status": "scenario",
+                    "official_data": false,
+                    "trend": "rising"
+                }
+            ],
+            "data_quality": {
+                "latest_at": "2026-08-21T14:50:00+09:00",
+                "missing": [
+                    "official_public_api_response"
+                ],
+                "delayed": [],
+                "fallback_used": true
+            }
+        },
+        {
+            "situation_id": "SIT-GH-META-001",
+            "admin_code": "48250",
+            "admin_name": "경상남도 김해시",
+            "reference_time": "2026-08-21T15:00:00+09:00",
+            "mode": "scenario",
+            "hazards": [
+                "HEAVY_RAIN",
+                "FLOOD"
+            ],
+            "user_input": {
+                "field_symptoms": [
+                    "소하천 유역 국지성 호우"
+                ],
+                "location_text": "김해시 소하천 유역",
+                "affected_objects": [
+                    "소하천 인접 농경지",
+                    "마을 진입로"
+                ],
+                "required_checks": [
+                    "정비대상 소하천 월류 여부"
+                ]
+            },
+            "observations": [
+                {
+                    "type": "WEATHER_ALERT",
+                    "station_id": null,
+                    "value": "주의보",
+                    "unit": null,
+                    "observed_at": "2026-08-21T14:50:00+09:00",
+                    "source_provider": "ScenarioObservationProvider",
+                    "value_status": "scenario",
+                    "official_data": false,
+                    "name": "호우주의보"
+                },
+                {
+                    "type": "RAINFALL_3H",
+                    "station_id": "GH-RF-01",
+                    "value": 61.0,
+                    "unit": "mm",
+                    "observed_at": "2026-08-21T14:50:00+09:00",
+                    "source_provider": "ScenarioObservationProvider",
+                    "value_status": "scenario",
+                    "official_data": false
+                }
+            ],
+            "data_quality": {
+                "latest_at": "2026-08-21T14:50:00+09:00",
+                "missing": [
+                    "official_public_api_response"
+                ],
+                "delayed": [],
+                "fallback_used": true
+            }
         }
     ],
     "package_version": "1.3",

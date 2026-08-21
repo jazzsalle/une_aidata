@@ -43,7 +43,6 @@ const health = __importStar(require("../server/routes/health.js"));
 const agentMessages = __importStar(require("../server/routes/v1/agent/messages.js"));
 const contractsProviderConformance = __importStar(require("../server/routes/v1/contracts/provider-conformance.js"));
 const contractsProviders = __importStar(require("../server/routes/v1/contracts/providers.js"));
-const floodTraces = __importStar(require("../server/routes/v1/flood-traces.js"));
 const integrationsStatus = __importStar(require("../server/routes/v1/integrations/status.js"));
 const integrationsUneRagProbe = __importStar(require("../server/routes/v1/integrations/une-rag-probe.js"));
 const mapLayers = __importStar(require("../server/routes/v1/map/layers.js"));
@@ -74,7 +73,6 @@ const routes = {
     'POST /api/v1/agent/messages': agentMessages.POST,
     'GET /api/v1/contracts/provider-conformance': contractsProviderConformance.GET,
     'GET /api/v1/contracts/providers': contractsProviders.GET,
-    'GET /api/v1/flood-traces': floodTraces.GET,
     'GET /api/v1/integrations/status': integrationsStatus.GET,
     'GET /api/v1/integrations/une-rag-probe': integrationsUneRagProbe.GET,
     'GET /api/v1/map/layers': mapLayers.GET,
