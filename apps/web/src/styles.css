@@ -1878,3 +1878,8 @@ button.context-add-button:hover { background: var(--surface-panel-blue); }
 .agent-dirty-warning button { flex: none; border: 1px solid #ef6c00; border-radius: 6px; background: #fff; color: #ef6c00; padding: 3px 8px; font-size: var(--fs-xs); cursor: pointer; }
 .agent-dirty-warning button:hover:not(:disabled) { background: #ef6c00; color: #fff; }
 .agent-dirty-warning button:disabled { opacity: .5; cursor: not-allowed; }
+
+/* 시연 순서 안내 — 발주처 화면에 떠 있어도 어색하지 않게 중립 톤·기본 접힘. */
+.agent-demo-guide { margin: 2px 0; font-size: var(--fs-xs); line-height: var(--lh-xs); color: var(--c-text-muted); }
+.agent-demo-guide summary { cursor: pointer; }
+.agent-demo-guide ol { margin: 4px 0 0; padding-left: 18px; display: grid; gap: 2px; }

@@ -10,7 +10,9 @@ interface Props{situation:CurrentSituation|null;onSituationCreated(s:CurrentSitu
  /** 메타 CQ 답변의 링크 칩 클릭 — 지역 전환·하천 이동·지구 하이라이트를 바깥(DashboardPage)이 맡는다. */
  onOpenLink?(link:AgentLink):void;}
 interface AgentTurn{turn_id:string;role:'user'|'assistant'|'system';text:string;created_at:string;response?:AgentResponse;context?:AgentContextItem[];}
-const SUGGESTIONS=['우선 확인지역의 선정 근거는?','현재와 유사한 과거 피해·복구 사례는?','매뉴얼상 먼저 확인할 절차는?','침수흔적도와 위성영상 변화를 비교해줘'];
+const SUGGESTIONS=['우선 확인지역의 선정 근거는?','현재와 유사한 과거 피해·복구 사례는?','매뉴얼상 먼저 확인할 절차는?','침수흔적도와 위성영상 변화를 비교해줘',
+ // 시나리오 상호작용 입구 — 수치가 든 질문은 답 아래 ⚙ 조건 제안 칩을 띄운다(서버 파싱).
+ '3시간 강우가 120mm 로 늘면 우선 확인지역이 어떻게 바뀌나?','수위가 3.5m 가 되면 어느 지구부터 확인해야 하나?'];
 function valueOf(s:CurrentSituation|null,type:string){const v=s?.observations.find(i=>i.type===type)?.value;return typeof v==='number'?String(v):'';}
 function paragraphs(text:string){return text.split(/\n+/).map(line=>line.trim()).filter(Boolean);}
 function turnTime(iso:string){return new Date(iso).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});}
@@ -125,6 +127,15 @@ export function SituationAgentPanel({situation,onSituationCreated,onAgentRespons
    <span>입력 탭에 적용하지 않은 조건이 있습니다 — 현재 답변은 적용된 조건 기준입니다.</span>
    <button type="button" disabled={!message.trim()||sending||applying} title={message.trim()?'조건을 적용한 뒤 아래 질문을 새 조건으로 보냅니다':'먼저 질문을 입력하세요'} onClick={()=>void applyThenAsk()}>{applying||sending?'적용·질의 중…':'지금 적용하고 질문'}</button>
   </div>:null}
+  <details className="agent-demo-guide">
+   <summary>시나리오 시연 순서</summary>
+   <ol>
+    <li>수치가 든 추천질문(예: 강우 120mm)을 눌러 전송하면 답 아래 <strong>⚙ 조건 제안</strong> 버튼이 생깁니다.</li>
+    <li>버튼을 누르면 입력 탭에 값이 채워집니다(아직 적용 전 — Agent 탭에 주황 ● 표시).</li>
+    <li>경고줄의 <strong>[지금 적용하고 질문]</strong>을 누르면 조건이 적용되고 같은 질문이 새 조건으로 다시 전송됩니다.</li>
+    <li>대화의 <strong>⟳ 상황 갱신</strong> 표시를 기준으로 조건 변경 전후의 답을 비교합니다.</li>
+   </ol>
+  </details>
   <div className="agent-composer">
    {context.length?<div className="agent-context-bar">
     <p id="agent-context-hint" className="agent-context-hint">선택한 대상 {context.length}건이 질의와 함께 전달됩니다. 질문에 대상을 적지 않아도 됩니다.</p>
