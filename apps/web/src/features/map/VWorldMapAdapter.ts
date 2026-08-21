@@ -192,7 +192,9 @@ export async function createVWorldMap(target: HTMLElement, adminCode: string, on
     vectors.set(code, layer);
     mapLayers.push(layer);
   }
-  const rivers: RiverLayerRegistry = createRiverLayers({ features: raw, styleContext, key, adminCode });
+  // 하천 파일은 자료 코드(남원 52190)로 있다 — 앱 코드(45190)를 그대로 넘기면 초기 로드가
+  // 404('이 지역 자료 없음') 로 남는다. setRegion 이 곧 덮더라도 초기값부터 맞춘다.
+  const rivers: RiverLayerRegistry = createRiverLayers({ features: raw, styleContext, key, adminCode: dataCodeOfApp(adminCode) });
   mapLayers.push(...rivers.layers);
 
   // 시군구 경계는 시드에 3곳(의왕·구미·남원)만 있다. 그 밖의 시군구는 전국 파일(SGG_{코드})에서

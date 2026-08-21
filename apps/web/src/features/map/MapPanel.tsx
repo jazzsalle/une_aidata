@@ -281,9 +281,12 @@ export function MapPanel({ adminCode, mapRegion, onRegionChange, focusTarget, hi
   useEffect(() => {
     const skip = skipBoundaryFitRef.current;
     skipBoundaryFitRef.current = false;
+    // mapReady 전 호출은 mapRef 가 null 이라 조용히 유실된다 — deps 에 mapReady 를 넣어
+    // 지도가 준비되면 반드시 한 번 다시 반영한다. 이게 빠지면 초기 진입 타이밍에 따라
+    // 어댑터가 초기 코드(앱 코드 45190)로 하천을 찾다 '이 지역 자료 없음' 으로 남는다.
     mapRef.current?.setRegion(region, mapRegionIn(regions, region)?.center, !skip);
     closePopup(); setHoverPoiId(null); setHover(null);
-  }, [region, regions, closePopup]);
+  }, [region, regions, mapReady, closePopup]);
   useEffect(() => {
     if (!highlightedFeatureId) { setHighlightNotice(null); return; }
     if (!mapReady || !mapRef.current) return;
