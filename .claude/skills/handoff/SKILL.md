@@ -6,6 +6,9 @@ disable-model-invocation: true
 
 # 핸드오프 (퇴근/이동 전 인계)
 
+> 커밋·PR·머지·배포 확인·정리까지 포함한 **하루 마감 전체 절차는 `/off-work`(퇴근 모드)** 다.
+> 이 스킬은 그중 인계 기록 한 단계만 담당한다.
+
 사용자가 `/handoff`를 실행하면:
 
 1. 이번 세션에서 한 일을 파악한다 (`git log --oneline -10`, `git status --short`, 대화 맥락).
