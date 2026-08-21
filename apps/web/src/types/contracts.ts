@@ -15,7 +15,9 @@ export interface MapAction{action:'fit_bounds'|'pan_to'|'highlight'|'toggle_laye
 export interface AgentLink{kind:'region'|'river'|'district';label:string;admin_code?:string;name?:string;target_id?:string;nav?:[number,number];nav_kind?:string;river_code?:string;}
 export interface AgentResponse{message_id:string;answer:string;priority_areas:PriorityArea[];similar_events:SimilarEvent[];procedures:ProcedureStep[];map_actions:MapAction[];evidence:EvidenceItem[];warnings:string[];limitations:string[];operator_confirmation_required:true;
  /** T3Q 메타 표본(CQ) 응답에만 있는 optional 필드 — 클릭하면 지도·지역으로 이동하는 대상. */
- links?:AgentLink[];meta_demo?:boolean;}
+ links?:AgentLink[];meta_demo?:boolean;
+ /** 질문에서 파싱한 조건 수치 제안 — 화면이 입력 탭에 채워만 주고, 적용은 담당자 버튼이다. */
+ suggested_conditions?:Array<{type:string;value:number;unit:string;label:string}>;}
 export interface IntegrationStatus{integration_id:string;name:string;configured:boolean;runtime_mode:string;message:string;required_env:string[];checked_at:string;validation_state?:'verified'|'configured'|'pending'|'fallback'|'error';next_action?:string;}
 
 

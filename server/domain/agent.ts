@@ -61,6 +61,30 @@ function detectIntent(message: string): Intent {
 }
 
 /** "특보 유량이 1100인데 …" 형태의 질의 유량값(㎥/s 추정)을 추출한다. */
+/** 질문 속 "강우 120mm" · "수위 3.5m" 류 수치를 입력 조건 제안으로 파싱한다.
+
+    Agent 가 조건을 직접 적용하는 일은 없다 — 화면이 입력 탭에 **채워만 주고** 적용 버튼은
+    담당자가 누른다(operator_confirmation_required 원칙). 단위가 붙은 수치만 잡는다 —
+    "120mm" 없이 "120" 만 있으면 어느 조건인지 알 수 없어 제안하지 않는다. */
+function extractSuggestedConditions(message: string): Array<{ type: string; value: number; unit: string; label: string }> {
+  const rules: Array<{ pattern: RegExp; type: string; unit: string; label: string }> = [
+    { pattern: /(\d[\d,]*(?:\.\d+)?)\s*(?:mm|밀리)/g, type: 'RAINFALL_3H', unit: 'mm', label: '3시간 강우' },
+    { pattern: /수위[^\d]{0,6}(\d[\d,]*(?:\.\d+)?)\s*(?:m|미터)(?![\d³3])/g, type: 'WATER_LEVEL', unit: 'm', label: '수위' },
+    { pattern: /(\d[\d,]*(?:\.\d+)?)\s*(?:m3\/s|㎥\/s|m³\/s|톤)/g, type: 'DISCHARGE', unit: 'm3/s', label: '유량' },
+  ];
+  const found: Array<{ type: string; value: number; unit: string; label: string }> = [];
+  for (const rule of rules) {
+    const match = rule.pattern.exec(message);
+    if (!match?.[1]) continue;
+    const value = Number(match[1].replace(/,/g, ''));
+    if (Number.isFinite(value) && value > 0 && !found.some((item) => item.type === rule.type)) {
+      found.push({ type: rule.type, value, unit: rule.unit, label: rule.label });
+    }
+  }
+  // 강우 문맥이 아닌 mm(지도 축척 등)를 오인할 수 있어, 강우 제안은 비·강우 낱말이 있을 때만 남긴다.
+  return found.filter((item) => item.type !== 'RAINFALL_3H' || /강우|강수|비|호우|mm/.test(message));
+}
+
 function extractFlowValue(message: string, intent: Intent): number | null {
   if (!intent.threshold && !intent.river) return null;
   const matches = message.match(/\d[\d,]*(?:\.\d+)?/g) ?? [];
@@ -434,6 +458,7 @@ export async function buildAgentResponse(situation: CurrentSituation, message: s
     evidence: responseEvidence,
     warnings,
     limitations,
+    suggested_conditions: extractSuggestedConditions(message),
     operator_confirmation_required: true,
   };
 }

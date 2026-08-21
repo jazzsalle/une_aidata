@@ -9,7 +9,7 @@ interface Props{situation:CurrentSituation|null;onSituationCreated(s:CurrentSitu
  contextItems?:AgentContextItem[];onRemoveContext?(item:AgentContextItem):void;
  /** 메타 CQ 답변의 링크 칩 클릭 — 지역 전환·하천 이동·지구 하이라이트를 바깥(DashboardPage)이 맡는다. */
  onOpenLink?(link:AgentLink):void;}
-interface AgentTurn{turn_id:string;role:'user'|'assistant';text:string;created_at:string;response?:AgentResponse;context?:AgentContextItem[];}
+interface AgentTurn{turn_id:string;role:'user'|'assistant'|'system';text:string;created_at:string;response?:AgentResponse;context?:AgentContextItem[];}
 const SUGGESTIONS=['우선 확인지역의 선정 근거는?','현재와 유사한 과거 피해·복구 사례는?','매뉴얼상 먼저 확인할 절차는?','침수흔적도와 위성영상 변화를 비교해줘'];
 function valueOf(s:CurrentSituation|null,type:string){const v=s?.observations.find(i=>i.type===type)?.value;return typeof v==='number'?String(v):'';}
 function paragraphs(text:string){return text.split(/\n+/).map(line=>line.trim()).filter(Boolean);}
@@ -38,10 +38,57 @@ export function SituationAgentPanel({situation,onSituationCreated,onAgentRespons
  const threadRef=useRef<HTMLDivElement|null>(null);
  const observations=useMemo(()=>situation?.observations??[],[situation]);
  const context=useMemo(()=>contextItems??[],[contextItems]);
- useEffect(()=>{setMode(situation?.mode==='scenario'?'scenario':'hybrid');setRain3h(valueOf(situation,'RAINFALL_3H'));setRain12h(valueOf(situation,'RAINFALL_12H'));setWater(valueOf(situation,'WATER_LEVEL'));setFlow(valueOf(situation,'DISCHARGE'));setSymptom(String(situation?.user_input?.location_text??''));setTurns([]);setSendError('');setSuggestionsOpen(false);},[situation?.situation_id]);
+ // 대화 리셋은 **지역이 바뀔 때만** 한다. 같은 지역에서 조건 적용·상황 전환으로 situation_id 가
+ // 갱신되면 대화를 유지하고 시스템 턴으로 기록한다 — 조건 변경 전후 답을 나란히 비교하는 것이
+ // 이 화면의 쓰임새인데, 재산정마다 스레드가 증발하면 비교가 불가능하다.
+ const prevAdminRef=useRef<string|null>(null);
+ const prevSituationIdRef=useRef<string|null>(null);
+ useEffect(()=>{
+  setMode(situation?.mode==='scenario'?'scenario':'hybrid');setRain3h(valueOf(situation,'RAINFALL_3H'));setRain12h(valueOf(situation,'RAINFALL_12H'));setWater(valueOf(situation,'WATER_LEVEL'));setFlow(valueOf(situation,'DISCHARGE'));setSymptom(String(situation?.user_input?.location_text??''));setSendError('');setSuggestionsOpen(false);
+  const admin=situation?.admin_code??null;const sid=situation?.situation_id??null;
+  if(prevAdminRef.current!==admin){setTurns([]);}
+  else if(sid&&prevSituationIdRef.current&&prevSituationIdRef.current!==sid){
+   const parts=(situation?.observations??[]).slice(0,4).map(o=>`${o.name??o.type} ${String(o.value)}${o.unit?` ${o.unit}`:''}`);
+   setTurns(prev=>prev.length?[...prev,{turn_id:`sys-${Date.now()}`,role:'system',text:`상황이 갱신되었습니다 — ${parts.join(' · ')||'조건 변경'}. 우선 확인지역이 재산정되었습니다(현재 판단 참고). 이후 답변은 이 조건 기준입니다.`,created_at:new Date().toISOString()}]:prev);
+  }
+  prevAdminRef.current=admin;prevSituationIdRef.current=sid;
+ },[situation?.situation_id]);
  useEffect(()=>{const el=threadRef.current;if(el)el.scrollTop=el.scrollHeight;},[turns.length,sending,activeTab]);
+ // 입력 탭의 값이 적용된 상황과 다른가 — 다르면 Agent 가 옛 조건으로 답하고 있다는 뜻이라 경고한다.
+ const dirty=useMemo(()=>{
+  if(!situation)return false;
+  const pairs:[string,string][]=[[rain3h,'RAINFALL_3H'],[rain12h,'RAINFALL_12H'],[water,'WATER_LEVEL'],[flow,'DISCHARGE']];
+  return pairs.some(([input,type])=>input.trim()!==''&&input.trim()!==valueOf(situation,type));
+ },[situation,rain3h,rain12h,water,flow]);
  function observation(type:string,value:string,unit:string,trend?:string):Observation|undefined{const n=Number(value);if(!Number.isFinite(n))return undefined;return{type,value:n,unit,trend,observed_at:new Date().toISOString(),source_provider:'UserInputProvider',value_status:'scenario',official_data:false};}
- async function apply(){if(!situation||applying)return;setApplying(true);setApplyError('');try{const obs=[observation('RAINFALL_3H',rain3h,'mm'),observation('RAINFALL_12H',rain12h,'mm'),observation('WATER_LEVEL',water,'m','rising'),observation('DISCHARGE',flow,'m3/s','rising')].filter(Boolean) as Observation[];const input:CreateSituationInput={admin_code:situation.admin_code,reference_time:new Date().toISOString(),mode,hazards:situation.hazards,observations:obs.length?obs:situation.observations,user_input:{field_symptoms:symptom?[symptom]:[],location_text:symptom}};onSituationCreated(await createSituation(input));}catch(e){setApplyError(`조건 적용·재산정에 실패했습니다. 기존 조건이 유지됩니다. (${e instanceof Error?e.message:'알 수 없는 오류'})`);}finally{setApplying(false);}}
+ function buildInput():CreateSituationInput|null{if(!situation)return null;const obs=[observation('RAINFALL_3H',rain3h,'mm'),observation('RAINFALL_12H',rain12h,'mm'),observation('WATER_LEVEL',water,'m','rising'),observation('DISCHARGE',flow,'m3/s','rising')].filter(Boolean) as Observation[];return{admin_code:situation.admin_code,reference_time:new Date().toISOString(),mode,hazards:situation.hazards,observations:obs.length?obs:situation.observations,user_input:{field_symptoms:symptom?[symptom]:[],location_text:symptom}};}
+ async function apply(){const input=buildInput();if(!input||applying)return;setApplying(true);setApplyError('');try{onSituationCreated(await createSituation(input));}catch(e){setApplyError(`조건 적용·재산정에 실패했습니다. 기존 조건이 유지됩니다. (${e instanceof Error?e.message:'알 수 없는 오류'})`);}finally{setApplying(false);}}
+ /** [지금 적용하고 질문] — 미적용 조건을 적용한 뒤 같은 질문을 새 조건으로 이어 보낸다.
+  *  두 동작 다 기존 경로(createSituation·sendAgentMessage)이고 담당자가 버튼으로 명시 지시한
+  *  것이라 자동 조치가 아니다. 새 상황을 지역 변수로 받아 곧바로 질의한다 — props 갱신을
+  *  기다리면 옛 상황으로 질문이 나간다. */
+ async function applyThenAsk(){
+  const text=message.trim();const input=buildInput();
+  if(!input||!text||sending||applying)return;
+  setApplying(true);setSending(true);setApplyError('');setSendError('');
+  try{
+   const next=await createSituation(input);onSituationCreated(next);
+   const sentContext=context.slice();
+   setTurns(prev=>[...prev,{turn_id:`ask-${Date.now()}`,role:'user',text,created_at:new Date().toISOString(),context:sentContext}]);
+   setMessage('');
+   const response=await sendAgentMessage(next,text,sentContext);
+   setTurns(prev=>[...prev,{turn_id:response.message_id||`answer-${Date.now()}`,role:'assistant',text:response.answer,created_at:new Date().toISOString(),response}]);
+   onAgentResponse(response);
+  }catch(e){setSendError(`적용 후 질의에 실패했습니다. (${e instanceof Error?e.message:'알 수 없는 오류'})`);}
+  finally{setApplying(false);setSending(false);}
+ }
+ /** 답변의 조건 제안 칩 — 입력 탭 해당 필드만 채운다. 적용 버튼은 담당자가 누른다. */
+ function fillCondition(item:{type:string;value:number}){
+  const value=String(item.value);
+  if(item.type==='RAINFALL_3H')setRain3h(value);else if(item.type==='RAINFALL_12H')setRain12h(value);
+  else if(item.type==='WATER_LEVEL')setWater(value);else if(item.type==='DISCHARGE')setFlow(value);
+  setActiveTab('input');
+ }
  async function submit(){const text=message.trim();if(!situation||!text||sending)return;const askedId=`ask-${Date.now()}`;const sentContext=context.slice();setSending(true);setSendError('');setTurns(prev=>[...prev,{turn_id:askedId,role:'user',text,created_at:new Date().toISOString(),context:sentContext}]);setMessage('');setSuggestionsOpen(false);
   try{const response=await sendAgentMessage(situation,text,sentContext);setTurns(prev=>[...prev,{turn_id:response.message_id||`answer-${Date.now()}`,role:'assistant',text:response.answer,created_at:new Date().toISOString(),response}]);onAgentResponse(response);}
   catch(e){setTurns(prev=>prev.filter(turn=>turn.turn_id!==askedId));setMessage(text);setSendError(`질의 실행에 실패했습니다. 잠시 후 다시 시도해 주세요. (${e instanceof Error?e.message:'알 수 없는 오류'})`);}
@@ -49,9 +96,13 @@ export function SituationAgentPanel({situation,onSituationCreated,onAgentRespons
  function onComposerKeyDown(e:ReactKeyboardEvent<HTMLTextAreaElement>){if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){e.preventDefault();void submit();}}
  function renderTurn(turn:AgentTurn){
   const response=turn.response;
+  if(turn.role==='system'){
+   return <p key={turn.turn_id} className="agent-turn-system" role="status"><span aria-hidden="true">⟳</span> {turn.text} <span className="agent-turn-time">{turnTime(turn.created_at)}</span></p>;
+  }
   return <article key={turn.turn_id} className={`agent-turn ${turn.role}`}>
    <p className="agent-turn-head"><span className="agent-turn-role">{turn.role==='user'?'담당자 질문':'AI Agent 답변'}</span><span className="agent-turn-time">{turnTime(turn.created_at)}</span></p>
    <div className={`agent-turn-body${response?.meta_demo?' meta-demo-text':''}`}>{paragraphs(turn.text).map((line,index)=><p key={`${turn.turn_id}-p-${index}`}>{line}</p>)}</div>
+   {response?.suggested_conditions?.length?<div className="agent-turn-links"><span className="agent-turn-links-label">조건 제안</span>{response.suggested_conditions.map((item,index)=><button key={`${turn.turn_id}-sc-${index}`} type="button" className="agent-link-chip" title="입력 탭에 이 값을 채웁니다. 적용·재산정 버튼은 직접 누르셔야 합니다." onClick={()=>fillCondition(item)}>⚙ {item.label} {item.value}{item.unit}</button>)}</div>:null}
    {response?.links?.length?<div className="agent-turn-links"><span className="agent-turn-links-label">바로가기</span>{response.links.map((link,index)=><button key={`${turn.turn_id}-lk-${index}`} type="button" className="agent-link-chip" onClick={()=>onOpenLink?.(link)} title={link.kind==='region'?'이 지역으로 지도 이동':link.kind==='river'?'하천 위치로 지도 이동':'지도에서 강조'}>{link.kind==='region'?'📍':link.kind==='river'?'〰':'▨'} {link.label}</button>)}</div>:null}
    {turn.context&&turn.context.length?<p className="agent-turn-context"><span className="agent-turn-context-label">함께 전달한 선택 대상</span>{turn.context.map(item=><span key={`${turn.turn_id}-c-${contextKey(item)}`} className="agent-turn-context-item">{contextText(item)}</span>)}</p>:null}
    {response?<p className="agent-turn-summary">근거 {response.evidence.length}건 · 유사사례 {response.similar_events.length}건 · 지도 이동 {response.map_actions.length?'있음':'없음'}</p>:null}
@@ -60,7 +111,7 @@ export function SituationAgentPanel({situation,onSituationCreated,onAgentRespons
    {response?<p className="agent-turn-confirm">담당자 확인 필요 · 공식 위험도·피해예측·자동 조치결정이 아닌 참고정보입니다.</p>:null}
   </article>;
  }
- return <aside className="left-panel"><div className="panel-tabs" role="tablist" aria-label="상황 입력 및 AI Agent" onKeyDown={e=>moveTabFocus<'input'|'agent'>(e,['input','agent'] as const,activeTab,setActiveTab,'situation-tab') }><button id="situation-tab-0" role="tab" aria-selected={activeTab==='input'} aria-controls="situation-panel-input" tabIndex={activeTab==='input'?0:-1} type="button" className={activeTab==='input'?'active':''} onClick={()=>setActiveTab('input')}>재난상황 입력</button><button id="situation-tab-1" role="tab" aria-selected={activeTab==='agent'} aria-controls="situation-panel-agent" tabIndex={activeTab==='agent'?0:-1} type="button" className={activeTab==='agent'?'active':''} onClick={()=>setActiveTab('agent')}>AI Agent{context.length?<span className="agent-tab-badge" aria-hidden="true">{context.length}</span>:null}</button></div><p className="sr-only" aria-live="polite">{context.length?`AI Agent 질의와 함께 전달될 선택 대상 ${context.length}건이 있습니다.`:''}</p>{activeTab==='input'?<div id="situation-panel-input" role="tabpanel" aria-labelledby="situation-tab-0" className="panel-scroll"><div className={`status-banner ${situation?.mode==='scenario'?'scenario':'hybrid'}`}>{situation?.mode==='scenario'?'시나리오 데이터 · 공식 관측 아님':'공공 API 조회 + 사용자 입력 · 실패 시 시나리오 대체'}</div><label className="field"><span>지역</span><input value={situation?.admin_name??''} readOnly/></label><label className="field"><span>입력 모드</span><select value={mode} onChange={e=>setMode(e.target.value as SituationMode)}><option value="hybrid">공공 API + 사용자 입력</option><option value="scenario">시나리오</option></select></label><div className="field-grid"><label className="field"><span>3시간 강우(mm)</span><input inputMode="decimal" value={rain3h} onChange={e=>setRain3h(e.target.value)}/></label><label className="field"><span>12시간 강우(mm)</span><input inputMode="decimal" value={rain12h} onChange={e=>setRain12h(e.target.value)}/></label><label className="field"><span>수위(m)</span><input inputMode="decimal" value={water} onChange={e=>setWater(e.target.value)}/></label><label className="field"><span>유량(m³/s)</span><input inputMode="decimal" value={flow} onChange={e=>setFlow(e.target.value)}/></label></div><label className="field"><span>현장징후·확인지역</span><textarea value={symptom} onChange={e=>setSymptom(e.target.value)}/></label><h3>적용 중인 조건</h3><div className="observation-list">{observations.slice(0,5).map((i,index)=><article key={`${i.type}-${index}`}><span>{i.name??i.type}</span><strong>{String(i.value)}{i.unit?` ${i.unit}`:''}</strong><small>{i.official_data?'공식':'입력/시나리오'} · {new Date(i.observed_at).toLocaleTimeString('ko-KR')}</small></article>)}</div>{applyError?<p role="alert" className="inline-error">{applyError}</p>:null}<button type="button" className="primary full" disabled={!situation||applying} onClick={apply}>{applying?'적용 중…':'현재 조건 적용·재산정'}</button></div>:<div id="situation-panel-agent" role="tabpanel" aria-labelledby="situation-tab-1" className="panel-scroll agent-chat">
+ return <aside className="left-panel"><div className="panel-tabs" role="tablist" aria-label="상황 입력 및 AI Agent" onKeyDown={e=>moveTabFocus<'input'|'agent'>(e,['input','agent'] as const,activeTab,setActiveTab,'situation-tab') }><button id="situation-tab-0" role="tab" aria-selected={activeTab==='input'} aria-controls="situation-panel-input" tabIndex={activeTab==='input'?0:-1} type="button" className={activeTab==='input'?'active':''} onClick={()=>setActiveTab('input')}>재난상황 입력</button><button id="situation-tab-1" role="tab" aria-selected={activeTab==='agent'} aria-controls="situation-panel-agent" tabIndex={activeTab==='agent'?0:-1} type="button" className={activeTab==='agent'?'active':''} onClick={()=>setActiveTab('agent')}>AI Agent{context.length?<span className="agent-tab-badge" aria-hidden="true">{context.length}</span>:null}{dirty?<span className="agent-tab-dirty" aria-hidden="true" title="적용하지 않은 입력 조건이 있습니다">●</span>:null}</button></div><p className="sr-only" aria-live="polite">{context.length?`AI Agent 질의와 함께 전달될 선택 대상 ${context.length}건이 있습니다.`:''}</p>{activeTab==='input'?<div id="situation-panel-input" role="tabpanel" aria-labelledby="situation-tab-0" className="panel-scroll"><div className={`status-banner ${situation?.mode==='scenario'?'scenario':'hybrid'}`}>{situation?.mode==='scenario'?'시나리오 데이터 · 공식 관측 아님':'공공 API 조회 + 사용자 입력 · 실패 시 시나리오 대체'}</div><label className="field"><span>지역</span><input value={situation?.admin_name??''} readOnly/></label><label className="field"><span>입력 모드</span><select value={mode} onChange={e=>setMode(e.target.value as SituationMode)}><option value="hybrid">공공 API + 사용자 입력</option><option value="scenario">시나리오</option></select></label><div className="field-grid"><label className="field"><span>3시간 강우(mm)</span><input inputMode="decimal" value={rain3h} onChange={e=>setRain3h(e.target.value)}/></label><label className="field"><span>12시간 강우(mm)</span><input inputMode="decimal" value={rain12h} onChange={e=>setRain12h(e.target.value)}/></label><label className="field"><span>수위(m)</span><input inputMode="decimal" value={water} onChange={e=>setWater(e.target.value)}/></label><label className="field"><span>유량(m³/s)</span><input inputMode="decimal" value={flow} onChange={e=>setFlow(e.target.value)}/></label></div><label className="field"><span>현장징후·확인지역</span><textarea value={symptom} onChange={e=>setSymptom(e.target.value)}/></label><h3>적용 중인 조건</h3><div className="observation-list">{observations.slice(0,5).map((i,index)=><article key={`${i.type}-${index}`}><span>{i.name??i.type}</span><strong>{String(i.value)}{i.unit?` ${i.unit}`:''}</strong><small>{i.official_data?'공식':'입력/시나리오'} · {new Date(i.observed_at).toLocaleTimeString('ko-KR')}</small></article>)}</div>{applyError?<p role="alert" className="inline-error">{applyError}</p>:null}<button type="button" className="primary full" disabled={!situation||applying} onClick={apply}>{applying?'적용 중…':'현재 조건 적용·재산정'}</button></div>:<div id="situation-panel-agent" role="tabpanel" aria-labelledby="situation-tab-1" className="panel-scroll agent-chat">
   <div ref={threadRef} className="agent-thread" role="log" aria-live="polite" aria-relevant="additions text" aria-label="AI Agent 대화" tabIndex={0}>
    <p className="agent-thread-intro">현재 입력조건과 계획·과거사례·매뉴얼 데이터를 연결해 우선 확인지역과 근거를 제공합니다. 답변은 참고정보이며 담당자 확인이 필요합니다.</p>
    {turns.map(renderTurn)}
@@ -70,6 +121,10 @@ export function SituationAgentPanel({situation,onSituationCreated,onAgentRespons
    <summary>{isMetaSituation&&cqSuggestions.length?`역량질문(CQ) ${cqSuggestions.length}건 〔표본〕`:`추천질문 ${SUGGESTIONS.length}건`}</summary>
    <div className="agent-suggestion-list">{(isMetaSituation&&cqSuggestions.length?cqSuggestions:SUGGESTIONS).map(i=><button key={i} type="button" className={`suggestion${isMetaSituation&&cqSuggestions.length?' meta-demo-text':''}`} onClick={()=>setMessage(i)}>{i}</button>)}</div>
   </details>
+  {dirty?<div className="agent-dirty-warning" role="status">
+   <span>입력 탭에 적용하지 않은 조건이 있습니다 — 현재 답변은 적용된 조건 기준입니다.</span>
+   <button type="button" disabled={!message.trim()||sending||applying} title={message.trim()?'조건을 적용한 뒤 아래 질문을 새 조건으로 보냅니다':'먼저 질문을 입력하세요'} onClick={()=>void applyThenAsk()}>{applying||sending?'적용·질의 중…':'지금 적용하고 질문'}</button>
+  </div>:null}
   <div className="agent-composer">
    {context.length?<div className="agent-context-bar">
     <p id="agent-context-hint" className="agent-context-hint">선택한 대상 {context.length}건이 질의와 함께 전달됩니다. 질문에 대상을 적지 않아도 됩니다.</p>
