@@ -199,33 +199,39 @@ export function InsightPanel(props:Props){
     <div id={`insight-panel-${tabs.indexOf(tab)}`} role="tabpanel" aria-labelledby={`insight-tab-${tabs.indexOf(tab)}`} className="panel-scroll">
       {tab==='현재 판단'&&<>
         <div className="notice-card warning"><strong>우선 확인 상대순위</strong><p>공식 위험도·피해예측 결과가 아니며 담당자 확인이 필요합니다.</p></div>
+        {/* 메타 표본은 우리 산정값(순위·점수·사유)을 표시하지 않는다 — 표본과 섞이면 T3Q 데이터로
+            오인되기 때문이다. 카드 목록은 표본 지구 나열이며 순서는 전달분 파일 순서다. */}
+        {isMetaDemoId(priorities?.situation_id)?<p className="meta-demo-text priority-meta-caption">표본 지구 목록 — 우선순위 점수·사유 등 산정값은 표시하지 않습니다(T3Q 실데이터 수신 전).</p>:null}
         <p className="sr-only">각 카드의 지역명 버튼은 지도의 해당 지점으로 이동하고, 상세보기 버튼은 지도 표시와 같은 위험지구 상세 정보를 창으로 엽니다.</p>
         {/* 카드 목록 래퍼. 초와이드(>2560px)에서 우측 패널이 520px 를 넘으면 이 래퍼만 2열로 흐른다(F-16 tier B). */}
         <div className="priority-list">{priorities?.areas.map(area=>{
           const district=districtByCode.get(area.spatial_object_id)??null;
           const typeTag=str(district?.disaster_type);           // 계획문서 판독 재해유형. 매칭 실패 시 태그를 만들지 않는다.
           const locationSummary=str(district?.location);
+          // 메타 표본 지구: 순위·점수·사유(우리 산정값)를 그리지 않는다 — T3Q 데이터 오인 방지.
+          const metaArea=isMetaDemoId(area.spatial_object_id);
           return <article
             className="priority-card"
             key={area.spatial_object_id}
             /* 마우스 편의를 위한 카드 전체 클릭. 키보드 진입점은 아래 지역명 버튼이며 내부 컨트롤은 stopPropagation 한다. */
             onClick={()=>onHighlight(area.spatial_object_id)}
           >
-            <div className="rank">{area.rank}</div>
+            {metaArea?null:<div className="rank">{area.rank}</div>}
             <div className="priority-body">
               <div className="priority-title">
-                <button type="button" className="priority-name-button" aria-label={`${area.name} 지도에서 보기`} onClick={event=>{event.stopPropagation();onHighlight(area.spatial_object_id);}}><strong className={isMetaDemoId(area.spatial_object_id)?'meta-demo-text':undefined}>{area.name}</strong></button>
-                {isMetaDemoId(area.spatial_object_id)?<span className="meta-demo-badge">표본</span>:null}
-                <span>{area.score}점</span>
+                <button type="button" className="priority-name-button" aria-label={`${area.name} 지도에서 보기`} onClick={event=>{event.stopPropagation();onHighlight(area.spatial_object_id);}}><strong className={metaArea?'meta-demo-text':undefined}>{area.name}</strong></button>
+                {metaArea?<span className="meta-demo-badge">표본</span>:null}
+                {metaArea?null:<span>{area.score}점</span>}
               </div>
               {typeTag||locationSummary?<p className="priority-tags">
                 {typeTag?<span className="priority-tag">{typeTag}</span>:null}
                 {locationSummary?<span className="priority-location">{locationSummary}</span>:null}
               </p>:null}
-              <ul>{area.reasons.slice(0,3).map(reason=><li key={reason}>{reason}</li>)}</ul>
+              {metaArea?null:<ul>{area.reasons.slice(0,3).map(reason=><li key={reason}>{reason}</li>)}</ul>}
               <div className="card-action-row">
                 <button type="button" className="priority-detail-button" onClick={event=>{event.stopPropagation();setDetailArea(area);}}>상세보기</button>
-                {onAddContext?<button type="button" className="context-add-button" onClick={event=>{event.stopPropagation();onAddContext({kind:'district',id:area.spatial_object_id,label:area.name,detail:area.reasons[0],admin_code:adminCode??undefined});}}>질의에 참조</button>:null}
+                {/* 질의 참조 detail: 메타 표본은 산정 사유 대신 표본 원자료(위치·재해유형)를 넘긴다. */}
+                {onAddContext?<button type="button" className="context-add-button" onClick={event=>{event.stopPropagation();onAddContext({kind:'district',id:area.spatial_object_id,label:area.name,detail:metaArea?(locationSummary??typeTag??undefined):area.reasons[0],admin_code:adminCode??undefined});}}>질의에 참조</button>:null}
               </div>
             </div>
           </article>;
@@ -415,12 +421,14 @@ export function InsightPanel(props:Props){
       footNote="본 요약은 관리대장·계획문서 판독 및 Mock/Seed 기반 참고 정보이며, 공식 위험등급 판정이나 피해예측이 아닙니다."
       onClose={closeDetail}
     >
+      {/* 메타 표본: 순위·점수·사유·확인항목(우리 산정값) 절을 통째로 뺀다 — 표본 원자료 절만 남긴다. */}
       <FactList className="map-popup-facts" rows={[
-        {label:'우선 확인 순위',value:`${detailArea.rank}위 · 상대점수 ${detailArea.score}점(공식 위험등급·피해확률 아님)`},
+        ...(isMetaDemoId(detailArea.spatial_object_id)?[]:[{label:'우선 확인 순위',value:`${detailArea.rank}위 · 상대점수 ${detailArea.score}점(공식 위험등급·피해확률 아님)`}]),
         {label:'공간객체 ID',value:orMissing(detailArea.spatial_object_id)},
         ...districtFactRows(detailDistrict),
         {label:'행정구역',value:orMissing(detailDistrict?.admin_name??detailDistrict?.admin_code??adminCode)},
       ]} />
+      {isMetaDemoId(detailArea.spatial_object_id)?<p className="meta-demo-text priority-meta-caption">우선순위 점수·사유 등 산정값은 표본 지역에서 표시하지 않습니다(T3Q 실데이터 수신 전).</p>:<>
       <section className="map-popup-section">
         <h4>우선 확인 사유</h4>
         {detailArea.reasons.length?<ul className="map-popup-list">{detailArea.reasons.map(reason=><li key={reason}>{reason}</li>)}</ul>:<p>사유 기재 미확보</p>}
@@ -429,6 +437,7 @@ export function InsightPanel(props:Props){
         <h4>담당자 확인 필요 항목</h4>
         {detailArea.required_checks.length?<ul className="map-popup-list">{detailArea.required_checks.map(check=><li key={check}>{check}</li>)}</ul>:<p>확인 항목 미확보</p>}
       </section>
+      </>}
       {detailDistrict
         ?<DistrictDetailSections district={detailDistrict} evidence={evidenceText(detailDistrict.evidence)} />
         :<section className="map-popup-section"><h4>계획문서 판독 상세</h4><p>이 지점과 코드가 일치하는 자연재해저감 종합계획 판독자료가 {MISSING} 상태입니다. 계획 PDF 수령 후 구조화 예정입니다.</p></section>}

@@ -60,3 +60,4 @@ anlysis/
 # 국가데이터처 법정동 연계정보 CSV(79 MB)와 행정동 경계 SHP(130 MB). 전처리 입력이며
 # 산출물 data/reference/sgg_code_map.json 은 커밋한다(scripts/build_sgg_code_map.py 로 재생성).
 행정구역/
+.vercel

@@ -1883,3 +1883,6 @@ button.context-add-button:hover { background: var(--surface-panel-blue); }
 .agent-demo-guide { margin: 2px 0; font-size: var(--fs-xs); line-height: var(--lh-xs); color: var(--c-text-muted); }
 .agent-demo-guide summary { cursor: pointer; }
 .agent-demo-guide ol { margin: 4px 0 0; padding-left: 18px; display: grid; gap: 2px; }
+
+/* 메타 표본 산정값 미표시 안내 — 인디고 표본 톤(.meta-demo-text)에 여백만 얹는다. */
+.priority-meta-caption { margin: 2px 0 6px; font-size: var(--fs-xs); line-height: var(--lh-xs); }

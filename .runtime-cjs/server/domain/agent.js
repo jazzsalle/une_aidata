@@ -309,6 +309,10 @@ async function buildAgentResponse(situation, message, context = []) {
             operator_confirmation_required: true,
         };
     }
+    // 메타 표본 상황(CQ 미스로 여기 떨어진 경우 포함)에서는 우리 산정값(순위·점수·사유)을 문장·지도
+    // Action 어디에도 싣지 않는다 — 표본과 섞이면 T3Q 데이터로 오인된다(2026-08-21 지시).
+    // priority 자체는 메타면 나열 모드(빈 reasons·score 0)로 계산된다(priorityAreas.ts).
+    const isMeta = situation.situation_id.includes('-META-');
     const priority = (0, priorityAreas_js_1.calculatePriorityAreas)(situation);
     const similar = await (0, similarEvents_js_1.searchSimilarEvents)(situation, 3);
     const procedures = seeds_js_1.seed.procedures.procedures.filter((item) => Array.isArray(item.target_admin_codes) && item.target_admin_codes.includes(situation.admin_code)).slice(0, 5);
@@ -357,11 +361,13 @@ async function buildAgentResponse(situation, message, context = []) {
             parts.push(`계획 임계값 참고: ${str(threshold.target)} ${str(threshold.operator)} ${num(threshold.value) ?? ''}${str(threshold.unit)}(${str(threshold.basis)}).`);
         if (districtIndex === 0 && strs(district.mitigation).length)
             parts.push(`계획된 저감대책은 ${strs(district.mitigation).slice(0, 3).join(' / ')}이며 사업비 ${fmt(num(district.cost_million_krw))}백만원·우선순위 ${str(district.priority) || '미기재'}입니다.`);
-        if (area)
-            parts.push(`현재 조건 기준 우선 확인 순위는 ${area.rank}위(참고점수 ${area.score})입니다.`);
-        else {
-            parts.push('현재 조건 상위 우선 확인지역 목록에는 포함되지 않았습니다.');
-            extraWarnings.push(`${name}${josa(name, '은', '는')} 현재 조건 상위 5개 우선 확인지역 목록에 포함되지 않아 목록에는 표시되지 않습니다.`);
+        if (!isMeta) {
+            if (area)
+                parts.push(`현재 조건 기준 우선 확인 순위는 ${area.rank}위(참고점수 ${area.score})입니다.`);
+            else {
+                parts.push('현재 조건 상위 우선 확인지역 목록에는 포함되지 않았습니다.');
+                extraWarnings.push(`${name}${josa(name, '은', '는')} 현재 조건 상위 5개 우선 확인지역 목록에 포함되지 않아 목록에는 표시되지 않습니다.`);
+            }
         }
         if (intent.damage || targets.fromContext) {
             const damages = recs(district.damage_events);
@@ -409,9 +415,12 @@ async function buildAgentResponse(situation, message, context = []) {
     if (enriched && intent.procedure && procedures.length) {
         sentences.push(`관련 대응절차 참고 템플릿은 ${procedures.length}건이며 첫 단계는 '${str(procedures[0]?.action_title)}'입니다(부산 북구청 매뉴얼 기반 잠정 템플릿).`);
     }
-    const legacyAnswer = first
-        ? `현재 입력·관측 조건을 계획 위험지식과 비교하여 ${first.name}을 우선 확인 후보 1순위로 제시합니다.${best ? ` 유사 참고사례는 '${best.event_name}'이며 사건 유사도는 ${best.similarity_score}점입니다.` : ''} 본 결과는 공식 위험도나 피해예측이 아니라 담당자 현장 확인을 지원하는 상대순위입니다.`
-        : '현재 조건에서 우선 확인지역을 산정하지 못했습니다.';
+    const metaNotice = '〔표본〕 지역에서는 우선순위 점수·순위·사유 등 산정값을 제공하지 않습니다(T3Q 실데이터 수신 전).';
+    const legacyAnswer = isMeta
+        ? `${metaNotice} 표본 지구 목록과 계획·근거 탭의 표본 내용을 참고하시고, 역량질문(CQ) 추천질문을 이용하면 메타 인스턴스 원문 근거를 확인할 수 있습니다.`
+        : first
+            ? `현재 입력·관측 조건을 계획 위험지식과 비교하여 ${first.name}을 우선 확인 후보 1순위로 제시합니다.${best ? ` 유사 참고사례는 '${best.event_name}'이며 사건 유사도는 ${best.similarity_score}점입니다.` : ''} 본 결과는 공식 위험도나 피해예측이 아니라 담당자 현장 확인을 지원하는 상대순위입니다.`
+            : '현재 조건에서 우선 확인지역을 산정하지 못했습니다.';
     const unresolvedLabels = !enriched && targets.contextLabels.length ? targets.contextLabels.join(' · ') : null;
     if (unresolvedLabels)
         extraWarnings.push(`선택하신 ${unresolvedLabels}에 해당하는 계획자료 대상을 확인하지 못해 현재 조건 기준 기본 결과를 제시합니다.`);
@@ -422,7 +431,7 @@ async function buildAgentResponse(situation, message, context = []) {
         ? ` 질문에 담긴 ${suggestedConditions.map((item) => `${item.label} ${item.value}${item.unit}`).join(' · ')} 값은 아래 조건 제안 버튼으로 입력 탭에 채울 수 있으며, 적용·재산정하면 현재 결과와 비교할 수 있습니다.`
         : '';
     const answer = enriched && sentences.length
-        ? `${sentences.join(' ')} ${first ? `현재 조건 우선 확인 후보 1순위는 ${first.name}입니다.` : ''}${suggestionTail} 본 답변은 계획문서·Seed 기반 참고정보이며 공식 위험도·피해예측·자동 조치결정이 아닙니다.`.replace(/\s+/g, ' ').trim()
+        ? `${sentences.join(' ')} ${first && !isMeta ? `현재 조건 우선 확인 후보 1순위는 ${first.name}입니다.` : ''}${isMeta ? ` ${metaNotice}` : ''}${suggestionTail} 본 답변은 계획문서·Seed 기반 참고정보이며 공식 위험도·피해예측·자동 조치결정이 아닙니다.`.replace(/\s+/g, ' ').trim()
         : unresolvedLabels
             ? `선택하신 ${unresolvedLabels}${josa(unresolvedLabels, '은', '는')} 계획자료에서 확인되지 않아 현재 조건 기준 기본 결과를 제시합니다. ${legacyAnswer}${suggestionTail}`
             : `${legacyAnswer}${suggestionTail}`;
@@ -437,7 +446,8 @@ async function buildAgentResponse(situation, message, context = []) {
             ? [{ action: 'highlight', target_id: focusDistrictId, layer_id: 'L-RISK' }, { action: 'fit_bounds', target_id: focusDistrictId }, ...(focusRiverId ? [{ action: 'toggle_layer', layer_id: 'L-RIVER', visible: true }] : []), { action: 'toggle_layer', layer_id: 'L-FLOOD-TRACE', visible: true }]
             : [{ action: 'highlight', target_id: focusRiverId, layer_id: 'L-RIVER' }, { action: 'fit_bounds', target_id: focusRiverId }, { action: 'toggle_layer', layer_id: 'L-RIVER', visible: true }];
     }
-    else if (first) {
+    else if (first && !isMeta) {
+        // 메타 표본에서는 1위 지구 자동 이동을 하지 않는다 — "1위"가 곧 우리 산정이기 때문이다.
         mapActions = [{ action: 'highlight', target_id: first.spatial_object_id }, { action: 'fit_bounds', target_id: first.spatial_object_id }, { action: 'toggle_layer', layer_id: 'L-FLOOD-TRACE', visible: true }];
     }
     const responseEvidence = enriched ? dedupeEvidence([...evidence, ...(best?.evidence ?? [])]) : (best?.evidence ?? []);

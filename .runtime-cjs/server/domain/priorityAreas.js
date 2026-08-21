@@ -85,6 +85,28 @@ function requiredChecks(district) {
 }
 function calculatePriorityAreas(situation) {
     const districtRows = seeds_js_1.seed.districts.districts.filter((item) => item.admin_code === situation.admin_code);
+    // 메타 표본 지역(-META-)은 **산정하지 않는다** — 점수·사유 같은 우리 로직 산출값이 표본과 섞이면
+    // T3Q에서 온 데이터로 오인된다(2026-08-21 지시). 지구를 전달분 파일 순서 그대로 나열만 하고,
+    // 계약(JSON Schema)이 요구하는 rank(≥1)·score(number)는 형식상 채우되 화면은 그리지 않는다.
+    // reasons·required_checks 는 빈 배열(계약상 적법) — 보고서 초안·Agent 반환에도 우리 문장이 안 실린다.
+    if (situation.situation_id.includes('-META-')) {
+        return {
+            situation_id: situation.situation_id,
+            generated_at: new Date().toISOString(),
+            method: 'META_DEMO_LISTING_NO_SCORING',
+            official_risk_score: false,
+            areas: districtRows.map((district, index) => ({
+                rank: index + 1,
+                spatial_object_id: district.district_code,
+                name: district.district_name,
+                score: 0,
+                component_scores: {},
+                reasons: [],
+                required_checks: [],
+                operator_confirmation_required: true,
+            })),
+        };
+    }
     const current = currentConditionScore(situation);
     const targetCodes = new Set(situation.hazards.flatMap((code) => HAZARD_CODES[code] ?? [code]));
     const locationText = JSON.stringify(situation.user_input ?? {}).toLowerCase();

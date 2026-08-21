@@ -6,7 +6,7 @@ import {
   RIVER_LAYER_SOURCES, SEMANTIC_ALIGNMENT_NOTE, SEMANTIC_LABEL,
   isRiverLayerId, riverLayerId, riverSourceById, riverSourceIdOf,
 } from './riverLayerSources';
-import { DEFAULT_MAP_REGION, type MapRegion, dataCodeOfApp, groupBySido, loadMapRegions, mapRegionIn } from './mapRegions';
+import { DEFAULT_MAP_REGION, type MapRegion, dataCodeOfApp, groupBySido, isMetaDemoId, loadMapRegions, mapRegionIn } from './mapRegions';
 import { entryInRegion, loadRiverSearchIndex, searchRivers, type RiverSearchEntry } from './riverSearchIndex';
 import { loadPlanReference } from '../../services/apiClient';
 // 위험지구 상세 렌더·표기 규칙은 '현재 판단' 상세보기 모달과 공용 컴포넌트를 재사용한다.
@@ -464,7 +464,8 @@ export function MapPanel({ adminCode, mapRegion, onRegionChange, focusTarget, hi
   const hoverMetric = useMemo(() => {
     if (!hoverPoi) return null;
     const area = priorityAreas?.find((item) => item.spatial_object_id === hoverPoi.id);
-    if (area) return { label: '우선순위', value: `${area.rank}위 · ${area.score}점` };
+    // 메타 표본 지구는 순위·점수(우리 산정값)를 보이지 않는다 — 재해유형 등 표본 원자료로 대체.
+    if (area && !isMetaDemoId(area.spatial_object_id)) return { label: '우선순위', value: `${area.rank}위 · ${area.score}점` };
     const type = str(hoverPoi.properties.disaster_type);
     if (type) return { label: '재해유형', value: type };
     return { label: '자료', value: '계획문서 판독 참고정보' };
