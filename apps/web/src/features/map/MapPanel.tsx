@@ -291,8 +291,29 @@ export function MapPanel({ adminCode, mapRegion, onRegionChange, focusTarget, hi
     if (!highlightedFeatureId) { setHighlightNotice(null); return; }
     if (!mapReady || !mapRef.current) return;
     // 지도 Action은 존재하는 GeoJSON ID만 실행: 없는 ID는 비차단 안내로 처리하고 흐름을 유지한다.
-    if (mapRef.current.highlightFeature(highlightedFeatureId)) setHighlightNotice(null);
-    else setHighlightNotice(`'${highlightedFeatureId}' 위치는 현재 지도 공간자료에 없어 지도 이동을 건너뛰었습니다. 목록 정보는 계속 확인할 수 있습니다.`);
+    if (mapRef.current.highlightFeature(highlightedFeatureId)) { setHighlightNotice(null); return; }
+    setHighlightNotice(`'${highlightedFeatureId}' 위치는 현재 지도 공간자료에 없어 지도 이동을 건너뛰었습니다. 목록 정보는 계속 확인할 수 있습니다.`);
+    // 형상 없는 지구(메타 표본 대산교 등)는 참조자료의 하천명으로 **실존하는 하천 형상**에 대신
+    // 맞춘다 — 하천 검색 결과 클릭과 같은 경로(gotoSearchResult)를 그대로 태운다. 좌표를 만들어
+    // 넣지 않으며, 측점(33+1920 등)→좌표 변환도 하지 않는다. 지구의 실좌표는 T3Q 실데이터가
+    // 채울 값이라 여기서 창작하면 나중에 실자료와 구분할 수 없다.
+    let alive = true;
+    (async () => {
+      try {
+        const [reference, index] = await Promise.all([loadPlanReference(null), loadRiverSearchIndex()]);
+        if (!alive) return;
+        const row = reference.districts.find((item) => item.district_code === highlightedFeatureId);
+        // '방동천(소하천)' 처럼 참조자료의 하천명엔 구분 꼬리가 붙는다 — 색인은 맨이름이므로 벗겨 맞춘다.
+        const riverName = str(row?.river_name)?.replace(/\(.*?\)\s*$/, '').trim();
+        if (!row || !riverName) return;
+        const entry = index.find((item) => item.name === riverName && entryInRegion(item, row.admin_code) && item.nav);
+        if (!entry) return; // 카탈로그 밖 하천(소하천 미등재 등)은 좌표가 없다 — 기존 안내 유지.
+        gotoSearchResult(entry);
+        const where = str(row.location);
+        setHighlightNotice(`'${str(row.district_name) ?? highlightedFeatureId}' 지구의 형상·좌표는 표본 자료에 없어 하천 '${riverName}' 구간으로 대신 이동했습니다.${where ? ` 위치 설명: ${where} (측점 좌표는 표본에 제공되지 않음).` : ''}`);
+      } catch { /* 참조자료를 못 받으면 기존 안내를 유지한다. */ }
+    })();
+    return () => { alive = false; };
   }, [highlightedFeatureId, mapReady]);
 
   // 위험지구·하천은 계획문서 판독 참고자료(districts/rivers)를 붙여 상세 요약까지 표시한다. 결측은 정상이며 조용히 1차 요약만 남긴다.
