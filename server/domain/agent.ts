@@ -416,11 +416,17 @@ export async function buildAgentResponse(situation: CurrentSituation, message: s
     : '현재 조건에서 우선 확인지역을 산정하지 못했습니다.';
   const unresolvedLabels = !enriched && targets.contextLabels.length ? targets.contextLabels.join(' · ') : null;
   if (unresolvedLabels) extraWarnings.push(`선택하신 ${unresolvedLabels}에 해당하는 계획자료 대상을 확인하지 못해 현재 조건 기준 기본 결과를 제시합니다.`);
+  // 질문 속 수치(120mm 등)를 조건 제안으로 파싱했다면, 답 끝에 다음 행동을 알려 준다 —
+  // 답 아래 ⚙ 칩이 왜 있는지 답 스스로 설명해야 시연·실사용 모두에서 흐름이 이어진다.
+  const suggestedConditions = extractSuggestedConditions(message);
+  const suggestionTail = suggestedConditions.length
+    ? ` 질문에 담긴 ${suggestedConditions.map((item) => `${item.label} ${item.value}${item.unit}`).join(' · ')} 값은 아래 조건 제안 버튼으로 입력 탭에 채울 수 있으며, 적용·재산정하면 현재 결과와 비교할 수 있습니다.`
+    : '';
   const answer = enriched && sentences.length
-    ? `${sentences.join(' ')} ${first ? `현재 조건 우선 확인 후보 1순위는 ${first.name}입니다.` : ''} 본 답변은 계획문서·Seed 기반 참고정보이며 공식 위험도·피해예측·자동 조치결정이 아닙니다.`.replace(/\s+/g, ' ').trim()
+    ? `${sentences.join(' ')} ${first ? `현재 조건 우선 확인 후보 1순위는 ${first.name}입니다.` : ''}${suggestionTail} 본 답변은 계획문서·Seed 기반 참고정보이며 공식 위험도·피해예측·자동 조치결정이 아닙니다.`.replace(/\s+/g, ' ').trim()
     : unresolvedLabels
-      ? `선택하신 ${unresolvedLabels}${josa(unresolvedLabels, '은', '는')} 계획자료에서 확인되지 않아 현재 조건 기준 기본 결과를 제시합니다. ${legacyAnswer}`
-      : legacyAnswer;
+      ? `선택하신 ${unresolvedLabels}${josa(unresolvedLabels, '은', '는')} 계획자료에서 확인되지 않아 현재 조건 기준 기본 결과를 제시합니다. ${legacyAnswer}${suggestionTail}`
+      : `${legacyAnswer}${suggestionTail}`;
 
   // 지도 Action은 GeoJSON에 존재하는 ID만 실행한다.
   const geoIds = geoIdSet();
@@ -458,7 +464,7 @@ export async function buildAgentResponse(situation: CurrentSituation, message: s
     evidence: responseEvidence,
     warnings,
     limitations,
-    suggested_conditions: extractSuggestedConditions(message),
+    suggested_conditions: suggestedConditions,
     operator_confirmation_required: true,
   };
 }
