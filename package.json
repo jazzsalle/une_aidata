@@ -54,6 +54,7 @@
     "data:admin-boundaries": "python3 scripts/build_admin_boundaries.py",
     "data:flood-traces": "python3 scripts/build_flood_traces.py",
     "data:meta-demo": "python3 scripts/build_meta_demo_seeds.py",
+    "data:risk-points": "python3 scripts/build_risk_point_layers.py",
     "data:sochun-crosscheck": "python3 scripts/build_sochun_ledger_crosscheck.py"
   },
   "engines": {

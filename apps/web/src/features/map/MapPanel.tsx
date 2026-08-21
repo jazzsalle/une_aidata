@@ -40,6 +40,9 @@ const core = [
   { name: '위험지구', code: 'L1' },
   { name: '행정경계', code: 'L3' },
   { name: '침수흔적', code: 'L-FLOOD-TRACE' },
+  { name: '붕괴위험지역', code: 'L-RISK-COLLAPSE' },
+  { name: '위험저수지', code: 'L-RISK-RESERVOIR' },
+  { name: '풍수해개선지구', code: 'L-RISK-STORM' },
   // 홍수위험지역·위험저수지·풍수해개선지구 mock 은 2026-08-19 지도에서 뺐다. 실제 Geometry·속성 계약
   // 전 임의 표출하지 않는다는 규칙(v1.0·v1.1)대로 시드·API 계약만 두고 화면에는 올리지 않는다.
   // 관측소는 전국 자료다. 시범서비스 대상이 전국이고 검증만 3개 지역이라 지역별로 자르지 않는다.
@@ -50,6 +53,7 @@ const PENDING_LAYERS = ['피해위치', '대피소'];
 const LAYER_LABEL: Record<string, string> = {
   L1: '위험지구', L2: '하천', L3: '행정경계',
   FLOOD_TRACE: '침수흔적', 'L-FLOOD-TRACE': '침수흔적',
+  'L-RISK-COLLAPSE': '붕괴위험지역', 'L-RISK-RESERVOIR': '위험저수지', 'L-RISK-STORM': '풍수해개선지구',
   'L-STATION-WL': '수위관측소', 'L-STATION-RF': '강수량관측소',
 };
 /** 전국 관측소 레이어(수위·강수량). 이 자료만 계획문서 판독물이 아니라 공공 API 원본이다. */
@@ -108,6 +112,11 @@ function facts(selection: MapFeatureSelection, district: DistrictReference | nul
   } else if (selection.layerId === 'L3') {
     rows.push({ label: '행정코드', value: orMissing(properties.admin_code) });
     rows.push({ label: '경계자료', value: orMissing(properties.source) });
+  } else if (selection.layerId.startsWith('L-RISK-')) {
+    rows.push({ label: '위험유형', value: orMissing(properties.risk_type) });
+    rows.push({ label: '주소', value: orMissing(properties.address) });
+    rows.push({ label: '연번', value: orMissing(properties.serial) });
+    rows.push({ label: '자료상태', value: '점 위치 자료 · 출처·공개등급 확인 필요' });
   } else if (selection.layerId === 'L-FLOOD-TRACE' || selection.layerId === 'FLOOD_TRACE') {
     // 행안부 침수흔적도(실자료). 원자료 필드를 그대로 보여 준다 — 등급(1~6)의 뜻은 명세를 받기 전까지 값 그대로다.
     rows.push({ label: '재난명', value: orMissing(properties.disaster_name) });
@@ -217,7 +226,7 @@ export function MapPanel({ adminCode, mapRegion, onRegionChange, focusTarget, hi
   const [detail, setDetail] = useState<{ district: DistrictReference | null; river: RiverReference | null }>({ district: null, river: null });
   const [riverStates, setRiverStates] = useState<RiverSourceState[]>([]);
   const [visible, setVisible] = useState<Record<string, boolean>>({
-    L1: true, L3: true, 'L-FLOOD-TRACE': false,
+    L1: true, L3: true, 'L-FLOOD-TRACE': false, 'L-RISK-COLLAPSE': false, 'L-RISK-RESERVOIR': false, 'L-RISK-STORM': false,
     'L-STATION-WL': false, 'L-STATION-RF': false,
     ...Object.fromEntries(RIVER_LAYER_SOURCES.map((source) => [riverLayerId(source.id), source.defaultVisible])),
     ...initialVisible,

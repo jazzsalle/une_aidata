@@ -236,6 +236,24 @@ def check_flood(path: Path, features: list) -> None:
             fail(f'{rel}: layer 가 FLOOD_TRACE 가 아니다 {fid}'); break
 
 
+def check_risk(path: Path, features: list) -> None:
+    """위험지역 점 3종. id 유일 · 주소 존재 · official_data=false(출처 확인 전) 를 지킨다."""
+    rel = path.relative_to(REPO)
+    seen: set = set()
+    for feature in features:
+        props = feature.get('properties') or {}
+        fid = str(feature.get('id') or '')
+        if not fid or fid in seen:
+            fail(f'{rel}: id 없음/중복 {fid}'); break
+        seen.add(fid)
+        if (feature.get('geometry') or {}).get('type') != 'Point':
+            fail(f'{rel}: Point 가 아닌 피처 {fid}'); break
+        if not props.get('address'):
+            fail(f'{rel}: 주소 없는 피처 {fid}'); break
+        if props.get('official_data') is not False:
+            fail(f'{rel}: 출처 확인 전이므로 official_data=false 여야 한다 {fid}'); break
+
+
 def check_stations(path: Path, features: list) -> None:
     rel = path.relative_to(REPO)
     seen: set[str] = set()
@@ -302,6 +320,8 @@ def main() -> int:
             check_admin(path, features)
         elif path.parent.name == 'flood':
             check_flood(path, features)
+        elif path.parent.name == 'risk':
+            check_risk(path, features)
 
     print(f'참조 GeoJSON: {len(paths)}개 파일 · 피처 {total:,}건')
     if failures:
