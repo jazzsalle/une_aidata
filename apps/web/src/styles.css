@@ -1869,3 +1869,12 @@ button.context-add-button:hover { background: var(--surface-panel-blue); }
 .satellite-preview-empty { display: grid; place-items: center; width: 128px; height: 128px; border: 1px dashed var(--c-border, #d5dbe3); border-radius: 6px; color: var(--c-text-muted); font-size: var(--fs-xs); }
 .satellite-preview-note { margin: 0; color: var(--c-text-muted); font-size: var(--fs-xs); line-height: var(--lh-xs); }
 @media (max-width: 720px) { .event-timeline-list li { grid-template-columns: 1fr; } .event-timeline-list li small { grid-column: 1; } }
+
+/* 두 패널 상호작용(2026-08-21). 시스템 턴 = 조건 변경의 기록(대화가 재산정에도 이어진다는 표식). */
+.agent-turn-system { margin: 6px 0; padding: 5px 8px; border-left: 3px solid var(--c-border, #d5dbe3); background: var(--surface-panel-blue, #f2f6fa); color: var(--c-text-muted); font-size: var(--fs-xs); line-height: var(--lh-xs); border-radius: 0 6px 6px 0; }
+.agent-turn-system .agent-turn-time { margin-left: 6px; }
+.agent-tab-dirty { margin-left: 4px; color: #ef6c00; font-size: 10px; vertical-align: super; }
+.agent-dirty-warning { display: flex; gap: 8px; align-items: center; justify-content: space-between; margin: 4px 0; padding: 6px 8px; border: 1px solid #ef6c00; border-radius: 8px; background: rgba(239,108,0,.06); font-size: var(--fs-xs); line-height: var(--lh-xs); }
+.agent-dirty-warning button { flex: none; border: 1px solid #ef6c00; border-radius: 6px; background: #fff; color: #ef6c00; padding: 3px 8px; font-size: var(--fs-xs); cursor: pointer; }
+.agent-dirty-warning button:hover:not(:disabled) { background: #ef6c00; color: #fff; }
+.agent-dirty-warning button:disabled { opacity: .5; cursor: not-allowed; }
