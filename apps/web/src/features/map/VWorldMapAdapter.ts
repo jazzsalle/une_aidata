@@ -100,6 +100,16 @@ function styleFor(feature: FeatureLike, context: StyleContext) {
   const { casing, activeCasing, activeLine } = palette(sat);
   // 관측소는 url 소스로 늦게 실려 'layer' 속성을 미리 심을 수 없다. 속성으로 판별한다.
   // 전국 2천여 점이 깔리므로 다른 POI 보다 작게 그려 위험지구 핀을 가리지 않게 한다.
+  // 위험지역 점 3종. 아이콘은 기존 점 표식(pointStyle) 그대로, 유형별 색만 다르다 —
+  // 위험저수지는 예전 mock 이 쓰던 청록을 그대로 이어 화면 기억을 지키고,
+  // 붕괴는 적갈, 풍수해개선지구는 예전 보라 계열이다.
+  if (feature.get('data_kind') === 'risk_point') {
+    const kind = String(feature.get('id') ?? '');
+    const tone = kind.startsWith('RESERVOIR') ? (sat ? '#00e676' : '#00897b')
+      : kind.startsWith('COLLAPSE') ? (sat ? '#ff8a65' : '#bf360c')
+      : (sat ? '#d18cff' : '#7b1fa2');
+    return pointStyle(active ? 9 : 5, active ? activeLine : tone, active ? activeCasing : casing, '#ffffff');
+  }
   const stationCode = feature.get('station_code');
   if (stationCode) {
     const rain = String(feature.get('station_type') ?? '').includes('강수');
@@ -123,7 +133,7 @@ function styleFor(feature: FeatureLike, context: StyleContext) {
 }
 
 // 배경(행정경계 등) 위에 겹친 POI를 먼저 잡도록 레이어 우선순위를 둔다.
-const HIT_PRIORITY: Record<string, number> = { L1: 0, 'L-STATION-WL': 0, 'L-STATION-RF': 0, FLOOD_TRACE: 1, 'L-FLOOD-TRACE': 1, L2: 2, L3: 3 };
+const HIT_PRIORITY: Record<string, number> = { L1: 0, 'L-STATION-WL': 0, 'L-STATION-RF': 0, 'L-RISK-COLLAPSE': 0, 'L-RISK-RESERVOIR': 0, 'L-RISK-STORM': 0, FLOOD_TRACE: 1, 'L-FLOOD-TRACE': 1, L2: 2, L3: 3 };
 // 하천 소스는 여러 개가 겹쳐 있어도 기존 L2와 같은 순위로 다룬다(위험지구·침수흔적보다 뒤, 행정경계보다 앞).
 const hitRank = (layerId: string) => (isRiverLayerId(layerId) ? 2 : HIT_PRIORITY[layerId] ?? 2);
 
@@ -260,6 +270,21 @@ export async function createVWorldMap(target: HTMLElement, adminCode: string, on
   // 전국 관측소(수위·강수량). 시범서비스 대상은 전국이고 검증만 3개 지역이므로
   // 지역별로 자르지 않고 전국 파일 하나를 쓴다. 기본은 꺼져 있고, OpenLayers 는
   // url 소스를 **레이어가 처음 그려질 때** 받으므로 켜기 전에는 요청이 나가지 않는다.
+  // 위험지역 점 3종(붕괴·위험저수지·풍수해개선지구, 2026-08-21 반입 · 전국 4,834점).
+  // 관측소와 같은 로딩 방식 — 전국 한 파일, 레이어를 켤 때 받는다.
+  const RISK_LAYERS: Array<[string, string]> = [
+    ['L-RISK-COLLAPSE', '/reference/risk/RISK_COLLAPSE.geojson'],
+    ['L-RISK-RESERVOIR', '/reference/risk/RISK_RESERVOIR.geojson'],
+    ['L-RISK-STORM', '/reference/risk/RISK_STORM_IMPROVE.geojson'],
+  ];
+  for (const [layerId, url] of RISK_LAYERS) {
+    const source = new VectorSource({ url, format: new GeoJSON() });
+    const layer = new VectorLayer({ properties: { layerId }, source, visible: false, style: (feature) => styleFor(feature, styleContext()) });
+    sources.set(layerId, source);
+    vectors.set(layerId, layer);
+    mapLayers.push(layer);
+  }
+
   const STATION_LAYERS: Array<[string, string]> = [
     ['L-STATION-WL', '/reference/stations/wl_stations.geojson'],
     ['L-STATION-RF', '/reference/stations/rf_stations.geojson'],
