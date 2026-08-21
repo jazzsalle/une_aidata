@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-21T08:11:08.155Z",
+  "generated_at": "2026-08-21T08:37:44.013Z",
   "source_version": "1.4.0-runtime-gate",
   "runtime_mode": "MOCK_PROVIDER_NEUTRAL",
   "npm_install": {
@@ -7500,7 +7500,7 @@
   "report_results": [
     {
       "situation_id": "SIT-NW-POC-001",
-      "report_id": "RPT-7a074851-49fa-4e22-9cac-b04c3b788d7e",
+      "report_id": "RPT-ff6ee1b6-29e4-45e0-96fc-73e96f9286cc",
       "selected_event_id": "EVT::20230809-FLOOD-45190-902",
       "similar_event_count": 1,
       "factor_count": 7,
@@ -7510,7 +7510,7 @@
     },
     {
       "situation_id": "SIT-UW-POC-001",
-      "report_id": "RPT-573f2cba-7393-497e-ae42-368ddd041bc5",
+      "report_id": "RPT-8667a874-b0cc-4ba9-a50b-7896e41380ab",
       "selected_event_id": "EVT::20240718-FLOOD-41430-901",
       "similar_event_count": 1,
       "factor_count": 7,
@@ -7520,7 +7520,7 @@
     },
     {
       "situation_id": "SIT-GM-POC-001",
-      "report_id": "RPT-844ef0d8-1b6a-4d00-9963-a9a546b60a1b",
+      "report_id": "RPT-bc857e76-5725-438d-b80b-7c805a5c5365",
       "selected_event_id": "EVT::20230810-TYPH-47190-901",
       "similar_event_count": 1,
       "factor_count": 7,
@@ -7530,7 +7530,7 @@
     },
     {
       "situation_id": "SIT-UW-SLOPE-POC-001",
-      "report_id": "RPT-80d76e50-134a-462e-be18-652406e9d652",
+      "report_id": "RPT-ed50b795-5462-4ebf-a087-7c33423f356a",
       "selected_event_id": "EVT::20240805-SLOPE-41430-901",
       "similar_event_count": 1,
       "factor_count": 7,
@@ -7540,7 +7540,7 @@
     },
     {
       "situation_id": "SIT-GM-SLOPE-POC-001",
-      "report_id": "RPT-0a42c1fe-1fa3-449a-8a21-5820d7c26c7d",
+      "report_id": "RPT-1086e6ef-eb8c-432c-9ed9-67bafc3460ef",
       "selected_event_id": "EVT::20240712-SLOPE-47190-901",
       "similar_event_count": 1,
       "factor_count": 7,

@@ -1886,3 +1886,6 @@ button.context-add-button:hover { background: var(--surface-panel-blue); }
 
 /* 메타 표본 산정값 미표시 안내 — 인디고 표본 톤(.meta-demo-text)에 여백만 얹는다. */
 .priority-meta-caption { margin: 2px 0 6px; font-size: var(--fs-xs); line-height: var(--lh-xs); }
+
+/* 메타 나열 카드: rank 원이 없어 1열로 흐른다(2열 유지 시 본문이 32px 칸에 끼어 깨짐). */
+.priority-card.meta-listing { grid-template-columns: 1fr; }
