@@ -13,7 +13,16 @@
                         형상이 정확히 대응한다. 하천망도로 조인하면 정확도가 68~78% 로 떨어지고
                         소하천을 지방·국가하천으로 올리는 오판이 난다(docs/32 §7).
   시군구            ← 행정동 경계와의 공간판정. 국가기본도는 EPSG:5179, 행정동은 EPSG:5186 이라
-                        판정용 대표점만 변환한다.
+                        행정동 쪽을 한 번만 5179 로 변환해 시군구 union 을 만든다.
+
+시군구 배정은 **교차하는 모든 시군구에 지역 경계로 클리핑해 담는다**(2026-08-22 개정).
+이전에는 폴리곤 bbox 중심 1점으로 시군구 하나에만 배정했는데, 실측으로 두 한계가 확인됐다:
+경계 하천 폴리곤 159건(0.56%)이 면적 과반이 다른 지역인데 한쪽에만 배정됐고(서낙동강이
+김해에 10%만 걸치는데 김해 배정), 한강 실폭은 전국 폴리곤 1개가 고양시에만 배정돼 서울
+어느 구에서도 실폭이 안 보였다. 지금은 시군구 경계 안에 통째로 들어가는 폴리곤(대다수)은
+그대로, 경계에 걸치는 폴리곤은 교차 시군구마다 잘라 담는다 — "그 지역 화면에 그 지역을
+지나는 하천이 전부 보인다"가 보장된다. 표시 목적이므로 잘라도 의미 훼손이 없고 속성은
+조각마다 그대로 붙는다.
 
 **중심선 형상은 반입하지 않는다.** 여기서는 속성을 읽어 붙이는 데만 쓴다. 3종 밖인 세류
 (RVC005 · 전체의 84.5%)와 기타하천(RVC004)은 색인에 넣지 않는다 — 서비스가 다루는 하천이
@@ -277,8 +286,15 @@ def plan_rivers() -> dict:
     return table
 
 
-def load_dongs():
+def load_regions():
+    """시군구별 경계 union(EPSG:5179) + 공간색인. 클리핑 배정의 기준 형상이다."""
     import csv as csv_module
+    from shapely.geometry import Polygon
+    from shapely.ops import unary_union
+    from shapely.prepared import prep
+    from shapely.strtree import STRtree
+    from shapely.validation import make_valid
+
     adm_to_sgg: dict = {}
     with require(LINK_CSV, '법정동 연계정보').open(encoding='cp949', newline='') as handle:
         for row in csv_module.DictReader(handle):
@@ -296,40 +312,93 @@ def load_dongs():
         for code in entry['codes']:
             promote[code] = entry['primary_code']
 
+    to5179 = pyproj.Transformer.from_crs('EPSG:5186', SRC_CRS, always_xy=True).transform
     reader = shapefile.Reader(str(DONG_SHP), encoding='cp949')
-    dongs = []
+    by_code: dict = defaultdict(list)
     for shape, record in zip(reader.shapes(), reader.records()):
         code = adm_to_sgg.get((record['ADM_CD'] or '').strip())
         if not code:
             continue
         points = np.asarray(shape.points, dtype=float)
+        x, y = to5179(points[:, 0], points[:, 1])
+        points = np.column_stack([x, y])
         bounds = list(shape.parts) + [len(points)]
-        rings = [points[bounds[i]:bounds[i + 1]] for i in range(len(shape.parts))]
-        dongs.append((shape.bbox, rings, promote.get(code, code)))
-    grid: dict = defaultdict(list)
-    for index, (box, _rings, _code) in enumerate(dongs):
-        for gx in range(int(box[0] // DONG_CELL_M), int(box[2] // DONG_CELL_M) + 1):
-            for gy in range(int(box[1] // DONG_CELL_M), int(box[3] // DONG_CELL_M) + 1):
-                grid[(gx, gy)].append(index)
-    return dongs, grid
+        for i in range(len(shape.parts)):
+            ring = points[bounds[i]:bounds[i + 1]]
+            if len(ring) >= 4:
+                # 구멍 방향을 따지지 않고 링 전부를 면으로 합친다 — 행정동 구멍은 대부분 이웃
+                # 행정동이라 같은 시군구 union 에서 도로 메워진다.
+                by_code[promote.get(code, code)].append(Polygon(ring))
+    codes: list = []
+    geoms: list = []
+    preps: list = []
+    for code, polys in by_code.items():
+        merged = unary_union(polys)
+        if not merged.is_valid:
+            merged = make_valid(merged)
+        codes.append(code)
+        geoms.append(merged)
+        preps.append(prep(merged))
+    tree = STRtree(geoms)
+    return codes, geoms, preps, tree
 
 
-def sgg_of(box, dongs, grid) -> str | None:
-    """폴리곤 bbox 중심을 행정동 경계와 대조한다. 하천은 가늘어 중심이 물 위라도 육상 경계 안이다."""
-    x5179, y5179 = (box[0] + box[2]) / 2, (box[1] + box[3]) / 2
-    x, y = TO5186(x5179, y5179)
-    for index in grid.get((int(x // DONG_CELL_M), int(y // DONG_CELL_M)), ()):
-        dbox, rings, code = dongs[index]
-        if not (dbox[0] <= x <= dbox[2] and dbox[1] <= y <= dbox[3]):
+def shapely_of(coords, parts):
+    """국가기본도 폴리곤(5179) → shapely. 링 방향으로 외곽/구멍을 가른다(geometry_of 와 동일 규약)."""
+    from shapely.geometry import MultiPolygon, Polygon
+    from shapely.validation import make_valid
+    shells: list = []
+    for ring in ring_slices(coords, parts):
+        if len(ring) < 4:
             continue
-        if contains(rings, x, y):
-            return code
-    return None
+        if signed_area(ring) < 0 or not shells:
+            shells.append([ring, []])
+        else:
+            shells[-1][1].append(ring)
+    polys = [Polygon(shell, holes) for shell, holes in shells]
+    geom = polys[0] if len(polys) == 1 else MultiPolygon(polys)
+    if not geom.is_valid:
+        geom = make_valid(geom)
+    return geom
+
+
+def geojson_of_shapely(geom, tolerance: float):
+    """클리핑 조각(shapely, 5179) → GeoJSON. 단순화·좌표계 변환은 geometry_of 와 같은 simplify 를 쓴다."""
+    polys = []
+    stack = [geom]
+    while stack:
+        g = stack.pop()
+        t = g.geom_type
+        if t == 'Polygon':
+            polys.append(g)
+        elif t in ('MultiPolygon', 'GeometryCollection'):
+            stack.extend(g.geoms)
+    coordinates = []
+    for poly in polys:
+        rings = []
+        for ring in [poly.exterior, *poly.interiors]:
+            simplified = simplify(np.asarray(ring.coords, dtype=float), tolerance)
+            if simplified:
+                rings.append(simplified)
+        if rings:
+            coordinates.append(rings)
+    if not coordinates:
+        return None
+    if len(coordinates) == 1:
+        return {'type': 'Polygon', 'coordinates': coordinates[0]}
+    return {'type': 'MultiPolygon', 'coordinates': coordinates}
 
 
 # ---------------------------------------------------------------- 본체
 
-def build(name: str, zip_path: Path, stem: str, semantic: str, centerlines, dongs, grid, plans, limit=0) -> dict:
+#: 클리핑 조각 최소 면적(m²). 경계선을 스치기만 한 부스러기(수 m²)는 지역 화면에 정보가 없다.
+#: 좁은 하천이 모서리를 실제로 지나는 조각(수십 m²)은 남긴다.
+MIN_PIECE_M2 = 25.0
+
+
+def build(name: str, zip_path: Path, stem: str, semantic: str, centerlines, regions, plans, limit=0) -> dict:
+    from shapely.geometry import box as shapely_box
+    codes, geoms, preps, tree = regions
     records = read_dbf(zip_path, f'{stem}.dbf')
     tolerance = TOLERANCE_BY_LAYER[name]
     stage = STAGE / name
@@ -342,49 +411,70 @@ def build(name: str, zip_path: Path, stem: str, semantic: str, centerlines, dong
     classes: Counter = Counter()
     tagged: Counter = Counter()
     no_region = 0
+    clipped = 0
     for index, box, parts, coords in stream_shapes(zip_path, f'{stem}.shp'):
-        code = sgg_of(box, dongs, grid)
-        if not code:
+        # 폴리곤이 지나는 시군구 전부에 담는다. bbox 가 통째로 한 시군구 안이면(대다수) 자르지 않는다.
+        bbox_poly = shapely_box(box[0], box[1], box[2], box[3])
+        candidates = list(tree.query(bbox_poly))
+        pieces: list = []  # (code, geometry)
+        whole = next((i for i in candidates if preps[i].contains(bbox_poly)), None)
+        if whole is not None:
+            geometry = geometry_of(coords, parts, tolerance)
+            if geometry:
+                pieces.append((codes[whole], geometry))
+        else:
+            poly = shapely_of(coords, parts)
+            for i in candidates:
+                if not preps[i].intersects(poly):
+                    continue
+                piece = geoms[i].intersection(poly)
+                if piece.is_empty or piece.area < MIN_PIECE_M2:
+                    continue
+                geometry = geojson_of_shapely(piece, tolerance)
+                if geometry:
+                    pieces.append((codes[i], geometry))
+            if len(pieces) > 1:
+                clipped += 1
+        if not pieces:
             # 해안·하구처럼 행정동 경계 밖으로 나간 폴리곤. 지어내지 않고 건너뛴다.
             no_region += 1
             continue
-        geometry = geometry_of(coords, parts, tolerance)
-        if not geometry:
-            continue
         fields = records[index].as_dict()
-        props = {
+        base = {
             'NF_ID': (fields.get('NF_ID') or '').strip(),
-            'admin_code': code,
             'source_layer': name,
             'semantic': semantic,
         }
         hit = class_of(coords, parts, box, centerlines)
         if hit:
             rank, river_name, river_code = hit
-            props['river_class'] = RIVER_SE_LABEL[{v: k for k, v in CLASS_RANK.items()}[rank]]
-            props['river_class_source'] = '중심선 공간조인'
+            base['river_class'] = RIVER_SE_LABEL[{v: k for k, v in CLASS_RANK.items()}[rank]]
+            base['river_class_source'] = '중심선 공간조인'
             if river_name:
-                props['river_name'] = river_name
-                # 계획문서 제원이 있는 하천이면 river_id 를 단다. 지도 강조·계획근거 패널이 이걸 쓴다.
-                river_id = plans.get((code, river_name))
-                if river_id:
-                    props['river_id'] = river_id
-                    tagged[river_id] += 1
+                base['river_name'] = river_name
             if river_code:
-                props['river_code'] = river_code
+                base['river_code'] = river_code
         else:
-            props['river_class'] = CLASS_UNKNOWN
-        classes[props['river_class']] += 1
+            base['river_class'] = CLASS_UNKNOWN
+        classes[base['river_class']] += len(pieces)
         if fields.get('MESRMTH_SE'):
-            props['survey_method'] = MESRMTH_LABEL.get(fields['MESRMTH_SE'], fields['MESRMTH_SE'])
+            base['survey_method'] = MESRMTH_LABEL.get(fields['MESRMTH_SE'], fields['MESRMTH_SE'])
 
-        handle = handles.get(code)
-        if handle is None:
-            handle = handles[code] = (stage / f'{code}.jsonl').open('w', encoding='utf-8')
-        handle.write(json.dumps({'type': 'Feature', 'id': f'{name}:{props["NF_ID"] or index}',
-                                 'properties': props, 'geometry': geometry},
-                                ensure_ascii=False, separators=(',', ':')) + '\n')
-        counts[code] += 1
+        for code, geometry in pieces:
+            props = dict(base)
+            props['admin_code'] = code
+            # 계획문서 제원이 있는 하천이면 river_id 를 단다. 지도 강조·계획근거 패널이 이걸 쓴다.
+            river_id = plans.get((code, props.get('river_name'))) if props.get('river_name') else None
+            if river_id:
+                props['river_id'] = river_id
+                tagged[river_id] += 1
+            handle = handles.get(code)
+            if handle is None:
+                handle = handles[code] = (stage / f'{code}.jsonl').open('w', encoding='utf-8')
+            handle.write(json.dumps({'type': 'Feature', 'id': f'{name}:{props["NF_ID"] or index}',
+                                     'properties': props, 'geometry': geometry},
+                                    ensure_ascii=False, separators=(',', ':')) + '\n')
+            counts[code] += 1
         if limit and sum(counts.values()) >= limit:
             break
     for handle in handles.values():
@@ -399,7 +489,7 @@ def build(name: str, zip_path: Path, stem: str, semantic: str, centerlines, dong
         total_bytes += out.stat().st_size
     shutil.rmtree(stage)
     print(f'  {name}: 시군구 {len(counts)} · 폴리곤 {sum(counts.values()):,} · '
-          f'{total_bytes / 1048576:.1f} MB · 행정동 밖 {no_region:,}건 제외')
+          f'{total_bytes / 1048576:.1f} MB · 행정동 밖 {no_region:,}건 제외 · 경계 걸침 분할 {clipped:,}건')
     print(f'    등급 {dict(classes.most_common())}')
     if tagged:
         print(f'    계획문서 하천 연결 {dict(tagged)}')
@@ -408,15 +498,15 @@ def build(name: str, zip_path: Path, stem: str, semantic: str, centerlines, dong
 
 def main() -> int:
     print(f'국가기본도 하천 반입 · {SRC_CRS} → EPSG:4326 · 단순화 {TOLERANCE_BY_LAYER} · 좌표 {PRECISION}자리')
-    dongs, grid = load_dongs()
-    print(f'  행정동 {len(dongs):,} 폴리곤')
+    regions = load_regions()
+    print(f'  시군구 경계 union {len(regions[0]):,}곳')
     centerlines = centerline_index()
 
     limit = int(sys.argv[1]) if len(sys.argv) > 1 else 0
     if limit:
         print(f'  시험 실행 · 레이어당 {limit:,}건까지만')
     plans = plan_rivers()
-    results = [build(name, zip_path, stem, semantic, centerlines, dongs, grid, plans, limit)
+    results = [build(name, zip_path, stem, semantic, centerlines, regions, plans, limit)
                for name, zip_path, stem, semantic in LAYERS]
     total = sum(r['bytes'] for r in results)
     print(f'\n합계 {sum(r["features"] for r in results):,} 폴리곤 · {total / 1048576:.1f} MB')
