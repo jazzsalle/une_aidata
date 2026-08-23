@@ -103,6 +103,9 @@ function facts(selection: MapFeatureSelection, district: DistrictReference | nul
     // 계획문서의 하천등급(rivers.json grade)과 출처가 다르므로 붙여서 보여준다.
     rows.push({ label: '하천등급', value: orMissing(river?.grade ?? properties.river_class ?? properties.grade ?? properties.cat_nam) });
     if (properties.river_class_source) rows.push({ label: '등급 판정근거', value: String(properties.river_class_source) });
+    // 시군구 파일 배정은 화면 표출용 행정경계 클리핑이다 — 하천 관리 관할(관리청·좌안/우안 구간)은
+    // 고시·계획문서가 정하는 별개 축이라, 지역 표시를 관할로 읽는 오독을 여기서 막는다.
+    rows.push({ label: '자료상태', value: '시군구 표시는 행정경계 기준 화면 표출이며 하천 관리 관할(관리청·좌안/우안)이 아닙니다' });
     rows.push({ label: '유역면적', value: river?.basin_area_km2 ? `${river.basin_area_km2} km²` : MISSING });
     rows.push({ label: '연장', value: river?.length_km ? `${river.length_km} km` : MISSING });
     rows.push({ label: '계획빈도', value: orMissing(river?.design_frequency_yr) });
