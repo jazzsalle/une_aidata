@@ -41,6 +41,9 @@ import shapefile
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from source_data import REPO, RIVER_NETWORK_LOCAL, RIVER_NETWORK_NATIONAL, require  # noqa: E402
 
+GRADE_OVERRIDES = json.loads((REPO / 'data' / 'reference' / 'river_grade_overrides_2024.json')
+                             .read_text(encoding='utf-8'))['overrides']
+
 DEST = REPO / 'apps' / 'web' / 'public' / 'reference' / 'rivers'
 OUT = DEST / 'river_network_catalog.json'
 
@@ -136,10 +139,14 @@ def collect(stem: Path, river_class: str, clas2: str) -> list[dict]:
         lon2, lat2 = TO4326(box[2], box[3])
         label_x, label_y = interior_point(record.shape)
         label_lon, label_lat = TO4326(label_x, label_y)
+        code = str(fields.get('RIVCD_2') or '').strip()
+        # 등급 보정(하천일람 2024): 하천망도 지방 레이어에 남아 있는 국가하천 승격분 등 —
+        # data/reference/river_grade_overrides_2024.json 이 근거·목록의 단일 출처다.
+        override = GRADE_OVERRIDES.get(code)
         rows.append({
-            'river_code': str(fields.get('RIVCD_2') or '').strip(),
+            'river_code': code,
             'river_name': (fields.get('RIVNM_2') or '').strip(),
-            'river_class': river_class,
+            'river_class': override['river_class'] if override else river_class,
             'bbox': [round(lon1, PRECISION), round(lat1, PRECISION),
                      round(lon2, PRECISION), round(lat2, PRECISION)],
             'nav': [round((lon1 + lon2) / 2, PRECISION), round((lat1 + lat2) / 2, PRECISION)],

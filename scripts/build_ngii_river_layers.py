@@ -84,6 +84,11 @@ SGG_MAP = REPO / 'data' / 'reference' / 'sgg_code_map.json'
 PLAN_RIVER_ADMIN = {'45190': '52190'}
 
 RIVER_SE_LABEL = {'RVC001': '국가하천', 'RVC002': '지방하천', 'RVC003': '소하천'}
+#: 등급 보정표(하천일람 2024). 중심선(국가기본도)이 승격 이전 등급을 들고 있는 코드 24건 —
+#: 안양천·굴포천·태화강 등 2019~ 국가하천 승격분과 구간 코드의 등급 정정. 등급을 추정해
+#: 만들지 않는다는 원칙대로, 일람에 코드·이름이 대조된 것만 담는다(생성 근거는 파일 참조).
+GRADE_OVERRIDES = json.loads((REPO / 'data' / 'reference' / 'river_grade_overrides_2024.json')
+                             .read_text(encoding='utf-8'))['overrides']
 CLASS_RANK = {'RVC001': 0, 'RVC002': 1, 'RVC003': 2}
 CLASS_UNKNOWN = '등급미확인'
 MESRMTH_LABEL = {'P': '사진측량', 'F': '현황측량', 'C': '지적측량'}
@@ -454,6 +459,10 @@ def build(name: str, zip_path: Path, stem: str, semantic: str, centerlines, regi
                 base['river_name'] = river_name
             if river_code:
                 base['river_code'] = river_code
+            override = GRADE_OVERRIDES.get(str(river_code or ''))
+            if override:
+                base['river_class'] = override['river_class']
+                base['river_class_source'] = f"중심선 공간조인 · {override['basis']} 보정"
         else:
             base['river_class'] = CLASS_UNKNOWN
         classes[base['river_class']] += len(pieces)
