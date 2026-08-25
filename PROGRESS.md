@@ -5,18 +5,22 @@
 > 완료 이력을 여기에 계속 쌓으면 정작 필요한 절이 잘려 나간다(2026-08-09 실제로 그랬다).
 
 ## Last updated
-2026-08-23 저녁 (회사 PC) — **하천 배정 정합성 검증→보정, 사건ID 분석, ADR-018, UNE RAG MCP 복구.**
-이번 이틀 머지: **#46·#47** T3Q 표출 카테고리 분석 엑셀(v2 는 메타스키마 의미구조 트리·표준
-바인딩 기반, handoff/표출카테고리_분석_20260821.xlsx) · **#48·#49** ADR-018 T3Q LLM 대화구조
-(이력 정본 UNE 보유·멀티턴 세션·재주입=교체·임계 시 세션 재생성) · **#50** docs/36 사건
-마스터ID 분석(NIA 진행현황 p6 결합 도해 — 기존 화면 요소가 결합축과 1:1) · **#51** 국가기본도
-하천을 교차 시군구 전부에 클리핑 배정(한강 실폭 서울 22개 구 생성, 복원법은 메모리
-ngii-clip-rollback) · **#52** 관할 정합성 검증(소하천 88%·지방하천 96%, handoff/하천관할_
-정합성검증_20260823.xlsx) · **#53** 등급 보정 24건(하천일람 2024, river_grade_overrides_2024.json
-단일 출처, 혼합 5건 보류) + 하천 팝업 "표출≠관할" 문구. 프로덕션 `v=677bc0f2` 검증 통과.
-그 외: **UNE RAG MCP 재등록**(사내 IP 변경 → 10.20.10.101:3100, 전 프로젝트 갱신, search_knowledge
-검색 전용) · **UNE RAG :8000 Swagger 확인 — 문서 업로드 API 존재**(/documents/upload, Bearer 인증,
-세션 API 도 있음 = ADR-018 의 멀티턴 축) · 소하천대장이 "전남광주통합특별시" 명칭 사용(2026 개편).
+2026-08-25 (회사 PC) — **`/doctor` 헬스체크. 코드 작업은 없었고 `/phase-run` 이 고장나 있던 것을 찾아 고쳤다.**
+
+**⚠ PR #55 가 열린 채로 머지 대기다 — 내일 첫 할 일이다(Next steps 0번).**
+
+- **`/phase-run` 이 서브에이전트를 하나도 못 띄우는 상태였다.** `.claude/skills/phase-run/SKILL.md`
+  의 `allowed-tools` 가 없어진 도구 이름 `Task` 를 가리키고 있었다(현재 이름은 `Agent`).
+  `allowed-tools` 에 없는 도구는 **경고 없이** 못 쓰므로 planner·generator·evaluator 가 전부
+  안 떴다. Phase 8 이 현재 목표이고 그 실행 경로가 `/phase-run` 이라 바로 걸리는 문제였다.
+  PR #55 에서 교정(본문 3곳 표현 포함). 게이트 3개(validate·smoke_priority·typecheck) 통과.
+- 같은 PR 로 `CLAUDE.md` 의 Phase 1~8 정의표를 `/phase-run` 스킬 본문으로 옮겼다(세션당 약
+  250 토큰). 금지 규칙 2건·Windows 함정·정본 문서 경로는 루트 CLAUDE.md 에 그대로 뒀다.
+- `/doctor` 결과 나머지는 건강했다: 네이티브 설치 1개(잔재 없음)·설정 파일 파싱 정상·에이전트
+  정의 3개 정상·SessionStart 훅 중앙값 577ms(08-14 수정 이후 오류 0)·버전 2.1.241 최신.
+  안 쓰던 `github` 플러그인은 꺼졌고 `permissions.defaultMode` 는 `auto` 가 됐다(사용자 조작).
+- **자동 모드 때문에 `gh pr merge` 가 막힌다** — 아래 Blockers 참고. 머지는 사용자가 직접 한다.
+- 오늘 머지된 PR 은 없다. **프로덕션은 08-23 상태(`v=677bc0f2`) 그대로**이고 배포 확인은 생략했다.
 
 ### 지금 반입돼 있는 것 (`apps/web/public/reference/`)
 
@@ -74,6 +78,7 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 - **2026-08-19** 하천 전국 229 시군구 + 코드 축 통일 + 침수흔적도 37,987건 반입 (PR #21~#33)
 - **2026-08-21** T3Q 메타 표본 3지역 비교본(P1~P4, PR #34~#37) · 시연 지원·위험점 3종·표본 산정값 미표시 (PR #38~#44)
 - **2026-08-22~23** ADR-018·사건ID 분석·하천 클리핑 배정·관할 검증·등급 보정 (PR #46~#53)
+- **2026-08-25** `/doctor` 헬스체크 — `/phase-run` 고장(allowed-tools `Task`→`Agent`) 수정 + Phase 표 스킬 이관 (PR #55, **머지 대기**)
 - **배포**: https://une-aidata-web.vercel.app (GitHub main 자동 배포)
 
 ## 서비스 범위 (2026-08-09 · 08-12 사용자 확인)
@@ -137,7 +142,15 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 
 ## Next steps
 
-**0. 하천·침수흔적 작업에서 남은 것** (2026-08-19 저녁 정리 — 전부 선택 사항, 막힌 건 없음)
+**0. PR #55 머지 (2026-08-25 저녁에 열어 둔 것 — 제일 먼저)**
+   - `gh pr merge 55 --merge --delete-branch` → `git checkout main && git pull`.
+     **자동 모드에서는 Claude 가 이 명령을 못 돌린다**(Blockers 참고) — 사용자가 직접,
+     또는 프롬프트에 `! gh pr merge 55 --merge --delete-branch`.
+   - 머지 전까지 `/phase-run` 은 계속 고장난 상태다(서브에이전트를 못 띄운다).
+     Phase 8 을 `/phase-run` 으로 돌릴 생각이면 **이걸 먼저 머지해야 한다.**
+   - 문서·스킬만 바뀐 PR 이라 앱 번들에는 영향이 없다. 게이트 3개는 이미 통과했다.
+
+**선택 사항 — 하천·침수흔적 작업에서 남은 것** (2026-08-19 저녁 정리 — 막힌 건 없음)
    - **POC mock 시드·API 계약까지 지울지 결정.** #27 에서 지도 표시만 뺐다. 완전히 지우려면
      OpenAPI 2경로(`/api/v1/flood-traces` · `/api/v1/mock/spatial`) · JSON Schema · Seed ID 3종 ·
      T3Q CQ 커버리지 시드 3건 · 게이트 4개가 걸린다 — CLAUDE.md 규칙상 영향범위 보고 후 승인.
@@ -162,6 +175,13 @@ Phase 8 — 실제 Provider Shadow Test 및 단계별 승격 (합격 기준: eva
 5. **공통 주의**: 키는 **로컬 셸 env 로만**. Vercel env 설정은 그 자체가 SELECTABLE 승격 행위라 승인2 이후 사용자가 직접 한다. DEFAULT 전환 금지. 절차: `docs/29_provider_shadow_and_promotion_procedure.md`
 
 ## Blockers
+- **자동 모드에서는 Claude 가 `gh pr merge` 를 못 돌린다 (2026-08-25 확인).** `permissions.defaultMode`
+  가 `auto` 로 바뀐 뒤부터 `gh pr merge <n> --merge --delete-branch` 가 자동 모드 분류기에
+  `Blocked by classifier` 로 거부된다(복합 명령을 단일 명령으로 줄여도 같다). 머지가 곧 프로덕션
+  배포라 막히는 게 맞으므로 **우회하지 않는다** — 사용자가 직접 돌리거나 프롬프트에
+  `! gh pr merge <n> --merge --delete-branch` 를 친다. `git push`·`gh pr create` 는 통과하므로
+  **PR 은 만들어지는데 머지만 안 되는** 모습이 된다(아래 `sangraedo` 증상과 헷갈리지 말 것 —
+  그건 `gh pr create` 가 실패한다).
 - **`gh` CLI 활성 계정 확인 — PR 을 만들 때 걸린다.** 이 리포는 `jazzsalle/une_aidata` 이고 `sangraedo` 계정은 READ 권한뿐이라 `gh pr create` 가 `must be a collaborator` 로 실패한다(2026-08-14 실제로 걸림). `git push` 는 자격증명이 달라 통과하므로 **push 는 되는데 PR 만 안 되는** 모습으로 나타난다. 우회: `gh auth switch --user jazzsalle` 후 `gh repo view jazzsalle/une_aidata --json viewerPermission` 이 `ADMIN` 인지 확인.
 - **작업 시작 전 `git fetch && git log --oneline HEAD..origin/main` 을 먼저 본다.** 2026-08-14 에 26 커밋 뒤처진 브랜치 위에서 작업해, 그대로 PR 을 올렸다면 PR #7~#18 이 통째로 되돌아갈 뻔했다. 회사↔집 왕복이 잦은 리포라 이게 재발하기 쉽다.
 - **Windows 의 `python3` 는 Microsoft Store 스텁일 수 있다 — 무엇을 시켜도 "Python" 한 줄만 찍고 exit 49.** PATH 에 실재하므로 `command -v` 는 통과한다. npm 스크립트의 `python3` 를 전부 `python` 으로 바꿔 실행할 것(CLAUDE.md 규칙). 2026-08-14 에 이것 때문에 **SessionStart 훅이 조용히 아무 컨텍스트도 주입하지 않고 있었다** — `load_progress.sh` 가 존재 확인만 하고 골랐기 때문. 실행 가능 여부까지 확인하도록 고쳤다.
